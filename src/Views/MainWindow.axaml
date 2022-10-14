@@ -5,13 +5,38 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="ChessBoom.Views.MainWindow"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/ChessBoom-Logo1.png"
         Title="ChessBoom">
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
+     
+    <StackPanel  
+                VerticalAlignment="Center"
+                Spacing = "20"> 
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <!-- TODO Icon-->
+
+        <!-- Welcome Message -->
+        <TextBlock Text="{Binding Greeting}" 
+                HorizontalAlignment="Center"/>
+
+        <!--Button Selection-->
+        <Grid ColumnDefinitions="Auto, Auto, Auto" HorizontalAlignment="Center">
+
+            <Button Content ="Game Analysis"
+                Grid.Column="0"/>
+
+            <Button Content ="Variant Game Analysis"
+                Grid.Column="1"/>
+
+            <Button Content ="Tutorials"
+                Grid.Column="2"/>
+
+        </Grid>
+                        
+        
+    </StackPanel>
 
 </Window>
