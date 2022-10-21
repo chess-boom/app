@@ -8,5 +8,20 @@ namespace ChessBoom.Views
         {
             InitializeComponent();
         }
+
+        public void OnClickGameAnalysis()
+        {
+
+        }
+
+        public void OnClickVariantGameAnalysis()
+        {
+            
+        }
+
+        public void OnClickTutorial()
+        {
+            
+        }
     }
 }
