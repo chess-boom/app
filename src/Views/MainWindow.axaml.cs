@@ -1,4 +1,7 @@
 using Avalonia.Controls;
+using Avalonia.Interactivity;
+using ChessBoom.GameBoard;
+using System;
 
 namespace ChessBoom.Views
 {
@@ -9,9 +12,11 @@ namespace ChessBoom.Views
             InitializeComponent();
         }
 
-        public void OnClickGameAnalysis()
+        public void OnClickGameAnalysis(object sender, RoutedEventArgs e)
         {
-
+            System.Console.WriteLine("hello");
+            Game game = new Game();
+            System.Console.WriteLine("game created");
         }
 
         public void OnClickVariantGameAnalysis()

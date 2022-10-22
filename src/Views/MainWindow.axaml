@@ -27,7 +27,7 @@
 
             <Button Content ="Game Analysis"
                 Grid.Column="0"
-                Command="{Binding OnClickGameAnalysis}"/>
+                Click="OnClickGameAnalysis"/>
 
             <Button Content ="Variant Game Analysis"
                 Grid.Column="1"
@@ -35,7 +35,7 @@
 
             <Button Content ="Tutorials"
                 Grid.Column="2"
-                Command="{Binding OnClickTutorials}"/>
+                />
 
         </Grid>
                         

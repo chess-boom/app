@@ -1,10 +1,8 @@
-namespace ChessBoom.Game
+namespace ChessBoom.GameBoard
 {
     public abstract class Piece {
         
 
-        public abstract bool canMoveToSquare(string squareName) {
-            
-        }
+        public abstract bool canMoveToSquare(string squareName);
     }
 }

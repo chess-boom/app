@@ -1,8 +1,9 @@
 using System;
 
-namespace ChessBoom.Game
+namespace ChessBoom.GameBoard
 {
     public static class GameHelpers {
+        /*
         public static string GetSquareNameFromCoordinates(int row, int col) {
             if (row < 0 || row >= Board.k_BoardRowNames.Length) {
                 throw new ArgumentException($"{row} is outside of the number of board rows.");
@@ -45,5 +46,6 @@ namespace ChessBoom.Game
 
             return (row, column);
         }
+        */
     }
 }
