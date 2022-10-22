@@ -10,22 +10,28 @@ namespace ChessBoom.GameBoard
         Horde
     }
 
-    enum Player {
+    public enum Player {
         White,
         Black
     }
     public class Game {
-        private Variant m_variant;
+        private Variant m_variant = Variant.Standard;
         private Board m_board;
         private Player m_playerToPlay {get; set;} = Player.White;
         private int m_halfmoveClock = 0;
         private int m_fullmoveCount = 0;
 
         public Game() {
-            m_variant = Variant.Standard;
             m_board = new Board();
             InitializeBoard(m_variant);
+
+            System.Console.WriteLine(m_board.ToString());
         }
+
+        /*public Game(Variant variant) {
+            m_variant = variant;
+            Game();
+        }*/
 
         private void InitializeBoard(Variant variant) {
             string fen = "";
