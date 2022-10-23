@@ -2,7 +2,6 @@ namespace ChessBoom.GameBoard
 {
     public abstract class Piece
     {
-        
         protected Player m_owner;
         protected int m_row;
         protected int m_column;

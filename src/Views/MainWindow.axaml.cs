@@ -21,12 +21,10 @@ namespace ChessBoom.Views
 
         public void OnClickVariantGameAnalysis()
         {
-            
         }
 
         public void OnClickTutorial()
         {
-            
         }
     }
 }
