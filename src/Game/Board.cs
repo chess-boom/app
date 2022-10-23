@@ -50,7 +50,7 @@ namespace ChessBoom.GameBoard
             }
 
             Piece piece;
-            switch(pieceType)
+            switch (pieceType)
             {
                 case 'K':
                     piece = new King(Player.White, row, col);

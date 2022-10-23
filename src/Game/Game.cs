@@ -44,7 +44,7 @@ namespace ChessBoom.GameBoard
         /// <summary>
         /// The next player to move
         /// </summary>
-        private Player m_playerToPlay {get; set;} = Player.White;
+        private Player m_playerToPlay { get; set; } = Player.White;
         /// <summary>
         /// The ability for each player to castle
         /// </summary>
@@ -265,7 +265,7 @@ namespace ChessBoom.GameBoard
                         throw new ArgumentException($"Invalid character {c} in FEN file.");
                 }
             }
-            
+
             m_castling.Add(Player.White, whiteCastling);
             m_castling.Add(Player.Black, blackCastling);
         }
@@ -352,7 +352,8 @@ namespace ChessBoom.GameBoard
             //
             fen += " ";
             // Retrieve en passant capability
-            try {
+            try
+            {
                 if (m_enPassant.HasValue)
                 {
                     fen += GameHelpers.GetSquareFromCoordinate(m_enPassant.Value);
