@@ -67,7 +67,9 @@ namespace ChessBoom.NUnitTests.GameTests
                 });
 
             //Do not need to do for all messages, validating here is enough
-            Assert.AreEqual(exception1.Message, "Coordinate (1, -1) is an invalid coordinate (x, y).");
+            if (exception1 != null)
+                Assert.AreEqual(exception1.Message, "Coordinate (1, -1) is an invalid coordinate (x, y).");
+            if (exception2 != null)
             Assert.AreEqual(exception2.Message, "Coordinate (-1, 1) is an invalid coordinate (x, y).");
           
         }
@@ -84,8 +86,8 @@ namespace ChessBoom.NUnitTests.GameTests
                     _board.CreatePiece('h', 1, 1);
                 });
 
-
-            Assert.AreEqual(exception.Message, "Error. h is an invalid piece type.");
+            if (exception != null)
+                Assert.AreEqual(exception.Message, "Error. h is an invalid piece type.");
 
 
         }
