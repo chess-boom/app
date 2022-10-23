@@ -30,12 +30,10 @@
                 Click="OnClickGameAnalysis"/>
 
             <Button Content ="Variant Game Analysis"
-                Grid.Column="1"
-                Command="{Binding OnClickVariantGameAnalysis}"/>
+                Grid.Column="1"/>
 
             <Button Content ="Tutorials"
-                Grid.Column="2"
-                />
+                Grid.Column="2"/>
 
         </Grid>
                         

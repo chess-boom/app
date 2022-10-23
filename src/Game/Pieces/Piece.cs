@@ -2,17 +2,19 @@ namespace ChessBoom.GameBoard
 {
     public abstract class Piece {
         
-        private Player owner;
-        private int m_row;
-        private int m_column;
+        protected Player m_owner;
+        protected int m_row;
+        protected int m_column;
 
         public Piece(Player player, int row, int column) {
-            owner = player;
+            m_owner = player;
             m_row = row;
             m_column = column;
         }
 
-
-        public abstract bool canMoveToSquare(string squareName);
+        public (int, int) GetCoordinates() {
+            return (m_row, m_column);
+        }
+        public abstract bool CanMoveToSquare(string squareName);
     }
 }

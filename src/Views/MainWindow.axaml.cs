@@ -14,9 +14,9 @@ namespace ChessBoom.Views
 
         public void OnClickGameAnalysis(object sender, RoutedEventArgs e)
         {
-            System.Console.WriteLine("hello");
+            System.Console.WriteLine("Game Analysis clicked");
             Game game = new Game();
-            System.Console.WriteLine("game created");
+            System.Console.WriteLine("Game Analysis done");
         }
 
         public void OnClickVariantGameAnalysis()

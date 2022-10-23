@@ -10,6 +10,15 @@ namespace ChessBoom.GameBoard
             m_pieces = new List<Piece>();
         }
 
+        public Piece? GetPiece(int row, int col) {
+            foreach (Piece piece in m_pieces) {
+                if ((row, col) == piece.GetCoordinates()) {
+                    return piece;
+                }
+            }
+            return null;
+        }
+
         /// <summary>
         /// Creates a piece
         /// </summary>

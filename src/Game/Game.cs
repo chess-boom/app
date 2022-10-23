@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace ChessBoom.GameBoard
@@ -14,18 +15,30 @@ namespace ChessBoom.GameBoard
         White,
         Black
     }
+
+    enum Castling {
+        Kingside,
+        Queenside
+    }
+
     public class Game {
         private Variant m_variant = Variant.Standard;
+        private Ruleset m_ruleset;
         private Board m_board;
         private Player m_playerToPlay {get; set;} = Player.White;
+        private Dictionary<Player, List<Castling>> m_castling;
+        private (int, int)? m_enPassant;
         private int m_halfmoveClock = 0;
         private int m_fullmoveCount = 0;
 
         public Game() {
             m_board = new Board();
+            m_castling = new Dictionary<Player, List<Castling>>();
             InitializeBoard(m_variant);
 
-            System.Console.WriteLine(m_board.ToString());
+            m_ruleset = new Standard();
+
+            System.Console.WriteLine(CreateFENFromBoard());
         }
 
         /*public Game(Variant variant) {
@@ -39,7 +52,8 @@ namespace ChessBoom.GameBoard
             // Note: Standard and Atomic use the default board. Chess960 and Horde use different initial configurations
             switch (variant) {
                 case Variant.Chess960:
-                break;
+                    // TODO: CB-24
+                    break;
                 case Variant.Horde:
                     fen = File.ReadAllText("Resources/horde.fen");
                     break;
@@ -66,7 +80,7 @@ namespace ChessBoom.GameBoard
 
             // Create the pieces
             string[] pieceSplit = fenSplit[0].Split('/');
-            for (int row = 7; row >= 0; row--) {
+            for (int row = 0; row < GameHelpers.k_BoardHeight; row++) {
                 int col = 0;
 
                 foreach (char piece in pieceSplit[row]) {
@@ -97,8 +111,24 @@ namespace ChessBoom.GameBoard
             }
 
             // Set castling availability
+            try {
+                SetCastling(fenSplit[2]);
+            }
+            catch (ArgumentException) {
+                SetCastling("-");
+            }
 
             // Set en passant capability
+            if (fenSplit[3] != "-") {
+                try {
+                    m_enPassant = GameHelpers.GetCoordinateFromSquare(fenSplit[3]);
+                }
+                catch (ArgumentException) {
+                    m_enPassant = null;
+                }
+            } else {
+                m_enPassant = null;
+            }
 
             // Set halfmove clock
             try {
@@ -128,6 +158,116 @@ namespace ChessBoom.GameBoard
                 default:
                     throw new ArgumentException($"Player \'{player}\' is not a valid player character.");
             }
+        }
+
+        private void SetCastling(string castling) {
+            List<Castling> whiteCastling = new List<Castling>();
+            List<Castling> blackCastling = new List<Castling>();
+            foreach (char c in castling) {
+                switch (c) {
+                    case 'K':
+                        whiteCastling.Add(Castling.Kingside);
+                        break;
+                    case 'k':
+                        blackCastling.Add(Castling.Kingside);
+                        break;
+                    case 'Q':
+                        whiteCastling.Add(Castling.Queenside);
+                        break;
+                    case 'q':
+                        blackCastling.Add(Castling.Queenside);
+                        break;
+                    case '-':
+                        break;
+                    default:
+                        throw new ArgumentException($"Invalid character {c} in FEN file.");
+                }
+            }
+            
+            m_castling.Add(Player.White, whiteCastling);
+            m_castling.Add(Player.Black, blackCastling);
+        }
+
+        private string GetCastling() {
+            string castling = "";
+            if (m_castling[Player.White].Contains(Castling.Kingside)) {
+                castling += "K";
+            }
+            if (m_castling[Player.White].Contains(Castling.Queenside)) {
+                castling += "Q";
+            }
+            if (m_castling[Player.Black].Contains(Castling.Kingside)) {
+                castling += "k";
+            }
+            if (m_castling[Player.Black].Contains(Castling.Queenside)) {
+                castling += "q";
+            }
+            return castling;
+        }
+
+        private string CreateFENFromBoard() {
+            string fen = "";
+
+            // Retrieve the pieces
+            for (int row = 0; row < GameHelpers.k_BoardHeight; row++) {
+                int emptySquareCount = 0;
+                for (int col = 0; col < GameHelpers.k_BoardWidth; col++) {
+                    Piece? piece = m_board.GetPiece(row, col);
+                    if (piece == null) {
+                        emptySquareCount++;
+                        continue;
+                    } else {
+                        // Append the number of empty squares and reset the count
+                        if (emptySquareCount != 0) {
+                            fen += emptySquareCount.ToString();
+                            emptySquareCount = 0;
+                        }
+
+                        fen += piece.ToString();
+                    }
+                }
+
+                if (emptySquareCount != 0) {
+                    fen += emptySquareCount.ToString();
+                    emptySquareCount = 0;
+                }
+
+                if (row != GameHelpers.k_BoardHeight - 1) {
+                    fen += "/";
+                }
+            }
+
+            //
+            fen += " ";
+            // Retrieve the next player
+            fen += (m_playerToPlay == Player.White) ? "w" : "b";
+            //
+            fen += " ";
+            // Retrieve castling availability
+            fen += GetCastling();
+            //
+            fen += " ";
+            // Retrieve en passant capability
+            try {
+                if (m_enPassant.HasValue) {
+                    fen += GameHelpers.GetSquareFromCoordinate(m_enPassant.Value);
+                } else {
+                    fen += "-";
+                }
+            }
+            catch (ArgumentException) {
+                fen += "-";
+            }
+            //
+            fen += " ";
+            // Retrieve halfmove clock
+            fen += m_halfmoveClock.ToString();
+            //
+            fen += " ";
+            // Retrieve fullmove number
+            fen += m_fullmoveCount.ToString();
+
+            return fen;
         }
     }
 }

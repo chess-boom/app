@@ -5,8 +5,13 @@ namespace ChessBoom.GameBoard
         public Queen(Player player, int row, int column) : base(player, row, column) {
         }
 
-        public override bool canMoveToSquare(string squareName) {
+        public override bool CanMoveToSquare(string squareName) {
             return true;
+        }
+
+        public override string ToString()
+        {
+            return (m_owner == Player.White) ? "Q" : "q";
         }
     }
 }
