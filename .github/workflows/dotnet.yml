@@ -24,18 +24,18 @@ jobs:
       working-directory: ./src
       run: dotnet build --no-restore
     - name: Test
-      working-directory: ./src
+      working-directory: ./ChessBoom.NUnitTests
       run: |
-        ls
-        cd ./ChessBoom.NUnitTests
         dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" --logger trx --results-directory coverage
     - name: Copy Coverage to Predictable Location
+      working-directory: ./ChessBoom.NUnitTests
       run: |
         ls
         cp coverage/*/coverage.cobertura.xml coverage/coverage.cobertura.xml
     - name: Code Coverage Summary
       uses: irongut/CodeCoverageSummary@v1.3.0
       with:
+        working-directory: ./ChessBoom.NUnitTests
         filename: coverage/coverage.cobertura.xml
         badge: true
         format: 'markdown'
@@ -44,6 +44,7 @@ jobs:
       uses: marocchino/sticky-pull-request-comment@v2
       if: github.event_name == 'pull_request'
       with:
+        working-directory: ./ChessBoom.NUnitTests
         recreate: true
         path: code-coverage-results.md
     - name: Write to Job Summary
