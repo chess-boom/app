@@ -1,11 +1,14 @@
 namespace ChessBoom.GameBoard
 {
-    public class Queen : Piece{
+    public class Queen : Piece
+    {
 
-        public Queen(Player player, int row, int column) : base(player, row, column) {
+        public Queen(Player player, int row, int column) : base(player, row, column)
+        {
         }
 
-        public override bool CanMoveToSquare(string squareName) {
+        public override bool CanMoveToSquare(string squareName)
+        {
             return true;
         }
 

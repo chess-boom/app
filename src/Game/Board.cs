@@ -6,7 +6,8 @@ namespace ChessBoom.GameBoard
     /// <summary>
     /// The Board class contains the chess pieces and is the medium through which a Game is played
     /// </summary>
-    public class Board {
+    public class Board
+    {
         /// <summary>
         /// The list of chess pieces
         /// </summary>
@@ -15,7 +16,8 @@ namespace ChessBoom.GameBoard
         /// <summary>
         /// The default constructor
         /// </summary>
-        public Board() {
+        public Board()
+        {
             m_pieces = new List<Piece>();
         }
 
@@ -24,9 +26,12 @@ namespace ChessBoom.GameBoard
         /// </summary>
         /// <param name="coordinate">The 2-tuple containing the row and column coordinates (0-7, 0-7)</param>
         /// <returns>The piece found on the passed square. If none, returns null</returns>
-        public Piece? GetPiece((int row, int col) coordinate) {
-            foreach (Piece piece in m_pieces) {
-                if (coordinate == piece.GetCoordinates()) {
+        public Piece? GetPiece((int row, int col) coordinate)
+        {
+            foreach (Piece piece in m_pieces)
+            {
+                if (coordinate == piece.GetCoordinates())
+                {
                     return piece;
                 }
             }
@@ -37,13 +42,16 @@ namespace ChessBoom.GameBoard
         /// Creates a piece
         /// </summary>
         /// <throws>ArgumentException if invalid pieceType or invalid coordinates</throws>
-        public void CreatePiece(char pieceType, int row, int col) {
-            if (row < 0 || row >= GameHelpers.k_BoardHeight || col < 0 || col >= GameHelpers.k_BoardWidth) {
+        public void CreatePiece(char pieceType, int row, int col)
+        {
+            if (row < 0 || row >= GameHelpers.k_BoardHeight || col < 0 || col >= GameHelpers.k_BoardWidth)
+            {
                 throw new ArgumentException($"Coordinate ({col}, {row}) is an invalid coordinate (x, y).");
             }
 
             Piece piece;
-            switch(pieceType) {
+            switch(pieceType)
+            {
                 case 'K':
                     piece = new King(Player.White, row, col);
                     break;
@@ -87,9 +95,11 @@ namespace ChessBoom.GameBoard
             m_pieces.Add(piece);
         }
 
-        public override string ToString() {
+        public override string ToString()
+        {
             string output = "";
-            foreach (Piece piece in m_pieces) {
+            foreach (Piece piece in m_pieces)
+            {
                 output += piece;
             }
             return output;

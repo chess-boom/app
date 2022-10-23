@@ -1,6 +1,7 @@
 namespace ChessBoom.GameBoard
 {
-    public abstract class Ruleset {
+    public abstract class Ruleset
+    {
         
 
     }
