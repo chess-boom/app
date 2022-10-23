@@ -26,6 +26,7 @@ jobs:
     - name: Test
       working-directory: ./src
       run: |
+        ls
         cd ./ChessBoom.NUnitTests
         dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" --logger trx --results-directory coverage
     - name: Copy Coverage to Predictable Location
