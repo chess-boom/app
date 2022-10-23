@@ -3,7 +3,7 @@ using ChessBoom.GameBoard;
 
 namespace ChessBoom.NUnitTests.GameTests
 {
-    internal class BoardUnitTests
+    public class BoardUnitTests
     {
         private Board _board = null!;
 
@@ -70,7 +70,7 @@ namespace ChessBoom.NUnitTests.GameTests
             if (exception1 != null)
                 Assert.AreEqual("Coordinate (1, -1) is an invalid coordinate (x, y).", exception1.Message);
             if (exception2 != null)
-            Assert.AreEqual("Coordinate (-1, 1) is an invalid coordinate (x, y).", exception2.Message);
+                Assert.AreEqual("Coordinate (-1, 1) is an invalid coordinate (x, y).", exception2.Message);
           
         }
         /// <summary>
