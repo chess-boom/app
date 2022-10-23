@@ -126,29 +126,17 @@ namespace ChessBoom.NUnitTests.GameTests
             var blackPawn = _board.GetPiece((5, 2));
 
 
-            if (whiteKing != null)
                 Assert.AreEqual(Player.White, whiteKing.GetPlayer());
-            if (blackKing != null)
                 Assert.AreEqual(Player.Black, blackKing.GetPlayer());
-            if (whiteQueen != null)
                 Assert.AreEqual(Player.White, whiteQueen.GetPlayer());
-            if (blackQueen != null)
                 Assert.AreEqual(Player.Black, blackQueen.GetPlayer());
-            if (whiteBishop != null)
                 Assert.AreEqual(Player.White, whiteBishop.GetPlayer());
-            if (blackBishop != null)
                 Assert.AreEqual(Player.Black, blackBishop.GetPlayer());
-            if (whiteKnight != null)
                 Assert.AreEqual(Player.White, whiteKnight.GetPlayer());
-            if (blackKnight != null)
                 Assert.AreEqual(Player.Black, blackKnight.GetPlayer());
-            if (whiteRook != null)
                 Assert.AreEqual(Player.White, whiteRook.GetPlayer());
-            if (blackRook != null)
                 Assert.AreEqual(Player.Black, blackRook.GetPlayer());
-            if (whitePawn != null)
                 Assert.AreEqual(Player.White, whitePawn.GetPlayer());
-            if (blackPawn != null)
                 Assert.AreEqual(Player.Black, blackPawn.GetPlayer());
 
         }
