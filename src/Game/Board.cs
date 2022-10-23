@@ -3,16 +3,30 @@ using System.Collections.Generic;
 
 namespace ChessBoom.GameBoard
 {
+    /// <summary>
+    /// The Board class contains the chess pieces and is the medium through which a Game is played
+    /// </summary>
     public class Board {
+        /// <summary>
+        /// The list of chess pieces
+        /// </summary>
         private List<Piece> m_pieces;
 
+        /// <summary>
+        /// The default constructor
+        /// </summary>
         public Board() {
             m_pieces = new List<Piece>();
         }
 
-        public Piece? GetPiece(int row, int col) {
+        /// <summary>
+        /// Retrieves a piece from its coordinates
+        /// </summary>
+        /// <param name="coordinate">The 2-tuple containing the row and column coordinates (0-7, 0-7)</param>
+        /// <returns>The piece found on the passed square. If none, returns null</returns>
+        public Piece? GetPiece((int row, int col) coordinate) {
             foreach (Piece piece in m_pieces) {
-                if ((row, col) == piece.GetCoordinates()) {
+                if (coordinate == piece.GetCoordinates()) {
                     return piece;
                 }
             }

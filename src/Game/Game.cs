@@ -21,16 +21,46 @@ namespace ChessBoom.GameBoard
         Queenside
     }
 
+    /// <summary>
+    /// The Game class handles the creation and playing of a game of any chess variant
+    /// </summary>
     public class Game {
+        /// <summary>
+        /// The chosen variant for this game
+        /// </summary>
         private Variant m_variant = Variant.Standard;
+        /// <summary>
+        /// The chosen ruleset for this game
+        /// </summary>
         private Ruleset m_ruleset;
+        /// <summary>
+        /// The board created for this game
+        /// </summary>
         private Board m_board;
+        /// <summary>
+        /// The next player to move
+        /// </summary>
         private Player m_playerToPlay {get; set;} = Player.White;
+        /// <summary>
+        /// The ability for each player to castle
+        /// </summary>
         private Dictionary<Player, List<Castling>> m_castling;
+        /// <summary>
+        /// The square on which en passant may be played (if any)
+        /// </summary>
         private (int, int)? m_enPassant;
+        /// <summary>
+        /// The number of half-moves since the last capture or pawn advance
+        /// </summary>
         private int m_halfmoveClock = 0;
+        /// <summary>
+        /// The number of full moves (starting at 1, incremented after Black moves)
+        /// </summary>
         private int m_fullmoveCount = 0;
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public Game() {
             m_board = new Board();
             m_castling = new Dictionary<Player, List<Castling>>();
@@ -46,6 +76,10 @@ namespace ChessBoom.GameBoard
             Game();
         }*/
 
+        /// <summary>
+        /// The board object is created and initialized
+        /// </summary>
+        /// <param name="variant">The chosen variant for the board</param>
         private void InitializeBoard(Variant variant) {
             string fen = "";
 
@@ -67,6 +101,10 @@ namespace ChessBoom.GameBoard
             CreateBoardFromFEN(fen);
         }
 
+        /// <summary>
+        /// The board is created and populated from a .FEN file
+        /// </summary>
+        /// <param name="fen">The contents of the .FEN file</param>
         private void CreateBoardFromFEN(string fen) {
             /* FEN files have 6 parts, delimited by ' ' characters:
             The first part is the piece placements, rows delimited by '/' characters starting on the top
@@ -147,6 +185,11 @@ namespace ChessBoom.GameBoard
             }
         }
 
+        /// <summary>
+        /// Mutator for the next player to play
+        /// </summary>
+        /// <param name="player">The .FEN notation of the player (w, b)</param>
+        /// <exception cref="ArgumentException">Thrown when the passed player is invalid</exception>
         private void SetPlayerToPlay(char player) {
             switch (player) {
                 case 'w':
@@ -160,6 +203,11 @@ namespace ChessBoom.GameBoard
             }
         }
 
+        /// <summary>
+        /// Mutator for castling privileges
+        /// </summary>
+        /// <param name="castling">The .FEN notation of the castling privileges (ex: "KQkq")</param>
+        /// <exception cref="ArgumentException">Thrown when the castling privileges contains an invalid character</exception>
         private void SetCastling(string castling) {
             List<Castling> whiteCastling = new List<Castling>();
             List<Castling> blackCastling = new List<Castling>();
@@ -188,6 +236,10 @@ namespace ChessBoom.GameBoard
             m_castling.Add(Player.Black, blackCastling);
         }
 
+        /// <summary>
+        /// Accessor for the castling privileges
+        /// </summary>
+        /// <returns>The castling privileges in .FEN format</returns>
         private string GetCastling() {
             string castling = "";
             if (m_castling[Player.White].Contains(Castling.Kingside)) {
@@ -205,6 +257,10 @@ namespace ChessBoom.GameBoard
             return castling;
         }
 
+        /// <summary>
+        /// Retrieve the board state as the contents of a .FEN file
+        /// </summary>
+        /// <returns>The board state as the contents of a .FEN file</returns>
         private string CreateFENFromBoard() {
             string fen = "";
 
@@ -212,7 +268,7 @@ namespace ChessBoom.GameBoard
             for (int row = 0; row < GameHelpers.k_BoardHeight; row++) {
                 int emptySquareCount = 0;
                 for (int col = 0; col < GameHelpers.k_BoardWidth; col++) {
-                    Piece? piece = m_board.GetPiece(row, col);
+                    Piece? piece = m_board.GetPiece((row, col));
                     if (piece == null) {
                         emptySquareCount++;
                         continue;
