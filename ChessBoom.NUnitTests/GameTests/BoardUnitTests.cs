@@ -68,9 +68,9 @@ namespace ChessBoom.NUnitTests.GameTests
 
             //Do not need to do for all messages, validating here is enough
             if (exception1 != null)
-                Assert.AreEqual(exception1.Message, "Coordinate (1, -1) is an invalid coordinate (x, y).");
+                Assert.AreEqual("Coordinate (1, -1) is an invalid coordinate (x, y).", exception1.Message);
             if (exception2 != null)
-            Assert.AreEqual(exception2.Message, "Coordinate (-1, 1) is an invalid coordinate (x, y).");
+            Assert.AreEqual("Coordinate (-1, 1) is an invalid coordinate (x, y).", exception2.Message);
           
         }
         /// <summary>
@@ -98,16 +98,60 @@ namespace ChessBoom.NUnitTests.GameTests
         [Test]
         public void PieceTeamProperlySet()
         {
-            _board.CreatePiece('R', 1, 1);
-            _board.CreatePiece('k', 2, 2);
+            _board.CreatePiece('K', 0, 1);
+            _board.CreatePiece('k', 0, 2);
+            _board.CreatePiece('Q', 1, 1);
+            _board.CreatePiece('q', 1, 2);
+            _board.CreatePiece('B', 2, 1);
+            _board.CreatePiece('b', 2, 2);
+            _board.CreatePiece('N', 3, 1);
+            _board.CreatePiece('n', 3, 2);
+            _board.CreatePiece('R', 4, 1);
+            _board.CreatePiece('r', 4, 2);
+            _board.CreatePiece('P', 5, 1);
+            _board.CreatePiece('p', 5, 2);
 
-            var white = _board.GetPiece((1, 1));
-            var black = _board.GetPiece((2, 2));
 
-            Assert.AreEqual(white.GetPlayer(), Player.White);
-            Assert.AreEqual(black.GetPlayer(), Player.Black);
+            var whiteKing = _board.GetPiece((0, 1));
+            var blackKing = _board.GetPiece((0, 2));
+            var whiteQueen = _board.GetPiece((1, 1));
+            var blackQueen = _board.GetPiece((1, 2));
+            var whiteBishop = _board.GetPiece((2, 1));
+            var blackBishop = _board.GetPiece((2, 2));
+            var whiteKnight = _board.GetPiece((3, 1));
+            var blackKnight = _board.GetPiece((3, 2));
+            var whiteRook = _board.GetPiece((4, 1));
+            var blackRook = _board.GetPiece((4, 2));
+            var whitePawn = _board.GetPiece((5, 1));
+            var blackPawn = _board.GetPiece((5, 2));
+
+
+
+            Assert.AreEqual(Player.White, whiteKing.GetPlayer());
+            Assert.AreEqual(Player.Black, blackKing.GetPlayer());
+            Assert.AreEqual(Player.White, whiteQueen.GetPlayer());
+            Assert.AreEqual(Player.Black, blackQueen.GetPlayer());
+            Assert.AreEqual(Player.White, whiteBishop.GetPlayer());
+            Assert.AreEqual(Player.Black, blackBishop.GetPlayer());
+            Assert.AreEqual(Player.White, whiteKnight.GetPlayer());
+            Assert.AreEqual(Player.Black, blackKnight.GetPlayer());
+            Assert.AreEqual(Player.White, whiteRook.GetPlayer());
+            Assert.AreEqual(Player.Black, blackRook.GetPlayer());
+            Assert.AreEqual(Player.White, whitePawn.GetPlayer());
+            Assert.AreEqual(Player.Black, blackPawn.GetPlayer());
+
         }
 
+        /// <summary>
+        /// If there is an empty spot on the board and we try and get a piece from there, return null.
+        /// </summary>
+        [Test]
+        public void BoardReturnsNullPieceOnEmptySpot()
+        {
+            var piece = _board.GetPiece((5, 5));
+
+            Assert.AreEqual(null, piece);
+        }
 
     }
 }
