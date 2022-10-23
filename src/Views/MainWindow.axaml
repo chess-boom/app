@@ -26,7 +26,8 @@
         <Grid ColumnDefinitions="Auto, Auto, Auto" HorizontalAlignment="Center">
 
             <Button Content ="Game Analysis"
-                Grid.Column="0"/>
+                Grid.Column="0"
+                Click="OnClickGameAnalysis"/>
 
             <Button Content ="Variant Game Analysis"
                 Grid.Column="1"/>
