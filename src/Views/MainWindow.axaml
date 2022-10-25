@@ -5,21 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="ChessBoom.Views.MainWindow"
-        Icon="/Assets/ChessBoom-Logo1.png"
+        Icon="/Assets/Icons/favicon.ico"
         Title="ChessBoom">
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
-     
-    <StackPanel  
+
+    <StackPanel
                 VerticalAlignment="Center"
-                Spacing = "20"> 
+                Spacing = "20">
 
         <!-- TODO Icon-->
 
         <!-- Welcome Message -->
-        <TextBlock Text="{Binding Greeting}" 
+        <TextBlock Text="{Binding Greeting}"
                 HorizontalAlignment="Center"/>
 
         <!--Button Selection-->
@@ -36,8 +36,8 @@
                 Grid.Column="2"/>
 
         </Grid>
-                        
-        
+
+
     </StackPanel>
 
 </Window>
