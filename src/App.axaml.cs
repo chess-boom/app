@@ -5,9 +5,12 @@ using ChessBoom.ViewModels;
 using ChessBoom.Views;
 using System.IO;
 using System.Reflection;
+using System.Diagnostics.CodeAnalysis;
+
 
 namespace ChessBoom
 {
+    [ExcludeFromCodeCoverage]
     public partial class App : Application
     {
         public override void Initialize()

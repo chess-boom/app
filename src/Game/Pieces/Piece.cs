@@ -18,5 +18,10 @@ namespace ChessBoom.GameBoard
             return (m_row, m_column);
         }
         public abstract bool CanMoveToSquare(string squareName);
+
+        public Player GetPlayer()
+        {
+            return m_owner;
+        }
     }
 }
