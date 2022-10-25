@@ -2,9 +2,11 @@ using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using ChessBoom.ViewModels;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ChessBoom
 {
+    [ExcludeFromCodeCoverage]
     public class ViewLocator : IDataTemplate
     {
         public IControl Build(object data)

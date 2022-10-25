@@ -2,9 +2,11 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using ChessBoom.GameBoard;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ChessBoom.Views
 {
+    [ExcludeFromCodeCoverage]
     public partial class MainWindow : Window
     {
         public MainWindow()
