@@ -71,7 +71,6 @@ namespace ChessBoom.NUnitTests.GameTests
                 Assert.AreEqual("Coordinate (1, -1) is an invalid coordinate (x, y).", exception1.Message);
             if (exception2 != null)
                 Assert.AreEqual("Coordinate (-1, 1) is an invalid coordinate (x, y).", exception2.Message);
-          
         }
         /// <summary>
         /// If an invalid piece, such as 'h' is created, we get an ArgumentException
@@ -79,7 +78,6 @@ namespace ChessBoom.NUnitTests.GameTests
         [Test]
         public void InvalidPieceThrowsBoardCreationTest()
         {
- 
             var exception = Assert.Throws<ArgumentException>(
                 delegate
                 {
@@ -88,8 +86,6 @@ namespace ChessBoom.NUnitTests.GameTests
 
             if (exception != null)
                 Assert.AreEqual(exception.Message, "Error. h is an invalid piece type.");
-
-
         }
 
         /// <summary>
@@ -126,19 +122,18 @@ namespace ChessBoom.NUnitTests.GameTests
             var blackPawn = _board.GetPiece((5, 2));
 
 
-                Assert.AreEqual(Player.White, whiteKing.GetPlayer());
-                Assert.AreEqual(Player.Black, blackKing.GetPlayer());
-                Assert.AreEqual(Player.White, whiteQueen.GetPlayer());
-                Assert.AreEqual(Player.Black, blackQueen.GetPlayer());
-                Assert.AreEqual(Player.White, whiteBishop.GetPlayer());
-                Assert.AreEqual(Player.Black, blackBishop.GetPlayer());
-                Assert.AreEqual(Player.White, whiteKnight.GetPlayer());
-                Assert.AreEqual(Player.Black, blackKnight.GetPlayer());
-                Assert.AreEqual(Player.White, whiteRook.GetPlayer());
-                Assert.AreEqual(Player.Black, blackRook.GetPlayer());
-                Assert.AreEqual(Player.White, whitePawn.GetPlayer());
-                Assert.AreEqual(Player.Black, blackPawn.GetPlayer());
-
+            Assert.AreEqual(Player.White, whiteKing.GetPlayer());
+            Assert.AreEqual(Player.Black, blackKing.GetPlayer());
+            Assert.AreEqual(Player.White, whiteQueen.GetPlayer());
+            Assert.AreEqual(Player.Black, blackQueen.GetPlayer());
+            Assert.AreEqual(Player.White, whiteBishop.GetPlayer());
+            Assert.AreEqual(Player.Black, blackBishop.GetPlayer());
+            Assert.AreEqual(Player.White, whiteKnight.GetPlayer());
+            Assert.AreEqual(Player.Black, blackKnight.GetPlayer());
+            Assert.AreEqual(Player.White, whiteRook.GetPlayer());
+            Assert.AreEqual(Player.Black, blackRook.GetPlayer());
+            Assert.AreEqual(Player.White, whitePawn.GetPlayer());
+            Assert.AreEqual(Player.Black, blackPawn.GetPlayer());
         }
 
         /// <summary>
@@ -151,6 +146,5 @@ namespace ChessBoom.NUnitTests.GameTests
 
             Assert.AreEqual(null, piece);
         }
-
     }
 }

@@ -33,7 +33,7 @@ namespace ChessBoom.NUnitTests.GameTests
             Piece whitePawn = new Pawn(_whitePlayer, 5, 0);
             Piece blackPawn = new Pawn(_blackPlayer, 5, 1);
 
-
+  
             Assert.AreEqual("K", whiteKing.ToString());
             Assert.AreEqual("k", blackKing.ToString());
             Assert.AreEqual("Q", whiteQueen.ToString());
@@ -46,11 +46,6 @@ namespace ChessBoom.NUnitTests.GameTests
             Assert.AreEqual("r", blackRook.ToString());
             Assert.AreEqual("P", whitePawn.ToString());
             Assert.AreEqual("p", blackPawn.ToString());
-
         }
-
-
-
-       
     }
 }
