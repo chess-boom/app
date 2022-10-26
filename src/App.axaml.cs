@@ -22,8 +22,9 @@ namespace ChessBoom
         public void SetWorkingDirectory()
         {
             string? assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string getSRCFromAssembly = "..\\..\\..\\..";
-            if (assemblyPath != null) {
+            string getSRCFromAssembly = "../../../..";
+            if (assemblyPath != null)
+            {
                 Directory.SetCurrentDirectory(assemblyPath + getSRCFromAssembly);
             }
         }
