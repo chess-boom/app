@@ -41,26 +41,6 @@ namespace ChessBoom.GameBoard
         /// The board created for this game
         /// </summary>
         private Board m_board;
-        /// <summary>
-        /// The next player to move
-        /// </summary>
-        private Player m_playerToPlay { get; set; } = Player.White;
-        /// <summary>
-        /// The ability for each player to castle
-        /// </summary>
-        private Dictionary<Player, List<Castling>> m_castling;
-        /// <summary>
-        /// The square on which en passant may be played (if any)
-        /// </summary>
-        private (int, int)? m_enPassant;
-        /// <summary>
-        /// The number of half-moves since the last capture or pawn advance
-        /// </summary>
-        private int m_halfmoveClock = 0;
-        /// <summary>
-        /// The number of full moves (starting at 1, incremented after Black moves)
-        /// </summary>
-        private int m_fullmoveCount = 0;
 
         /// <summary>
         /// Default constructor
@@ -68,12 +48,11 @@ namespace ChessBoom.GameBoard
         public Game()
         {
             m_board = new Board();
-            m_castling = new Dictionary<Player, List<Castling>>();
             InitializeBoard(m_variant);
 
             m_ruleset = new Standard();
 
-            System.Console.WriteLine(CreateFENFromBoard());
+            System.Console.WriteLine(CreateFENFromBoard(m_board));
         }
 
         /*public Game(Variant variant)
@@ -106,15 +85,17 @@ namespace ChessBoom.GameBoard
                     break;
             }
 
-            CreateBoardFromFEN(fen);
+            m_board = CreateBoardFromFEN(fen);
         }
 
         /// <summary>
         /// The board is created and populated from a .FEN file
         /// </summary>
         /// <param name="fen">The contents of the .FEN file</param>
-        private void CreateBoardFromFEN(string fen)
+        private Board CreateBoardFromFEN(string fen)
         {
+            Board board = new Board();
+            
             /* FEN files have 6 parts, delimited by ' ' characters:
             The first part is the piece placements, rows delimited by '/' characters starting on the top
             The second part denotes the next player to take their turn
@@ -141,7 +122,7 @@ namespace ChessBoom.GameBoard
                     {
                         try
                         {
-                            m_board.CreatePiece(piece, row, col);
+                            board.CreatePiece(piece, row, col);
                         }
                         catch (ArgumentException)
                         {
@@ -159,21 +140,21 @@ namespace ChessBoom.GameBoard
             }
             try
             {
-                SetPlayerToPlay(fenSplit[1][0]);
+                board.SetPlayerToPlay(fenSplit[1][0]);
             }
             catch (ArgumentException)
             {
-                SetPlayerToPlay('w');
+                board.SetPlayerToPlay('w');
             }
 
             // Set castling availability
             try
             {
-                SetCastling(fenSplit[2]);
+                board.SetCastling(fenSplit[2]);
             }
             catch (ArgumentException)
             {
-                SetCastling("-");
+                board.SetCastling("-");
             }
 
             // Set en passant capability
@@ -181,126 +162,46 @@ namespace ChessBoom.GameBoard
             {
                 try
                 {
-                    m_enPassant = GameHelpers.GetCoordinateFromSquare(fenSplit[3]);
+                    board.m_enPassant = GameHelpers.GetCoordinateFromSquare(fenSplit[3]);
                 }
                 catch (ArgumentException)
                 {
-                    m_enPassant = null;
+                    board.m_enPassant = null;
                 }
             }
             else
             {
-                m_enPassant = null;
+                board.m_enPassant = null;
             }
 
             // Set halfmove clock
             try
             {
-                m_halfmoveClock = int.Parse(fenSplit[4]);
+                board.m_halfmoveClock = int.Parse(fenSplit[4]);
             }
             catch (FormatException)
             {
-                m_halfmoveClock = 0;
+                board.m_halfmoveClock = 0;
             }
 
             // Set fullmove number
             try
             {
-                m_fullmoveCount = int.Parse(fenSplit[5]);
+                board.m_fullmoveCount = int.Parse(fenSplit[5]);
             }
             catch (FormatException)
             {
-                m_fullmoveCount = 0;
-            }
-        }
-
-        /// <summary>
-        /// Mutator for the next player to play
-        /// </summary>
-        /// <param name="player">The .FEN notation of the player (w, b)</param>
-        /// <exception cref="ArgumentException">Thrown when the passed player is invalid</exception>
-        private void SetPlayerToPlay(char player)
-        {
-            switch (player)
-            {
-                case 'w':
-                    m_playerToPlay = Player.White;
-                    break;
-                case 'b':
-                    m_playerToPlay = Player.Black;
-                    break;
-                default:
-                    throw new ArgumentException($"Player \'{player}\' is not a valid player character.");
-            }
-        }
-
-        /// <summary>
-        /// Mutator for castling privileges
-        /// </summary>
-        /// <param name="castling">The .FEN notation of the castling privileges (ex: "KQkq")</param>
-        /// <exception cref="ArgumentException">Thrown when the castling privileges contains an invalid character</exception>
-        private void SetCastling(string castling)
-        {
-            List<Castling> whiteCastling = new List<Castling>();
-            List<Castling> blackCastling = new List<Castling>();
-            foreach (char c in castling)
-            {
-                switch (c)
-                {
-                    case 'K':
-                        whiteCastling.Add(Castling.Kingside);
-                        break;
-                    case 'k':
-                        blackCastling.Add(Castling.Kingside);
-                        break;
-                    case 'Q':
-                        whiteCastling.Add(Castling.Queenside);
-                        break;
-                    case 'q':
-                        blackCastling.Add(Castling.Queenside);
-                        break;
-                    case '-':
-                        break;
-                    default:
-                        throw new ArgumentException($"Invalid character {c} in FEN file.");
-                }
+                board.m_fullmoveCount = 0;
             }
 
-            m_castling.Add(Player.White, whiteCastling);
-            m_castling.Add(Player.Black, blackCastling);
-        }
-
-        /// <summary>
-        /// Accessor for the castling privileges
-        /// </summary>
-        /// <returns>The castling privileges in .FEN format</returns>
-        private string GetCastling()
-        {
-            string castling = "";
-            if (m_castling[Player.White].Contains(Castling.Kingside))
-            {
-                castling += "K";
-            }
-            if (m_castling[Player.White].Contains(Castling.Queenside))
-            {
-                castling += "Q";
-            }
-            if (m_castling[Player.Black].Contains(Castling.Kingside))
-            {
-                castling += "k";
-            }
-            if (m_castling[Player.Black].Contains(Castling.Queenside))
-            {
-                castling += "q";
-            }
-            return castling;
+            return board;
         }
 
         /// <summary>
         /// Retrieve the board state as the contents of a .FEN file
         /// </summary>
         /// <returns>The board state as the contents of a .FEN file</returns>
-        private string CreateFENFromBoard()
+        private static string CreateFENFromBoard(Board board)
         {
             string fen = "";
 
@@ -310,7 +211,7 @@ namespace ChessBoom.GameBoard
                 int emptySquareCount = 0;
                 for (int col = 0; col < GameHelpers.k_BoardWidth; col++)
                 {
-                    Piece? piece = m_board.GetPiece((row, col));
+                    Piece? piece = board.GetPiece((row, col));
                     if (piece == null)
                     {
                         emptySquareCount++;
@@ -344,19 +245,19 @@ namespace ChessBoom.GameBoard
             //
             fen += " ";
             // Retrieve the next player
-            fen += (m_playerToPlay == Player.White) ? "w" : "b";
+            fen += (board.m_playerToPlay == Player.White) ? "w" : "b";
             //
             fen += " ";
             // Retrieve castling availability
-            fen += GetCastling();
+            fen += board.GetCastling();
             //
             fen += " ";
             // Retrieve en passant capability
             try
             {
-                if (m_enPassant.HasValue)
+                if (board.m_enPassant.HasValue)
                 {
-                    fen += GameHelpers.GetSquareFromCoordinate(m_enPassant.Value);
+                    fen += GameHelpers.GetSquareFromCoordinate(board.m_enPassant.Value);
                 }
                 else
                 {
@@ -370,11 +271,11 @@ namespace ChessBoom.GameBoard
             //
             fen += " ";
             // Retrieve halfmove clock
-            fen += m_halfmoveClock.ToString();
+            fen += board.m_halfmoveClock.ToString();
             //
             fen += " ";
             // Retrieve fullmove number
-            fen += m_fullmoveCount.ToString();
+            fen += board.m_fullmoveCount.ToString();
 
             return fen;
         }

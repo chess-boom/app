@@ -1,10 +1,16 @@
+using System.Collections.Generic;
+
 namespace ChessBoom.GameBoard
 {
     public class King : Piece
     {
-
-        public King(Player player, int row, int column) : base(player, row, column)
+        public King(Board board, Player player, int row, int column) : base(board, player, row, column)
         {
+        }
+
+        public override List<(int, int)> GetMovementSquares()
+        {
+            return new List<(int, int)>();
         }
 
         public override bool CanMoveToSquare(string squareName)

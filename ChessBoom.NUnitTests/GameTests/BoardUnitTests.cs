@@ -122,29 +122,182 @@ namespace ChessBoom.NUnitTests.GameTests
             var blackPawn = _board.GetPiece((5, 2));
 
 
-            Assert.AreEqual(Player.White, whiteKing.GetPlayer());
-            Assert.AreEqual(Player.Black, blackKing.GetPlayer());
-            Assert.AreEqual(Player.White, whiteQueen.GetPlayer());
-            Assert.AreEqual(Player.Black, blackQueen.GetPlayer());
-            Assert.AreEqual(Player.White, whiteBishop.GetPlayer());
-            Assert.AreEqual(Player.Black, blackBishop.GetPlayer());
-            Assert.AreEqual(Player.White, whiteKnight.GetPlayer());
-            Assert.AreEqual(Player.Black, blackKnight.GetPlayer());
-            Assert.AreEqual(Player.White, whiteRook.GetPlayer());
-            Assert.AreEqual(Player.Black, blackRook.GetPlayer());
-            Assert.AreEqual(Player.White, whitePawn.GetPlayer());
-            Assert.AreEqual(Player.Black, blackPawn.GetPlayer());
+            Assert.IsNotNull(whiteKing);
+            Assert.IsNotNull(blackKing);
+            Assert.IsNotNull(whiteQueen);
+            Assert.IsNotNull(blackQueen);
+            Assert.IsNotNull(whiteBishop);
+            Assert.IsNotNull(blackBishop);
+            Assert.IsNotNull(whiteKnight);
+            Assert.IsNotNull(blackKnight);
+            Assert.IsNotNull(whiteRook);
+            Assert.IsNotNull(blackRook);
+            Assert.IsNotNull(whitePawn);
+            Assert.IsNotNull(blackPawn);
+
+            if (whiteKing != null)
+            {
+                Assert.AreEqual(Player.White, whiteKing.GetPlayer());
+            }
+            if (blackKing != null)
+            {
+                Assert.AreEqual(Player.Black, blackKing.GetPlayer());
+            }
+            if (whiteQueen != null)
+            {
+                Assert.AreEqual(Player.White, whiteQueen.GetPlayer());
+            }
+            if (blackQueen != null)
+            {
+                Assert.AreEqual(Player.Black, blackQueen.GetPlayer());
+            }
+            if (whiteBishop != null)
+            {
+                Assert.AreEqual(Player.White, whiteBishop.GetPlayer());
+            }
+            if (blackBishop != null)
+            {
+                Assert.AreEqual(Player.Black, blackBishop.GetPlayer());
+            }
+            if (whiteKnight != null)
+            {
+                Assert.AreEqual(Player.White, whiteKnight.GetPlayer());
+            }
+            if (blackKnight != null)
+            {
+                Assert.AreEqual(Player.Black, blackKnight.GetPlayer());
+            }
+            if (whiteRook != null)
+            {
+                Assert.AreEqual(Player.White, whiteRook.GetPlayer());
+            }
+            if (blackRook != null)
+            {
+                Assert.AreEqual(Player.Black, blackRook.GetPlayer());
+            }
+            if (whitePawn != null)
+            {
+                Assert.AreEqual(Player.White, whitePawn.GetPlayer());
+            }
+            if (blackPawn != null)
+            {
+                Assert.AreEqual(Player.Black, blackPawn.GetPlayer());
+            }
         }
 
         /// <summary>
         /// If there is an empty spot on the board and we try and get a piece from there, return null.
         /// </summary>
         [Test]
-        public void BoardReturnsNullPieceOnEmptySpot()
+        public void BoardReturnsNullPieceOnEmptySpotTest()
         {
             var piece = _board.GetPiece((5, 5));
 
             Assert.AreEqual(null, piece);
+        }
+
+        /// <summary>
+        /// Check that the proper player is set to play
+        /// </summary>
+        [Test]
+        public void PlayerToPlayTest()
+        {
+            _board.SetPlayerToPlay('w');
+            Assert.AreEqual(Player.White, _board.m_playerToPlay);
+            _board.SetPlayerToPlay('b');
+            Assert.AreEqual(Player.Black, _board.m_playerToPlay);
+        }
+
+        /// <summary>
+        /// If an invalid player, such as 'h' is set, we get an ArgumentException
+        /// </summary>
+        [Test]
+        public void InvalidPlayingPlayerThrowsTest()
+        {
+            var exception = Assert.Throws<ArgumentException>(
+                delegate
+                {
+                    _board.SetPlayerToPlay('h');
+                });
+
+            if (exception != null)
+                Assert.AreEqual(exception.Message, "Player \'h\' is not a valid player character.");
+        }
+
+        /// <summary>
+        /// Ensure valid castling notations are handled
+        /// </summary>
+        [Test]
+        public void CheckProperCastlingTest()
+        {
+            // Null castling
+            _board.SetCastling("-");
+            var castling = _board.GetCastling();
+            Assert.AreEqual(castling, "-");
+
+            // Full castling
+            _board.SetCastling("KQkq");
+            castling = _board.GetCastling();
+            Assert.AreEqual(castling, "KQkq");
+
+            // Partial castling
+            _board.SetCastling("Qk");
+            castling = _board.GetCastling();
+            Assert.AreEqual(castling, "Qk");
+
+            // Misordered castling
+            _board.SetCastling("qkQK");
+            castling = _board.GetCastling();
+            Assert.AreEqual(castling, "KQkq");
+        }
+
+        /// <summary>
+        /// Check if improper castling situations are handled
+        /// </summary>
+        [Test]
+        public void CheckImproperCastlingTest()
+        {
+            // Improper character
+            var exception1 = Assert.Throws<ArgumentException>(
+                delegate
+                {
+                    _board.SetCastling("h");
+                });
+            // Repeated character
+            var exception2 = Assert.Throws<ArgumentException>(
+                delegate
+                {
+                    _board.SetCastling("QQ");
+                });
+            // Empty argument
+            var exception3 = Assert.Throws<ArgumentException>(
+                delegate
+                {
+                    _board.SetCastling("");
+                });
+            // Appended hyphen
+            var exception4 = Assert.Throws<ArgumentException>(
+                delegate
+                {
+                    _board.SetCastling("KQ-");
+                });
+            // Prepended hyphen
+            var exception5 = Assert.Throws<ArgumentException>(
+                delegate
+                {
+                    _board.SetCastling("-KQ");
+                });
+
+            if (exception1 != null)
+                Assert.AreEqual(exception1.Message, "Invalid character \'h\' in FEN file.");
+            if (exception2 != null)
+                Assert.AreEqual(exception2.Message, "Duplicate character \'Q\' in FEN file.");
+            if (exception3 != null)
+                Assert.AreEqual(exception3.Message, "FEN file must include castling rights.");
+            if (exception4 != null)
+                Assert.AreEqual(exception4.Message, "Character \'-\' must represent null castling rights in FEN file.");
+            if (exception5 != null)
+                Assert.AreEqual(exception5.Message, "No castling rights must be represented by a single \'-\'.");
         }
     }
 }

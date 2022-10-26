@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace ChessBoom.GameBoard
 {
@@ -85,6 +86,89 @@ namespace ChessBoom.GameBoard
             }
 
             return (row, column);
+        }
+
+        /// <summary>
+        /// Check for if a given coordinate exists on a board
+        /// </summary>
+        /// <param name="coordinate">The 2-tuple containing the row and column coordinates (0-7, 0-7)</param>
+        /// <returns>Whether or not the coordinate exists on a board</returns>
+        public static bool IsOnBoard((int, int) coordinate)
+        {
+            return (coordinate.Item1 >= 0 && coordinate.Item1 < k_BoardWidth
+                && coordinate.Item2 >= 0 && coordinate.Item2 < k_BoardHeight);
+        }
+
+        /// <summary>
+        /// Check for if a given square is under attack by another player
+        /// </summary>
+        /// <param name="board">The board to examine</param>
+        /// <param name="searchingPlayer">The player who might be able to see the passed coordinate</param>
+        /// <param name="coordinate">The 2-tuple containing the row and column coordinates (0-7, 0-7)</param>
+        /// <returns>Whether or not the coordinate is visible to the player</returns>
+        public static bool IsSquareVisible(Board board, Player searchingPlayer, (int, int) coordinate)
+        {
+            // TODO: Implement!
+            return true;
+        }
+
+        /// <summary>
+        /// Mathematically add two 2-dimensional integer vectors
+        /// </summary>
+        /// <param name="v1">A 2-dimensional integer vector</param>
+        /// <param name="v2">A 2-dimensional integer vector</param>
+        /// <returns>The sum of the two vectors</returns>
+        public static (int, int) AddVector((int, int) v1, (int, int) v2)
+        {
+            (int, int) vector = v1;
+            vector.Item1 += v2.Item1;
+            vector.Item2 += v2.Item2;
+            return vector;
+        }
+
+        /// <summary>
+        /// Find all possible movement squares by repeatedly adding a movement vector to a starting position and add them to a List
+        /// </summary>
+        /// <param name="movementSquares">The reference of the list of squares that is added to</param>
+        /// <param name="board">The board on which the movement is made</param>
+        /// <param name="player">The player considered an "ally"</param>
+        /// <param name="startingPosition">The position (not counted) at which the movement begins</param>
+        /// <param name="movementVector">The vector that is repeatedly added to the current position</param>
+        public static void GetVectorMovementSquares(ref List<(int, int)> movementSquares, Board board, Player player, (int, int) startingPosition, (int, int) movementVector)
+        {
+            if (!IsOnBoard(startingPosition))
+            {
+                return;
+            }
+
+            (int, int) position = startingPosition;
+            bool movementFlag = true;
+            do
+            {
+                position = AddVector(position, movementVector);
+
+                // Handle board boundaries
+                if (!GameHelpers.IsOnBoard(position))
+                {
+                    movementFlag = false;
+                    break;
+                }
+
+                Piece? occupant = board.GetPiece(position);
+                // Handle running into a piece
+                if (occupant != null)
+                {
+                    movementFlag = false;
+                    // Allied pieces can not be captured
+                    if (occupant.GetPlayer() == player)
+                    {
+                        break;
+                    }
+                }
+
+                movementSquares.Add((position.Item1, position.Item2));
+            }
+            while (movementFlag);
         }
     }
 }

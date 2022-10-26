@@ -9,9 +9,29 @@ namespace ChessBoom.GameBoard
     public class Board
     {
         /// <summary>
+        /// The next player to move
+        /// </summary>
+        public Player m_playerToPlay { get; set; } = Player.White;
+        /// <summary>
+        /// The ability for each player to castle
+        /// </summary>
+        private Dictionary<Player, List<Castling>> m_castling { get; set; }
+        /// <summary>
+        /// The square on which en passant may be played (if any)
+        /// </summary>
+        public (int, int)? m_enPassant { get; set; }
+        /// <summary>
+        /// The number of half-moves since the last capture or pawn advance
+        /// </summary>
+        public int m_halfmoveClock { get; set; } = 0;
+        /// <summary>
+        /// The number of full moves (starting at 1, incremented after Black moves)
+        /// </summary>
+        public int m_fullmoveCount { get; set; } = 0;
+        /// <summary>
         /// The list of chess pieces
         /// </summary>
-        private List<Piece> m_pieces;
+        public List<Piece> m_pieces { get; set; }
 
         /// <summary>
         /// The default constructor
@@ -19,6 +39,7 @@ namespace ChessBoom.GameBoard
         public Board()
         {
             m_pieces = new List<Piece>();
+            m_castling = new Dictionary<Player, List<Castling>>();
         }
 
         /// <summary>
@@ -53,46 +74,162 @@ namespace ChessBoom.GameBoard
             switch (pieceType)
             {
                 case 'K':
-                    piece = new King(Player.White, row, col);
+                    piece = new King(this, Player.White, row, col);
                     break;
                 case 'k':
-                    piece = new King(Player.Black, row, col);
+                    piece = new King(this, Player.Black, row, col);
                     break;
                 case 'Q':
-                    piece = new Queen(Player.White, row, col);
+                    piece = new Queen(this, Player.White, row, col);
                     break;
                 case 'q':
-                    piece = new Queen(Player.Black, row, col);
+                    piece = new Queen(this, Player.Black, row, col);
                     break;
                 case 'B':
-                    piece = new Bishop(Player.White, row, col);
+                    piece = new Bishop(this, Player.White, row, col);
                     break;
                 case 'b':
-                    piece = new Bishop(Player.Black, row, col);
+                    piece = new Bishop(this, Player.Black, row, col);
                     break;
                 case 'N':
-                    piece = new Knight(Player.White, row, col);
+                    piece = new Knight(this, Player.White, row, col);
                     break;
                 case 'n':
-                    piece = new Knight(Player.Black, row, col);
+                    piece = new Knight(this, Player.Black, row, col);
                     break;
                 case 'R':
-                    piece = new Rook(Player.White, row, col);
+                    piece = new Rook(this, Player.White, row, col);
                     break;
                 case 'r':
-                    piece = new Rook(Player.Black, row, col);
+                    piece = new Rook(this, Player.Black, row, col);
                     break;
                 case 'P':
-                    piece = new Pawn(Player.White, row, col);
+                    piece = new Pawn(this, Player.White, row, col);
                     break;
                 case 'p':
-                    piece = new Pawn(Player.Black, row, col);
+                    piece = new Pawn(this, Player.Black, row, col);
                     break;
                 default:
                     throw new ArgumentException($"Error. {pieceType} is an invalid piece type.");
             }
 
             m_pieces.Add(piece);
+        }
+
+        /// <summary>
+        /// Mutator for the next player to play
+        /// </summary>
+        /// <param name="player">The .FEN notation of the player (w, b)</param>
+        /// <exception cref="ArgumentException">Thrown when the passed player is invalid</exception>
+        public void SetPlayerToPlay(char player)
+        {
+            switch (player)
+            {
+                case 'w':
+                    m_playerToPlay = Player.White;
+                    break;
+                case 'b':
+                    m_playerToPlay = Player.Black;
+                    break;
+                default:
+                    throw new ArgumentException($"Player \'{player}\' is not a valid player character.");
+            }
+        }
+
+        /// <summary>
+        /// Mutator for castling privileges
+        /// </summary>
+        /// <param name="castling">The .FEN notation of the castling privileges (ex: "KQkq")</param>
+        /// <exception cref="ArgumentException">Thrown when the castling privileges contains an invalid character</exception>
+        public void SetCastling(string castling)
+        {
+            if (castling.Length < 1)
+            {
+                throw new ArgumentException($"FEN file must include castling rights.");
+            }
+
+            List<Castling> whiteCastling = new List<Castling>();
+            List<Castling> blackCastling = new List<Castling>();
+            foreach (char c in castling)
+            {
+                switch (c)
+                {
+                    case 'K':
+                        if (whiteCastling.Contains(Castling.Kingside))
+                        {
+                            throw new ArgumentException($"Duplicate character \'{c}\' in FEN file.");
+                        }
+                        whiteCastling.Add(Castling.Kingside);
+                        break;
+                    case 'k':
+                        if (blackCastling.Contains(Castling.Kingside))
+                        {
+                            throw new ArgumentException($"Duplicate character \'{c}\' in FEN file.");
+                        }
+                        blackCastling.Add(Castling.Kingside);
+                        break;
+                    case 'Q':
+                        if (whiteCastling.Contains(Castling.Queenside))
+                        {
+                            throw new ArgumentException($"Duplicate character \'{c}\' in FEN file.");
+                        }
+                        whiteCastling.Add(Castling.Queenside);
+                        break;
+                    case 'q':
+                        if (blackCastling.Contains(Castling.Queenside))
+                        {
+                            throw new ArgumentException($"Duplicate character \'{c}\' in FEN file.");
+                        }
+                        blackCastling.Add(Castling.Queenside);
+                        break;
+                    case '-':
+                        if (whiteCastling.Count > 0 || blackCastling.Count > 0)
+                        {
+                            throw new ArgumentException($"Character \'-\' must represent null castling rights in FEN file.");
+                        }
+                        if (castling != "-")
+                        {
+                            throw new ArgumentException($"No castling rights must be represented by a single \'-\'.");
+                        }
+                        break;
+                    default:
+                        throw new ArgumentException($"Invalid character \'{c}\' in FEN file.");
+                }
+            }
+
+            m_castling = new Dictionary<Player, List<Castling>>();
+            m_castling.Add(Player.White, whiteCastling);
+            m_castling.Add(Player.Black, blackCastling);
+        }
+
+        /// <summary>
+        /// Accessor for the castling privileges
+        /// </summary>
+        /// <returns>The castling privileges in .FEN format</returns>
+        public string GetCastling()
+        {
+            string castling = "";
+            if (m_castling[Player.White].Contains(Castling.Kingside))
+            {
+                castling += "K";
+            }
+            if (m_castling[Player.White].Contains(Castling.Queenside))
+            {
+                castling += "Q";
+            }
+            if (m_castling[Player.Black].Contains(Castling.Kingside))
+            {
+                castling += "k";
+            }
+            if (m_castling[Player.Black].Contains(Castling.Queenside))
+            {
+                castling += "q";
+            }
+            if (castling == "")
+            {
+                castling = "-";
+            }
+            return castling;
         }
 
         public override string ToString()
