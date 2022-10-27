@@ -1,6 +1,5 @@
 # App
 [![.NET Build & Test](https://github.com/chess-boom/app/actions/workflows/dotnet.yml/badge.svg)](https://github.com/chess-boom/app/actions/workflows/dotnet.yml)
-![Code Coverage](https://img.shields.io/badge/Code%20Coverage-30%25-critical?style=flat)
 ## Design Infrastructure
 
 See [Confluence Page](https://chessboom.atlassian.net/l/cp/hDGAeeMt)
