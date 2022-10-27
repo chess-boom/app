@@ -100,6 +100,16 @@ namespace ChessBoom.GameBoard
         }
 
         /// <summary>
+        /// Get the opposing player
+        /// </summary>
+        /// <param name="board">The player seeking their opponent</param>
+        /// <returns>The opposing player</returns>
+        public static Player GetOpponent(Player player)
+        {
+            return (player == Player.White ? Player.Black : Player.White);
+        }
+
+        /// <summary>
         /// Check for if a given square is under attack by another player
         /// </summary>
         /// <param name="board">The board to examine</param>
@@ -109,7 +119,7 @@ namespace ChessBoom.GameBoard
         public static bool IsSquareVisible(Board board, Player searchingPlayer, (int, int) coordinate)
         {
             // TODO: Implement!
-            return true;
+            return false;
         }
 
         /// <summary>

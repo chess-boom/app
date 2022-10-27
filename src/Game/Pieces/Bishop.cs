@@ -12,7 +12,7 @@ namespace ChessBoom.GameBoard
         {
             List<(int, int)> movementSquares = new List<(int, int)>();
             (int, int) movementVector;
-            (int, int) position = (m_column, m_row);
+            (int, int) position = GetCoordinates();
 
             // Top left
             movementVector = (-1, 1);
@@ -28,11 +28,6 @@ namespace ChessBoom.GameBoard
             GameHelpers.GetVectorMovementSquares(ref movementSquares, m_board, m_owner, position, movementVector);
 
             return movementSquares;
-        }
-
-        public override bool CanMoveToSquare(string squareName)
-        {
-            return true;
         }
 
         public override string ToString()

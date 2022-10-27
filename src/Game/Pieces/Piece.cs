@@ -23,7 +23,11 @@ namespace ChessBoom.GameBoard
         }
 
         public abstract List<(int, int)> GetMovementSquares();
-        public abstract bool CanMoveToSquare(string squareName);
+
+        public bool CanMoveToSquare(string squareName)
+        {
+            return GetMovementSquares().Contains(GameHelpers.GetCoordinateFromSquare(squareName));
+        }
 
         public Board GetBoard()
         {
