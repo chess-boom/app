@@ -95,15 +95,13 @@ namespace ChessBoom.GameBoard
         private Board CreateBoardFromFEN(string fen)
         {
             Board board = new Board();
-            
             /* FEN files have 6 parts, delimited by ' ' characters:
             The first part is the piece placements, rows delimited by '/' characters starting on the top
             The second part denotes the next player to take their turn
             The third part denotes castling availability
             The fourth part denotes en passant availability
             The fifth part denotes the halfmove clock, useful for enforcing the fifty-move rule
-            The sixth part denotes the fullmove number
-            */
+            The sixth part denotes the fullmove number */
             string[] fenSplit = fen.Split(' ');
 
             // Create the pieces
