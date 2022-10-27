@@ -10,7 +10,7 @@ namespace ChessBoom.NUnitTests
         [SetUp]
         public void Setup()
         {
-            //_game = new Game(); //Commenting out until issue with Resources folder is fixed.
+            _game = new Game();
         }
 
         [Test]
