@@ -32,6 +32,10 @@ namespace ChessBoom.GameBoard
         /// The list of chess pieces
         /// </summary>
         public List<Piece> m_pieces { get; set; }
+        /// <summary>
+        /// The game that contains this board
+        /// </summary>
+        public Game? m_game { get; set; }
 
         /// <summary>
         /// The default constructor
@@ -114,6 +118,36 @@ namespace ChessBoom.GameBoard
             }
 
             m_pieces.Add(piece);
+        }
+
+        public void MovePiece(string start, string destination)
+        {
+            (int, int) startCoordinate;
+            (int, int) destinationCoordinate;
+            try
+            {
+                startCoordinate = GameHelpers.GetCoordinateFromSquare(start);
+                destinationCoordinate = GameHelpers.GetCoordinateFromSquare(destination);
+            }
+            catch (ArgumentException e)
+            {
+                throw e;
+            }
+
+            Piece? piece = GetPiece(startCoordinate);
+            if (piece == null)
+            {
+                throw new ArgumentException($"Square {start} has no piece to move");
+            }
+
+            // TODO: Insert additional conditions for moving pieces here
+            // Ex: check, castling through check, etc.
+
+            if (!piece.GetMovementSquares().Contains(destinationCoordinate))
+            {
+                throw new ArgumentException($"Piece {piece} is unable to move to square {destinationCoordinate}.");
+            }
+            piece.MovePiece(destinationCoordinate);
         }
 
         /// <summary>
@@ -230,6 +264,14 @@ namespace ChessBoom.GameBoard
                 castling = "-";
             }
             return castling;
+        }
+
+        public void Capture(Piece attacker, (int, int) coordinate)
+        {
+            if (m_game != null)
+            {
+                m_game.Capture(attacker, GameHelpers.GetSquareFromCoordinate(coordinate));
+            }
         }
 
         public override string ToString()

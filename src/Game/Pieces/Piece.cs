@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace ChessBoom.GameBoard
@@ -17,6 +18,11 @@ namespace ChessBoom.GameBoard
             m_column = column;
         }
 
+        public void Destroy()
+        {
+            m_board.m_pieces.Remove(this);
+        }
+
         public (int, int) GetCoordinates()
         {
             return (m_row, m_column);
@@ -27,6 +33,23 @@ namespace ChessBoom.GameBoard
         public bool CanMoveToSquare(string squareName)
         {
             return GetMovementSquares().Contains(GameHelpers.GetCoordinateFromSquare(squareName));
+        }
+
+        public void MovePiece((int, int) coordinate)
+        {
+            if (GetMovementSquares().Contains(coordinate))
+            {
+                if (m_board.GetPiece(coordinate) != null)
+                {
+                    m_board.Capture(this, coordinate);
+                }
+                m_column = coordinate.Item1;
+                m_row = coordinate.Item2;
+            }
+            else
+            {
+                throw new ArgumentException($"Error. Piece {this.ToString()} on {GameHelpers.GetSquareFromCoordinate(GetCoordinates())} is unable to move to {GameHelpers.GetSquareFromCoordinate(coordinate)}!");
+            }
         }
 
         public Board GetBoard()

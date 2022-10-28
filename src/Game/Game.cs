@@ -40,7 +40,7 @@ namespace ChessBoom.GameBoard
         /// <summary>
         /// The board created for this game
         /// </summary>
-        private Board m_board;
+        public Board m_board { get; set; }
 
         /// <summary>
         /// Default constructor
@@ -86,6 +86,11 @@ namespace ChessBoom.GameBoard
             }
 
             m_board = CreateBoardFromFEN(fen);
+        }
+
+        public void Capture(Piece attacker, string square)
+        {
+            m_ruleset.Capture(attacker, m_board, square);
         }
 
         /// <summary>
@@ -199,7 +204,7 @@ namespace ChessBoom.GameBoard
         /// Retrieve the board state as the contents of a .FEN file
         /// </summary>
         /// <returns>The board state as the contents of a .FEN file</returns>
-        private static string CreateFENFromBoard(Board board)
+        public static string CreateFENFromBoard(Board board)
         {
             string fen = "";
 

@@ -10,6 +10,7 @@ namespace ChessBoom.GameBoard
 
         public override List<(int, int)> GetMovementSquares()
         {
+            // TODO: incorporate castling!
             List<(int, int)> movementSquares = new List<(int, int)>();
 
             List<(int, int)> tryCoordinates = new List<(int, int)>();

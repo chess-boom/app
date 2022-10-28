@@ -10,13 +10,18 @@ namespace ChessBoom.NUnitTests
         [SetUp]
         public void Setup()
         {
-            //_game = new Game(); //Commenting out until issue with Resources folder is fixed.
+            _game = new Game();
         }
 
+        /// <summary>
+        /// Test creating a game and printing out the board state properly
+        /// </summary>
         [Test]
-        public void Test1()
+        public void CheckProperFENSetupTest()
         {
-            Assert.Pass();
+            string fen = Game.CreateFENFromBoard(_game.m_board);
+            // FAILS: Can not access Resources folder!
+            Assert.Equals(fen, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
         }
     }
 }
