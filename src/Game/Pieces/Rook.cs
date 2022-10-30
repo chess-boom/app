@@ -4,7 +4,7 @@ namespace ChessBoom.GameBoard
 {
     public class Rook : Piece
     {
-        public Rook(Board board, Player player, int row, int column) : base(board, player, row, column)
+        public Rook(Board board, Player player, (int, int) coordinate) : base(board, player, coordinate)
         {
         }
 

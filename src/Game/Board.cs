@@ -51,7 +51,7 @@ namespace ChessBoom.GameBoard
         /// </summary>
         /// <param name="coordinate">The 2-tuple containing the row and column coordinates (0-7, 0-7)</param>
         /// <returns>The piece found on the passed square. If none, returns null</returns>
-        public Piece? GetPiece((int row, int col) coordinate)
+        public Piece? GetPiece((int, int) coordinate)
         {
             foreach (Piece piece in m_pieces)
             {
@@ -67,51 +67,51 @@ namespace ChessBoom.GameBoard
         /// Creates a piece
         /// </summary>
         /// <throws>ArgumentException if invalid pieceType or invalid coordinates</throws>
-        public void CreatePiece(char pieceType, int row, int col)
+        public void CreatePiece(char pieceType, (int, int) coordinate)
         {
-            if (row < 0 || row >= GameHelpers.k_BoardHeight || col < 0 || col >= GameHelpers.k_BoardWidth)
+            if (coordinate.Item1 < 0 || coordinate.Item1 >= GameHelpers.k_BoardWidth || coordinate.Item2 < 0 || coordinate.Item2 >= GameHelpers.k_BoardHeight)
             {
-                throw new ArgumentException($"Coordinate ({col}, {row}) is an invalid coordinate (x, y).");
+                throw new ArgumentException($"Coordinate ({coordinate.Item1}, {coordinate.Item2}) is an invalid coordinate (x, y).");
             }
 
             Piece piece;
             switch (pieceType)
             {
                 case 'K':
-                    piece = new King(this, Player.White, row, col);
+                    piece = new King(this, Player.White, coordinate);
                     break;
                 case 'k':
-                    piece = new King(this, Player.Black, row, col);
+                    piece = new King(this, Player.Black, coordinate);
                     break;
                 case 'Q':
-                    piece = new Queen(this, Player.White, row, col);
+                    piece = new Queen(this, Player.White, coordinate);
                     break;
                 case 'q':
-                    piece = new Queen(this, Player.Black, row, col);
+                    piece = new Queen(this, Player.Black, coordinate);
                     break;
                 case 'B':
-                    piece = new Bishop(this, Player.White, row, col);
+                    piece = new Bishop(this, Player.White, coordinate);
                     break;
                 case 'b':
-                    piece = new Bishop(this, Player.Black, row, col);
+                    piece = new Bishop(this, Player.Black, coordinate);
                     break;
                 case 'N':
-                    piece = new Knight(this, Player.White, row, col);
+                    piece = new Knight(this, Player.White, coordinate);
                     break;
                 case 'n':
-                    piece = new Knight(this, Player.Black, row, col);
+                    piece = new Knight(this, Player.Black, coordinate);
                     break;
                 case 'R':
-                    piece = new Rook(this, Player.White, row, col);
+                    piece = new Rook(this, Player.White, coordinate);
                     break;
                 case 'r':
-                    piece = new Rook(this, Player.Black, row, col);
+                    piece = new Rook(this, Player.Black, coordinate);
                     break;
                 case 'P':
-                    piece = new Pawn(this, Player.White, row, col);
+                    piece = new Pawn(this, Player.White, coordinate);
                     break;
                 case 'p':
-                    piece = new Pawn(this, Player.Black, row, col);
+                    piece = new Pawn(this, Player.Black, coordinate);
                     break;
                 default:
                     throw new ArgumentException($"Error. {pieceType} is an invalid piece type.");
@@ -120,6 +120,14 @@ namespace ChessBoom.GameBoard
             m_pieces.Add(piece);
         }
 
+        /// <summary>
+        /// Moves a piece from one square to another
+        /// </summary>
+        /// <param name="start">The name of the square on which the moving piece resides</param>
+        /// <param name="destination">The name of the square to which the piece will move</param>
+        /// <exception cref="ArgumentException">Thrown if the specified starting square is invalid/exception>
+        /// <exception cref="ArgumentException">Thrown if the specified starting square contains no piece</exception>
+        /// <exception cref="ArgumentException">Thrown if the found piece is unable to move to the specified coordinate</exception>
         public void MovePiece(string start, string destination)
         {
             (int, int) startCoordinate;
@@ -143,11 +151,14 @@ namespace ChessBoom.GameBoard
             // TODO: Insert additional conditions for moving pieces here
             // Ex: check, castling through check, etc.
 
-            if (!piece.GetMovementSquares().Contains(destinationCoordinate))
+            try
             {
-                throw new ArgumentException($"Piece {piece} is unable to move to square {destinationCoordinate}.");
+                piece.MovePiece(destinationCoordinate);
             }
-            piece.MovePiece(destinationCoordinate);
+            catch (ArgumentException e)
+            {
+                throw e;
+            }
         }
 
         /// <summary>
@@ -266,6 +277,11 @@ namespace ChessBoom.GameBoard
             return castling;
         }
 
+        /// <summary>
+        /// Handle the capture that has occurred on a specific square
+        /// </summary>
+        /// <param name="attacker">The piece that initiated the capture</param>
+        /// <param name="coordinate">The square on which the capture takes place</param>
         public void Capture(Piece attacker, (int, int) coordinate)
         {
             if (m_game != null)

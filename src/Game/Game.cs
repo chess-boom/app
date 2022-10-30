@@ -25,6 +25,49 @@ namespace ChessBoom.GameBoard
     }
 
     /// <summary>
+    /// The Move struct represents a single move and all of its variations via a nested recursive list
+    /// </summary>
+    struct Move
+    {
+        public Move(Piece piece, string square)
+        {
+            m_piece = piece;
+            m_square = square;
+            m_variations = null;
+        }
+        public Piece m_piece { get; }
+        public string m_square { get; }
+        public List<Move>? m_variations { get; set; }
+
+        // TODO: Implement variations
+        public void AddVariation(Move move)
+        {
+            if (m_variations == null)
+            {
+                m_variations = new List<Move>();
+            }
+            if (!m_variations.Contains(move))
+            {
+                m_variations.Add(move);
+            }
+            else
+            {
+                throw new ArgumentException($"Variation {move} already exists");
+            }
+        }
+
+        public override string ToString()
+        {
+            string? pieceString = m_piece.ToString();
+            if (pieceString == null)
+            {
+                throw new NullReferenceException($"Piece should not be null!");
+            }
+            return pieceString.ToLower() + m_square;
+        }
+    }
+
+    /// <summary>
     /// The Game class handles the creation and playing of a game of any chess variant
     /// </summary>
     public class Game
@@ -41,6 +84,10 @@ namespace ChessBoom.GameBoard
         /// The board created for this game
         /// </summary>
         public Board m_board { get; set; }
+        /// <summary>
+        /// The data structure for all moves and variations
+        /// </summary>
+        private List<Move> m_moveList;
 
         /// <summary>
         /// Default constructor
@@ -51,6 +98,7 @@ namespace ChessBoom.GameBoard
             InitializeBoard(m_variant);
 
             m_ruleset = new Standard();
+            m_moveList = new List<Move>();
 
             System.Console.WriteLine(CreateFENFromBoard(m_board));
         }
@@ -88,9 +136,60 @@ namespace ChessBoom.GameBoard
             m_board = CreateBoardFromFEN(fen);
         }
 
+        /// <summary>
+        /// Handle the capture that has occurred on a specific square
+        /// </summary>
+        /// <param name="attacker">The piece that initiated the capture</param>
+        /// <param name="coordinate">The square on which the capture takes place</param>
         public void Capture(Piece attacker, string square)
         {
             m_ruleset.Capture(attacker, m_board, square);
+        }
+
+        public void MakeExplicitMove(string startingSquare, string destinationSquare)
+        {
+            try
+            {
+                Piece? piece = m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(startingSquare));
+                if (piece == null)
+                {
+                    throw new ArgumentException($"Piece on square {startingSquare} not found!");
+                }
+                MakeMove(piece, destinationSquare);
+            }
+            catch (ArgumentException e)
+            {
+                throw e;
+            }
+        }
+
+        /// <summary>
+        /// Attempt to move a piece as a player's move
+        /// </summary>
+        /// <param name="piece">The piece that will attempt to move</param>
+        /// <param name="square">The square that the piece should move to</param>
+        public void MakeMove(Piece piece, string square)
+        {
+            try
+            {
+                piece.MovePiece(GameHelpers.GetCoordinateFromSquare(square));
+            }
+            catch (ArgumentException e)
+            {
+                throw e;
+            }
+            if (m_board.m_playerToPlay == Player.White)
+            {
+                m_board.m_playerToPlay = Player.Black;
+            }
+            else
+            {
+                m_board.m_playerToPlay = Player.White;
+                m_board.m_fullmoveCount++;
+            }
+            // TODO: Account for resetting the halfmove clock!
+            m_board.m_halfmoveClock++;
+            m_moveList.Add(new Move(piece, square));
         }
 
         /// <summary>
@@ -125,7 +224,8 @@ namespace ChessBoom.GameBoard
                     {
                         try
                         {
-                            board.CreatePiece(piece, row, col);
+                            (int, int) coordinate = (col, (GameHelpers.k_BoardHeight - 1) - row);
+                            board.CreatePiece(piece, coordinate);
                         }
                         catch (ArgumentException)
                         {
@@ -209,12 +309,12 @@ namespace ChessBoom.GameBoard
             string fen = "";
 
             // Retrieve the pieces
-            for (int row = 0; row < GameHelpers.k_BoardHeight; row++)
+            for (int row = GameHelpers.k_BoardHeight - 1; row >= 0; row--)
             {
                 int emptySquareCount = 0;
                 for (int col = 0; col < GameHelpers.k_BoardWidth; col++)
                 {
-                    Piece? piece = board.GetPiece((row, col));
+                    Piece? piece = board.GetPiece((col, row));
                     if (piece == null)
                     {
                         emptySquareCount++;
@@ -239,7 +339,7 @@ namespace ChessBoom.GameBoard
                     emptySquareCount = 0;
                 }
 
-                if (row != GameHelpers.k_BoardHeight - 1)
+                if (row != 0)
                 {
                     fen += "/";
                 }

@@ -10,14 +10,17 @@ namespace ChessBoom.GameBoard
         protected int m_row;
         protected int m_column;
 
-        public Piece(Board board, Player player, int row, int column)
+        public Piece(Board board, Player player, (int, int) coordinate)
         {
             m_board = board;
             m_owner = player;
-            m_row = row;
-            m_column = column;
+            m_row = coordinate.Item2;
+            m_column = coordinate.Item1;
         }
 
+        /// <summary>
+        /// Effectively destroy this piece
+        /// </summary>
         public void Destroy()
         {
             m_board.m_pieces.Remove(this);
@@ -25,9 +28,13 @@ namespace ChessBoom.GameBoard
 
         public (int, int) GetCoordinates()
         {
-            return (m_row, m_column);
+            return (m_column, m_row);
         }
 
+        /// <summary>
+        /// Get the list of squares that this piece can move to
+        /// </summary>
+        /// <returns>The list of square coordinates that the piece can move to</returns>
         public abstract List<(int, int)> GetMovementSquares();
 
         public bool CanMoveToSquare(string squareName)
@@ -35,6 +42,11 @@ namespace ChessBoom.GameBoard
             return GetMovementSquares().Contains(GameHelpers.GetCoordinateFromSquare(squareName));
         }
 
+        /// <summary>
+        /// Attempt to move the piece to a new square. Initiates a capture if required
+        /// </summary>
+        /// <param name="coordinate">The coordinate to which the piece will try to move</param>
+        /// <exception cref="ArgumentException">Thrown the piece is unable to move to the specified coordinate</exception>
         public void MovePiece((int, int) coordinate)
         {
             if (GetMovementSquares().Contains(coordinate))
