@@ -4,7 +4,7 @@ namespace ChessBoom.GameBoard
 {
     public class Bishop : Piece
     {
-        public Bishop(Board board, Player player, int row, int column) : base(board, player, row, column)
+        public Bishop(Board board, Player player, (int, int) coordinate) : base(board, player, coordinate)
         {
         }
 

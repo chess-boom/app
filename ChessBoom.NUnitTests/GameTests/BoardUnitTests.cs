@@ -20,18 +20,18 @@ namespace ChessBoom.NUnitTests.GameTests
         public void BoardCreationTest()
         {
             //Setting up arbitrary placement of valid pieces
-            _board.CreatePiece('p', 1, 1);
-            _board.CreatePiece('p', 1, 2);
-            _board.CreatePiece('p', 1, 3);
-            _board.CreatePiece('p', 1, 4);
-            _board.CreatePiece('p', 1, 5);
-            _board.CreatePiece('k', 2, 4);
-            _board.CreatePiece('q', 2, 5);
-            _board.CreatePiece('r', 5, 1);
-            _board.CreatePiece('R', 7, 7);
+            _board.CreatePiece('p', (1, 1));
+            _board.CreatePiece('p', (1, 2));
+            _board.CreatePiece('p', (1, 3));
+            _board.CreatePiece('p', (1, 4));
+            _board.CreatePiece('p', (1, 5));
+            _board.CreatePiece('k', (2, 4));
+            _board.CreatePiece('q', (2, 5));
+            _board.CreatePiece('r', (5, 1));
+            _board.CreatePiece('R', (7, 7));
 
 
-            Assert.AreEqual("pppppkqrR", _board.ToString());
+            Assert.AreEqual(".......R\n........\n.pq.....\n.pk.....\n.p......\n.p......\n.p...r..\n........\n", _board.ToString());
         }
 
         /// <summary>
@@ -44,33 +44,33 @@ namespace ChessBoom.NUnitTests.GameTests
             var exception1 = Assert.Throws<ArgumentException>(
                 delegate
                 {
-                    _board.CreatePiece('p', -1, 1);
+                    _board.CreatePiece('p', (-1, 1));
                 });
 
             var exception2 = Assert.Throws<ArgumentException>(
                 delegate
                 {
-                    _board.CreatePiece('p', 1, -1);
+                    _board.CreatePiece('p', (1, -1));
                 });
 
             //Out of bounds positive (board is 8x8, we index by 0)
             var exception3 = Assert.Throws<ArgumentException>(
                 delegate
                 {
-                    _board.CreatePiece('p', 8, 1);
+                    _board.CreatePiece('p', (8, 1));
                 });
 
             var exception4 = Assert.Throws<ArgumentException>(
                 delegate
                 {
-                    _board.CreatePiece('p', 1, 8);
+                    _board.CreatePiece('p', (1, 8));
                 });
 
             //Do not need to do for all messages, validating here is enough
             if (exception1 != null)
-                Assert.AreEqual("Coordinate (1, -1) is an invalid coordinate (x, y).", exception1.Message);
+                Assert.AreEqual("Coordinate (-1, 1) is an invalid coordinate (x, y).", exception1.Message);
             if (exception2 != null)
-                Assert.AreEqual("Coordinate (-1, 1) is an invalid coordinate (x, y).", exception2.Message);
+                Assert.AreEqual("Coordinate (1, -1) is an invalid coordinate (x, y).", exception2.Message);
         }
         /// <summary>
         /// If an invalid piece, such as 'h' is created, we get an ArgumentException
@@ -81,7 +81,7 @@ namespace ChessBoom.NUnitTests.GameTests
             var exception = Assert.Throws<ArgumentException>(
                 delegate
                 {
-                    _board.CreatePiece('h', 1, 1);
+                    _board.CreatePiece('h', (1, 1));
                 });
 
             if (exception != null)
@@ -94,18 +94,18 @@ namespace ChessBoom.NUnitTests.GameTests
         [Test]
         public void PieceTeamProperlySet()
         {
-            _board.CreatePiece('K', 0, 1);
-            _board.CreatePiece('k', 0, 2);
-            _board.CreatePiece('Q', 1, 1);
-            _board.CreatePiece('q', 1, 2);
-            _board.CreatePiece('B', 2, 1);
-            _board.CreatePiece('b', 2, 2);
-            _board.CreatePiece('N', 3, 1);
-            _board.CreatePiece('n', 3, 2);
-            _board.CreatePiece('R', 4, 1);
-            _board.CreatePiece('r', 4, 2);
-            _board.CreatePiece('P', 5, 1);
-            _board.CreatePiece('p', 5, 2);
+            _board.CreatePiece('K', (0, 1));
+            _board.CreatePiece('k', (0, 2));
+            _board.CreatePiece('Q', (1, 1));
+            _board.CreatePiece('q', (1, 2));
+            _board.CreatePiece('B', (2, 1));
+            _board.CreatePiece('b', (2, 2));
+            _board.CreatePiece('N', (3, 1));
+            _board.CreatePiece('n', (3, 2));
+            _board.CreatePiece('R', (4, 1));
+            _board.CreatePiece('r', (4, 2));
+            _board.CreatePiece('P', (5, 1));
+            _board.CreatePiece('p', (5, 2));
 
 
             var whiteKing = _board.GetPiece((0, 1));

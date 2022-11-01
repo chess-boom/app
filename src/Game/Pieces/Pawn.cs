@@ -1,10 +1,11 @@
+using System;
 using System.Collections.Generic;
 
 namespace ChessBoom.GameBoard
 {
     public class Pawn : Piece
     {
-        public Pawn(Board board, Player player, int row, int column) : base(board, player, row, column)
+        public Pawn(Board board, Player player, (int, int) coordinate) : base(board, player, coordinate)
         {
         }
 
@@ -64,6 +65,65 @@ namespace ChessBoom.GameBoard
             }
 
             return movementSquares;
+        }
+
+        /// <summary>
+        /// Attempt to move the piece to a new square. Initiates a capture if required
+        /// </summary>
+        /// <param name="coordinate">The coordinate to which the piece will try to move</param>
+        /// <exception cref="ArgumentException">Thrown the piece is unable to move to the specified coordinate</exception>
+        public override void MovePiece((int, int) coordinate)
+        {
+            if (GetMovementSquares().Contains(coordinate))
+            {
+                m_board.m_halfmoveClock = 0;
+
+                if (m_board.GetPiece(coordinate) != null)
+                {
+                    m_board.Capture(this, coordinate);
+                }
+                else if (coordinate == m_board.m_enPassant) // Capture en passant
+                {
+                    (int, int) captureCoordinate = coordinate;
+                    if (m_owner == Player.White)
+                    {
+                        // The captured piece must be 1 tile lower than the capture square
+                        captureCoordinate = GameHelpers.AddVector(captureCoordinate, (0, -1));
+                    }
+                    else
+                    {
+                        // The captured piece must be 1 tile above than the capture square
+                        captureCoordinate = GameHelpers.AddVector(captureCoordinate, (0, 1));
+                    }
+                    m_board.Capture(this, captureCoordinate);
+                }
+
+                // Handle 2-square movement (enables en passant)
+                if (coordinate == GameHelpers.AddVector(this.GetCoordinates(), (0, 2)))
+                {
+                    m_board.m_enPassant = GameHelpers.AddVector(this.GetCoordinates(), (0, 1));
+                }
+                else if (coordinate == GameHelpers.AddVector(this.GetCoordinates(), (0, -2)))
+                {
+                    m_board.m_enPassant = GameHelpers.AddVector(this.GetCoordinates(), (0, -1));
+                }
+                else
+                {
+                    // If not 2-square movement, disable en passant
+                    if (m_board.m_enPassant != null)
+                    {
+                        m_board.m_enPassant = null;
+                    }
+                }
+
+                // Actually move the piece
+                m_column = coordinate.Item1;
+                m_row = coordinate.Item2;
+            }
+            else
+            {
+                throw new ArgumentException($"Error. Piece {this.ToString()} on {GameHelpers.GetSquareFromCoordinate(GetCoordinates())} is unable to move to {GameHelpers.GetSquareFromCoordinate(coordinate)}!");
+            }
         }
 
         public override string ToString()

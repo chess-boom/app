@@ -39,7 +39,7 @@ namespace ChessBoom.GameBoard
                 throw new ArgumentException($"Coordinate ({coordinate.Item1}, {coordinate.Item2}) is an invalid square");
             }
 
-            return coordinate.Item1.ToString() + coordinate.Item2.ToString();
+            return k_BoardColumnNames[coordinate.Item1] + k_BoardRowNames[coordinate.Item2];
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace ChessBoom.GameBoard
             int column = -1;
             for (int index = 0; index < k_BoardColumnNames.Length; index++)
             {
-                if (square[0].Equals(k_BoardColumnNames[index]))
+                if (square[0].ToString().Equals(k_BoardColumnNames[index]))
                 {
                     column = index;
                     break;
@@ -74,7 +74,7 @@ namespace ChessBoom.GameBoard
             int row = -1;
             for (int index = 0; index < k_BoardRowNames.Length; index++)
             {
-                if (square[1].Equals(k_BoardRowNames[index]))
+                if (square[1].ToString().Equals(k_BoardRowNames[index]))
                 {
                     row = index;
                     break;
@@ -85,7 +85,7 @@ namespace ChessBoom.GameBoard
                 throw new ArgumentException($"{square} does not have a proper row coordinate.");
             }
 
-            return (row, column);
+            return (column, row);
         }
 
         /// <summary>

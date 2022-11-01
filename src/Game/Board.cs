@@ -9,6 +9,18 @@ namespace ChessBoom.GameBoard
     public class Board
     {
         /// <summary>
+        /// Map for piece types and their constructors
+        /// </summary>
+        public static Dictionary<char, Func<Board, Player, (int, int), Piece>> k_pieceConstructor = new Dictionary<char, Func<Board, Player, (int, int), Piece>>()
+        {
+            {'K', (Board board, Player player, (int, int) coordinate) => new King(board, player, coordinate)},
+            {'Q', (Board board, Player player, (int, int) coordinate) => new Queen(board, player, coordinate)},
+            {'R', (Board board, Player player, (int, int) coordinate) => new Rook(board, player, coordinate)},
+            {'N', (Board board, Player player, (int, int) coordinate) => new Knight(board, player, coordinate)},
+            {'B', (Board board, Player player, (int, int) coordinate) => new Bishop(board, player, coordinate)},
+            {'P', (Board board, Player player, (int, int) coordinate) => new Pawn(board, player, coordinate)}
+        };
+        /// <summary>
         /// The next player to move
         /// </summary>
         public Player m_playerToPlay { get; set; } = Player.White;
@@ -32,6 +44,10 @@ namespace ChessBoom.GameBoard
         /// The list of chess pieces
         /// </summary>
         public List<Piece> m_pieces { get; set; }
+        /// <summary>
+        /// The game that contains this board
+        /// </summary>
+        public Game? m_game { get; set; }
 
         /// <summary>
         /// The default constructor
@@ -43,11 +59,19 @@ namespace ChessBoom.GameBoard
         }
 
         /// <summary>
+        /// The parameterized constructor
+        /// </summary>
+        public Board(Game game) : this()
+        {
+            m_game = game;
+        }
+
+        /// <summary>
         /// Retrieves a piece from its coordinates
         /// </summary>
         /// <param name="coordinate">The 2-tuple containing the row and column coordinates (0-7, 0-7)</param>
         /// <returns>The piece found on the passed square. If none, returns null</returns>
-        public Piece? GetPiece((int row, int col) coordinate)
+        public Piece? GetPiece((int, int) coordinate)
         {
             foreach (Piece piece in m_pieces)
             {
@@ -62,59 +86,75 @@ namespace ChessBoom.GameBoard
         /// <summary>
         /// Creates a piece
         /// </summary>
-        /// <throws>ArgumentException if invalid pieceType or invalid coordinates</throws>
-        public void CreatePiece(char pieceType, int row, int col)
+        /// <exception cref="ArgumentException">Thrown when the passed player is invalid</exception>
+        /// <exception cref="ArgumentException">Thrown if invalid pieceType or invalid coordinates</exception>
+        public void CreatePiece(char pieceType, (int, int) coordinate)
         {
-            if (row < 0 || row >= GameHelpers.k_BoardHeight || col < 0 || col >= GameHelpers.k_BoardWidth)
+            if (!GameHelpers.IsOnBoard(coordinate))
             {
-                throw new ArgumentException($"Coordinate ({col}, {row}) is an invalid coordinate (x, y).");
+                throw new ArgumentException($"Coordinate ({coordinate.Item1}, {coordinate.Item2}) is an invalid coordinate (x, y).");
             }
 
+            Player player = Char.IsUpper(pieceType) ? Player.White : Player.Black;
+
             Piece piece;
-            switch (pieceType)
+            try
             {
-                case 'K':
-                    piece = new King(this, Player.White, row, col);
-                    break;
-                case 'k':
-                    piece = new King(this, Player.Black, row, col);
-                    break;
-                case 'Q':
-                    piece = new Queen(this, Player.White, row, col);
-                    break;
-                case 'q':
-                    piece = new Queen(this, Player.Black, row, col);
-                    break;
-                case 'B':
-                    piece = new Bishop(this, Player.White, row, col);
-                    break;
-                case 'b':
-                    piece = new Bishop(this, Player.Black, row, col);
-                    break;
-                case 'N':
-                    piece = new Knight(this, Player.White, row, col);
-                    break;
-                case 'n':
-                    piece = new Knight(this, Player.Black, row, col);
-                    break;
-                case 'R':
-                    piece = new Rook(this, Player.White, row, col);
-                    break;
-                case 'r':
-                    piece = new Rook(this, Player.Black, row, col);
-                    break;
-                case 'P':
-                    piece = new Pawn(this, Player.White, row, col);
-                    break;
-                case 'p':
-                    piece = new Pawn(this, Player.Black, row, col);
-                    break;
-                default:
-                    throw new ArgumentException($"Error. {pieceType} is an invalid piece type.");
+                piece = k_pieceConstructor[Char.ToUpper(pieceType)](this, player, coordinate);
+            }
+            catch (KeyNotFoundException)
+            {
+                throw new ArgumentException($"Error. {pieceType} is an invalid piece type.");
             }
 
             m_pieces.Add(piece);
         }
+
+        // TODO: Determine whether this function should be kept or not
+        // Note: This may be useful in the future for when variations are made.
+        //      Depending on the architecture, a game may delegate each variation
+        //      to its own board, which should then make its own moves.
+
+        /// <summary>
+        /// Moves a piece from one square to another
+        /// </summary>
+        /// <param name="start">The name of the square on which the moving piece resides</param>
+        /// <param name="destination">The name of the square to which the piece will move</param>
+        /// <exception cref="ArgumentException">Thrown if the specified starting square is invalid/exception>
+        /// <exception cref="ArgumentException">Thrown if the specified starting square contains no piece</exception>
+        /// <exception cref="ArgumentException">Thrown if the found piece is unable to move to the specified coordinate</exception>
+        /*public void MovePiece(string start, string destination)
+        {
+            (int, int) startCoordinate;
+            (int, int) destinationCoordinate;
+            try
+            {
+                startCoordinate = GameHelpers.GetCoordinateFromSquare(start);
+                destinationCoordinate = GameHelpers.GetCoordinateFromSquare(destination);
+            }
+            catch (ArgumentException e)
+            {
+                throw e;
+            }
+
+            Piece? piece = GetPiece(startCoordinate);
+            if (piece == null)
+            {
+                throw new ArgumentException($"Square {start} has no piece to move");
+            }
+
+            // TODO: Insert additional conditions for moving pieces here
+            // Ex: check, castling through check, etc.
+
+            try
+            {
+                piece.MovePiece(destinationCoordinate);
+            }
+            catch (ArgumentException e)
+            {
+                throw e;
+            }
+        }*/
 
         /// <summary>
         /// Mutator for the next player to play
@@ -232,13 +272,41 @@ namespace ChessBoom.GameBoard
             return castling;
         }
 
+        /// <summary>
+        /// Handle the capture that has occurred on a specific square
+        /// </summary>
+        /// <param name="attacker">The piece that initiated the capture</param>
+        /// <param name="coordinate">The square on which the capture takes place</param>
+        public void Capture(Piece attacker, (int, int) coordinate)
+        {
+            if (m_game != null)
+            {
+                m_game.Capture(attacker, GameHelpers.GetSquareFromCoordinate(coordinate));
+                m_halfmoveClock = 0;
+            }
+        }
+
         public override string ToString()
         {
             string output = "";
-            foreach (Piece piece in m_pieces)
+
+            for (int y = GameHelpers.k_BoardHeight - 1; y >= 0; y--)
             {
-                output += piece;
+                for (int x = 0; x < GameHelpers.k_BoardWidth; x++)
+                {
+                    Piece? piece = GetPiece((x, y));
+                    if (piece == null)
+                    {
+                        output += ".";
+                    }
+                    else
+                    {
+                        output += piece.ToString();
+                    }
+                }
+                output += "\n";
             }
+
             return output;
         }
     }

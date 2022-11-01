@@ -4,12 +4,13 @@ namespace ChessBoom.GameBoard
 {
     public class King : Piece
     {
-        public King(Board board, Player player, int row, int column) : base(board, player, row, column)
+        public King(Board board, Player player, (int, int) coordinate) : base(board, player, coordinate)
         {
         }
 
         public override List<(int, int)> GetMovementSquares()
         {
+            // TODO: incorporate castling!
             List<(int, int)> movementSquares = new List<(int, int)>();
 
             List<(int, int)> tryCoordinates = new List<(int, int)>();

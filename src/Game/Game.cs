@@ -25,6 +25,67 @@ namespace ChessBoom.GameBoard
     }
 
     /// <summary>
+    /// The Move struct represents a single move and all of its variations via a nested recursive list
+    /// </summary>
+    struct Move
+    {
+        public Move(Piece piece, string square)
+        {
+            m_piece = piece;
+            m_square = square;
+            m_variations = null;
+        }
+        public Piece m_piece { get; }
+        public string m_square { get; }
+        public List<Move>? m_variations { get; set; }
+
+        // TODO: Implement variations
+        public void AddVariation(Move move)
+        {
+            if (m_variations == null)
+            {
+                m_variations = new List<Move>();
+            }
+            if (!m_variations.Contains(move))
+            {
+                m_variations.Add(move);
+            }
+            else
+            {
+                throw new ArgumentException($"Variation {move} already exists");
+            }
+        }
+
+        public override string ToString()
+        {
+            string? pieceString = m_piece.ToString();
+            if (pieceString == null)
+            {
+                throw new NullReferenceException($"Piece should not be null!");
+            }
+            return pieceString.ToLower() + m_square;
+        }
+    }
+
+    /// <summary>
+    /// The GameplayErrorException class is used for any case in which gameplay rules are broken
+    /// </summary>
+    public class GameplayErrorException : Exception
+    {
+        public GameplayErrorException()
+        {
+        }
+
+        public GameplayErrorException(string message) : base(message)
+        {
+        }
+
+        public GameplayErrorException(string message, Exception inner) : base(message, inner)
+        {
+        }
+    }
+
+    /// <summary>
     /// The Game class handles the creation and playing of a game of any chess variant
     /// </summary>
     public class Game
@@ -40,19 +101,20 @@ namespace ChessBoom.GameBoard
         /// <summary>
         /// The board created for this game
         /// </summary>
-        private Board m_board;
+        public Board m_board { get; set; }
+        /// <summary>
+        /// The data structure for all moves and variations
+        /// </summary>
+        private List<Move> m_moveList;
 
         /// <summary>
         /// Default constructor
         /// </summary>
         public Game()
         {
-            m_board = new Board();
-            InitializeBoard(m_variant);
-
+            m_board = InitializeBoard(m_variant);
             m_ruleset = new Standard();
-
-            System.Console.WriteLine(CreateFENFromBoard(m_board));
+            m_moveList = new List<Move>();
         }
 
         /*public Game(Variant variant)
@@ -65,7 +127,7 @@ namespace ChessBoom.GameBoard
         /// The board object is created and initialized
         /// </summary>
         /// <param name="variant">The chosen variant for the board</param>
-        private void InitializeBoard(Variant variant)
+        private Board InitializeBoard(Variant variant)
         {
             string fen = "";
 
@@ -85,23 +147,87 @@ namespace ChessBoom.GameBoard
                     break;
             }
 
-            m_board = CreateBoardFromFEN(fen);
+            return CreateBoardFromFEN(fen);
         }
 
         /// <summary>
-        /// The board is created and populated from a .FEN file
+        /// Handle the capture that has occurred on a specific square
+        /// </summary>
+        /// <param name="attacker">The piece that initiated the capture</param>
+        /// <param name="coordinate">The square on which the capture takes place</param>
+        public void Capture(Piece attacker, string square)
+        {
+            m_ruleset.Capture(attacker, m_board, square);
+        }
+
+        /// <summary>
+        /// Handle the capture that has occurred on a specific square
+        /// </summary>
+        /// <param name="attacker">The piece that initiated the capture</param>
+        /// <param name="coordinate">The square on which the capture takes place</param>
+        /// <exception cref="ArgumentException">Thrown the piece on the starting square can not be found or be moved, or the square can not be found</exception>
+        public void MakeExplicitMove(string startingSquare, string destinationSquare)
+        {
+            try
+            {
+                Piece? piece = m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(startingSquare));
+                if (piece == null)
+                {
+                    throw new ArgumentException($"Piece on square {startingSquare} not found!");
+                }
+                MakeMove(piece, destinationSquare);
+            }
+            catch (ArgumentException e)
+            {
+                throw e;
+            }
+        }
+
+        /// <summary>
+        /// Attempt to move a piece as a player's move
+        /// </summary>
+        /// <param name="piece">The piece that will attempt to move</param>
+        /// <param name="square">The square that the piece should move to</param>
+        /// <exception cref="GameplayErrorException">Thrown if the wrong player attempts to make a move</exception>
+        /// <exception cref="ArgumentException">Thrown the piece can not be found or be moved, or the square can not be found</exception>
+        public void MakeMove(Piece piece, string square)
+        {
+            if (piece.GetPlayer() != m_board.m_playerToPlay)
+            {
+                throw new GameplayErrorException($"Piece {piece} can not move because it is not {piece.GetPlayer()}\'s turn!");
+            }
+            m_board.m_halfmoveClock++;
+
+            try
+            {
+                piece.MovePiece(GameHelpers.GetCoordinateFromSquare(square));
+            }
+            catch (ArgumentException e)
+            {
+                throw e;
+            }
+            if (m_board.m_playerToPlay == Player.Black)
+            {
+                m_board.m_fullmoveCount++;
+            }
+            m_board.m_playerToPlay = GameHelpers.GetOpponent(m_board.m_playerToPlay);
+            m_moveList.Add(new Move(piece, square));
+        }
+
+        /// <summary>
+        /// The board is created and populated from a .FEN file.
+        /// FEN files have 6 parts, delimited by whitespace characters:
+        ///     The first part is the piece placements, rows delimited by '/' characters starting on the top.
+        ///     The second part denotes the next player to take their turn.
+        ///     The third part denotes castling availability.
+        ///     The fourth part denotes en passant availability.
+        ///     The fifth part denotes the halfmove clock, useful for enforcing the fifty-move rule.
+        ///     The sixth part denotes the fullmove number.
         /// </summary>
         /// <param name="fen">The contents of the .FEN file</param>
         private Board CreateBoardFromFEN(string fen)
         {
-            Board board = new Board();
-            /* FEN files have 6 parts, delimited by ' ' characters:
-            The first part is the piece placements, rows delimited by '/' characters starting on the top
-            The second part denotes the next player to take their turn
-            The third part denotes castling availability
-            The fourth part denotes en passant availability
-            The fifth part denotes the halfmove clock, useful for enforcing the fifty-move rule
-            The sixth part denotes the fullmove number */
+            Board board = new Board(this);
             string[] fenSplit = fen.Split(' ');
 
             // Create the pieces
@@ -120,7 +246,8 @@ namespace ChessBoom.GameBoard
                     {
                         try
                         {
-                            board.CreatePiece(piece, row, col);
+                            (int, int) coordinate = (col, (GameHelpers.k_BoardHeight - 1) - row);
+                            board.CreatePiece(piece, coordinate);
                         }
                         catch (ArgumentException)
                         {
@@ -199,17 +326,17 @@ namespace ChessBoom.GameBoard
         /// Retrieve the board state as the contents of a .FEN file
         /// </summary>
         /// <returns>The board state as the contents of a .FEN file</returns>
-        private static string CreateFENFromBoard(Board board)
+        public static string CreateFENFromBoard(Board board)
         {
             string fen = "";
 
             // Retrieve the pieces
-            for (int row = 0; row < GameHelpers.k_BoardHeight; row++)
+            for (int row = GameHelpers.k_BoardHeight - 1; row >= 0; row--)
             {
                 int emptySquareCount = 0;
                 for (int col = 0; col < GameHelpers.k_BoardWidth; col++)
                 {
-                    Piece? piece = board.GetPiece((row, col));
+                    Piece? piece = board.GetPiece((col, row));
                     if (piece == null)
                     {
                         emptySquareCount++;
@@ -234,7 +361,7 @@ namespace ChessBoom.GameBoard
                     emptySquareCount = 0;
                 }
 
-                if (row != GameHelpers.k_BoardHeight - 1)
+                if (row != 0)
                 {
                     fen += "/";
                 }
