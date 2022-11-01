@@ -14,9 +14,9 @@ namespace ChessBoom.GameBoard
                     capturedPiece.Destroy();
                 }
             }
-            catch (ArgumentException)
+            catch (ArgumentException e)
             {
-
+                throw e;
             }
         }
     }

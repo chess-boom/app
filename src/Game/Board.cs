@@ -47,6 +47,14 @@ namespace ChessBoom.GameBoard
         }
 
         /// <summary>
+        /// The parameterized constructor
+        /// </summary>
+        public Board(Game game) : this()
+        {
+            m_game = game;
+        }
+
+        /// <summary>
         /// Retrieves a piece from its coordinates
         /// </summary>
         /// <param name="coordinate">The 2-tuple containing the row and column coordinates (0-7, 0-7)</param>
@@ -287,16 +295,31 @@ namespace ChessBoom.GameBoard
             if (m_game != null)
             {
                 m_game.Capture(attacker, GameHelpers.GetSquareFromCoordinate(coordinate));
+                m_halfmoveClock = 0;
             }
         }
 
         public override string ToString()
         {
             string output = "";
-            foreach (Piece piece in m_pieces)
+
+            for (int y = GameHelpers.k_BoardHeight - 1; y >= 0; y--)
             {
-                output += piece;
+                for (int x = 0; x < GameHelpers.k_BoardWidth; x++)
+                {
+                    Piece? piece = GetPiece((x, y));
+                    if (piece == null)
+                    {
+                        output += ".";
+                    }
+                    else
+                    {
+                        output += piece.ToString();
+                    }
+                }
+                output += "\n";
             }
+
             return output;
         }
     }

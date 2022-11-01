@@ -31,7 +31,7 @@ namespace ChessBoom.NUnitTests.GameTests
             _board.CreatePiece('R', (7, 7));
 
 
-            Assert.AreEqual("pppppkqrR", _board.ToString());
+            Assert.AreEqual(".......R\n........\n.pq.....\n.pk.....\n.p......\n.p......\n.p...r..\n........\n", _board.ToString());
         }
 
         /// <summary>

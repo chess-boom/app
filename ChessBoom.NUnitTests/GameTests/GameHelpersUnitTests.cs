@@ -30,6 +30,29 @@ namespace ChessBoom.NUnitTests.GameTests
         }
 
         /// <summary>
+        /// Test the helper function for getting a square's name from illegal coordinates
+        /// </summary>
+        [Test]
+        public void GetOoBSquareFromCoordinateTest()
+        {
+            var exception1 = Assert.Throws<ArgumentException>(
+                delegate
+                {
+                    GameHelpers.GetSquareFromCoordinate((-1, 0));
+                });
+            var exception2 = Assert.Throws<ArgumentException>(
+                delegate
+                {
+                    GameHelpers.GetSquareFromCoordinate((8, 15));
+                });
+
+            if (exception1 != null)
+                Assert.AreEqual(exception1.Message, "Coordinate (-1, 0) is an invalid square");
+            if (exception2 != null)
+                Assert.AreEqual(exception2.Message, "Coordinate (8, 15) is an invalid square");
+        }
+
+        /// <summary>
         /// Test the helper function for getting the coordinates from a square's name
         /// </summary>
         [Test]

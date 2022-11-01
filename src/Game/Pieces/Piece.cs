@@ -47,10 +47,15 @@ namespace ChessBoom.GameBoard
         /// </summary>
         /// <param name="coordinate">The coordinate to which the piece will try to move</param>
         /// <exception cref="ArgumentException">Thrown the piece is unable to move to the specified coordinate</exception>
-        public void MovePiece((int, int) coordinate)
+        public virtual void MovePiece((int, int) coordinate)
         {
             if (GetMovementSquares().Contains(coordinate))
             {
+                if (m_board.m_enPassant != null)
+                {
+                    m_board.m_enPassant = null;
+                }
+
                 if (m_board.GetPiece(coordinate) != null)
                 {
                     m_board.Capture(this, coordinate);

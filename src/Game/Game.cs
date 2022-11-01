@@ -67,6 +67,21 @@ namespace ChessBoom.GameBoard
         }
     }
 
+    public class GameplayErrorException : Exception
+    {
+        public GameplayErrorException()
+        {
+        }
+
+        public GameplayErrorException(string message) : base(message)
+        {
+        }
+
+        public GameplayErrorException(string message, Exception inner) : base(message, inner)
+        {
+        }
+    }
+
     /// <summary>
     /// The Game class handles the creation and playing of a game of any chess variant
     /// </summary>
@@ -94,13 +109,9 @@ namespace ChessBoom.GameBoard
         /// </summary>
         public Game()
         {
-            m_board = new Board();
-            InitializeBoard(m_variant);
-
+            m_board = InitializeBoard(m_variant);
             m_ruleset = new Standard();
             m_moveList = new List<Move>();
-
-            System.Console.WriteLine(CreateFENFromBoard(m_board));
         }
 
         /*public Game(Variant variant)
@@ -113,7 +124,7 @@ namespace ChessBoom.GameBoard
         /// The board object is created and initialized
         /// </summary>
         /// <param name="variant">The chosen variant for the board</param>
-        private void InitializeBoard(Variant variant)
+        private Board InitializeBoard(Variant variant)
         {
             string fen = "";
 
@@ -133,7 +144,7 @@ namespace ChessBoom.GameBoard
                     break;
             }
 
-            m_board = CreateBoardFromFEN(fen);
+            return CreateBoardFromFEN(fen);
         }
 
         /// <summary>
@@ -146,6 +157,11 @@ namespace ChessBoom.GameBoard
             m_ruleset.Capture(attacker, m_board, square);
         }
 
+        /// <summary>
+        /// Handle the capture that has occurred on a specific square
+        /// </summary>
+        /// <param name="attacker">The piece that initiated the capture</param>
+        /// <param name="coordinate">The square on which the capture takes place</param>
         public void MakeExplicitMove(string startingSquare, string destinationSquare)
         {
             try
@@ -170,6 +186,12 @@ namespace ChessBoom.GameBoard
         /// <param name="square">The square that the piece should move to</param>
         public void MakeMove(Piece piece, string square)
         {
+            if (piece.GetPlayer() != m_board.m_playerToPlay)
+            {
+                throw new GameplayErrorException($"Piece {piece} can not move because it is not {piece.GetPlayer()}\'s turn!");
+            }
+            m_board.m_halfmoveClock++;
+
             try
             {
                 piece.MovePiece(GameHelpers.GetCoordinateFromSquare(square));
@@ -178,17 +200,11 @@ namespace ChessBoom.GameBoard
             {
                 throw e;
             }
-            if (m_board.m_playerToPlay == Player.White)
+            if (m_board.m_playerToPlay == Player.Black)
             {
-                m_board.m_playerToPlay = Player.Black;
-            }
-            else
-            {
-                m_board.m_playerToPlay = Player.White;
                 m_board.m_fullmoveCount++;
             }
-            // TODO: Account for resetting the halfmove clock!
-            m_board.m_halfmoveClock++;
+            m_board.m_playerToPlay = GameHelpers.GetOpponent(m_board.m_playerToPlay);
             m_moveList.Add(new Move(piece, square));
         }
 
@@ -198,7 +214,7 @@ namespace ChessBoom.GameBoard
         /// <param name="fen">The contents of the .FEN file</param>
         private Board CreateBoardFromFEN(string fen)
         {
-            Board board = new Board();
+            Board board = new Board(this);
             /* FEN files have 6 parts, delimited by ' ' characters:
             The first part is the piece placements, rows delimited by '/' characters starting on the top
             The second part denotes the next player to take their turn
