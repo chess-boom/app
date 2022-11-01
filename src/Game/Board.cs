@@ -9,6 +9,18 @@ namespace ChessBoom.GameBoard
     public class Board
     {
         /// <summary>
+        /// Map for piece types and their constructors
+        /// </summary>
+        public static Dictionary<char, Func<Board, Player, (int, int), Piece>> k_pieceConstructor = new Dictionary<char, Func<Board, Player, (int, int), Piece>>()
+        {
+            {'K', (Board board, Player player, (int, int) coordinate) => new King(board, player, coordinate)},
+            {'Q', (Board board, Player player, (int, int) coordinate) => new Queen(board, player, coordinate)},
+            {'R', (Board board, Player player, (int, int) coordinate) => new Rook(board, player, coordinate)},
+            {'N', (Board board, Player player, (int, int) coordinate) => new Knight(board, player, coordinate)},
+            {'B', (Board board, Player player, (int, int) coordinate) => new Bishop(board, player, coordinate)},
+            {'P', (Board board, Player player, (int, int) coordinate) => new Pawn(board, player, coordinate)}
+        };
+        /// <summary>
         /// The next player to move
         /// </summary>
         public Player m_playerToPlay { get; set; } = Player.White;
@@ -74,59 +86,34 @@ namespace ChessBoom.GameBoard
         /// <summary>
         /// Creates a piece
         /// </summary>
-        /// <throws>ArgumentException if invalid pieceType or invalid coordinates</throws>
+        /// <exception cref="ArgumentException">Thrown when the passed player is invalid</exception>
+        /// <exception cref="ArgumentException">Thrown if invalid pieceType or invalid coordinates</exception>
         public void CreatePiece(char pieceType, (int, int) coordinate)
         {
-            if (coordinate.Item1 < 0 || coordinate.Item1 >= GameHelpers.k_BoardWidth || coordinate.Item2 < 0 || coordinate.Item2 >= GameHelpers.k_BoardHeight)
+            if (!GameHelpers.IsOnBoard(coordinate))
             {
                 throw new ArgumentException($"Coordinate ({coordinate.Item1}, {coordinate.Item2}) is an invalid coordinate (x, y).");
             }
 
+            Player player = Char.IsUpper(pieceType) ? Player.White : Player.Black;
+
             Piece piece;
-            switch (pieceType)
+            try
             {
-                case 'K':
-                    piece = new King(this, Player.White, coordinate);
-                    break;
-                case 'k':
-                    piece = new King(this, Player.Black, coordinate);
-                    break;
-                case 'Q':
-                    piece = new Queen(this, Player.White, coordinate);
-                    break;
-                case 'q':
-                    piece = new Queen(this, Player.Black, coordinate);
-                    break;
-                case 'B':
-                    piece = new Bishop(this, Player.White, coordinate);
-                    break;
-                case 'b':
-                    piece = new Bishop(this, Player.Black, coordinate);
-                    break;
-                case 'N':
-                    piece = new Knight(this, Player.White, coordinate);
-                    break;
-                case 'n':
-                    piece = new Knight(this, Player.Black, coordinate);
-                    break;
-                case 'R':
-                    piece = new Rook(this, Player.White, coordinate);
-                    break;
-                case 'r':
-                    piece = new Rook(this, Player.Black, coordinate);
-                    break;
-                case 'P':
-                    piece = new Pawn(this, Player.White, coordinate);
-                    break;
-                case 'p':
-                    piece = new Pawn(this, Player.Black, coordinate);
-                    break;
-                default:
-                    throw new ArgumentException($"Error. {pieceType} is an invalid piece type.");
+                piece = k_pieceConstructor[Char.ToUpper(pieceType)](this, player, coordinate);
+            }
+            catch (KeyNotFoundException)
+            {
+                throw new ArgumentException($"Error. {pieceType} is an invalid piece type.");
             }
 
             m_pieces.Add(piece);
         }
+
+        // TODO: Determine whether this function should be kept or not
+        // Note: This may be useful in the future for when variations are made.
+        //      Depending on the architecture, a game may delegate each variation
+        //      to its own board, which should then make its own moves.
 
         /// <summary>
         /// Moves a piece from one square to another
@@ -138,7 +125,6 @@ namespace ChessBoom.GameBoard
         /// <exception cref="ArgumentException">Thrown if the found piece is unable to move to the specified coordinate</exception>
         /*public void MovePiece(string start, string destination)
         {
-            // Note: This may be useful in the future for when variations are made
             (int, int) startCoordinate;
             (int, int) destinationCoordinate;
             try

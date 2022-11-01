@@ -67,6 +67,9 @@ namespace ChessBoom.GameBoard
         }
     }
 
+    /// <summary>
+    /// The GameplayErrorException class is used for any case in which gameplay rules are broken
+    /// </summary>
     public class GameplayErrorException : Exception
     {
         public GameplayErrorException()
@@ -162,6 +165,7 @@ namespace ChessBoom.GameBoard
         /// </summary>
         /// <param name="attacker">The piece that initiated the capture</param>
         /// <param name="coordinate">The square on which the capture takes place</param>
+        /// <exception cref="ArgumentException">Thrown the piece on the starting square can not be found or be moved, or the square can not be found</exception>
         public void MakeExplicitMove(string startingSquare, string destinationSquare)
         {
             try
@@ -184,6 +188,8 @@ namespace ChessBoom.GameBoard
         /// </summary>
         /// <param name="piece">The piece that will attempt to move</param>
         /// <param name="square">The square that the piece should move to</param>
+        /// <exception cref="GameplayErrorException">Thrown if the wrong player attempts to make a move</exception>
+        /// <exception cref="ArgumentException">Thrown the piece can not be found or be moved, or the square can not be found</exception>
         public void MakeMove(Piece piece, string square)
         {
             if (piece.GetPlayer() != m_board.m_playerToPlay)
@@ -209,19 +215,19 @@ namespace ChessBoom.GameBoard
         }
 
         /// <summary>
-        /// The board is created and populated from a .FEN file
+        /// The board is created and populated from a .FEN file.
+        /// FEN files have 6 parts, delimited by whitespace characters:
+        ///     The first part is the piece placements, rows delimited by '/' characters starting on the top.
+        ///     The second part denotes the next player to take their turn.
+        ///     The third part denotes castling availability.
+        ///     The fourth part denotes en passant availability.
+        ///     The fifth part denotes the halfmove clock, useful for enforcing the fifty-move rule.
+        ///     The sixth part denotes the fullmove number.
         /// </summary>
         /// <param name="fen">The contents of the .FEN file</param>
         private Board CreateBoardFromFEN(string fen)
         {
             Board board = new Board(this);
-            /* FEN files have 6 parts, delimited by ' ' characters:
-            The first part is the piece placements, rows delimited by '/' characters starting on the top
-            The second part denotes the next player to take their turn
-            The third part denotes castling availability
-            The fourth part denotes en passant availability
-            The fifth part denotes the halfmove clock, useful for enforcing the fifty-move rule
-            The sixth part denotes the fullmove number */
             string[] fenSplit = fen.Split(' ');
 
             // Create the pieces
