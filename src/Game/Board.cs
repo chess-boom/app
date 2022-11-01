@@ -136,8 +136,9 @@ namespace ChessBoom.GameBoard
         /// <exception cref="ArgumentException">Thrown if the specified starting square is invalid/exception>
         /// <exception cref="ArgumentException">Thrown if the specified starting square contains no piece</exception>
         /// <exception cref="ArgumentException">Thrown if the found piece is unable to move to the specified coordinate</exception>
-        public void MovePiece(string start, string destination)
+        /*public void MovePiece(string start, string destination)
         {
+            // Note: This may be useful in the future for when variations are made
             (int, int) startCoordinate;
             (int, int) destinationCoordinate;
             try
@@ -167,7 +168,7 @@ namespace ChessBoom.GameBoard
             {
                 throw e;
             }
-        }
+        }*/
 
         /// <summary>
         /// Mutator for the next player to play

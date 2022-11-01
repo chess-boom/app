@@ -75,5 +75,51 @@ namespace ChessBoom.NUnitTests.GameTests
             Assert.AreEqual(coordinate7, (1, 7));
             Assert.AreEqual(coordinate8, (0, 0));
         }
+
+        /// <summary>
+        /// Test the helper function for getting a coordinate from an illegal square
+        /// </summary>
+        [Test]
+        public void GetOoBCoordinateFromSquareTest()
+        {
+            var exception1 = Assert.Throws<ArgumentException>(
+                delegate
+                {
+                    GameHelpers.GetCoordinateFromSquare("abc");
+                });
+            var exception2 = Assert.Throws<ArgumentException>(
+                delegate
+                {
+                    GameHelpers.GetCoordinateFromSquare("11");
+                });
+            var exception3 = Assert.Throws<ArgumentException>(
+                delegate
+                {
+                    GameHelpers.GetCoordinateFromSquare("bb");
+                });
+
+            if (exception1 != null)
+                Assert.AreEqual(exception1.Message, "abc is not properly formatted.");
+            if (exception2 != null)
+                Assert.AreEqual(exception2.Message, "11 does not have a proper column coordinate.");
+            if (exception3 != null)
+                Assert.AreEqual(exception3.Message, "bb does not have a proper row coordinate.");
+        }
+
+        /// <summary>
+        /// Test the helper function for getting all legal squares from a movement vector and starting position
+        /// </summary>
+        [Test]
+        public void GetMovementSquaresOoBTest()
+        {
+            List<(int, int)> movementSquares = new List<(int, int)>();
+            Board board = new Board();
+            Player player = Player.White;
+
+            // Should return immediately, adding no movement squares, despite all hit squares being valid
+            GameHelpers.GetVectorMovementSquares(ref movementSquares, board, player, (-1, 4), (1, 0));
+
+            Assert.AreEqual(movementSquares.Count, 0);
+        }
     }
 }
