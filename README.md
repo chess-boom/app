@@ -1,5 +1,6 @@
 # App
 [![.NET Build & Test](https://github.com/chess-boom/app/actions/workflows/dotnet.yml/badge.svg)](https://github.com/chess-boom/app/actions/workflows/dotnet.yml)
+[![Lint Code Base](https://github.com/chess-boom/app/actions/workflows/super-linter.yml/badge.svg)](https://github.com/chess-boom/app/actions/workflows/super-linter.yml)
 ## Design Infrastructure
 
 See [Confluence Page](https://chessboom.atlassian.net/l/cp/hDGAeeMt)
