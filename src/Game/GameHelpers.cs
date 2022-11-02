@@ -118,7 +118,7 @@ namespace ChessBoom.GameBoard
         public static List<Piece> GetPlayerPieces(Player player, Board board)
         {
             List<Piece> playerPieces = new List<Piece>();
-            foreach(Piece piece in board.m_pieces)
+            foreach (Piece piece in board.m_pieces)
             {
                 if (piece.GetPlayer() == player)
                 {

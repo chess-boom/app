@@ -106,7 +106,7 @@ namespace ChessBoom.GameBoard
                 player,
                 kingCoordinate,
                 castlingVector);
-            
+
             foreach ((int, int) coordinate in intermediateSquares)
             {
                 try
@@ -138,7 +138,7 @@ namespace ChessBoom.GameBoard
             {
                 throw new GameplayErrorException("Castling is illegal in this situation!");
             }
-            
+
             string playerRow = (player == Player.White) ? "1" : "8";
             string rookCol = (side == Castling.Kingside) ? "h" : "a";
             string newKingCol = (side == Castling.Kingside) ? "g" : "c";
@@ -167,7 +167,7 @@ namespace ChessBoom.GameBoard
                 throw new GameplayErrorException("Castling is illegal in this situation!");
             }
 
-            try 
+            try
             {
                 king.CommandMovePiece(GameHelpers.GetCoordinateFromSquare(newKingCol + playerRow));
                 rook.CommandMovePiece(GameHelpers.GetCoordinateFromSquare(newRookCol + playerRow));
