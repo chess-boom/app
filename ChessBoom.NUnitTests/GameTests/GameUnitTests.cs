@@ -146,5 +146,123 @@ namespace ChessBoom.NUnitTests.GameTests
             if (exception6 != null)
                 Assert.AreEqual(exception6.Message, "Piece p can not move because it is not Black\'s turn!");
         }
+
+        /// <summary>
+        /// Ensure castling kingside works
+        /// </summary>
+        [Test]
+        public void KingsideCastlingTest()
+        {
+            _game.MakeExplicitMove("e2", "e4");
+            _game.MakeExplicitMove("e7", "e5");
+            _game.MakeExplicitMove("g1", "f3");
+            _game.MakeExplicitMove("g8", "f6");
+            _game.MakeExplicitMove("f1", "c4");
+            _game.MakeExplicitMove("f8", "c5");
+            _game.MakeExplicitMove("e1", "O-O");
+            _game.MakeExplicitMove("e8", "O-O");
+
+            // Ensure the FEN allows kingside castling
+            string fen = Game.CreateFENFromBoard(_game.m_board);
+            Assert.AreEqual(fen, "rnbq1rk1/pppp1ppp/5n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w - - 6 5");
+        }
+
+        /// <summary>
+        /// Ensure castling queenside works
+        /// </summary>
+        [Test]
+        public void QueensideCastlingTest()
+        {
+            _game.MakeExplicitMove("d2", "d4");
+            _game.MakeExplicitMove("d7", "d5");
+            _game.MakeExplicitMove("d1", "d3");
+            _game.MakeExplicitMove("d8", "d6");
+            _game.MakeExplicitMove("b1", "c3");
+            _game.MakeExplicitMove("b8", "c6");
+            _game.MakeExplicitMove("c1", "e3");
+            _game.MakeExplicitMove("c8", "e6");
+            _game.MakeExplicitMove("e1", "O-O-O");
+            _game.MakeExplicitMove("e8", "O-O-O");
+
+            // Ensure the FEN allows queenside castling
+            string fen = Game.CreateFENFromBoard(_game.m_board);
+            Assert.AreEqual(fen, "2kr1bnr/ppp1pppp/2nqb3/3p4/3P4/2NQB3/PPP1PPPP/2KR1BNR w - - 8 6");
+        }
+
+        /// <summary>
+        /// Ensure that castling through check is not allowed
+        /// </summary>
+        [Test]
+        public void CastlingThroughCheckTest()
+        {
+            _game.MakeExplicitMove("e2", "e4");
+            _game.MakeExplicitMove("b7", "b6");
+            _game.MakeExplicitMove("f1", "a6");
+            _game.MakeExplicitMove("c8", "a6");
+            _game.MakeExplicitMove("g1", "f3");
+            _game.MakeExplicitMove("e7", "e6");
+
+            var exception = Assert.Throws<GameplayErrorException>(
+                delegate
+                {
+                    // Player attempts to castle through check
+                    _game.MakeExplicitMove("e1", "O-O");
+                });
+
+            if (exception != null)
+                Assert.AreEqual(exception.Message, "Castling is illegal in this situation!");
+        }
+
+        /// <summary>
+        /// Ensure that castling while in check is not allowed
+        /// </summary>
+        [Test]
+        public void CastlingOutOfCheckTest()
+        {
+            _game.MakeExplicitMove("e2", "e4");
+            _game.MakeExplicitMove("e7", "e5");
+            _game.MakeExplicitMove("f1", "b5");
+            _game.MakeExplicitMove("d7", "d5");
+            _game.MakeExplicitMove("d2", "d4");
+            _game.MakeExplicitMove("f8", "b4");
+
+            var exception = Assert.Throws<GameplayErrorException>(
+                delegate
+                {
+                    // Player attempts to castle out of check
+                    _game.MakeExplicitMove("e1", "O-O");
+                });
+
+            if (exception != null)
+                Assert.AreEqual(exception.Message, "Castling is illegal in this situation!");
+        }
+
+        /// <summary>
+        /// Ensure that castling after moving the king is not allowed
+        /// </summary>
+        [Test]
+        public void CastlingAfterMovingTest()
+        {
+            _game.MakeExplicitMove("e2", "e4");
+            _game.MakeExplicitMove("e7", "e5");
+            _game.MakeExplicitMove("g1", "f3");
+            _game.MakeExplicitMove("g8", "f6");
+            _game.MakeExplicitMove("f1", "c4");
+            _game.MakeExplicitMove("f8", "c5");
+            _game.MakeExplicitMove("e1", "e2");
+            _game.MakeExplicitMove("e8", "e7");
+            _game.MakeExplicitMove("e2", "e1");
+            _game.MakeExplicitMove("e7", "e8");
+
+            var exception = Assert.Throws<GameplayErrorException>(
+                delegate
+                {
+                    // Player attempts to castle out of check
+                    _game.MakeExplicitMove("e1", "O-O");
+                });
+
+            if (exception != null)
+                Assert.AreEqual(exception.Message, "Castling is illegal in this situation!");
+        }
     }
 }

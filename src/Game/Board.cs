@@ -273,6 +273,51 @@ namespace ChessBoom.GameBoard
         }
 
         /// <summary>
+        /// Remove partial castling rights from a player
+        /// </summary>
+        /// <param name="player">The player who loses a castling right</param>
+        /// <param name="side">The side on which the player loses castling rights</param>
+        public void RemoveCastling(Player player, Castling side)
+        {
+            m_castling[player].Remove(side);
+        }
+
+        /// <summary>
+        /// Check if a player may castle to a side in the current board state (FEN). Does not check for the legality of the move itself.
+        /// </summary>
+        /// <param name="player">The player that wishes to castle</param>
+        /// <param name="side">The side on which the player wishes to castle</param>
+        public bool CanCastleFromFEN(Player player, Castling side)
+        {
+            List<Castling>? castling;
+            try
+            {
+                m_castling.TryGetValue(player, out castling);
+                return (castling != null && castling.Contains(side));
+            }
+            catch (ArgumentNullException)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Check if a player may legally castle according to the board. Does not verify with the board state (FEN). Requires the board to be in a game.
+        /// </summary>
+        /// <param name="player">The player that wishes to castle</param>
+        /// <param name="side">The side on which the player wishes to castle</param>
+        /// <exception cref="NullReferenceException">Thrown when the board does not belong to a game</exception>
+        public bool CanCastleFromBoard(Player player, Castling side)
+        {
+            if (m_game == null)
+            {
+                throw new NullReferenceException("This board does not belong to a game. Castling can not occur.");
+            }
+
+            return m_game.m_ruleset.CanCastle(m_game, player, side);
+        }
+
+        /// <summary>
         /// Handle the capture that has occurred on a specific square
         /// </summary>
         /// <param name="attacker">The piece that initiated the capture</param>

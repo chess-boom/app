@@ -102,11 +102,30 @@ namespace ChessBoom.GameBoard
         /// <summary>
         /// Get the opposing player
         /// </summary>
-        /// <param name="board">The player seeking their opponent</param>
+        /// <param name="player">The player seeking their opponent</param>
         /// <returns>The opposing player</returns>
         public static Player GetOpponent(Player player)
         {
             return (player == Player.White ? Player.Black : Player.White);
+        }
+
+        /// <summary>
+        /// Get all the player's pieces
+        /// </summary>
+        /// <param name="player">The player seeking their pieces</param>
+        /// <param name="board">The board on which the pieces reside</param>
+        /// <returns>The player's pieces</returns>
+        public static List<Piece> GetPlayerPieces(Player player, Board board)
+        {
+            List<Piece> playerPieces = new List<Piece>();
+            foreach(Piece piece in board.m_pieces)
+            {
+                if (piece.GetPlayer() == player)
+                {
+                    playerPieces.Add(piece);
+                }
+            }
+            return playerPieces;
         }
 
         /// <summary>
@@ -115,10 +134,24 @@ namespace ChessBoom.GameBoard
         /// <param name="board">The board to examine</param>
         /// <param name="searchingPlayer">The player who might be able to see the passed coordinate</param>
         /// <param name="coordinate">The 2-tuple containing the row and column coordinates (0-7, 0-7)</param>
+        /// <exception cref="ArgumentException">Thrown when the passed coordinate is out of bounds</exception>
         /// <returns>Whether or not the coordinate is visible to the player</returns>
         public static bool IsSquareVisible(Board board, Player searchingPlayer, (int, int) coordinate)
         {
-            // TODO: Implement!
+            foreach (Piece piece in GameHelpers.GetPlayerPieces(searchingPlayer, board))
+            {
+                try
+                {
+                    if (piece.CanMoveToSquare(GameHelpers.GetSquareFromCoordinate(coordinate)))
+                    {
+                        return true;
+                    }
+                }
+                catch (ArgumentException e)
+                {
+                    throw e;
+                }
+            }
             return false;
         }
 
@@ -139,7 +172,7 @@ namespace ChessBoom.GameBoard
         /// <summary>
         /// Find all possible movement squares by repeatedly adding a movement vector to a starting position and add them to a List
         /// </summary>
-        /// <param name="movementSquares">The reference of the list of squares that is added to</param>
+        /// <param name="movementSquares">The reference of the list of squares that is added to. Squares added in order from closest to furthest from origin</param>
         /// <param name="board">The board on which the movement is made</param>
         /// <param name="player">The player considered an "ally"</param>
         /// <param name="startingPosition">The position (not counted) at which the movement begins</param>

@@ -1,16 +1,21 @@
+using System;
 using System.Collections.Generic;
 
 namespace ChessBoom.GameBoard
 {
     public class King : Piece
     {
+        /// <summary>
+        /// Flag to keep track of if the king has moved
+        /// </summary>
+        private bool m_hasMoved;
         public King(Board board, Player player, (int, int) coordinate) : base(board, player, coordinate)
         {
+            m_hasMoved = false;
         }
 
         public override List<(int, int)> GetMovementSquares()
         {
-            // TODO: incorporate castling!
             List<(int, int)> movementSquares = new List<(int, int)>();
 
             List<(int, int)> tryCoordinates = new List<(int, int)>();
@@ -39,6 +44,17 @@ namespace ChessBoom.GameBoard
                 movementSquares.Add(coordinate);
             }
             return movementSquares;
+        }
+
+        public override void MovePiece((int, int) coordinate)
+        {
+            base.MovePiece(coordinate);
+            if (!m_hasMoved)
+            {
+                m_board.RemoveCastling(m_owner, Castling.Kingside);
+                m_board.RemoveCastling(m_owner, Castling.Queenside);
+                m_hasMoved = true;
+            }
         }
 
         public override string ToString()

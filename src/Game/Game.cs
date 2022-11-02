@@ -18,7 +18,7 @@ namespace ChessBoom.GameBoard
         Black
     }
 
-    enum Castling
+    public enum Castling
     {
         Kingside,
         Queenside
@@ -29,6 +29,14 @@ namespace ChessBoom.GameBoard
     /// </summary>
     struct Move
     {
+        /// <summary>
+        /// The notation for kingside castling
+        /// </summary>
+        public static string k_kingsideCastleNotation = "O-O";
+        /// <summary>
+        /// The notation for kingside castling
+        /// </summary>
+        public static string k_queensideCastleNotation = "O-O-O";
         public Move(Piece piece, string square)
         {
             m_piece = piece;
@@ -97,7 +105,7 @@ namespace ChessBoom.GameBoard
         /// <summary>
         /// The chosen ruleset for this game
         /// </summary>
-        private Ruleset m_ruleset;
+        public Ruleset m_ruleset;
         /// <summary>
         /// The board created for this game
         /// </summary>
@@ -188,7 +196,7 @@ namespace ChessBoom.GameBoard
         /// </summary>
         /// <param name="piece">The piece that will attempt to move</param>
         /// <param name="square">The square that the piece should move to</param>
-        /// <exception cref="GameplayErrorException">Thrown if the wrong player attempts to make a move</exception>
+        /// <exception cref="GameplayErrorException">Thrown if the wrong player attempts to make a move or if castling is attempted when illegal</exception>
         /// <exception cref="ArgumentException">Thrown the piece can not be found or be moved, or the square can not be found</exception>
         public void MakeMove(Piece piece, string square)
         {
@@ -200,9 +208,20 @@ namespace ChessBoom.GameBoard
 
             try
             {
-                piece.MovePiece(GameHelpers.GetCoordinateFromSquare(square));
+                if (square == Move.k_kingsideCastleNotation || square == Move.k_queensideCastleNotation)
+                {
+                    m_ruleset.Castle(this, piece.GetPlayer(), (square == Move.k_kingsideCastleNotation) ? Castling.Kingside : Castling.Queenside);
+                }
+                else
+                {
+                    piece.MovePiece(GameHelpers.GetCoordinateFromSquare(square));
+                }
             }
             catch (ArgumentException e)
+            {
+                throw e;
+            }
+            catch (GameplayErrorException e)
             {
                 throw e;
             }
