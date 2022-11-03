@@ -43,16 +43,9 @@ namespace ChessBoom.GameBoard
             // Check if any of the opponent's pieces can move to a square occupied by a king
             foreach ((int, int) coordinate in kingSquares)
             {
-                try
+                if (GameHelpers.IsSquareVisible(board, GameHelpers.GetOpponent(player), coordinate))
                 {
-                    if (GameHelpers.IsSquareVisible(board, GameHelpers.GetOpponent(player), coordinate))
-                    {
-                        return true;
-                    }
-                }
-                catch (ArgumentException)
-                {
-                    // Occurs if coordinate is out of bounds (a king is out of bounds). Should never occur.
+                    return true;
                 }
             }
             return false;
@@ -109,17 +102,9 @@ namespace ChessBoom.GameBoard
 
             foreach ((int, int) coordinate in intermediateSquares)
             {
-                try
+                if (GameHelpers.IsSquareVisible(game.m_board, GameHelpers.GetOpponent(player), coordinate))
                 {
-                    if (GameHelpers.IsSquareVisible(game.m_board, GameHelpers.GetOpponent(player), coordinate))
-                    {
-                        // An opponent's piece can see a square between the king and the rook (castling through check)
-                        return false;
-                    }
-                }
-                catch (ArgumentException)
-                {
-                    // A piece was placed out of bounds - should never happen!
+                    // An opponent's piece can see a square between the king and the rook (castling through check)
                     return false;
                 }
                 if (game.m_board.GetPiece(coordinate) != null)

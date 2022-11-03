@@ -32,11 +32,11 @@ namespace ChessBoom.GameBoard
         /// <summary>
         /// The notation for kingside castling
         /// </summary>
-        public static string k_kingsideCastleNotation = "O-O";
+        public const string k_kingsideCastleNotation = "O-O";
         /// <summary>
         /// The notation for kingside castling
         /// </summary>
-        public static string k_queensideCastleNotation = "O-O-O";
+        public const string k_queensideCastleNotation = "O-O-O";
         public Move(Piece piece, string square)
         {
             m_piece = piece;
@@ -105,7 +105,7 @@ namespace ChessBoom.GameBoard
         /// <summary>
         /// The chosen ruleset for this game
         /// </summary>
-        public Ruleset m_ruleset;
+        public Ruleset m_ruleset { get; set; }
         /// <summary>
         /// The board created for this game
         /// </summary>

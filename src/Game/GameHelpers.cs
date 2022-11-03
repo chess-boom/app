@@ -134,7 +134,6 @@ namespace ChessBoom.GameBoard
         /// <param name="board">The board to examine</param>
         /// <param name="searchingPlayer">The player who might be able to see the passed coordinate</param>
         /// <param name="coordinate">The 2-tuple containing the row and column coordinates (0-7, 0-7)</param>
-        /// <exception cref="ArgumentException">Thrown when the passed coordinate is out of bounds</exception>
         /// <returns>Whether or not the coordinate is visible to the player</returns>
         public static bool IsSquareVisible(Board board, Player searchingPlayer, (int, int) coordinate)
         {
@@ -147,9 +146,9 @@ namespace ChessBoom.GameBoard
                         return true;
                     }
                 }
-                catch (ArgumentException e)
+                catch (ArgumentException)
                 {
-                    throw e;
+                    return false;
                 }
             }
             return false;
