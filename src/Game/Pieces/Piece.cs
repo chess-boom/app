@@ -69,6 +69,30 @@ namespace ChessBoom.GameBoard
             }
         }
 
+        /// <summary>
+        /// Forcibly move the piece to a specific square, regardless of if it would be normally allowed
+        /// </summary>
+        /// <param name="coordinate">The coordinate to which the piece will move</param>
+        /// <exception cref="ArgumentException">The passed coordinate is out of bounds</exception>
+        public void CommandMovePiece((int, int) coordinate)
+        {
+            if (!GameHelpers.IsOnBoard(coordinate))
+            {
+                throw new ArgumentException($"Coordinate {coordinate} is not on the board!");
+            }
+            if (m_board.m_enPassant != null)
+            {
+                m_board.m_enPassant = null;
+            }
+
+            if (m_board.GetPiece(coordinate) != null)
+            {
+                m_board.Capture(this, coordinate);
+            }
+            m_column = coordinate.Item1;
+            m_row = coordinate.Item2;
+        }
+
         public Board GetBoard()
         {
             return m_board;
