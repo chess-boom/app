@@ -51,9 +51,9 @@ namespace ChessBoom.GameBoard
             return false;
         }
 
-        public override bool CanCastle(Game game, Player player, Castling side)
+        public override bool CanCastle(Board board, Player player, Castling side)
         {
-            if (!game.m_board.CanCastleFromFEN(player, side))
+            if (!board.CanCastleFromFEN(player, side))
             {
                 return false;
             }
@@ -67,8 +67,8 @@ namespace ChessBoom.GameBoard
             try
             {
                 kingCoordinate = GameHelpers.GetCoordinateFromSquare("e" + playerRow);
-                king = game.m_board.GetPiece(kingCoordinate);
-                rook = game.m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(rookCol + playerRow));
+                king = board.GetPiece(kingCoordinate);
+                rook = board.GetPiece(GameHelpers.GetCoordinateFromSquare(rookCol + playerRow));
             }
             catch (ArgumentException)
             {
@@ -85,7 +85,7 @@ namespace ChessBoom.GameBoard
                 return false;
             }
 
-            if (IsInCheck(player, game.m_board))
+            if (IsInCheck(player, board))
             {
                 // King is currently in check
                 return false;
@@ -95,19 +95,19 @@ namespace ChessBoom.GameBoard
             List<(int, int)> intermediateSquares = new List<(int, int)>();
             GameHelpers.GetVectorMovementSquares(
                 ref intermediateSquares,
-                game.m_board,
+                board,
                 player,
                 kingCoordinate,
                 castlingVector);
 
             foreach ((int, int) coordinate in intermediateSquares)
             {
-                if (GameHelpers.IsSquareVisible(game.m_board, GameHelpers.GetOpponent(player), coordinate))
+                if (GameHelpers.IsSquareVisible(board, GameHelpers.GetOpponent(player), coordinate))
                 {
                     // An opponent's piece can see a square between the king and the rook (castling through check)
                     return false;
                 }
-                if (game.m_board.GetPiece(coordinate) != null)
+                if (board.GetPiece(coordinate) != null)
                 {
                     // A piece exists between the king and the rook
                     return false;
@@ -119,7 +119,7 @@ namespace ChessBoom.GameBoard
 
         public override void Castle(Game game, Player player, Castling side)
         {
-            if (!CanCastle(game, player, side))
+            if (!CanCastle(game.m_board, player, side))
             {
                 throw new GameplayErrorException("Castling is illegal in this situation!");
             }

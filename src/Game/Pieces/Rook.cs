@@ -14,6 +14,29 @@ namespace ChessBoom.GameBoard
             m_hasMoved = false;
         }
 
+        public override void Destroy()
+        {
+            try
+            {
+                string kingsideRookSquare = m_board.GetRuleset().GetInitialRookSquare(m_owner, Castling.Kingside);
+                if (m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(kingsideRookSquare)) == this)
+                {
+                    m_board.RemoveCastling(m_owner, Castling.Kingside);
+                }
+                string queensideRookSquare = m_board.GetRuleset().GetInitialRookSquare(m_owner, Castling.Queenside);
+                if (m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(queensideRookSquare)) == this)
+                {
+                    m_board.RemoveCastling(m_owner, Castling.Queenside);
+                }
+            }
+            catch (ArgumentException)
+            {
+                Console.WriteLine("Error! Castling rights removal failed.");
+                return;
+            }
+            base.Destroy();
+        }
+
         public override List<(int, int)> GetMovementSquares()
         {
             List<(int, int)> movementSquares = new List<(int, int)>();
@@ -47,12 +70,12 @@ namespace ChessBoom.GameBoard
                 }
                 try
                 {
-                    string kingsideRookSquare = m_board.m_game.m_ruleset.GetInitialRookSquare(m_owner, Castling.Kingside);
+                    string kingsideRookSquare = m_board.GetRuleset().GetInitialRookSquare(m_owner, Castling.Kingside);
                     if (m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(kingsideRookSquare)) == this)
                     {
                         m_board.RemoveCastling(m_owner, Castling.Kingside);
                     }
-                    string queensideRookSquare = m_board.m_game.m_ruleset.GetInitialRookSquare(m_owner, Castling.Queenside);
+                    string queensideRookSquare = m_board.GetRuleset().GetInitialRookSquare(m_owner, Castling.Queenside);
                     if (m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(queensideRookSquare)) == this)
                     {
                         m_board.RemoveCastling(m_owner, Castling.Queenside);
@@ -60,6 +83,7 @@ namespace ChessBoom.GameBoard
                 }
                 catch (ArgumentException)
                 {
+                    Console.WriteLine("Error! Castling rights removal failed.");
                     return;
                 }
 
