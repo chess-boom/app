@@ -21,10 +21,10 @@ namespace ChessBoom.GameBoard
         /// <summary>
         /// Check if a player can legally castle to a side
         /// </summary>
-        /// <param name="game">The game in which the castling might take place</param>
+        /// <param name="board">The board on which the castling might take place</param>
         /// <param name="player">The player who wants to castle</param>
         /// <param name="side">The side to which the player wants to castle</param>
-        public abstract bool CanCastle(Game game, Player player, Castling side);
+        public abstract bool CanCastle(Board board, Player player, Castling side);
 
         /// <summary>
         /// Castle a player's king

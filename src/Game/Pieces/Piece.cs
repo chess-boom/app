@@ -21,7 +21,7 @@ namespace ChessBoom.GameBoard
         /// <summary>
         /// Effectively destroy this piece
         /// </summary>
-        public void Destroy()
+        public virtual void Destroy()
         {
             m_board.m_pieces.Remove(this);
         }

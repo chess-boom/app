@@ -14,7 +14,7 @@ namespace ChessBoom.GameBoard
             throw new NotImplementedException();
         }
 
-        public override bool CanCastle(Game game, Player player, Castling side)
+        public override bool CanCastle(Board board, Player player, Castling side)
         {
             throw new NotImplementedException();
         }

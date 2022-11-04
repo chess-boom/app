@@ -80,6 +80,29 @@ namespace ChessBoom.NUnitTests.GameTests
         }
 
         /// <summary>
+        /// Ensure promotion works
+        /// </summary>
+        [Test]
+        public void PromotionTest()
+        {
+            // TODO: Update this test once requesting a piece type works! Currently (Nov. 3, 2022) always promotes to queen
+            _game.MakeExplicitMove("h2", "h4");
+            _game.MakeExplicitMove("b7", "b5");
+            _game.MakeExplicitMove("h4", "h5");
+            _game.MakeExplicitMove("b5", "b4");
+            _game.MakeExplicitMove("h5", "h6");
+            _game.MakeExplicitMove("b4", "b3");
+            _game.MakeExplicitMove("h6", "g7");
+            _game.MakeExplicitMove("b3", "a2");
+
+            // Ensure the promotion takes place
+            _game.MakeExplicitMove("g7", "h8");
+            _game.MakeExplicitMove("a2", "b1");
+            string fen = Game.CreateFENFromBoard(_game.m_board);
+            Assert.AreEqual(fen, "rnbqkbnQ/p1pppp1p/8/8/8/8/1PPPPPP1/RqBQKBNR w KQq - 0 6");
+        }
+
+        /// <summary>
         /// Attempt to make illegal moves
         /// </summary>
         [Test]

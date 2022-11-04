@@ -177,6 +177,22 @@ namespace ChessBoom.GameBoard
         }
 
         /// <summary>
+        /// Accessor for the board's ruleset. Defaults to standard chess rules.
+        /// </summary>
+        /// <returns>The game's ruleset. Returns standard chess rules if the board does not have a game.</returns>
+        public Ruleset GetRuleset()
+        {
+            if (m_game != null)
+            {
+                return m_game.m_ruleset;
+            }
+            else
+            {
+                return new Standard();
+            }
+        }
+
+        /// <summary>
         /// Mutator for castling privileges
         /// </summary>
         /// <param name="castling">The .FEN notation of the castling privileges (ex: "KQkq")</param>
@@ -302,22 +318,6 @@ namespace ChessBoom.GameBoard
         }
 
         /// <summary>
-        /// Check if a player may legally castle according to the board. Does not verify with the board state (FEN). Requires the board to be in a game.
-        /// </summary>
-        /// <param name="player">The player that wishes to castle</param>
-        /// <param name="side">The side on which the player wishes to castle</param>
-        /// <exception cref="NullReferenceException">Thrown when the board does not belong to a game</exception>
-        public bool CanCastleFromBoard(Player player, Castling side)
-        {
-            if (m_game == null)
-            {
-                throw new NullReferenceException("This board does not belong to a game. Castling can not occur.");
-            }
-
-            return m_game.m_ruleset.CanCastle(m_game, player, side);
-        }
-
-        /// <summary>
         /// Handle the capture that has occurred on a specific square
         /// </summary>
         /// <param name="attacker">The piece that initiated the capture</param>
@@ -329,6 +329,34 @@ namespace ChessBoom.GameBoard
                 m_game.Capture(attacker, GameHelpers.GetSquareFromCoordinate(coordinate));
                 m_halfmoveClock = 0;
             }
+        }
+
+        /// <summary>
+        /// Handle a pawn's request to promote
+        /// </summary>
+        /// <param name="pawn">The pawn that wishes to promote</param>
+        public void RequestPromotion(Pawn pawn)
+        {
+            try
+            {
+                pawn.Destroy();
+                char promotionPiece = (pawn.GetPlayer() == Player.White) ? Char.ToUpper(RequestPromotionPiece()) : Char.ToLower(RequestPromotionPiece());
+                CreatePiece(promotionPiece, pawn.GetCoordinates());
+            }
+            catch (ArgumentException)
+            {
+                // Caught if the received promotion piece is invalid or if the pawn is out of bounds
+            }
+        }
+
+        /// <summary>
+        /// Request from the user which piece to promote a pawn to
+        /// </summary>
+        /// <returns></returns>
+        public char RequestPromotionPiece()
+        {
+            // TODO: Ask the user for which piece to promote to
+            return 'Q';
         }
 
         public override string ToString()
