@@ -31,6 +31,7 @@ namespace ChessBoom.GameBoard
             }
             catch (ArgumentException)
             {
+                Console.WriteLine("Error! Castling rights removal failed.");
                 return;
             }
             base.Destroy();
@@ -82,6 +83,7 @@ namespace ChessBoom.GameBoard
                 }
                 catch (ArgumentException)
                 {
+                    Console.WriteLine("Error! Castling rights removal failed.");
                     return;
                 }
 

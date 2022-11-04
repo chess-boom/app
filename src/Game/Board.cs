@@ -346,6 +346,7 @@ namespace ChessBoom.GameBoard
             catch (ArgumentException)
             {
                 // Caught if the received promotion piece is invalid or if the pawn is out of bounds
+                Console.WriteLine("Error! Promotion request failed.");
             }
         }
 
