@@ -32,7 +32,9 @@ namespace ChessBoom.GameBoard
         VictoryWhite,
         VictoryBlack,
         // TODO: Implement draw checks
-        Draw
+        Draw,
+        // TODO: Implement game aborting
+        Aborted
     }
 
     /// <summary>

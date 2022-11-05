@@ -33,6 +33,7 @@ namespace ChessBoom.GameBoard
 
         /// <summary>
         /// Get the list of squares that this piece can move to
+        /// TODO: Convert to HashSet to improve performance
         /// </summary>
         /// <returns>The list of square coordinates that the piece can move to</returns>
         public abstract List<(int, int)> GetMovementSquares();
