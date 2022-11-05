@@ -29,17 +29,25 @@ namespace ChessBoom.GameBoard
         /// <summary>
         /// Castle a player's king
         /// </summary>
-        /// <param name="game">The game in which the castling might take place</param>
+        /// <param name="board">The board in which the castling might take place</param>
         /// <param name="player">The player who wants to castle</param>
         /// <param name="side">The side to which the player wants to castle</param>
         /// <exception cref="ArgumentException">Thrown if castling is illegal</exception>
-        public abstract void Castle(Game game, Player player, Castling side);
+        public abstract void Castle(Board board, Player player, Castling side);
 
         /// <summary>
         /// Get the initial square for a rook
         /// </summary>
         /// <param name="player">The player whose rook is accessed</param>
         /// <param name="side">The rook to select</param>
+        /// <returns>The name of the square that the rook initially stands upon</returns>
         public abstract string GetInitialRookSquare(Player player, Castling side);
+
+        /// <summary>
+        /// Determine if a specified board contains an illegal state
+        /// </summary>
+        /// <param name="board">The board to assess</param>
+        /// <returns>Whether or not the board is legal as per the ruleset</returns>
+        public abstract bool IsIllegalBoardState(Board board);
     }
 }
