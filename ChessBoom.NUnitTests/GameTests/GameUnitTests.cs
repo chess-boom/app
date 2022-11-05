@@ -340,5 +340,64 @@ namespace ChessBoom.NUnitTests.GameTests
             if (exception2 != null)
                 Assert.AreEqual(exception2.Message, "Error! Illegal move!");
         }
+
+        /// <summary>
+        /// Ensure white checkmate changes the game state
+        /// </summary>
+        [Test]
+        public void WhiteCheckmateTest()
+        {
+            _game.MakeExplicitMove("e2", "e4");
+            _game.MakeExplicitMove("f7", "f6");
+            _game.MakeExplicitMove("f1", "c4");
+            _game.MakeExplicitMove("g7", "g5");
+            Assert.AreEqual(_game.m_gameState, GameState.InProgress);
+            _game.MakeExplicitMove("d1", "h5");
+            Assert.AreEqual(_game.m_gameState, GameState.VictoryWhite);
+
+            string fen = Game.CreateFENFromBoard(_game.m_board);
+            Assert.AreEqual(fen, "rnbqkbnr/ppppp2p/5p2/6pQ/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 1 3");
+        }
+
+        /// <summary>
+        /// Ensure black checkmate changes the game state
+        /// </summary>
+        [Test]
+        public void BlackCheckmateTest()
+        {
+            _game.MakeExplicitMove("f2", "f3");
+            _game.MakeExplicitMove("e7", "e6");
+            _game.MakeExplicitMove("g2", "g4");
+            Assert.AreEqual(_game.m_gameState, GameState.InProgress);
+            _game.MakeExplicitMove("d8", "h4");
+            Assert.AreEqual(_game.m_gameState, GameState.VictoryBlack);
+
+            string fen = Game.CreateFENFromBoard(_game.m_board);
+            Assert.AreEqual(fen, "rnb1kbnr/pppp1ppp/4p3/8/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq - 1 3");
+        }
+
+        /// <summary>
+        /// Ensure moves can not be played in an improper game state
+        /// </summary>
+        [Test]
+        public void MoveAfterGameEndTest()
+        {
+            _game.MakeExplicitMove("f2", "f3");
+            _game.MakeExplicitMove("e7", "e6");
+            _game.MakeExplicitMove("g2", "g4");
+            Assert.AreEqual(_game.m_gameState, GameState.InProgress);
+            _game.MakeExplicitMove("d8", "h4");
+            Assert.AreEqual(_game.m_gameState, GameState.VictoryBlack);
+
+            var exception = Assert.Throws<GameplayErrorException>(
+                delegate
+                {
+                    // Player attempts to play another random move
+                    _game.MakeExplicitMove("e2", "e3");
+                });
+
+            if (exception != null)
+                Assert.AreEqual(exception.Message, "Game is not in progress! Illegal move.");
+        }
     }
 }

@@ -5,6 +5,19 @@ namespace ChessBoom.GameBoard
 {
     public class Standard : Ruleset
     {
+        private static readonly Standard instance = new Standard();
+        private Standard()
+        {
+        }
+
+        public static Standard Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
+
         public override void Capture(Piece attacker, Board board, string square)
         {
             try
@@ -176,6 +189,67 @@ namespace ChessBoom.GameBoard
         public override bool IsIllegalBoardState(Board board)
         {
             return IsInCheck(GameHelpers.GetOpponent(board.m_playerToPlay), board);
+        }
+
+        public override void AssessBoardState(Game game, Board board)
+        {
+            // Only the next player to play may be in checkmate, else an illegal move must have occurred
+            if (!IsInCheck(board.m_playerToPlay, board))
+            {
+                // TODO: Assess for stalemate
+                return;
+            }
+
+            List<Piece> pieces = GameHelpers.GetPlayerPieces(board.m_playerToPlay, board);
+            Board testBoard;
+            bool legalMoveExists = false;
+
+            foreach (Piece piece in pieces)
+            {
+                List<(int, int)> pieceMoves = piece.GetMovementSquares();
+
+                foreach ((int, int) move in pieceMoves)
+                {
+                    testBoard = Game.CreateBoardFromFEN(game, Game.CreateFENFromBoard(board));
+
+                    try
+                    {
+                        Piece? testPiece = testBoard.GetPiece(piece.GetCoordinates());
+                        if (testPiece != null)
+                        {
+                            testPiece.MovePiece(move);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Error! Test piece from duplicated board not found!");
+                        }
+                    }
+                    catch (ArgumentException e)
+                    {
+                        Console.WriteLine($"Error! {e}");
+                    }
+                    catch (GameplayErrorException e)
+                    {
+                        Console.WriteLine($"Error! {e}");
+                    }
+
+                    testBoard.m_playerToPlay = GameHelpers.GetOpponent(testBoard.m_playerToPlay);
+                    if (!IsIllegalBoardState(testBoard))
+                    {
+                        legalMoveExists = true;
+                        break;
+                    }
+                }
+                if (legalMoveExists)
+                {
+                    break;
+                }
+            }
+
+            if (!legalMoveExists)
+            {
+                game.m_gameState = (board.m_playerToPlay == Player.Black) ? GameState.VictoryWhite : GameState.VictoryBlack;
+            }
         }
     }
 }
