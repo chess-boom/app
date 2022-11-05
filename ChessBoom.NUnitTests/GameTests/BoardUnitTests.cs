@@ -233,22 +233,22 @@ namespace ChessBoom.NUnitTests.GameTests
             // Null castling
             _board.SetCastling("-");
             var castling = _board.GetCastling();
-            Assert.AreEqual(castling, "-");
+            Assert.AreEqual("-", castling);
 
             // Full castling
             _board.SetCastling("KQkq");
             castling = _board.GetCastling();
-            Assert.AreEqual(castling, "KQkq");
+            Assert.AreEqual("KQkq", castling);
 
             // Partial castling
             _board.SetCastling("Qk");
             castling = _board.GetCastling();
-            Assert.AreEqual(castling, "Qk");
+            Assert.AreEqual("Qk", castling);
 
             // Misordered castling
             _board.SetCastling("qkQK");
             castling = _board.GetCastling();
-            Assert.AreEqual(castling, "KQkq");
+            Assert.AreEqual("KQkq", castling);
         }
 
         /// <summary>
