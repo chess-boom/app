@@ -196,7 +196,6 @@ namespace ChessBoom.GameBoard
             }
             m_board.m_halfmoveClock++;
 
-            //Board nextBoard = new Board(m_board);
             Board nextBoard = CreateBoardFromFEN(CreateFENFromBoard(m_board));
             Piece? nextPiece = nextBoard.GetPiece(piece.GetCoordinates());
             if (nextPiece == null)

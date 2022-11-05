@@ -327,7 +327,7 @@ namespace ChessBoom.NUnitTests.GameTests
                     // Player attempts to walk towards the check
                     _game.MakeExplicitMove("e8", "f7");
                 });
-            
+
             var exception2 = Assert.Throws<GameplayErrorException>(
                 delegate
                 {
