@@ -24,7 +24,7 @@ namespace ChessBoom.NUnitTests
             string directory = new DirectoryInfo(Directory.GetCurrentDirectory()).Name;
 
             // ChessBoom.NUnitTests and src are at the same hierarchy level
-            Assert.AreEqual(directory, "ChessBoom.NUnitTests");
+            Assert.AreEqual("ChessBoom.NUnitTests", directory);
         }
     }
 }

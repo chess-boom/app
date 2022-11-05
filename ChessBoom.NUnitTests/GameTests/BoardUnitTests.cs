@@ -85,7 +85,7 @@ namespace ChessBoom.NUnitTests.GameTests
                 });
 
             if (exception != null)
-                Assert.AreEqual(exception.Message, "Error. h is an invalid piece type.");
+                Assert.AreEqual("Error. h is an invalid piece type.", exception.Message);
         }
 
         /// <summary>
@@ -221,7 +221,7 @@ namespace ChessBoom.NUnitTests.GameTests
                 });
 
             if (exception != null)
-                Assert.AreEqual(exception.Message, "Player \'h\' is not a valid player character.");
+                Assert.AreEqual("Player \'h\' is not a valid player character.", exception.Message);
         }
 
         /// <summary>
@@ -289,15 +289,15 @@ namespace ChessBoom.NUnitTests.GameTests
                 });
 
             if (exception1 != null)
-                Assert.AreEqual(exception1.Message, "Invalid character \'h\' in FEN file.");
+                Assert.AreEqual("Invalid character \'h\' in FEN file.", exception1.Message);
             if (exception2 != null)
-                Assert.AreEqual(exception2.Message, "Duplicate character \'Q\' in FEN file.");
+                Assert.AreEqual("Duplicate character \'Q\' in FEN file.", exception2.Message);
             if (exception3 != null)
-                Assert.AreEqual(exception3.Message, "FEN file must include castling rights.");
+                Assert.AreEqual("FEN file must include castling rights.", exception3.Message);
             if (exception4 != null)
-                Assert.AreEqual(exception4.Message, "Character \'-\' must represent null castling rights in FEN file.");
+                Assert.AreEqual("Character \'-\' must represent null castling rights in FEN file.", exception4.Message);
             if (exception5 != null)
-                Assert.AreEqual(exception5.Message, "No castling rights must be represented by a single \'-\'.");
+                Assert.AreEqual("No castling rights must be represented by a single \'-\'.", exception5.Message);
         }
     }
 }

@@ -19,14 +19,14 @@ namespace ChessBoom.NUnitTests.GameTests
             string square6 = GameHelpers.GetSquareFromCoordinate((5, 2));
             string square7 = GameHelpers.GetSquareFromCoordinate((1, 7));
             string square8 = GameHelpers.GetSquareFromCoordinate((0, 0));
-            Assert.AreEqual(square1, "c3");
-            Assert.AreEqual(square2, "g1");
-            Assert.AreEqual(square3, "h8");
-            Assert.AreEqual(square4, "b6");
-            Assert.AreEqual(square5, "d5");
-            Assert.AreEqual(square6, "f3");
-            Assert.AreEqual(square7, "b8");
-            Assert.AreEqual(square8, "a1");
+            Assert.AreEqual("c3", square1);
+            Assert.AreEqual("g1", square2);
+            Assert.AreEqual("h8", square3);
+            Assert.AreEqual("b6", square4);
+            Assert.AreEqual("d5", square5);
+            Assert.AreEqual("f3", square6);
+            Assert.AreEqual("b8", square7);
+            Assert.AreEqual("a1", square8);
         }
 
         /// <summary>
@@ -47,9 +47,9 @@ namespace ChessBoom.NUnitTests.GameTests
                 });
 
             if (exception1 != null)
-                Assert.AreEqual(exception1.Message, "Coordinate (-1, 0) is an invalid square");
+                Assert.AreEqual("Coordinate (-1, 0) is an invalid square", exception1.Message);
             if (exception2 != null)
-                Assert.AreEqual(exception2.Message, "Coordinate (8, 15) is an invalid square");
+                Assert.AreEqual("Coordinate (8, 15) is an invalid square", exception2.Message);
         }
 
         /// <summary>
@@ -66,14 +66,14 @@ namespace ChessBoom.NUnitTests.GameTests
             (int, int) coordinate6 = GameHelpers.GetCoordinateFromSquare("f3");
             (int, int) coordinate7 = GameHelpers.GetCoordinateFromSquare("b8");
             (int, int) coordinate8 = GameHelpers.GetCoordinateFromSquare("a1");
-            Assert.AreEqual(coordinate1, (2, 2));
-            Assert.AreEqual(coordinate2, (6, 0));
-            Assert.AreEqual(coordinate3, (7, 7));
-            Assert.AreEqual(coordinate4, (1, 5));
-            Assert.AreEqual(coordinate5, (3, 4));
-            Assert.AreEqual(coordinate6, (5, 2));
-            Assert.AreEqual(coordinate7, (1, 7));
-            Assert.AreEqual(coordinate8, (0, 0));
+            Assert.AreEqual((2, 2), coordinate1);
+            Assert.AreEqual((6, 0), coordinate2);
+            Assert.AreEqual((7, 7), coordinate3);
+            Assert.AreEqual((1, 5), coordinate4);
+            Assert.AreEqual((3, 4), coordinate5);
+            Assert.AreEqual((5, 2), coordinate6);
+            Assert.AreEqual((1, 7), coordinate7);
+            Assert.AreEqual((0, 0), coordinate8);
         }
 
         /// <summary>
@@ -99,11 +99,11 @@ namespace ChessBoom.NUnitTests.GameTests
                 });
 
             if (exception1 != null)
-                Assert.AreEqual(exception1.Message, "abc is not properly formatted.");
+                Assert.AreEqual("abc is not properly formatted.", exception1.Message);
             if (exception2 != null)
-                Assert.AreEqual(exception2.Message, "11 does not have a proper column coordinate.");
+                Assert.AreEqual("11 does not have a proper column coordinate.", exception2.Message);
             if (exception3 != null)
-                Assert.AreEqual(exception3.Message, "bb does not have a proper row coordinate.");
+                Assert.AreEqual("bb does not have a proper row coordinate.", exception3.Message);
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace ChessBoom.NUnitTests.GameTests
             // Should return immediately, adding no movement squares, despite all hit squares being valid
             GameHelpers.GetVectorMovementSquares(ref movementSquares, board, player, (-1, 4), (1, 0));
 
-            Assert.AreEqual(movementSquares.Count, 0);
+            Assert.AreEqual(0, movementSquares.Count);
         }
     }
 }
