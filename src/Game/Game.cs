@@ -163,16 +163,6 @@ namespace ChessBoom.GameBoard
         /// </summary>
         /// <param name="attacker">The piece that initiated the capture</param>
         /// <param name="coordinate">The square on which the capture takes place</param>
-        public void Capture(Piece attacker, string square)
-        {
-            m_ruleset.Capture(attacker, m_board, square);
-        }
-
-        /// <summary>
-        /// Handle the capture that has occurred on a specific square
-        /// </summary>
-        /// <param name="attacker">The piece that initiated the capture</param>
-        /// <param name="coordinate">The square on which the capture takes place</param>
         /// <exception cref="ArgumentException">Thrown the piece on the starting square can not be found or be moved, or the square can not be found</exception>
         public void MakeExplicitMove(string startingSquare, string destinationSquare)
         {
@@ -196,8 +186,8 @@ namespace ChessBoom.GameBoard
         /// </summary>
         /// <param name="piece">The piece that will attempt to move</param>
         /// <param name="square">The square that the piece should move to</param>
-        /// <exception cref="GameplayErrorException">Thrown if the wrong player attempts to make a move or if castling is attempted when illegal</exception>
         /// <exception cref="ArgumentException">Thrown the piece can not be found or be moved, or the square can not be found</exception>
+        /// <exception cref="GameplayErrorException">Thrown if the wrong player attempts to make a move or if castling is attempted when illegal</exception>
         public void MakeMove(Piece piece, string square)
         {
             if (piece.GetPlayer() != m_board.m_playerToPlay)
@@ -206,15 +196,24 @@ namespace ChessBoom.GameBoard
             }
             m_board.m_halfmoveClock++;
 
+            //Board nextBoard = new Board(m_board);
+            Board nextBoard = CreateBoardFromFEN(CreateFENFromBoard(m_board));
+            Piece? nextPiece = nextBoard.GetPiece(piece.GetCoordinates());
+            if (nextPiece == null)
+            {
+                // Should not occur, else the Board copy constructor failed to create a proper deep copy
+                Console.WriteLine("Error! Copied piece not found!");
+                return;
+            }
             try
             {
                 if (square == Move.k_kingsideCastleNotation || square == Move.k_queensideCastleNotation)
                 {
-                    m_ruleset.Castle(this, piece.GetPlayer(), (square == Move.k_kingsideCastleNotation) ? Castling.Kingside : Castling.Queenside);
+                    m_ruleset.Castle(nextBoard, nextPiece.GetPlayer(), (square == Move.k_kingsideCastleNotation) ? Castling.Kingside : Castling.Queenside);
                 }
                 else
                 {
-                    piece.MovePiece(GameHelpers.GetCoordinateFromSquare(square));
+                    nextPiece.MovePiece(GameHelpers.GetCoordinateFromSquare(square));
                 }
             }
             catch (ArgumentException e)
@@ -225,11 +224,19 @@ namespace ChessBoom.GameBoard
             {
                 throw e;
             }
-            if (m_board.m_playerToPlay == Player.Black)
+
+            if (nextBoard.m_playerToPlay == Player.Black)
             {
-                m_board.m_fullmoveCount++;
+                nextBoard.m_fullmoveCount++;
             }
-            m_board.m_playerToPlay = GameHelpers.GetOpponent(m_board.m_playerToPlay);
+            nextBoard.m_playerToPlay = GameHelpers.GetOpponent(nextBoard.m_playerToPlay);
+
+            if (m_ruleset.IsIllegalBoardState(nextBoard))
+            {
+                throw new GameplayErrorException("Error! Illegal move!");
+            }
+
+            m_board = nextBoard;
             m_moveList.Add(new Move(piece, square));
         }
 

@@ -19,12 +19,17 @@ namespace ChessBoom.GameBoard
             throw new NotImplementedException();
         }
 
-        public override void Castle(Game game, Player player, Castling side)
+        public override void Castle(Board board, Player player, Castling side)
         {
             throw new NotImplementedException();
         }
 
         public override string GetInitialRookSquare(Player player, Castling side)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool IsIllegalBoardState(Board board)
         {
             throw new NotImplementedException();
         }

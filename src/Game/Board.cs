@@ -324,11 +324,8 @@ namespace ChessBoom.GameBoard
         /// <param name="coordinate">The square on which the capture takes place</param>
         public void Capture(Piece attacker, (int, int) coordinate)
         {
-            if (m_game != null)
-            {
-                m_game.Capture(attacker, GameHelpers.GetSquareFromCoordinate(coordinate));
-                m_halfmoveClock = 0;
-            }
+            GetRuleset().Capture(attacker, this, GameHelpers.GetSquareFromCoordinate(coordinate));
+            m_halfmoveClock = 0;
         }
 
         /// <summary>

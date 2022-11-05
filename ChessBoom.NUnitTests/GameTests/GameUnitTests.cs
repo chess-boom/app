@@ -244,9 +244,11 @@ namespace ChessBoom.NUnitTests.GameTests
         {
             _game.MakeExplicitMove("e2", "e4");
             _game.MakeExplicitMove("e7", "e5");
-            _game.MakeExplicitMove("f1", "b5");
+            _game.MakeExplicitMove("f1", "c4");
             _game.MakeExplicitMove("d7", "d5");
             _game.MakeExplicitMove("d2", "d4");
+            _game.MakeExplicitMove("d5", "c4");
+            _game.MakeExplicitMove("g1", "f3");
             _game.MakeExplicitMove("f8", "b4");
 
             var exception = Assert.Throws<GameplayErrorException>(
@@ -286,6 +288,57 @@ namespace ChessBoom.NUnitTests.GameTests
 
             if (exception != null)
                 Assert.AreEqual(exception.Message, "Castling is illegal in this situation!");
+        }
+
+        /// <summary>
+        /// Ensure that checks may be blocked, captured, or moved out of
+        /// </summary>
+        [Test]
+        public void HandlingCheckTest()
+        {
+            _game.MakeExplicitMove("e2", "e4");
+            _game.MakeExplicitMove("f7", "f5");
+            _game.MakeExplicitMove("d1", "h5");
+            _game.MakeExplicitMove("g7", "g6"); // Check is blocked
+            _game.MakeExplicitMove("h5", "g6");
+            _game.MakeExplicitMove("h7", "g6"); // Check is captured
+            _game.MakeExplicitMove("f1", "b5");
+            _game.MakeExplicitMove("f8", "h6");
+            _game.MakeExplicitMove("b5", "d7");
+            _game.MakeExplicitMove("e8", "f7"); // Check is sidestepped
+
+            string fen = Game.CreateFENFromBoard(_game.m_board);
+            Assert.AreEqual(fen, "rnbq2nr/pppBpk2/6pb/5p2/4P3/8/PPPP1PPP/RNB1K1NR w KQ - 1 6");
+        }
+
+        /// <summary>
+        /// Ensure that making illegal moves while in check throws GameplayErrorExceptions
+        /// </summary>
+        [Test]
+        public void IllegalCheckMoveTest()
+        {
+            _game.MakeExplicitMove("e2", "e4");
+            _game.MakeExplicitMove("f7", "f5");
+            _game.MakeExplicitMove("d1", "h5");
+
+            var exception1 = Assert.Throws<GameplayErrorException>(
+                delegate
+                {
+                    // Player attempts to walk towards the check
+                    _game.MakeExplicitMove("e8", "f7");
+                });
+            
+            var exception2 = Assert.Throws<GameplayErrorException>(
+                delegate
+                {
+                    // Player attempts to play another random move
+                    _game.MakeExplicitMove("g7", "g5");
+                });
+
+            if (exception1 != null)
+                Assert.AreEqual(exception1.Message, "Error! Illegal move!");
+            if (exception2 != null)
+                Assert.AreEqual(exception2.Message, "Error! Illegal move!");
         }
     }
 }

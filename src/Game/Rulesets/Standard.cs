@@ -117,9 +117,9 @@ namespace ChessBoom.GameBoard
             return true;
         }
 
-        public override void Castle(Game game, Player player, Castling side)
+        public override void Castle(Board board, Player player, Castling side)
         {
-            if (!CanCastle(game.m_board, player, side))
+            if (!CanCastle(board, player, side))
             {
                 throw new GameplayErrorException("Castling is illegal in this situation!");
             }
@@ -136,8 +136,8 @@ namespace ChessBoom.GameBoard
             try
             {
                 kingCoordinate = GameHelpers.GetCoordinateFromSquare("e" + playerRow);
-                king = game.m_board.GetPiece(kingCoordinate);
-                rook = game.m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(rookCol + playerRow));
+                king = board.GetPiece(kingCoordinate);
+                rook = board.GetPiece(GameHelpers.GetCoordinateFromSquare(rookCol + playerRow));
             }
             catch (ArgumentException)
             {
@@ -162,8 +162,8 @@ namespace ChessBoom.GameBoard
                 throw e;
             }
 
-            game.m_board.RemoveCastling(player, Castling.Kingside);
-            game.m_board.RemoveCastling(player, Castling.Queenside);
+            board.RemoveCastling(player, Castling.Kingside);
+            board.RemoveCastling(player, Castling.Queenside);
         }
 
         public override string GetInitialRookSquare(Player player, Castling side)
@@ -171,6 +171,11 @@ namespace ChessBoom.GameBoard
             string playerRow = (player == Player.White) ? "1" : "8";
             string rookCol = (side == Castling.Kingside) ? "h" : "a";
             return rookCol + playerRow;
+        }
+
+        public override bool IsIllegalBoardState(Board board)
+        {
+            return IsInCheck(GameHelpers.GetOpponent(board.m_playerToPlay), board);
         }
     }
 }
