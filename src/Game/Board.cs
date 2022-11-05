@@ -188,7 +188,7 @@ namespace ChessBoom.GameBoard
             }
             else
             {
-                return new Standard();
+                return Standard.Instance;
             }
         }
 

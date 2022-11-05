@@ -33,5 +33,10 @@ namespace ChessBoom.GameBoard
         {
             throw new NotImplementedException();
         }
+
+        public override void AssessBoardState(Game game, Board board)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

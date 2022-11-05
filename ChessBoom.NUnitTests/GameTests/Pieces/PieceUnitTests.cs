@@ -64,7 +64,7 @@ namespace ChessBoom.NUnitTests.GameTests
             if (bishop != null)
             {
                 var movementSquares = bishop.GetMovementSquares();
-                Assert.AreEqual(movementSquares.Count, 9);
+                Assert.AreEqual(9, movementSquares.Count);
                 Assert.Contains((0, 0), movementSquares);
                 Assert.Contains((0, 2), movementSquares);
                 Assert.Contains((2, 0), movementSquares);
@@ -81,7 +81,7 @@ namespace ChessBoom.NUnitTests.GameTests
             if (bishop != null)
             {
                 var movementSquares = bishop.GetMovementSquares();
-                Assert.AreEqual(movementSquares.Count, 7);
+                Assert.AreEqual(7, movementSquares.Count);
                 Assert.Contains((0, 0), movementSquares);
                 Assert.Contains((0, 2), movementSquares);
                 Assert.Contains((2, 0), movementSquares);
@@ -96,7 +96,7 @@ namespace ChessBoom.NUnitTests.GameTests
             if (bishop != null)
             {
                 var movementSquares = bishop.GetMovementSquares();
-                Assert.AreEqual(movementSquares.Count, 5);
+                Assert.AreEqual(5, movementSquares.Count);
                 Assert.Contains((0, 0), movementSquares);
                 Assert.Contains((0, 2), movementSquares);
                 Assert.Contains((2, 0), movementSquares);
@@ -119,7 +119,7 @@ namespace ChessBoom.NUnitTests.GameTests
             if (king1 != null)
             {
                 var movementSquares = king1.GetMovementSquares();
-                Assert.AreEqual(movementSquares.Count, 3);
+                Assert.AreEqual(3, movementSquares.Count);
                 Assert.Contains((1, 0), movementSquares);
                 Assert.Contains((1, 1), movementSquares);
                 Assert.Contains((0, 1), movementSquares);
@@ -133,7 +133,7 @@ namespace ChessBoom.NUnitTests.GameTests
             if (king2 != null)
             {
                 var movementSquares = king2.GetMovementSquares();
-                Assert.AreEqual(movementSquares.Count, 8);
+                Assert.AreEqual(8, movementSquares.Count);
                 Assert.Contains((2, 2), movementSquares);
                 Assert.Contains((2, 3), movementSquares);
                 Assert.Contains((2, 4), movementSquares);
@@ -149,7 +149,7 @@ namespace ChessBoom.NUnitTests.GameTests
             if (king2 != null)
             {
                 var movementSquares = king2.GetMovementSquares();
-                Assert.AreEqual(movementSquares.Count, 7);
+                Assert.AreEqual(7, movementSquares.Count);
                 Assert.Contains((2, 2), movementSquares);
                 Assert.Contains((2, 3), movementSquares);
                 Assert.Contains((2, 4), movementSquares);
@@ -164,7 +164,7 @@ namespace ChessBoom.NUnitTests.GameTests
             if (king2 != null)
             {
                 var movementSquares = king2.GetMovementSquares();
-                Assert.AreEqual(movementSquares.Count, 7);
+                Assert.AreEqual(7, movementSquares.Count);
                 Assert.Contains((2, 2), movementSquares);
                 Assert.Contains((2, 3), movementSquares);
                 Assert.Contains((2, 4), movementSquares);
@@ -189,7 +189,7 @@ namespace ChessBoom.NUnitTests.GameTests
             if (knight1 != null)
             {
                 var movementSquares = knight1.GetMovementSquares();
-                Assert.AreEqual(movementSquares.Count, 2);
+                Assert.AreEqual(2, movementSquares.Count);
                 Assert.Contains((2, 1), movementSquares);
                 Assert.Contains((1, 2), movementSquares);
             }
@@ -200,7 +200,7 @@ namespace ChessBoom.NUnitTests.GameTests
             if (knight2 != null)
             {
                 var movementSquares = knight2.GetMovementSquares();
-                Assert.AreEqual(movementSquares.Count, 8);
+                Assert.AreEqual(8, movementSquares.Count);
                 Assert.Contains((2, 3), movementSquares);
                 Assert.Contains((2, 5), movementSquares);
                 Assert.Contains((3, 6), movementSquares);
@@ -216,7 +216,7 @@ namespace ChessBoom.NUnitTests.GameTests
             if (knight2 != null)
             {
                 var movementSquares = knight2.GetMovementSquares();
-                Assert.AreEqual(movementSquares.Count, 7);
+                Assert.AreEqual(7, movementSquares.Count);
                 Assert.Contains((2, 5), movementSquares);
                 Assert.Contains((3, 6), movementSquares);
                 Assert.Contains((3, 2), movementSquares);
@@ -231,7 +231,7 @@ namespace ChessBoom.NUnitTests.GameTests
             if (knight2 != null)
             {
                 var movementSquares = knight2.GetMovementSquares();
-                Assert.AreEqual(movementSquares.Count, 7);
+                Assert.AreEqual(7, movementSquares.Count);
                 Assert.Contains((2, 5), movementSquares);
                 Assert.Contains((3, 6), movementSquares);
                 Assert.Contains((3, 2), movementSquares);
@@ -256,7 +256,7 @@ namespace ChessBoom.NUnitTests.GameTests
             if (pawn1 != null)
             {
                 var movementSquares = pawn1.GetMovementSquares();
-                Assert.AreEqual(movementSquares.Count, 2);
+                Assert.AreEqual(2, movementSquares.Count);
                 Assert.Contains((0, 1), movementSquares);
                 Assert.Contains((0, 2), movementSquares);
             }
@@ -270,7 +270,7 @@ namespace ChessBoom.NUnitTests.GameTests
             if (pawn2 != null)
             {
                 var movementSquares = pawn2.GetMovementSquares();
-                Assert.AreEqual(movementSquares.Count, 2);
+                Assert.AreEqual(2, movementSquares.Count);
                 Assert.Contains((4, 5), movementSquares);
                 Assert.Contains((3, 5), movementSquares);
             }
@@ -283,7 +283,7 @@ namespace ChessBoom.NUnitTests.GameTests
             if (pawn3 != null)
             {
                 var movementSquares = pawn3.GetMovementSquares();
-                Assert.AreEqual(movementSquares.Count, 1);
+                Assert.AreEqual(1, movementSquares.Count);
                 Assert.Contains((6, 2), movementSquares);
             }
         }
@@ -302,7 +302,7 @@ namespace ChessBoom.NUnitTests.GameTests
             if (queen1 != null)
             {
                 var movementSquares = queen1.GetMovementSquares();
-                Assert.AreEqual(movementSquares.Count, 23);
+                Assert.AreEqual(23, movementSquares.Count);
                 Assert.Contains((0, 0), movementSquares);
                 Assert.Contains((0, 1), movementSquares);
                 Assert.Contains((0, 2), movementSquares);
@@ -341,7 +341,7 @@ namespace ChessBoom.NUnitTests.GameTests
             if (queen1 != null)
             {
                 var movementSquares = queen1.GetMovementSquares();
-                Assert.AreEqual(movementSquares.Count, 17);
+                Assert.AreEqual(17, movementSquares.Count);
                 Assert.Contains((0, 0), movementSquares);
                 Assert.Contains((0, 1), movementSquares);
                 Assert.Contains((0, 2), movementSquares);
@@ -374,7 +374,7 @@ namespace ChessBoom.NUnitTests.GameTests
             if (queen1 != null)
             {
                 var movementSquares = queen1.GetMovementSquares();
-                Assert.AreEqual(movementSquares.Count, 11);
+                Assert.AreEqual(11, movementSquares.Count);
                 Assert.Contains((0, 0), movementSquares);
                 Assert.Contains((0, 1), movementSquares);
                 Assert.Contains((0, 2), movementSquares);
@@ -409,7 +409,7 @@ namespace ChessBoom.NUnitTests.GameTests
             if (rook != null)
             {
                 var movementSquares = rook.GetMovementSquares();
-                Assert.AreEqual(movementSquares.Count, 14);
+                Assert.AreEqual(14, movementSquares.Count);
                 Assert.Contains((0, 1), movementSquares);
                 Assert.Contains((1, 0), movementSquares);
 
@@ -436,7 +436,7 @@ namespace ChessBoom.NUnitTests.GameTests
             if (rook != null)
             {
                 var movementSquares = rook.GetMovementSquares();
-                Assert.AreEqual(movementSquares.Count, 10);
+                Assert.AreEqual(10, movementSquares.Count);
                 Assert.Contains((0, 1), movementSquares);
                 Assert.Contains((1, 0), movementSquares);
 
@@ -460,7 +460,7 @@ namespace ChessBoom.NUnitTests.GameTests
             if (rook != null)
             {
                 var movementSquares = rook.GetMovementSquares();
-                Assert.AreEqual(movementSquares.Count, 6);
+                Assert.AreEqual(6, movementSquares.Count);
                 Assert.Contains((0, 1), movementSquares);
                 Assert.Contains((1, 0), movementSquares);
 

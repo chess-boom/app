@@ -15,7 +15,6 @@ namespace ChessBoom.GameBoard
         /// </summary>
         /// <param name="player">The player who may or may not be in check</param>
         /// <param name="board">The board on which checks are searched for</param>
-        /// <exception cref="ArgumentException">Thrown if a player's king is out of bounds</exception>
         public abstract bool IsInCheck(Player player, Board board);
 
         /// <summary>
@@ -49,5 +48,12 @@ namespace ChessBoom.GameBoard
         /// <param name="board">The board to assess</param>
         /// <returns>Whether or not the board is legal as per the ruleset</returns>
         public abstract bool IsIllegalBoardState(Board board);
+
+        /// <summary>
+        /// Assess the state of the specified board. Covers victory/defeat conditions.
+        /// </summary>
+        /// <param name="game">The game, whose state may change</param>
+        /// <param name="board">The board to assess</param>
+        public abstract void AssessBoardState(Game game, Board board);
     }
 }

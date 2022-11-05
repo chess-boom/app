@@ -20,7 +20,7 @@ namespace ChessBoom.NUnitTests.GameTests
         public void CheckDefaultFENSetupTest()
         {
             string fen = Game.CreateFENFromBoard(_game.m_board);
-            Assert.AreEqual(fen, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+            Assert.AreEqual("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", fen);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace ChessBoom.NUnitTests.GameTests
             _game.MakeExplicitMove("f1", "b5");
 
             string fen = Game.CreateFENFromBoard(_game.m_board);
-            Assert.AreEqual(fen, "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3");
+            Assert.AreEqual("r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3", fen);
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace ChessBoom.NUnitTests.GameTests
             _game.MakeExplicitMove("e6", "d5");
 
             string fen = Game.CreateFENFromBoard(_game.m_board);
-            Assert.AreEqual(fen, "rn2kbnr/ppp1pppp/8/3b4/8/8/PPPP1PPP/R1BQKBNR w KQkq - 0 5");
+            Assert.AreEqual("rn2kbnr/ppp1pppp/8/3b4/8/8/PPPP1PPP/R1BQKBNR w KQkq - 0 5", fen);
         }
 
         /// <summary>
@@ -71,12 +71,12 @@ namespace ChessBoom.NUnitTests.GameTests
 
             // Ensure the FEN enables an "en passant" capture on square d6
             string fen = Game.CreateFENFromBoard(_game.m_board);
-            Assert.AreEqual(fen, "rnbqkbnr/1pp1pppp/p7/3pP3/8/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 3");
+            Assert.AreEqual("rnbqkbnr/1pp1pppp/p7/3pP3/8/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 3", fen);
 
             // Ensure the capture takes place
             _game.MakeExplicitMove("e5", "d6");
             fen = Game.CreateFENFromBoard(_game.m_board);
-            Assert.AreEqual(fen, "rnbqkbnr/1pp1pppp/p2P4/8/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 3");
+            Assert.AreEqual("rnbqkbnr/1pp1pppp/p2P4/8/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 3", fen);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace ChessBoom.NUnitTests.GameTests
             _game.MakeExplicitMove("g7", "h8");
             _game.MakeExplicitMove("a2", "b1");
             string fen = Game.CreateFENFromBoard(_game.m_board);
-            Assert.AreEqual(fen, "rnbqkbnQ/p1pppp1p/8/8/8/8/1PPPPPP1/RqBQKBNR w KQq - 0 6");
+            Assert.AreEqual("rnbqkbnQ/p1pppp1p/8/8/8/8/1PPPPPP1/RqBQKBNR w KQq - 0 6", fen);
         }
 
         /// <summary>
@@ -157,17 +157,17 @@ namespace ChessBoom.NUnitTests.GameTests
                 });
 
             if (exception1 != null)
-                Assert.AreEqual(exception1.Message, "Error. Piece R on a1 is unable to move to a3!");
+                Assert.AreEqual("Error. Piece R on a1 is unable to move to a3!", exception1.Message);
             if (exception2 != null)
-                Assert.AreEqual(exception2.Message, "Error. Piece N on g1 is unable to move to e2!");
+                Assert.AreEqual("Error. Piece N on g1 is unable to move to e2!", exception2.Message);
             if (exception3 != null)
-                Assert.AreEqual(exception3.Message, "Error. Piece P on e5 is unable to move to f6!");
+                Assert.AreEqual("Error. Piece P on e5 is unable to move to f6!", exception3.Message);
             if (exception4 != null)
-                Assert.AreEqual(exception4.Message, "Piece on square h3 not found!");
+                Assert.AreEqual("Piece on square h3 not found!", exception4.Message);
             if (exception5 != null)
-                Assert.AreEqual(exception5.Message, $"i2 does not have a proper column coordinate.");
+                Assert.AreEqual($"i2 does not have a proper column coordinate.", exception5.Message);
             if (exception6 != null)
-                Assert.AreEqual(exception6.Message, "Piece p can not move because it is not Black\'s turn!");
+                Assert.AreEqual("Piece p can not move because it is not Black\'s turn!", exception6.Message);
         }
 
         /// <summary>
@@ -187,7 +187,7 @@ namespace ChessBoom.NUnitTests.GameTests
 
             // Ensure the FEN allows kingside castling
             string fen = Game.CreateFENFromBoard(_game.m_board);
-            Assert.AreEqual(fen, "rnbq1rk1/pppp1ppp/5n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w - - 6 5");
+            Assert.AreEqual("rnbq1rk1/pppp1ppp/5n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w - - 6 5", fen);
         }
 
         /// <summary>
@@ -209,7 +209,7 @@ namespace ChessBoom.NUnitTests.GameTests
 
             // Ensure the FEN allows queenside castling
             string fen = Game.CreateFENFromBoard(_game.m_board);
-            Assert.AreEqual(fen, "2kr1bnr/ppp1pppp/2nqb3/3p4/3P4/2NQB3/PPP1PPPP/2KR1BNR w - - 8 6");
+            Assert.AreEqual("2kr1bnr/ppp1pppp/2nqb3/3p4/3P4/2NQB3/PPP1PPPP/2KR1BNR w - - 8 6", fen);
         }
 
         /// <summary>
@@ -233,7 +233,7 @@ namespace ChessBoom.NUnitTests.GameTests
                 });
 
             if (exception != null)
-                Assert.AreEqual(exception.Message, "Castling is illegal in this situation!");
+                Assert.AreEqual("Castling is illegal in this situation!", exception.Message);
         }
 
         /// <summary>
@@ -259,7 +259,7 @@ namespace ChessBoom.NUnitTests.GameTests
                 });
 
             if (exception != null)
-                Assert.AreEqual(exception.Message, "Castling is illegal in this situation!");
+                Assert.AreEqual("Castling is illegal in this situation!", exception.Message);
         }
 
         /// <summary>
@@ -287,7 +287,7 @@ namespace ChessBoom.NUnitTests.GameTests
                 });
 
             if (exception != null)
-                Assert.AreEqual(exception.Message, "Castling is illegal in this situation!");
+                Assert.AreEqual("Castling is illegal in this situation!", exception.Message);
         }
 
         /// <summary>
@@ -308,7 +308,7 @@ namespace ChessBoom.NUnitTests.GameTests
             _game.MakeExplicitMove("e8", "f7"); // Check is sidestepped
 
             string fen = Game.CreateFENFromBoard(_game.m_board);
-            Assert.AreEqual(fen, "rnbq2nr/pppBpk2/6pb/5p2/4P3/8/PPPP1PPP/RNB1K1NR w KQ - 1 6");
+            Assert.AreEqual("rnbq2nr/pppBpk2/6pb/5p2/4P3/8/PPPP1PPP/RNB1K1NR w KQ - 1 6", fen);
         }
 
         /// <summary>
@@ -336,9 +336,68 @@ namespace ChessBoom.NUnitTests.GameTests
                 });
 
             if (exception1 != null)
-                Assert.AreEqual(exception1.Message, "Error! Illegal move!");
+                Assert.AreEqual("Error! Illegal move!", exception1.Message);
             if (exception2 != null)
-                Assert.AreEqual(exception2.Message, "Error! Illegal move!");
+                Assert.AreEqual("Error! Illegal move!", exception2.Message);
+        }
+
+        /// <summary>
+        /// Ensure white checkmate changes the game state
+        /// </summary>
+        [Test]
+        public void WhiteCheckmateTest()
+        {
+            _game.MakeExplicitMove("e2", "e4");
+            _game.MakeExplicitMove("f7", "f6");
+            _game.MakeExplicitMove("f1", "c4");
+            _game.MakeExplicitMove("g7", "g5");
+            Assert.AreEqual(_game.m_gameState, GameState.InProgress);
+            _game.MakeExplicitMove("d1", "h5");
+            Assert.AreEqual(_game.m_gameState, GameState.VictoryWhite);
+
+            string fen = Game.CreateFENFromBoard(_game.m_board);
+            Assert.AreEqual("rnbqkbnr/ppppp2p/5p2/6pQ/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 1 3", fen);
+        }
+
+        /// <summary>
+        /// Ensure black checkmate changes the game state
+        /// </summary>
+        [Test]
+        public void BlackCheckmateTest()
+        {
+            _game.MakeExplicitMove("f2", "f3");
+            _game.MakeExplicitMove("e7", "e6");
+            _game.MakeExplicitMove("g2", "g4");
+            Assert.AreEqual(_game.m_gameState, GameState.InProgress);
+            _game.MakeExplicitMove("d8", "h4");
+            Assert.AreEqual(_game.m_gameState, GameState.VictoryBlack);
+
+            string fen = Game.CreateFENFromBoard(_game.m_board);
+            Assert.AreEqual("rnb1kbnr/pppp1ppp/4p3/8/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq - 1 3", fen);
+        }
+
+        /// <summary>
+        /// Ensure moves can not be played in an improper game state
+        /// </summary>
+        [Test]
+        public void MoveAfterGameEndTest()
+        {
+            _game.MakeExplicitMove("f2", "f3");
+            _game.MakeExplicitMove("e7", "e6");
+            _game.MakeExplicitMove("g2", "g4");
+            Assert.AreEqual(GameState.InProgress, _game.m_gameState);
+            _game.MakeExplicitMove("d8", "h4");
+            Assert.AreEqual(GameState.VictoryBlack, _game.m_gameState);
+
+            var exception = Assert.Throws<GameplayErrorException>(
+                delegate
+                {
+                    // Player attempts to play another random move
+                    _game.MakeExplicitMove("e2", "e3");
+                });
+
+            if (exception != null)
+                Assert.AreEqual("Game is not in progress! Illegal move.", exception.Message);
         }
     }
 }

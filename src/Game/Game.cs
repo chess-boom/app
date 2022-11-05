@@ -24,6 +24,19 @@ namespace ChessBoom.GameBoard
         Queenside
     }
 
+    public enum GameState
+    {
+        // TODO: Create a game loop
+        Setup,
+        InProgress,
+        VictoryWhite,
+        VictoryBlack,
+        // TODO: Implement draw checks
+        Draw,
+        // TODO: Implement game aborting
+        Aborted
+    }
+
     /// <summary>
     /// The Move struct represents a single move and all of its variations via a nested recursive list
     /// </summary>
@@ -116,13 +129,19 @@ namespace ChessBoom.GameBoard
         private List<Move> m_moveList;
 
         /// <summary>
+        /// The present game state
+        /// </summary>
+        public GameState m_gameState { get; set; }
+
+        /// <summary>
         /// Default constructor
         /// </summary>
         public Game()
         {
             m_board = InitializeBoard(m_variant);
-            m_ruleset = new Standard();
+            m_ruleset = Standard.Instance;
             m_moveList = new List<Move>();
+            m_gameState = GameState.InProgress;
         }
 
         /*public Game(Variant variant)
@@ -155,7 +174,7 @@ namespace ChessBoom.GameBoard
                     break;
             }
 
-            return CreateBoardFromFEN(fen);
+            return CreateBoardFromFEN(this, fen);
         }
 
         /// <summary>
@@ -190,13 +209,17 @@ namespace ChessBoom.GameBoard
         /// <exception cref="GameplayErrorException">Thrown if the wrong player attempts to make a move or if castling is attempted when illegal</exception>
         public void MakeMove(Piece piece, string square)
         {
+            if (m_gameState != GameState.InProgress)
+            {
+                throw new GameplayErrorException($"Game is not in progress! Illegal move.");
+            }
             if (piece.GetPlayer() != m_board.m_playerToPlay)
             {
                 throw new GameplayErrorException($"Piece {piece} can not move because it is not {piece.GetPlayer()}\'s turn!");
             }
             m_board.m_halfmoveClock++;
 
-            Board nextBoard = CreateBoardFromFEN(CreateFENFromBoard(m_board));
+            Board nextBoard = CreateBoardFromFEN(this, CreateFENFromBoard(m_board));
             Piece? nextPiece = nextBoard.GetPiece(piece.GetCoordinates());
             if (nextPiece == null)
             {
@@ -237,6 +260,8 @@ namespace ChessBoom.GameBoard
 
             m_board = nextBoard;
             m_moveList.Add(new Move(piece, square));
+
+            m_ruleset.AssessBoardState(this, m_board);
         }
 
         /// <summary>
@@ -250,9 +275,9 @@ namespace ChessBoom.GameBoard
         ///     The sixth part denotes the fullmove number.
         /// </summary>
         /// <param name="fen">The contents of the .FEN file</param>
-        private Board CreateBoardFromFEN(string fen)
+        public static Board CreateBoardFromFEN(Game game, string fen)
         {
-            Board board = new Board(this);
+            Board board = new Board(game);
             string[] fenSplit = fen.Split(' ');
 
             // Create the pieces
