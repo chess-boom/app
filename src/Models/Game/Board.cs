@@ -11,7 +11,7 @@ namespace ChessBoom.Views.GameBoard
         /// <summary>
         /// Map for piece types and their constructors
         /// </summary>
-        public static Dictionary<char, Func<Board, Player, (int, int), Piece>> k_pieceConstructor = new Dictionary<char, Func<Board, Player, (int, int), Piece>>()
+        public static readonly Dictionary<char, Func<Board, Player, (int, int), Piece>> k_pieceConstructor = new Dictionary<char, Func<Board, Player, (int, int), Piece>>()
         {
             {'K', (Board board, Player player, (int, int) coordinate) => new King(board, player, coordinate)},
             {'Q', (Board board, Player player, (int, int) coordinate) => new Queen(board, player, coordinate)},
