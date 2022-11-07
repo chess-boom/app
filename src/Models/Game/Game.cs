@@ -80,11 +80,7 @@ namespace ChessBoom.Views.GameBoard
         public override string ToString()
         {
             string? pieceString = m_piece.ToString();
-            if (pieceString == null)
-            {
-                throw new NullReferenceException($"Piece should not be null!");
-            }
-            return pieceString.ToLower() + m_square;
+            return pieceString?.ToLower() + m_square;
         }
     }
 
