@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace ChessBoom.GameBoard
+namespace ChessBoom.Views.GameBoard
 {
     enum Variant
     {

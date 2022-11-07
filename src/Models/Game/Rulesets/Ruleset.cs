@@ -1,4 +1,4 @@
-namespace ChessBoom.GameBoard
+namespace ChessBoom.Views.GameBoard
 {
     public abstract class Ruleset
     {

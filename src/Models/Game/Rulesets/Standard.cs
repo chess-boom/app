@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ChessBoom.GameBoard
+namespace ChessBoom.Views.GameBoard
 {
     public class Standard : Ruleset
     {
