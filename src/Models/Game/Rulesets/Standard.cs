@@ -30,7 +30,7 @@ namespace ChessBoom.Models.Game
             }
             catch (ArgumentException e)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -172,7 +172,7 @@ namespace ChessBoom.Models.Game
             }
             catch (ArgumentException e)
             {
-                throw e;
+                throw;
             }
 
             board.RemoveCastling(player, Castling.Kingside);
