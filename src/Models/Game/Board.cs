@@ -120,6 +120,40 @@ namespace ChessBoom.Models.Game
             m_pieces.Add(piece);
         }
 
+        /// <summary>
+        /// Create a board from the piece placement data of a FEN string
+        /// </summary>
+        /// <param name="fen">Each rank is described, starting with rank 8 and ending with rank 1, with a "/" between each one; within each rank, the contents of the squares are described in order from the a-file to the h-file.</param>
+        public void CreateBoard(string fen)
+        {
+            string[] pieceSplit = fen.Split('/');
+            for (int row = 0; row < GameHelpers.k_BoardHeight; row++)
+            {
+                int col = 0;
+
+                foreach (char piece in pieceSplit[row])
+                {
+                    if (Char.IsDigit(piece))
+                    {
+                        col += (int)Char.GetNumericValue(piece);
+                    }
+                    else
+                    {
+                        try
+                        {
+                            (int, int) coordinate = (col, (GameHelpers.k_BoardHeight - 1) - row);
+                            CreatePiece(piece, coordinate);
+                        }
+                        catch (ArgumentException)
+                        {
+
+                        }
+                        col++;
+                    }
+                }
+            }
+        }
+
         // TODO: Determine whether this function should be kept or not
         // Note: This may be useful in the future for when variations are made.
         //      Depending on the architecture, a game may delegate each variation

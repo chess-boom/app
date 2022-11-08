@@ -276,33 +276,7 @@ namespace ChessBoom.Models.Game
             Board board = new Board(game);
             string[] fenSplit = fen.Split(' ');
 
-            // Create the pieces
-            string[] pieceSplit = fenSplit[0].Split('/');
-            for (int row = 0; row < GameHelpers.k_BoardHeight; row++)
-            {
-                int col = 0;
-
-                foreach (char piece in pieceSplit[row])
-                {
-                    if (Char.IsDigit(piece))
-                    {
-                        col += (int)Char.GetNumericValue(piece);
-                    }
-                    else
-                    {
-                        try
-                        {
-                            (int, int) coordinate = (col, (GameHelpers.k_BoardHeight - 1) - row);
-                            board.CreatePiece(piece, coordinate);
-                        }
-                        catch (ArgumentException)
-                        {
-
-                        }
-                        col++;
-                    }
-                }
-            }
+            board.CreateBoard(fenSplit[0]);
 
             // Set the next player to play
             if (fenSplit[1].Length != 1)
