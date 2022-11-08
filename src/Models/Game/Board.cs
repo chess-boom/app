@@ -262,7 +262,7 @@ namespace ChessBoom.Models.Game
 
             if (castling.Length < 1)
             {
-                throw new ArgumentException($"FEN file must include castling rights");
+                throw new ArgumentException("FEN file must include castling rights");
             }
 
             foreach (char c in castling)
