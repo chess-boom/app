@@ -323,8 +323,9 @@ namespace ChessBoom.Models.Game
             {
                 board.SetCastling(fenSplit[2]);
             }
-            catch (ArgumentException)
+            catch (ArgumentException e)
             {
+                Console.WriteLine($"{e}: defaulting to no castling rights");
                 board.SetCastling("-");
             }
 

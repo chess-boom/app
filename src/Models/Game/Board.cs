@@ -214,11 +214,10 @@ namespace ChessBoom.Models.Game
                 {Player.White, new List<Castling>()},
                 {Player.Black, new List<Castling>()},
             };
-            m_castling[Player.White].Add(Castling.Kingside);
 
             if (castling.Length < 1)
             {
-                throw new ArgumentException($"FEN file must include castling rights.");
+                throw new ArgumentException($"FEN file must include castling rights");
             }
 
             foreach (char c in castling)
@@ -226,25 +225,26 @@ namespace ChessBoom.Models.Game
                 // Here we do 2 lookups, but unpacking in-place is awkward
                 if (!k_castling.TryGetValue(c, out _))
                 {
-                    throw new ArgumentException($"Invalid character \'{c}\' in FEN file.");
+                    throw new ArgumentException($"Invalid character \'{c}\' in FEN file");
                 }
 
                 (Player? player, Castling? side) = k_castling[c];
 
                 // character was not '-'
+                // not a guard clause because compiler uses HasValue check for casting Nullable<>
                 if (player.HasValue && side.HasValue)
                 {
                     if (m_castling[player.Value].Contains(side.Value))
                     {
-                        throw new ArgumentException($"Duplicate character \'{c}\' in FEN file.");
+                        throw new ArgumentException($"Duplicate character \'{c}\' in FEN file");
                     }
                     m_castling[player.Value].Add(side.Value);
                 }
                 else
                 {
-                    if (m_castling[Player.White].Count > 0 || m_castling[Player.Black].Count > 0)
+                    if (castling.Length > 1)
                     {
-                        throw new ArgumentException($"Character \'-\' must represent null castling rights in FEN file.");
+                        throw new ArgumentException("Character \'-\' must exclusively represent null castling rights in FEN file");
                     }
                     break;
                 }
