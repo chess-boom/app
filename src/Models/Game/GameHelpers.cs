@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ChessBoom.Views.GameBoard
+namespace ChessBoom.Models.Game
 {
     /// <summary>
     /// This helper class contains useful constants and functions for use in other gameplay-related classes

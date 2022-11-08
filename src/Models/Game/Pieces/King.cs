@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ChessBoom.Views.GameBoard
+namespace ChessBoom.Models.Game
 {
     public class King : Piece
     {

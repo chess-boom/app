@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ChessBoom.Views.GameBoard
+namespace ChessBoom.Models.Game
 {
     /// <summary>
     /// The Board class contains the chess pieces and is the medium through which a Game is played
@@ -212,42 +212,42 @@ namespace ChessBoom.Views.GameBoard
                 {
                     case 'K':
                         if (whiteCastling.Contains(Castling.Kingside))
-                        {
+                {
                             throw new ArgumentException($"Duplicate character \'{c}\' in FEN file.");
                         }
                         whiteCastling.Add(Castling.Kingside);
                         break;
                     case 'k':
                         if (blackCastling.Contains(Castling.Kingside))
-                        {
-                            throw new ArgumentException($"Duplicate character \'{c}\' in FEN file.");
-                        }
+                    {
+                        throw new ArgumentException($"Duplicate character \'{c}\' in FEN file.");
+                    }
                         blackCastling.Add(Castling.Kingside);
                         break;
                     case 'Q':
                         if (whiteCastling.Contains(Castling.Queenside))
                         {
                             throw new ArgumentException($"Duplicate character \'{c}\' in FEN file.");
-                        }
+                }
                         whiteCastling.Add(Castling.Queenside);
                         break;
                     case 'q':
                         if (blackCastling.Contains(Castling.Queenside))
-                        {
+                {
                             throw new ArgumentException($"Duplicate character \'{c}\' in FEN file.");
                         }
                         blackCastling.Add(Castling.Queenside);
                         break;
                     case '-':
                         if (whiteCastling.Count > 0 || blackCastling.Count > 0)
-                        {
-                            throw new ArgumentException($"Character \'-\' must represent null castling rights in FEN file.");
-                        }
+                    {
+                        throw new ArgumentException($"Character \'-\' must represent null castling rights in FEN file.");
+                    }
                         if (castling != "-")
                         {
                             throw new ArgumentException($"No castling rights must be represented by a single \'-\'.");
                         }
-                        break;
+                    break;
                     default:
                         throw new ArgumentException($"Invalid character \'{c}\' in FEN file.");
                 }

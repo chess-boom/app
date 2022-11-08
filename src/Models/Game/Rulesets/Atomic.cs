@@ -1,6 +1,6 @@
 using System;
 
-namespace ChessBoom.Views.GameBoard
+namespace ChessBoom.Models.Game
 {
     public class Atomic : Ruleset
     {
