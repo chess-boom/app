@@ -190,9 +190,9 @@ namespace ChessBoom.Models.Game
                 }
                 MakeMove(piece, destinationSquare);
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
-                throw e;
+                throw;
             }
         }
 
