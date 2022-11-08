@@ -122,7 +122,7 @@ namespace ChessBoom.Models.Game
         /// <summary>
         /// The data structure for all moves and variations
         /// </summary>
-        private List<Move> m_moveList;
+        private readonly List<Move> m_moveList;
 
         /// <summary>
         /// The present game state
