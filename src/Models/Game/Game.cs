@@ -234,13 +234,13 @@ namespace ChessBoom.Models.Game
                     nextPiece.MovePiece(GameHelpers.GetCoordinateFromSquare(square));
                 }
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
-                throw e;
+                throw;
             }
-            catch (GameplayErrorException e)
+            catch (GameplayErrorException)
             {
-                throw e;
+                throw;
             }
 
             if (nextBoard.m_playerToPlay == Player.Black)
