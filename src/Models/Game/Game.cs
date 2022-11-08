@@ -110,7 +110,7 @@ namespace ChessBoom.Models.Game
         /// <summary>
         /// The chosen variant for this game
         /// </summary>
-        private Variant m_variant = Variant.Standard;
+        private readonly Variant m_variant = Variant.Standard;
         /// <summary>
         /// The chosen ruleset for this game
         /// </summary>
