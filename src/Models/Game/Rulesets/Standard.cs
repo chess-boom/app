@@ -28,7 +28,7 @@ namespace ChessBoom.Models.Game
                     capturedPiece.Destroy();
                 }
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 throw;
             }
@@ -170,7 +170,7 @@ namespace ChessBoom.Models.Game
                 king.CommandMovePiece(GameHelpers.GetCoordinateFromSquare(newKingCol + playerRow));
                 rook.CommandMovePiece(GameHelpers.GetCoordinateFromSquare(newRookCol + playerRow));
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 throw;
             }
