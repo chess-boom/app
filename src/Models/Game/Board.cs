@@ -20,6 +20,16 @@ namespace ChessBoom.Models.Game
             {'B', (Board board, Player player, (int, int) coordinate) => new Bishop(board, player, coordinate)},
             {'P', (Board board, Player player, (int, int) coordinate) => new Pawn(board, player, coordinate)}
         };
+
+        public static readonly Dictionary<char, Tuple<Player?, Castling?>> k_castling = new Dictionary<char, Tuple<Player?, Castling?>>()
+        {
+            {'K', new Tuple<Player?, Castling?>(Player.White, Castling.Kingside)},
+            {'k', new Tuple<Player?, Castling?>(Player.Black, Castling.Kingside)},
+            {'Q', new Tuple<Player?, Castling?>(Player.White, Castling.Queenside)},
+            {'q', new Tuple<Player?, Castling?>(Player.Black, Castling.Queenside)},
+            {'-', new Tuple<Player?, Castling?>(null, null)}
+        };
+
         /// <summary>
         /// The next player to move
         /// </summary>
@@ -199,63 +209,46 @@ namespace ChessBoom.Models.Game
         /// <exception cref="ArgumentException">Thrown when the castling privileges contains an invalid character</exception>
         public void SetCastling(string castling)
         {
+            m_castling = new Dictionary<Player, List<Castling>>()
+            {
+                {Player.White, new List<Castling>()},
+                {Player.Black, new List<Castling>()},
+            };
+            m_castling[Player.White].Add(Castling.Kingside);
+
             if (castling.Length < 1)
             {
                 throw new ArgumentException($"FEN file must include castling rights.");
             }
 
-            List<Castling> whiteCastling = new List<Castling>();
-            List<Castling> blackCastling = new List<Castling>();
             foreach (char c in castling)
             {
-                switch (c)
+                // Here we do 2 lookups, but unpacking in-place is awkward
+                if (!k_castling.TryGetValue(c, out _))
                 {
-                    case 'K':
-                        if (whiteCastling.Contains(Castling.Kingside))
+                    throw new ArgumentException($"Invalid character \'{c}\' in FEN file.");
+                }
+
+                (Player? player, Castling? side) = k_castling[c];
+
+                // character was not '-'
+                if (player.HasValue && side.HasValue)
                 {
-                            throw new ArgumentException($"Duplicate character \'{c}\' in FEN file.");
-                        }
-                        whiteCastling.Add(Castling.Kingside);
-                        break;
-                    case 'k':
-                        if (blackCastling.Contains(Castling.Kingside))
+                    if (m_castling[player.Value].Contains(side.Value))
                     {
                         throw new ArgumentException($"Duplicate character \'{c}\' in FEN file.");
                     }
-                        blackCastling.Add(Castling.Kingside);
-                        break;
-                    case 'Q':
-                        if (whiteCastling.Contains(Castling.Queenside))
-                        {
-                            throw new ArgumentException($"Duplicate character \'{c}\' in FEN file.");
+                    m_castling[player.Value].Add(side.Value);
                 }
-                        whiteCastling.Add(Castling.Queenside);
-                        break;
-                    case 'q':
-                        if (blackCastling.Contains(Castling.Queenside))
+                else
                 {
-                            throw new ArgumentException($"Duplicate character \'{c}\' in FEN file.");
-                        }
-                        blackCastling.Add(Castling.Queenside);
-                        break;
-                    case '-':
-                        if (whiteCastling.Count > 0 || blackCastling.Count > 0)
+                    if (m_castling[Player.White].Count > 0 || m_castling[Player.Black].Count > 0)
                     {
                         throw new ArgumentException($"Character \'-\' must represent null castling rights in FEN file.");
                     }
-                        if (castling != "-")
-                        {
-                            throw new ArgumentException($"No castling rights must be represented by a single \'-\'.");
-                        }
                     break;
-                    default:
-                        throw new ArgumentException($"Invalid character \'{c}\' in FEN file.");
                 }
             }
-
-            m_castling = new Dictionary<Player, List<Castling>>();
-            m_castling.Add(Player.White, whiteCastling);
-            m_castling.Add(Player.Black, blackCastling);
         }
 
         /// <summary>
