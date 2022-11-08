@@ -10,7 +10,7 @@ namespace ChessBoom.Models.Game
         protected int m_row;
         protected int m_column;
 
-        public Piece(Board board, Player player, (int, int) coordinate)
+        protected Piece(Board board, Player player, (int, int) coordinate)
         {
             m_board = board;
             m_owner = player;
