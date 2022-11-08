@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Collections.Generic;
 
 namespace ChessBoom.Models.Game
@@ -11,7 +12,7 @@ namespace ChessBoom.Models.Game
         /// <summary>
         /// Map for piece types and their constructors
         /// </summary>
-        public static readonly Dictionary<char, Func<Board, Player, (int, int), Piece>> k_pieceConstructor = new Dictionary<char, Func<Board, Player, (int, int), Piece>>()
+        protected static readonly Dictionary<char, Func<Board, Player, (int, int), Piece>> k_pieceConstructor = new Dictionary<char, Func<Board, Player, (int, int), Piece>>()
         {
             {'K', (Board board, Player player, (int, int) coordinate) => new King(board, player, coordinate)},
             {'Q', (Board board, Player player, (int, int) coordinate) => new Queen(board, player, coordinate)},
@@ -21,13 +22,23 @@ namespace ChessBoom.Models.Game
             {'P', (Board board, Player player, (int, int) coordinate) => new Pawn(board, player, coordinate)}
         };
 
-        public static readonly Dictionary<char, Tuple<Player?, Castling?>> k_castling = new Dictionary<char, Tuple<Player?, Castling?>>()
+        protected static readonly char k_noCastling = '-';
+
+        protected static readonly Dictionary<char, Tuple<Player?, Castling?>> k_FENToCastling = new Dictionary<char, Tuple<Player?, Castling?>>()
         {
             {'K', new Tuple<Player?, Castling?>(Player.White, Castling.Kingside)},
-            {'k', new Tuple<Player?, Castling?>(Player.Black, Castling.Kingside)},
             {'Q', new Tuple<Player?, Castling?>(Player.White, Castling.Queenside)},
+            {'k', new Tuple<Player?, Castling?>(Player.Black, Castling.Kingside)},
             {'q', new Tuple<Player?, Castling?>(Player.Black, Castling.Queenside)},
-            {'-', new Tuple<Player?, Castling?>(null, null)}
+            {k_noCastling, new Tuple<Player?, Castling?>(null, null)}
+        };
+
+        protected static readonly Dictionary<Tuple<Player, Castling>, char> k_castlingToFEN = new Dictionary<Tuple<Player, Castling>, char>()
+        {
+            {new Tuple<Player, Castling>(Player.White, Castling.Kingside), 'K'},
+            {new Tuple<Player, Castling>(Player.White, Castling.Queenside), 'Q'},
+            {new Tuple<Player, Castling>(Player.Black, Castling.Kingside), 'k'},
+            {new Tuple<Player, Castling>(Player.Black, Castling.Queenside), 'q'}
         };
 
         /// <summary>
@@ -257,12 +268,12 @@ namespace ChessBoom.Models.Game
             foreach (char c in castling)
             {
                 // Here we do 2 lookups, but unpacking in-place is awkward
-                if (!k_castling.TryGetValue(c, out _))
+                if (!k_FENToCastling.TryGetValue(c, out _))
                 {
                     throw new ArgumentException($"Invalid character \'{c}\' in FEN file");
                 }
 
-                (Player? player, Castling? side) = k_castling[c];
+                (Player? player, Castling? side) = k_FENToCastling[c];
 
                 // character was not '-'
                 // not a guard clause because compiler uses HasValue check for casting Nullable<>
@@ -278,7 +289,7 @@ namespace ChessBoom.Models.Game
                 {
                     if (castling.Length > 1)
                     {
-                        throw new ArgumentException("Character \'-\' must exclusively represent null castling rights in FEN file");
+                        throw new ArgumentException($"Character \'{k_noCastling}\' must exclusively represent null castling rights in FEN file");
                     }
                     break;
                 }
@@ -286,33 +297,24 @@ namespace ChessBoom.Models.Game
         }
 
         /// <summary>
-        /// Accessor for the castling privileges
+        /// Accessor for the castling privileges. Note: order matters
         /// </summary>
         /// <returns>The castling privileges in .FEN format</returns>
         public string GetCastling()
         {
-            string castling = "";
-            if (m_castling[Player.White].Contains(Castling.Kingside))
+            StringBuilder castlingString = new StringBuilder(k_FENToCastling.Keys.Count - 1);
+            foreach (((Player player, Castling castling), char c) in k_castlingToFEN)
             {
-                castling += "K";
+                if (m_castling[player].Contains(castling))
+                {
+                    castlingString.Append(c);
+                }
             }
-            if (m_castling[Player.White].Contains(Castling.Queenside))
+            if (castlingString.Length == 0)
             {
-                castling += "Q";
+                return k_noCastling.ToString();
             }
-            if (m_castling[Player.Black].Contains(Castling.Kingside))
-            {
-                castling += "k";
-            }
-            if (m_castling[Player.Black].Contains(Castling.Queenside))
-            {
-                castling += "q";
-            }
-            if (castling == "")
-            {
-                castling = "-";
-            }
-            return castling;
+            return castlingString.ToString();
         }
 
         /// <summary>
