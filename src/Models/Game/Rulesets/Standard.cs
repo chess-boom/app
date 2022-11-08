@@ -48,7 +48,7 @@ namespace ChessBoom.Models.Game
 
             // Get the squares of all those kings
             List<(int, int)> kingSquares = new List<(int, int)>();
-            foreach (King king in playerKings)
+            foreach (Piece king in playerKings)
             {
                 kingSquares.Add(king.GetCoordinates());
             }
