@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace ChessBoom.GameBoard
+namespace ChessBoom.Models.Game
 {
     public class Knight : Piece
     {

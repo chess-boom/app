@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace ChessBoom.GameBoard
+namespace ChessBoom.Models.Game
 {
     enum Variant
     {
@@ -80,11 +80,7 @@ namespace ChessBoom.GameBoard
         public override string ToString()
         {
             string? pieceString = m_piece.ToString();
-            if (pieceString == null)
-            {
-                throw new NullReferenceException($"Piece should not be null!");
-            }
-            return pieceString.ToLower() + m_square;
+            return pieceString?.ToLower() + m_square;
         }
     }
 
@@ -114,7 +110,7 @@ namespace ChessBoom.GameBoard
         /// <summary>
         /// The chosen variant for this game
         /// </summary>
-        private Variant m_variant = Variant.Standard;
+        private readonly Variant m_variant = Variant.Standard;
         /// <summary>
         /// The chosen ruleset for this game
         /// </summary>
@@ -126,7 +122,7 @@ namespace ChessBoom.GameBoard
         /// <summary>
         /// The data structure for all moves and variations
         /// </summary>
-        private List<Move> m_moveList;
+        private readonly List<Move> m_moveList;
 
         /// <summary>
         /// The present game state
@@ -194,9 +190,9 @@ namespace ChessBoom.GameBoard
                 }
                 MakeMove(piece, destinationSquare);
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -238,13 +234,13 @@ namespace ChessBoom.GameBoard
                     nextPiece.MovePiece(GameHelpers.GetCoordinateFromSquare(square));
                 }
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
-                throw e;
+                throw;
             }
-            catch (GameplayErrorException e)
+            catch (GameplayErrorException)
             {
-                throw e;
+                throw;
             }
 
             if (nextBoard.m_playerToPlay == Player.Black)
@@ -280,33 +276,7 @@ namespace ChessBoom.GameBoard
             Board board = new Board(game);
             string[] fenSplit = fen.Split(' ');
 
-            // Create the pieces
-            string[] pieceSplit = fenSplit[0].Split('/');
-            for (int row = 0; row < GameHelpers.k_BoardHeight; row++)
-            {
-                int col = 0;
-
-                foreach (char piece in pieceSplit[row])
-                {
-                    if (Char.IsDigit(piece))
-                    {
-                        col += (int)Char.GetNumericValue(piece);
-                    }
-                    else
-                    {
-                        try
-                        {
-                            (int, int) coordinate = (col, (GameHelpers.k_BoardHeight - 1) - row);
-                            board.CreatePiece(piece, coordinate);
-                        }
-                        catch (ArgumentException)
-                        {
-
-                        }
-                        col++;
-                    }
-                }
-            }
+            board.CreateBoard(fenSplit[0]);
 
             // Set the next player to play
             if (fenSplit[1].Length != 1)
@@ -327,8 +297,9 @@ namespace ChessBoom.GameBoard
             {
                 board.SetCastling(fenSplit[2]);
             }
-            catch (ArgumentException)
+            catch (ArgumentException e)
             {
+                Console.WriteLine($"{e}: defaulting to no castling rights");
                 board.SetCastling("-");
             }
 

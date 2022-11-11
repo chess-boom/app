@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using ChessBoom.GameBoard;
+using ChessBoom.Models.Game;
 using System;
 using System.Diagnostics.CodeAnalysis;
 

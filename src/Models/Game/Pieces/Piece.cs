@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ChessBoom.GameBoard
+namespace ChessBoom.Models.Game
 {
     public abstract class Piece
     {
@@ -10,7 +10,7 @@ namespace ChessBoom.GameBoard
         protected int m_row;
         protected int m_column;
 
-        public Piece(Board board, Player player, (int, int) coordinate)
+        protected Piece(Board board, Player player, (int, int) coordinate)
         {
             m_board = board;
             m_owner = player;

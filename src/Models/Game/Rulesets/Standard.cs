@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ChessBoom.GameBoard
+namespace ChessBoom.Models.Game
 {
     public class Standard : Ruleset
     {
@@ -28,9 +28,9 @@ namespace ChessBoom.GameBoard
                     capturedPiece.Destroy();
                 }
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -48,7 +48,7 @@ namespace ChessBoom.GameBoard
 
             // Get the squares of all those kings
             List<(int, int)> kingSquares = new List<(int, int)>();
-            foreach (King king in playerKings)
+            foreach (Piece king in playerKings)
             {
                 kingSquares.Add(king.GetCoordinates());
             }
@@ -170,9 +170,9 @@ namespace ChessBoom.GameBoard
                 king.CommandMovePiece(GameHelpers.GetCoordinateFromSquare(newKingCol + playerRow));
                 rook.CommandMovePiece(GameHelpers.GetCoordinateFromSquare(newRookCol + playerRow));
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
-                throw e;
+                throw;
             }
 
             board.RemoveCastling(player, Castling.Kingside);

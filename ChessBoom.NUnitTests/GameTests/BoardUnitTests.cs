@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using ChessBoom.GameBoard;
+using ChessBoom.Models.Game;
 
 namespace ChessBoom.NUnitTests.GameTests
 {
@@ -29,7 +29,6 @@ namespace ChessBoom.NUnitTests.GameTests
             _board.CreatePiece('q', (2, 5));
             _board.CreatePiece('r', (5, 1));
             _board.CreatePiece('R', (7, 7));
-
 
             Assert.AreEqual(".......R\n........\n.pq.....\n.pk.....\n.p......\n.p......\n.p...r..\n........\n", _board.ToString());
         }
@@ -289,15 +288,15 @@ namespace ChessBoom.NUnitTests.GameTests
                 });
 
             if (exception1 != null)
-                Assert.AreEqual("Invalid character \'h\' in FEN file.", exception1.Message);
+                Assert.AreEqual("Invalid character \'h\' in FEN file", exception1.Message);
             if (exception2 != null)
-                Assert.AreEqual("Duplicate character \'Q\' in FEN file.", exception2.Message);
+                Assert.AreEqual("Duplicate character \'Q\' in FEN file", exception2.Message);
             if (exception3 != null)
-                Assert.AreEqual("FEN file must include castling rights.", exception3.Message);
+                Assert.AreEqual("FEN file must include castling rights", exception3.Message);
             if (exception4 != null)
-                Assert.AreEqual("Character \'-\' must represent null castling rights in FEN file.", exception4.Message);
+                Assert.AreEqual("Character \'-\' must exclusively represent null castling rights in FEN file", exception4.Message);
             if (exception5 != null)
-                Assert.AreEqual("No castling rights must be represented by a single \'-\'.", exception5.Message);
+                Assert.AreEqual("Character \'-\' must exclusively represent null castling rights in FEN file", exception5.Message);
         }
     }
 }

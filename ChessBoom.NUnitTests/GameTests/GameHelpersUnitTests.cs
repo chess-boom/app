@@ -1,5 +1,5 @@
 using NUnit.Framework;
-using ChessBoom.GameBoard;
+using ChessBoom.Models.Game;
 
 namespace ChessBoom.NUnitTests.GameTests
 {

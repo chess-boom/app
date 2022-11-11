@@ -1,7 +1,8 @@
 using System;
+using System.Text;
 using System.Collections.Generic;
 
-namespace ChessBoom.GameBoard
+namespace ChessBoom.Models.Game
 {
     /// <summary>
     /// The Board class contains the chess pieces and is the medium through which a Game is played
@@ -11,7 +12,7 @@ namespace ChessBoom.GameBoard
         /// <summary>
         /// Map for piece types and their constructors
         /// </summary>
-        public static Dictionary<char, Func<Board, Player, (int, int), Piece>> k_pieceConstructor = new Dictionary<char, Func<Board, Player, (int, int), Piece>>()
+        protected static readonly Dictionary<char, Func<Board, Player, (int, int), Piece>> k_pieceConstructor = new Dictionary<char, Func<Board, Player, (int, int), Piece>>()
         {
             {'K', (Board board, Player player, (int, int) coordinate) => new King(board, player, coordinate)},
             {'Q', (Board board, Player player, (int, int) coordinate) => new Queen(board, player, coordinate)},
@@ -20,6 +21,26 @@ namespace ChessBoom.GameBoard
             {'B', (Board board, Player player, (int, int) coordinate) => new Bishop(board, player, coordinate)},
             {'P', (Board board, Player player, (int, int) coordinate) => new Pawn(board, player, coordinate)}
         };
+
+        protected static readonly char k_noCastling = '-';
+
+        protected static readonly Dictionary<char, Tuple<Player?, Castling?>> k_FENToCastling = new Dictionary<char, Tuple<Player?, Castling?>>()
+        {
+            {'K', new Tuple<Player?, Castling?>(Player.White, Castling.Kingside)},
+            {'Q', new Tuple<Player?, Castling?>(Player.White, Castling.Queenside)},
+            {'k', new Tuple<Player?, Castling?>(Player.Black, Castling.Kingside)},
+            {'q', new Tuple<Player?, Castling?>(Player.Black, Castling.Queenside)},
+            {k_noCastling, new Tuple<Player?, Castling?>(null, null)}
+        };
+
+        protected static readonly Dictionary<Tuple<Player, Castling>, char> k_castlingToFEN = new Dictionary<Tuple<Player, Castling>, char>()
+        {
+            {new Tuple<Player, Castling>(Player.White, Castling.Kingside), 'K'},
+            {new Tuple<Player, Castling>(Player.White, Castling.Queenside), 'Q'},
+            {new Tuple<Player, Castling>(Player.Black, Castling.Kingside), 'k'},
+            {new Tuple<Player, Castling>(Player.Black, Castling.Queenside), 'q'}
+        };
+
         /// <summary>
         /// The next player to move
         /// </summary>
@@ -108,6 +129,40 @@ namespace ChessBoom.GameBoard
             }
 
             m_pieces.Add(piece);
+        }
+
+        /// <summary>
+        /// Create a board from the piece placement data of a FEN string
+        /// </summary>
+        /// <param name="fen">Each rank is described, starting with rank 8 and ending with rank 1, with a "/" between each one; within each rank, the contents of the squares are described in order from the a-file to the h-file.</param>
+        public void CreateBoard(string fen)
+        {
+            string[] pieceSplit = fen.Split('/');
+            for (int row = 0; row < GameHelpers.k_BoardHeight; row++)
+            {
+                int col = 0;
+
+                foreach (char piece in pieceSplit[row])
+                {
+                    if (Char.IsDigit(piece))
+                    {
+                        col += (int)Char.GetNumericValue(piece);
+                    }
+                    else
+                    {
+                        try
+                        {
+                            (int, int) coordinate = (col, (GameHelpers.k_BoardHeight - 1) - row);
+                            CreatePiece(piece, coordinate);
+                        }
+                        catch (ArgumentException)
+                        {
+
+                        }
+                        col++;
+                    }
+                }
+            }
         }
 
         // TODO: Determine whether this function should be kept or not
@@ -199,93 +254,67 @@ namespace ChessBoom.GameBoard
         /// <exception cref="ArgumentException">Thrown when the castling privileges contains an invalid character</exception>
         public void SetCastling(string castling)
         {
+            m_castling = new Dictionary<Player, List<Castling>>()
+            {
+                {Player.White, new List<Castling>()},
+                {Player.Black, new List<Castling>()},
+            };
+
             if (castling.Length < 1)
             {
-                throw new ArgumentException($"FEN file must include castling rights.");
+                throw new ArgumentException("FEN file must include castling rights");
             }
 
-            List<Castling> whiteCastling = new List<Castling>();
-            List<Castling> blackCastling = new List<Castling>();
             foreach (char c in castling)
             {
-                switch (c)
+                // Here we do 2 lookups, but unpacking in-place is awkward
+                if (!k_FENToCastling.TryGetValue(c, out _))
                 {
-                    case 'K':
-                        if (whiteCastling.Contains(Castling.Kingside))
-                        {
-                            throw new ArgumentException($"Duplicate character \'{c}\' in FEN file.");
-                        }
-                        whiteCastling.Add(Castling.Kingside);
-                        break;
-                    case 'k':
-                        if (blackCastling.Contains(Castling.Kingside))
-                        {
-                            throw new ArgumentException($"Duplicate character \'{c}\' in FEN file.");
-                        }
-                        blackCastling.Add(Castling.Kingside);
-                        break;
-                    case 'Q':
-                        if (whiteCastling.Contains(Castling.Queenside))
-                        {
-                            throw new ArgumentException($"Duplicate character \'{c}\' in FEN file.");
-                        }
-                        whiteCastling.Add(Castling.Queenside);
-                        break;
-                    case 'q':
-                        if (blackCastling.Contains(Castling.Queenside))
-                        {
-                            throw new ArgumentException($"Duplicate character \'{c}\' in FEN file.");
-                        }
-                        blackCastling.Add(Castling.Queenside);
-                        break;
-                    case '-':
-                        if (whiteCastling.Count > 0 || blackCastling.Count > 0)
-                        {
-                            throw new ArgumentException($"Character \'-\' must represent null castling rights in FEN file.");
-                        }
-                        if (castling != "-")
-                        {
-                            throw new ArgumentException($"No castling rights must be represented by a single \'-\'.");
-                        }
-                        break;
-                    default:
-                        throw new ArgumentException($"Invalid character \'{c}\' in FEN file.");
+                    throw new ArgumentException($"Invalid character \'{c}\' in FEN file");
+                }
+
+                (Player? player, Castling? side) = k_FENToCastling[c];
+
+                // character was not '-'
+                // not a guard clause because compiler uses HasValue check for casting Nullable<>
+                if (player.HasValue && side.HasValue)
+                {
+                    if (m_castling[player.Value].Contains(side.Value))
+                    {
+                        throw new ArgumentException($"Duplicate character \'{c}\' in FEN file");
+                    }
+                    m_castling[player.Value].Add(side.Value);
+                }
+                else
+                {
+                    if (castling.Length > 1)
+                    {
+                        throw new ArgumentException($"Character \'{k_noCastling}\' must exclusively represent null castling rights in FEN file");
+                    }
+                    break;
                 }
             }
-
-            m_castling = new Dictionary<Player, List<Castling>>();
-            m_castling.Add(Player.White, whiteCastling);
-            m_castling.Add(Player.Black, blackCastling);
         }
 
         /// <summary>
-        /// Accessor for the castling privileges
+        /// Accessor for the castling privileges. Note: order matters
         /// </summary>
         /// <returns>The castling privileges in .FEN format</returns>
         public string GetCastling()
         {
-            string castling = "";
-            if (m_castling[Player.White].Contains(Castling.Kingside))
+            StringBuilder castlingString = new StringBuilder(k_FENToCastling.Keys.Count - 1);
+            foreach (((Player player, Castling castling), char c) in k_castlingToFEN)
             {
-                castling += "K";
+                if (m_castling[player].Contains(castling))
+                {
+                    castlingString.Append(c);
+                }
             }
-            if (m_castling[Player.White].Contains(Castling.Queenside))
+            if (castlingString.Length == 0)
             {
-                castling += "Q";
+                return k_noCastling.ToString();
             }
-            if (m_castling[Player.Black].Contains(Castling.Kingside))
-            {
-                castling += "k";
-            }
-            if (m_castling[Player.Black].Contains(Castling.Queenside))
-            {
-                castling += "q";
-            }
-            if (castling == "")
-            {
-                castling = "-";
-            }
-            return castling;
+            return castlingString.ToString();
         }
 
         /// <summary>
