@@ -399,5 +399,215 @@ namespace ChessBoom.NUnitTests.GameTests
             if (exception != null)
                 Assert.AreEqual("Game is not in progress! Illegal move.", exception.Message);
         }
+
+        /// <summary>
+        /// Ensure a draw is made in the case of threefold repetition
+        /// </summary>
+        [Test]
+        public void ThreefoldRepetitionTest()
+        {
+            _game.MakeExplicitMove("e2", "e4");
+            _game.MakeExplicitMove("e7", "e5");
+            _game.MakeExplicitMove("e1", "e2");
+            _game.MakeExplicitMove("e8", "e7");
+            _game.MakeExplicitMove("e2", "e1");
+            _game.MakeExplicitMove("e7", "e8");
+            _game.MakeExplicitMove("e1", "e2");
+            _game.MakeExplicitMove("e8", "e7");
+            _game.MakeExplicitMove("e2", "e1");
+            _game.MakeExplicitMove("e7", "e8");
+            _game.MakeExplicitMove("e1", "e2");
+            Assert.AreEqual(GameState.InProgress, _game.m_gameState);
+            _game.MakeExplicitMove("e8", "e7");
+            // Threefold repetition occurs
+            Assert.AreEqual(GameState.Draw, _game.m_gameState);
+
+            var exception = Assert.Throws<GameplayErrorException>(
+                delegate
+                {
+                    // Player attempts to play another random move
+                    _game.MakeExplicitMove("e2", "e3");
+                });
+
+            if (exception != null)
+                Assert.AreEqual("Game is not in progress! Illegal move.", exception.Message);
+        }
+
+        /// <summary>
+        /// Ensure a draw is made in the case of stalemate
+        /// </summary>
+        [Test]
+        public void StalemateTest()
+        {
+            _game.MakeExplicitMove("e2", "e4");
+            _game.MakeExplicitMove("d7", "d5"); // 1
+            _game.MakeExplicitMove("d1", "h5");
+            _game.MakeExplicitMove("b8", "d7"); // 2
+            _game.MakeExplicitMove("h5", "h7");
+            _game.MakeExplicitMove("d7", "e5"); // 3
+            _game.MakeExplicitMove("h7", "h8");
+            _game.MakeExplicitMove("c8", "f5"); // 4
+            _game.MakeExplicitMove("h8", "g7");
+            _game.MakeExplicitMove("e8", "d7"); // 5
+            _game.MakeExplicitMove("g7", "g8");
+            _game.MakeExplicitMove("d7", "c8"); // 6
+            _game.MakeExplicitMove("g8", "f7");
+            _game.MakeExplicitMove("c8", "b8"); // 7
+            _game.MakeExplicitMove("f7", "f8");
+            _game.MakeExplicitMove("e5", "c6"); // 8
+            _game.MakeExplicitMove("f8", "e7");
+            _game.MakeExplicitMove("c6", "b4"); // 9
+            _game.MakeExplicitMove("e7", "d8");
+            _game.MakeExplicitMove("f5", "c8"); // 10
+            _game.MakeExplicitMove("d8", "d5");
+            _game.MakeExplicitMove("b4", "c6"); // 11
+            _game.MakeExplicitMove("d5", "c6");
+            _game.MakeExplicitMove("c8", "e6"); // 12
+            _game.MakeExplicitMove("c6", "e8");
+            _game.MakeExplicitMove("e6", "c8"); // 13
+            _game.MakeExplicitMove("d2", "d4");
+            _game.MakeExplicitMove("b7", "b5"); // 14
+            _game.MakeExplicitMove("c1", "f4");
+            _game.MakeExplicitMove("b5", "b4"); // 15
+            _game.MakeExplicitMove("f1", "a6");
+            _game.MakeExplicitMove("b4", "b3"); // 16
+            Assert.AreEqual(GameState.InProgress, _game.m_gameState);
+            _game.MakeExplicitMove("c2", "b3");
+            // Stalemate occurs
+            Assert.AreEqual(GameState.Draw, _game.m_gameState);
+
+            var exception = Assert.Throws<GameplayErrorException>(
+                delegate
+                {
+                    // Player attempts to play another random move
+                    _game.MakeExplicitMove("c7", "c6");
+                });
+
+            if (exception != null)
+                Assert.AreEqual("Game is not in progress! Illegal move.", exception.Message);
+        }
+
+        /// <summary>
+        /// Ensure a draw is made in the case of the fifty move rule
+        /// </summary>
+        [Test]
+        public void FiftyMoveRuleTest()
+        {
+            _game.MakeExplicitMove("e2", "e4");
+            _game.MakeExplicitMove("e7", "e5"); // 1
+            _game.MakeExplicitMove("d1", "h5");
+            _game.MakeExplicitMove("d8", "h4"); // 2
+            _game.MakeExplicitMove("h5", "h6");
+            _game.MakeExplicitMove("g8", "e7"); // 3
+            _game.MakeExplicitMove("h6", "g6");
+            _game.MakeExplicitMove("e7", "g8"); // 4
+            _game.MakeExplicitMove("g6", "f6");
+            _game.MakeExplicitMove("g8", "e7"); // 5
+            _game.MakeExplicitMove("f6", "d6");
+            _game.MakeExplicitMove("e7", "g8"); // 6
+            _game.MakeExplicitMove("d6", "c6");
+            _game.MakeExplicitMove("g8", "e7"); // 7
+            _game.MakeExplicitMove("c6", "b6");
+            _game.MakeExplicitMove("e7", "g8"); // 8
+            _game.MakeExplicitMove("b6", "a6");
+            _game.MakeExplicitMove("g8", "e7"); // 9
+            _game.MakeExplicitMove("a6", "a5");
+            _game.MakeExplicitMove("e7", "g8"); // 10
+            _game.MakeExplicitMove("a5", "b5");
+            _game.MakeExplicitMove("g8", "e7"); // 11
+            _game.MakeExplicitMove("b5", "c5");
+            _game.MakeExplicitMove("e7", "g8"); // 12
+            _game.MakeExplicitMove("c5", "d5");
+            _game.MakeExplicitMove("g8", "e7"); // 13
+            _game.MakeExplicitMove("d5", "d4");
+            _game.MakeExplicitMove("e7", "g8"); // 14
+            _game.MakeExplicitMove("d4", "d3");
+            _game.MakeExplicitMove("g8", "e7"); // 15
+            _game.MakeExplicitMove("d3", "c3");
+            _game.MakeExplicitMove("e7", "g8"); // 16
+            _game.MakeExplicitMove("c3", "c4");
+            _game.MakeExplicitMove("g8", "e7"); // 17
+            _game.MakeExplicitMove("c4", "b4");
+            _game.MakeExplicitMove("e7", "g8"); // 18
+            _game.MakeExplicitMove("b4", "a4");
+            _game.MakeExplicitMove("g8", "e7"); // 19
+            _game.MakeExplicitMove("a4", "a3");
+            _game.MakeExplicitMove("e7", "g8"); // 20
+            _game.MakeExplicitMove("a3", "b3");
+            _game.MakeExplicitMove("g8", "e7"); // 21
+            _game.MakeExplicitMove("b3", "h3");
+            _game.MakeExplicitMove("h4", "h5"); // 22
+            _game.MakeExplicitMove("h3", "h4");
+            _game.MakeExplicitMove("e7", "g8"); // 23
+            _game.MakeExplicitMove("h4", "g5");
+            _game.MakeExplicitMove("g8", "e7"); // 24
+            _game.MakeExplicitMove("g5", "h6");
+            _game.MakeExplicitMove("e7", "g8"); // 25
+            _game.MakeExplicitMove("h6", "g6");
+            _game.MakeExplicitMove("g8", "e7"); // 26
+            _game.MakeExplicitMove("g6", "f6");
+            _game.MakeExplicitMove("e7", "g8"); // 27
+            _game.MakeExplicitMove("f6", "e6");
+            _game.MakeExplicitMove("g8", "e7"); // 28
+            _game.MakeExplicitMove("e6", "d6");
+            _game.MakeExplicitMove("e7", "g8"); // 29
+            _game.MakeExplicitMove("d6", "c6");
+            _game.MakeExplicitMove("g8", "e7"); // 30
+            _game.MakeExplicitMove("c6", "b6");
+            _game.MakeExplicitMove("e7", "g8"); // 31
+            _game.MakeExplicitMove("b6", "a6");
+            _game.MakeExplicitMove("g8", "e7"); // 32
+            _game.MakeExplicitMove("a6", "a5");
+            _game.MakeExplicitMove("e7", "g8"); // 33
+            _game.MakeExplicitMove("a5", "b5");
+            _game.MakeExplicitMove("g8", "e7"); // 34
+            _game.MakeExplicitMove("b5", "c5");
+            _game.MakeExplicitMove("e7", "g8"); // 35
+            _game.MakeExplicitMove("c5", "d5");
+            _game.MakeExplicitMove("g8", "e7"); // 36
+            _game.MakeExplicitMove("d5", "d4");
+            _game.MakeExplicitMove("e7", "g8"); // 37
+            _game.MakeExplicitMove("d4", "c4");
+            _game.MakeExplicitMove("g8", "e7"); // 38
+            _game.MakeExplicitMove("c4", "b4");
+            _game.MakeExplicitMove("e7", "g8"); // 39
+            _game.MakeExplicitMove("b4", "a4");
+            _game.MakeExplicitMove("g8", "e7"); // 40
+            _game.MakeExplicitMove("a4", "a3");
+            _game.MakeExplicitMove("e7", "g8"); // 41
+            _game.MakeExplicitMove("a3", "b3");
+            _game.MakeExplicitMove("g8", "e7"); // 42
+            _game.MakeExplicitMove("b3", "c3");
+            _game.MakeExplicitMove("e7", "g8"); // 43
+            _game.MakeExplicitMove("c3", "d3");
+            _game.MakeExplicitMove("g8", "e7"); // 44
+            _game.MakeExplicitMove("d3", "e3");
+            _game.MakeExplicitMove("e7", "g8"); // 45
+            _game.MakeExplicitMove("e3", "f3");
+            _game.MakeExplicitMove("g8", "e7"); // 46
+            _game.MakeExplicitMove("f3", "g3");
+            _game.MakeExplicitMove("e7", "g8"); // 47
+            _game.MakeExplicitMove("g3", "f4");
+            _game.MakeExplicitMove("g8", "e7"); // 48
+            _game.MakeExplicitMove("f4", "h4");
+            _game.MakeExplicitMove("h5", "h6"); // 49
+            _game.MakeExplicitMove("h4", "h5");
+            _game.MakeExplicitMove("e7", "g8"); // 50
+            _game.MakeExplicitMove("h5", "g5");
+            Assert.AreEqual(GameState.InProgress, _game.m_gameState);
+            _game.MakeExplicitMove("g8", "e7"); // 51
+            // Fifty move rule is enforced
+            Assert.AreEqual(GameState.Draw, _game.m_gameState);
+
+            var exception = Assert.Throws<GameplayErrorException>(
+                delegate
+                {
+                    // Player attempts to play another random move
+                    _game.MakeExplicitMove("e1", "e2");
+                });
+
+            if (exception != null)
+                Assert.AreEqual("Game is not in progress! Illegal move.", exception.Message);
+        }
     }
 }
