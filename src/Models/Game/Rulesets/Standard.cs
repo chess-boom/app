@@ -18,6 +18,11 @@ namespace ChessBoom.Models.Game
             }
         }
 
+        /// <summary>
+        /// The limiting number of moves that amount to "no progress" before a game ends in a draw
+        /// </summary>
+        private const int k_progressMoveLimit = 50;
+
         public override void Capture(Piece attacker, Board board, string square)
         {
             try
@@ -193,10 +198,17 @@ namespace ChessBoom.Models.Game
 
         public override void AssessBoardState(Game game, Board board)
         {
-            // Only the next player to play may be in checkmate, else an illegal move must have occurred
-            if (!IsInCheck(board.m_playerToPlay, board))
+            // 50-move rule
+            if (board.m_halfmoveClock >= (2 * k_progressMoveLimit))
             {
-                // TODO: Assess for stalemate
+                game.m_gameState = GameState.Draw;
+                return;
+            }
+
+            // Threefold repetition
+            if (game.HasThreefoldRepetition())
+            {
+                game.m_gameState = GameState.Draw;
                 return;
             }
 
@@ -210,7 +222,8 @@ namespace ChessBoom.Models.Game
 
                 foreach ((int, int) move in pieceMoves)
                 {
-                    testBoard = Game.CreateBoardFromFEN(game, Game.CreateFENFromBoard(board));
+                    Game testGame = new Game();
+                    testBoard = Game.CreateBoardFromFEN(testGame, Game.CreateFENFromBoard(board));
 
                     try
                     {
@@ -248,7 +261,16 @@ namespace ChessBoom.Models.Game
 
             if (!legalMoveExists)
             {
-                game.m_gameState = (board.m_playerToPlay == Player.Black) ? GameState.VictoryWhite : GameState.VictoryBlack;
+                // Only the next player to play may be in checkmate, else an illegal move must have occurred
+                if (!IsInCheck(board.m_playerToPlay, board))
+                {
+                    game.m_gameState = GameState.Draw;
+                    return;
+                }
+                else
+                {
+                    game.m_gameState = (board.m_playerToPlay == Player.Black) ? GameState.VictoryWhite : GameState.VictoryBlack;
+                }
             }
         }
     }

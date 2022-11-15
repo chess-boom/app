@@ -354,6 +354,10 @@ namespace ChessBoom.Models.Game
         public void Capture(Piece attacker, (int, int) coordinate)
         {
             GetRuleset().Capture(attacker, this, GameHelpers.GetSquareFromCoordinate(coordinate));
+            if (m_game != null)
+            {
+                m_game.ClearVisitedPositions();
+            }
             m_halfmoveClock = 0;
         }
 
@@ -379,7 +383,7 @@ namespace ChessBoom.Models.Game
         /// <summary>
         /// Request from the user which piece to promote a pawn to
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The character corresponding to the piece to which the pawn will promote</returns>
         public char RequestPromotionPiece()
         {
             // TODO: Ask the user for which piece to promote to

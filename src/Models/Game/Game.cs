@@ -123,6 +123,10 @@ namespace ChessBoom.Models.Game
         /// The data structure for all moves and variations
         /// </summary>
         private readonly List<Move> m_moveList;
+        /// <summary>
+        /// Maps repeatable unique board positions to the number of times they have been reached
+        /// </summary>
+        private Dictionary<string, int> m_visitedPositions;
 
         /// <summary>
         /// The present game state
@@ -137,6 +141,7 @@ namespace ChessBoom.Models.Game
             m_board = InitializeBoard(m_variant);
             m_ruleset = Standard.Instance;
             m_moveList = new List<Move>();
+            m_visitedPositions = new Dictionary<string, int>();
             m_gameState = GameState.InProgress;
         }
 
@@ -255,9 +260,47 @@ namespace ChessBoom.Models.Game
             }
 
             m_board = nextBoard;
+
+            string boardPosition = GetPiecesFENFromBoard(m_board);
+            boardPosition += " " + GetPlayerFENFromBoard(m_board);
+            boardPosition += " " + m_board.GetCastling();
+            boardPosition += " " + GetEnPassantFENFromBoard(m_board);
+
+            if (m_visitedPositions.ContainsKey(boardPosition))
+            {
+                m_visitedPositions[boardPosition]++;
+            }
+            else
+            {
+                m_visitedPositions.Add(boardPosition, 1);
+            }
             m_moveList.Add(new Move(piece, square));
 
             m_ruleset.AssessBoardState(this, m_board);
+        }
+
+        /// <summary>
+        /// Event that all previous positions may no longer be re-reached
+        /// </summary>
+        public void ClearVisitedPositions()
+        {
+            m_visitedPositions.Clear();
+        }
+
+        /// <summary>
+        /// Determine whether or not threefold repetition has been reached
+        /// </summary>
+        /// <returns>If threefold repetition has occurred</returns>
+        public bool HasThreefoldRepetition()
+        {
+            foreach (KeyValuePair<string, int> visitedPosition in m_visitedPositions)
+            {
+                if (visitedPosition.Value >= 3)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>
@@ -349,9 +392,40 @@ namespace ChessBoom.Models.Game
         /// <returns>The board state as the contents of a .FEN file</returns>
         public static string CreateFENFromBoard(Board board)
         {
+            // Retrieve the pieces
+            string fen = GetPiecesFENFromBoard(board);
+            //
+            fen += " ";
+            // Retrieve the next player
+            fen += GetPlayerFENFromBoard(board);
+            //
+            fen += " ";
+            // Retrieve castling availability
+            fen += board.GetCastling();
+            //
+            fen += " ";
+            // Retrieve en passant capability
+            fen += GetEnPassantFENFromBoard(board);
+            //
+            fen += " ";
+            // Retrieve halfmove clock
+            fen += board.m_halfmoveClock.ToString();
+            //
+            fen += " ";
+            // Retrieve fullmove number
+            fen += board.m_fullmoveCount.ToString();
+
+            return fen;
+        }
+
+        /// <summary>
+        /// Retrieve the board state of the pieces as the contents of a .FEN file
+        /// </summary>
+        /// <returns>The board state of the pieces as the contents of a .FEN file</returns>
+        private static string GetPiecesFENFromBoard(Board board)
+        {
             string fen = "";
 
-            // Retrieve the pieces
             for (int row = GameHelpers.k_BoardHeight - 1; row >= 0; row--)
             {
                 int emptySquareCount = 0;
@@ -388,42 +462,39 @@ namespace ChessBoom.Models.Game
                 }
             }
 
-            //
-            fen += " ";
-            // Retrieve the next player
-            fen += (board.m_playerToPlay == Player.White) ? "w" : "b";
-            //
-            fen += " ";
-            // Retrieve castling availability
-            fen += board.GetCastling();
-            //
-            fen += " ";
-            // Retrieve en passant capability
+            return fen;
+        }
+
+        /// <summary>
+        /// Retrieve the next player as the contents of a .FEN file
+        /// </summary>
+        /// <returns>The next player as the contents of a .FEN file</returns>
+        private static string GetPlayerFENFromBoard(Board board)
+        {
+            return (board.m_playerToPlay == Player.White) ? "w" : "b";
+        }
+
+        /// <summary>
+        /// Retrieve the en passant availability as the contents of a .FEN file
+        /// </summary>
+        /// <returns>The en passant availability as the contents of a .FEN file</returns>
+        private static string GetEnPassantFENFromBoard(Board board)
+        {
             try
             {
                 if (board.m_enPassant.HasValue)
                 {
-                    fen += GameHelpers.GetSquareFromCoordinate(board.m_enPassant.Value);
+                    return GameHelpers.GetSquareFromCoordinate(board.m_enPassant.Value);
                 }
                 else
                 {
-                    fen += "-";
+                    return "-";
                 }
             }
             catch (ArgumentException)
             {
-                fen += "-";
+                return "-";
             }
-            //
-            fen += " ";
-            // Retrieve halfmove clock
-            fen += board.m_halfmoveClock.ToString();
-            //
-            fen += " ";
-            // Retrieve fullmove number
-            fen += board.m_fullmoveCount.ToString();
-
-            return fen;
         }
     }
 }

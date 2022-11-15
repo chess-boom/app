@@ -76,6 +76,10 @@ namespace ChessBoom.Models.Game
         {
             if (GetMovementSquares().Contains(coordinate))
             {
+                if (m_board.m_game != null)
+                {
+                    m_board.m_game.ClearVisitedPositions();
+                }
                 m_board.m_halfmoveClock = 0;
 
                 if (m_board.GetPiece(coordinate) != null)
