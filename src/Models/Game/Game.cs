@@ -63,7 +63,7 @@ namespace ChessBoom.Models.Game
         // TODO: Implement variations
         public void AddVariation(Move move)
         {
-            if (m_variations == null)
+            if (m_variations is null)
             {
                 m_variations = new List<Move>();
             }
@@ -189,7 +189,7 @@ namespace ChessBoom.Models.Game
             try
             {
                 Piece? piece = m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(startingSquare));
-                if (piece == null)
+                if (piece is null)
                 {
                     throw new ArgumentException($"Piece on square {startingSquare} not found!");
                 }
@@ -220,23 +220,17 @@ namespace ChessBoom.Models.Game
             }
             m_board.m_halfmoveClock++;
 
-            Board nextBoard = CreateBoardFromFEN(this, CreateFENFromBoard(m_board));
-            Piece? nextPiece = nextBoard.GetPiece(piece.GetCoordinates());
-            if (nextPiece == null)
-            {
-                // Should not occur, else the Board copy constructor failed to create a proper deep copy
-                Console.WriteLine("Error! Copied piece not found!");
-                return;
-            }
+            Board legacyBoard = CreateBoardFromFEN(this, CreateFENFromBoard(m_board));
+
             try
             {
                 if (square == Move.k_kingsideCastleNotation || square == Move.k_queensideCastleNotation)
                 {
-                    m_ruleset.Castle(nextBoard, nextPiece.GetPlayer(), (square == Move.k_kingsideCastleNotation) ? Castling.Kingside : Castling.Queenside);
+                    m_ruleset.Castle(m_board, piece.GetPlayer(), (square == Move.k_kingsideCastleNotation) ? Castling.Kingside : Castling.Queenside);
                 }
                 else
                 {
-                    nextPiece.MovePiece(GameHelpers.GetCoordinateFromSquare(square));
+                    piece.MovePiece(GameHelpers.GetCoordinateFromSquare(square));
                 }
             }
             catch (ArgumentException)
@@ -248,23 +242,23 @@ namespace ChessBoom.Models.Game
                 throw;
             }
 
-            if (nextBoard.m_playerToPlay == Player.Black)
+            if (m_board.m_playerToPlay == Player.Black)
             {
-                nextBoard.m_fullmoveCount++;
+                m_board.m_fullmoveCount++;
             }
-            nextBoard.m_playerToPlay = GameHelpers.GetOpponent(nextBoard.m_playerToPlay);
+            m_board.m_playerToPlay = GameHelpers.GetOpponent(m_board.m_playerToPlay);
 
-            if (m_ruleset.IsIllegalBoardState(nextBoard))
+            if (m_ruleset.IsIllegalBoardState(m_board))
             {
+                m_board = legacyBoard;
                 throw new GameplayErrorException("Error! Illegal move!");
             }
 
-            m_board = nextBoard;
-
-            string boardPosition = GetPiecesFENFromBoard(m_board);
-            boardPosition += " " + GetPlayerFENFromBoard(m_board);
-            boardPosition += " " + m_board.GetCastling();
-            boardPosition += " " + GetEnPassantFENFromBoard(m_board);
+            string boardPosition = String.Format("{0} {1} {2} {3}",
+                GetPiecesFENFromBoard(m_board),
+                GetPlayerFENFromBoard(m_board),
+                m_board.GetCastling(),
+                GetEnPassantFENFromBoard(m_board));
 
             if (m_visitedPositions.ContainsKey(boardPosition))
             {
@@ -392,30 +386,13 @@ namespace ChessBoom.Models.Game
         /// <returns>The board state as the contents of a .FEN file</returns>
         public static string CreateFENFromBoard(Board board)
         {
-            // Retrieve the pieces
-            string fen = GetPiecesFENFromBoard(board);
-            //
-            fen += " ";
-            // Retrieve the next player
-            fen += GetPlayerFENFromBoard(board);
-            //
-            fen += " ";
-            // Retrieve castling availability
-            fen += board.GetCastling();
-            //
-            fen += " ";
-            // Retrieve en passant capability
-            fen += GetEnPassantFENFromBoard(board);
-            //
-            fen += " ";
-            // Retrieve halfmove clock
-            fen += board.m_halfmoveClock.ToString();
-            //
-            fen += " ";
-            // Retrieve fullmove number
-            fen += board.m_fullmoveCount.ToString();
-
-            return fen;
+            return String.Format("{0} {1} {2} {3} {4} {5}",
+                GetPiecesFENFromBoard(board),
+                GetPlayerFENFromBoard(board),
+                board.GetCastling(),
+                GetEnPassantFENFromBoard(board),
+                board.m_halfmoveClock.ToString(),
+                board.m_fullmoveCount.ToString());
         }
 
         /// <summary>
@@ -432,7 +409,7 @@ namespace ChessBoom.Models.Game
                 for (int col = 0; col < GameHelpers.k_BoardWidth; col++)
                 {
                     Piece? piece = board.GetPiece((col, row));
-                    if (piece == null)
+                    if (piece is null)
                     {
                         emptySquareCount++;
                         continue;

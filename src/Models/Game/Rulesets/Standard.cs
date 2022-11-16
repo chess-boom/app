@@ -28,7 +28,7 @@ namespace ChessBoom.Models.Game
             try
             {
                 Piece? capturedPiece = board.GetPiece(GameHelpers.GetCoordinateFromSquare(square));
-                if (capturedPiece != null)
+                if (capturedPiece is not null)
                 {
                     capturedPiece.Destroy();
                 }
@@ -94,8 +94,8 @@ namespace ChessBoom.Models.Game
                 return false;
             }
 
-            if (king == null
-                || rook == null
+            if (king is null
+                || rook is null
                 || king.GetType() != typeof(King)
                 || rook.GetType() != typeof(Rook))
             {
@@ -125,7 +125,7 @@ namespace ChessBoom.Models.Game
                     // An opponent's piece can see a square between the king and the rook (castling through check)
                     return false;
                 }
-                if (board.GetPiece(coordinate) != null)
+                if (board.GetPiece(coordinate) is not null)
                 {
                     // A piece exists between the king and the rook
                     return false;
@@ -163,8 +163,8 @@ namespace ChessBoom.Models.Game
                 throw new GameplayErrorException("Castling is illegal in this situation!");
             }
 
-            if (king == null
-                || rook == null)
+            if (king is null
+                || rook is null)
             {
                 // Pieces were not found. Should never occur since CanCastle must return true.
                 throw new GameplayErrorException("Castling is illegal in this situation!");
@@ -228,7 +228,7 @@ namespace ChessBoom.Models.Game
                     try
                     {
                         Piece? testPiece = testBoard.GetPiece(piece.GetCoordinates());
-                        if (testPiece != null)
+                        if (testPiece is not null)
                         {
                             testPiece.MovePiece(move);
                         }
