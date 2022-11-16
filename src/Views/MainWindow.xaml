@@ -1,0 +1,53 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:rxui="clr-namespace:Avalonia.ReactiveUI;assembly=Avalonia.ReactiveUI"
+        xmlns:app="clr-namespace:ChessBoom"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:ChessBoom.ViewModels"
+        xmlns:views="clr-namespace:ChessBoom.Views"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="ChessBoom.Views.MainWindow"
+        Title="ChessBoom"
+        >
+  <Design.DataContext>
+    <viewModels:MainWindowViewModel />
+  </Design.DataContext>
+  <!-- TODO : fix icon relative path -->
+  <Window.Background>
+    <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%%,0%">
+      <GradientStop Color="Black" Offset="0.0"/>
+      <GradientStop Color="#131313" Offset="0.1"/>
+      <GradientStop Color="#272727" Offset="0.5"/>
+      <GradientStop Color="#131313" Offset="0.9"/>
+      <GradientStop Color="Black" Offset="1"/>
+    </LinearGradientBrush>
+  </Window.Background>
+  <Grid RowDefinitions="*,Auto">
+    <rxui:RoutedViewHost Grid.Row="0" Router="{Binding Path=Router}" PageTransition="{x:Null}">
+      <rxui:RoutedViewHost.DefaultContent>
+        <views:DashboardView/>
+        <!-- <TextBlock Text="Default content" -->
+        <!--            HorizontalAlignment="Center" -->
+        <!--            VerticalAlignment="Center" /> -->
+      </rxui:RoutedViewHost.DefaultContent>
+      <rxui:RoutedViewHost.ViewLocator>
+        <!-- See AppViewLocator.cs section below -->
+        <app:AppViewLocator />
+      </rxui:RoutedViewHost.ViewLocator>
+    </rxui:RoutedViewHost>
+    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="15">
+      <StackPanel.Styles>
+        <Style Selector="StackPanel > :is(Control)">
+          <Setter Property="Margin" Value="2"/>
+        </Style>
+        <Style Selector="StackPanel > TextBlock">
+          <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+      </StackPanel.Styles>
+      <Button Content="Go home" Command="{Binding GoHome}" />
+      <Button Content="Go back" Command="{Binding GoBack}" />
+      <TextBlock Text="{Binding Router.NavigationStack.Count}" />
+    </StackPanel>
+  </Grid>
+</Window>

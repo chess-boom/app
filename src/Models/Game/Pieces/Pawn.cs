@@ -1,140 +1,139 @@
 using System;
 using System.Collections.Generic;
 
-namespace ChessBoom.Models.Game
+namespace ChessBoom.Models.Game;
+
+public class Pawn : Piece
 {
-    public class Pawn : Piece
+    public Pawn(Board board, Player player, (int, int) coordinate) : base(board, player, coordinate)
     {
-        public Pawn(Board board, Player player, (int, int) coordinate) : base(board, player, coordinate)
+    }
+
+    public override List<(int, int)> GetMovementSquares()
+    {
+        List<(int, int)> movementSquares = new List<(int, int)>();
+
+        (int, int) coordinates = GetCoordinates();
+        (int, int) standardMove;
+        (int, int) doubleMove;
+        (int, int) captureLeft;
+        (int, int) captureRight;
+
+        if (m_owner == Player.White)
         {
+            standardMove = GameHelpers.AddVector(coordinates, (0, 1));
+            doubleMove = GameHelpers.AddVector(coordinates, (0, 2));
+            captureLeft = GameHelpers.AddVector(coordinates, (-1, 1));
+            captureRight = GameHelpers.AddVector(coordinates, (1, 1));
+        }
+        else
+        {
+            standardMove = GameHelpers.AddVector(coordinates, (0, -1));
+            doubleMove = GameHelpers.AddVector(coordinates, (0, -2));
+            captureLeft = GameHelpers.AddVector(coordinates, (-1, -1));
+            captureRight = GameHelpers.AddVector(coordinates, (1, -1));
         }
 
-        public override List<(int, int)> GetMovementSquares()
+        if (GameHelpers.IsOnBoard(standardMove) && (m_board.GetPiece(standardMove) == null))
         {
-            List<(int, int)> movementSquares = new List<(int, int)>();
-
-            (int, int) coordinates = GetCoordinates();
-            (int, int) standardMove;
-            (int, int) doubleMove;
-            (int, int) captureLeft;
-            (int, int) captureRight;
-
-            if (m_owner == Player.White)
+            movementSquares.Add(standardMove);
+        }
+        if (GameHelpers.IsOnBoard(standardMove)
+            && GameHelpers.IsOnBoard(doubleMove)
+            && (m_board.GetPiece(standardMove) == null)
+            && (m_board.GetPiece(doubleMove) == null))
+        {
+            if ((m_owner == Player.White && m_row < 2)
+                || (m_owner == Player.Black && m_row > 5))
             {
-                standardMove = GameHelpers.AddVector(coordinates, (0, 1));
-                doubleMove = GameHelpers.AddVector(coordinates, (0, 2));
-                captureLeft = GameHelpers.AddVector(coordinates, (-1, 1));
-                captureRight = GameHelpers.AddVector(coordinates, (1, 1));
+                movementSquares.Add(doubleMove);
             }
-            else
-            {
-                standardMove = GameHelpers.AddVector(coordinates, (0, -1));
-                doubleMove = GameHelpers.AddVector(coordinates, (0, -2));
-                captureLeft = GameHelpers.AddVector(coordinates, (-1, -1));
-                captureRight = GameHelpers.AddVector(coordinates, (1, -1));
-            }
-
-            if (GameHelpers.IsOnBoard(standardMove) && (m_board.GetPiece(standardMove) == null))
-            {
-                movementSquares.Add(standardMove);
-            }
-            if (GameHelpers.IsOnBoard(standardMove)
-                && GameHelpers.IsOnBoard(doubleMove)
-                && (m_board.GetPiece(standardMove) == null)
-                && (m_board.GetPiece(doubleMove) == null))
-            {
-                if ((m_owner == Player.White && m_row < 2)
-                    || (m_owner == Player.Black && m_row > 5))
-                {
-                    movementSquares.Add(doubleMove);
-                }
-            }
-            Piece? occupant = m_board.GetPiece(captureLeft);
-            if (GameHelpers.IsOnBoard(captureLeft)
-                && ((occupant != null) && (occupant.GetPlayer() == GameHelpers.GetOpponent(m_owner)))
-                    || (captureLeft == m_board.m_enPassant))
-            {
-                movementSquares.Add(captureLeft);
-            }
-            occupant = m_board.GetPiece(captureRight);
-            if (GameHelpers.IsOnBoard(captureRight)
-                && ((occupant != null) && (occupant.GetPlayer() == GameHelpers.GetOpponent(m_owner)))
-                    || (captureRight == m_board.m_enPassant))
-            {
-                movementSquares.Add(captureRight);
-            }
-
-            return movementSquares;
+        }
+        Piece? occupant = m_board.GetPiece(captureLeft);
+        if (GameHelpers.IsOnBoard(captureLeft)
+            && ((occupant != null) && (occupant.GetPlayer() == GameHelpers.GetOpponent(m_owner)))
+            || (captureLeft == m_board.m_enPassant))
+        {
+            movementSquares.Add(captureLeft);
+        }
+        occupant = m_board.GetPiece(captureRight);
+        if (GameHelpers.IsOnBoard(captureRight)
+            && ((occupant != null) && (occupant.GetPlayer() == GameHelpers.GetOpponent(m_owner)))
+            || (captureRight == m_board.m_enPassant))
+        {
+            movementSquares.Add(captureRight);
         }
 
-        /// <summary>
-        /// Attempt to move the piece to a new square. Initiates a capture if required
-        /// </summary>
-        /// <param name="coordinate">The coordinate to which the piece will try to move</param>
-        /// <exception cref="ArgumentException">Thrown the piece is unable to move to the specified coordinate</exception>
-        public override void MovePiece((int, int) coordinate)
+        return movementSquares;
+    }
+
+    /// <summary>
+    /// Attempt to move the piece to a new square. Initiates a capture if required
+    /// </summary>
+    /// <param name="coordinate">The coordinate to which the piece will try to move</param>
+    /// <exception cref="ArgumentException">Thrown the piece is unable to move to the specified coordinate</exception>
+    public override void MovePiece((int, int) coordinate)
+    {
+        if (GetMovementSquares().Contains(coordinate))
         {
-            if (GetMovementSquares().Contains(coordinate))
+            m_board.m_halfmoveClock = 0;
+
+            if (m_board.GetPiece(coordinate) != null)
             {
-                m_board.m_halfmoveClock = 0;
-
-                if (m_board.GetPiece(coordinate) != null)
+                m_board.Capture(this, coordinate);
+            }
+            else if (coordinate == m_board.m_enPassant) // Capture en passant
+            {
+                (int, int) captureCoordinate = coordinate;
+                if (m_owner == Player.White)
                 {
-                    m_board.Capture(this, coordinate);
-                }
-                else if (coordinate == m_board.m_enPassant) // Capture en passant
-                {
-                    (int, int) captureCoordinate = coordinate;
-                    if (m_owner == Player.White)
-                    {
-                        // The captured piece must be 1 tile lower than the capture square
-                        captureCoordinate = GameHelpers.AddVector(captureCoordinate, (0, -1));
-                    }
-                    else
-                    {
-                        // The captured piece must be 1 tile above than the capture square
-                        captureCoordinate = GameHelpers.AddVector(captureCoordinate, (0, 1));
-                    }
-                    m_board.Capture(this, captureCoordinate);
-                }
-
-                // Handle 2-square movement (enables en passant)
-                if (coordinate == GameHelpers.AddVector(this.GetCoordinates(), (0, 2)))
-                {
-                    m_board.m_enPassant = GameHelpers.AddVector(this.GetCoordinates(), (0, 1));
-                }
-                else if (coordinate == GameHelpers.AddVector(this.GetCoordinates(), (0, -2)))
-                {
-                    m_board.m_enPassant = GameHelpers.AddVector(this.GetCoordinates(), (0, -1));
+                    // The captured piece must be 1 tile lower than the capture square
+                    captureCoordinate = GameHelpers.AddVector(captureCoordinate, (0, -1));
                 }
                 else
                 {
-                    // If not 2-square movement, disable en passant
-                    if (m_board.m_enPassant != null)
-                    {
-                        m_board.m_enPassant = null;
-                    }
+                    // The captured piece must be 1 tile above than the capture square
+                    captureCoordinate = GameHelpers.AddVector(captureCoordinate, (0, 1));
                 }
+                m_board.Capture(this, captureCoordinate);
+            }
 
-                // Actually move the piece
-                m_column = coordinate.Item1;
-                m_row = coordinate.Item2;
-
-                if ((m_row == GameHelpers.k_BoardHeight - 1 && m_owner == Player.White)
-                    || (m_row == 0 && m_owner == Player.Black))
-                {
-                    m_board.RequestPromotion(this);
-                }
+            // Handle 2-square movement (enables en passant)
+            if (coordinate == GameHelpers.AddVector(this.GetCoordinates(), (0, 2)))
+            {
+                m_board.m_enPassant = GameHelpers.AddVector(this.GetCoordinates(), (0, 1));
+            }
+            else if (coordinate == GameHelpers.AddVector(this.GetCoordinates(), (0, -2)))
+            {
+                m_board.m_enPassant = GameHelpers.AddVector(this.GetCoordinates(), (0, -1));
             }
             else
             {
-                throw new ArgumentException($"Error. Piece {this.ToString()} on {GameHelpers.GetSquareFromCoordinate(GetCoordinates())} is unable to move to {GameHelpers.GetSquareFromCoordinate(coordinate)}!");
+                // If not 2-square movement, disable en passant
+                if (m_board.m_enPassant != null)
+                {
+                    m_board.m_enPassant = null;
+                }
+            }
+
+            // Actually move the piece
+            m_column = coordinate.Item1;
+            m_row = coordinate.Item2;
+
+            if ((m_row == GameHelpers.k_BoardHeight - 1 && m_owner == Player.White)
+                || (m_row == 0 && m_owner == Player.Black))
+            {
+                m_board.RequestPromotion(this);
             }
         }
-
-        public override string ToString()
+        else
         {
-            return (m_owner == Player.White) ? "P" : "p";
+            throw new ArgumentException($"Error. Piece {this.ToString()} on {GameHelpers.GetSquareFromCoordinate(GetCoordinates())} is unable to move to {GameHelpers.GetSquareFromCoordinate(coordinate)}!");
         }
+    }
+
+    public override string ToString()
+    {
+        return (m_owner == Player.White) ? "P" : "p";
     }
 }
