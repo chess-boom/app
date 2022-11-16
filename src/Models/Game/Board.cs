@@ -193,7 +193,7 @@ namespace ChessBoom.Models.Game
             }
 
             Piece? piece = GetPiece(startCoordinate);
-            if (piece == null)
+            if (piece is null)
             {
                 throw new ArgumentException($"Square {start} has no piece to move");
             }

@@ -156,17 +156,17 @@ namespace ChessBoom.NUnitTests.GameTests
                     _game.MakeExplicitMove("e7", "e6");
                 });
 
-            if (exception1 != null)
+            if (exception1 is not null)
                 Assert.AreEqual("Error. Piece R on a1 is unable to move to a3!", exception1.Message);
-            if (exception2 != null)
+            if (exception2 is not null)
                 Assert.AreEqual("Error. Piece N on g1 is unable to move to e2!", exception2.Message);
-            if (exception3 != null)
+            if (exception3 is not null)
                 Assert.AreEqual("Error. Piece P on e5 is unable to move to f6!", exception3.Message);
-            if (exception4 != null)
+            if (exception4 is not null)
                 Assert.AreEqual("Piece on square h3 not found!", exception4.Message);
-            if (exception5 != null)
+            if (exception5 is not null)
                 Assert.AreEqual($"i2 does not have a proper column coordinate.", exception5.Message);
-            if (exception6 != null)
+            if (exception6 is not null)
                 Assert.AreEqual("Piece p can not move because it is not Black\'s turn!", exception6.Message);
         }
 
@@ -232,7 +232,7 @@ namespace ChessBoom.NUnitTests.GameTests
                     _game.MakeExplicitMove("e1", "O-O");
                 });
 
-            if (exception != null)
+            if (exception is not null)
                 Assert.AreEqual("Castling is illegal in this situation!", exception.Message);
         }
 
@@ -258,7 +258,7 @@ namespace ChessBoom.NUnitTests.GameTests
                     _game.MakeExplicitMove("e1", "O-O");
                 });
 
-            if (exception != null)
+            if (exception is not null)
                 Assert.AreEqual("Castling is illegal in this situation!", exception.Message);
         }
 
@@ -286,7 +286,7 @@ namespace ChessBoom.NUnitTests.GameTests
                     _game.MakeExplicitMove("e1", "O-O");
                 });
 
-            if (exception != null)
+            if (exception is not null)
                 Assert.AreEqual("Castling is illegal in this situation!", exception.Message);
         }
 
@@ -335,9 +335,9 @@ namespace ChessBoom.NUnitTests.GameTests
                     _game.MakeExplicitMove("g7", "g5");
                 });
 
-            if (exception1 != null)
+            if (exception1 is not null)
                 Assert.AreEqual("Error! Illegal move!", exception1.Message);
-            if (exception2 != null)
+            if (exception2 is not null)
                 Assert.AreEqual("Error! Illegal move!", exception2.Message);
         }
 
@@ -396,7 +396,7 @@ namespace ChessBoom.NUnitTests.GameTests
                     _game.MakeExplicitMove("e2", "e3");
                 });
 
-            if (exception != null)
+            if (exception is not null)
                 Assert.AreEqual("Game is not in progress! Illegal move.", exception.Message);
         }
 
@@ -429,7 +429,7 @@ namespace ChessBoom.NUnitTests.GameTests
                     _game.MakeExplicitMove("e2", "e3");
                 });
 
-            if (exception != null)
+            if (exception is not null)
                 Assert.AreEqual("Game is not in progress! Illegal move.", exception.Message);
         }
 
@@ -483,7 +483,7 @@ namespace ChessBoom.NUnitTests.GameTests
                     _game.MakeExplicitMove("c7", "c6");
                 });
 
-            if (exception != null)
+            if (exception is not null)
                 Assert.AreEqual("Game is not in progress! Illegal move.", exception.Message);
         }
 
@@ -633,7 +633,7 @@ namespace ChessBoom.NUnitTests.GameTests
                     _game.MakeExplicitMove("e1", "e2");
                 });
 
-            if (exception != null)
+            if (exception is not null)
                 Assert.AreEqual("Game is not in progress! Illegal move.", exception.Message);
         }
     }

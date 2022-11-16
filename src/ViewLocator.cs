@@ -14,7 +14,7 @@ namespace ChessBoom
             var name = data.GetType().FullName!.Replace("ViewModel", "View");
             var type = Type.GetType(name);
 
-            if (type != null)
+            if (type is not null)
             {
                 return (Control)Activator.CreateInstance(type)!;
             }

@@ -198,7 +198,7 @@ namespace ChessBoom.Models.Game
 
                 Piece? occupant = board.GetPiece(position);
                 // Handle running into a piece
-                if (occupant != null)
+                if (occupant is not null)
                 {
                     movementFlag = false;
                     // Allied pieces can not be captured

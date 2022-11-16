@@ -66,9 +66,9 @@ namespace ChessBoom.NUnitTests.GameTests
                 });
 
             //Do not need to do for all messages, validating here is enough
-            if (exception1 != null)
+            if (exception1 is not null)
                 Assert.AreEqual("Coordinate (-1, 1) is an invalid coordinate (x, y).", exception1.Message);
-            if (exception2 != null)
+            if (exception2 is not null)
                 Assert.AreEqual("Coordinate (1, -1) is an invalid coordinate (x, y).", exception2.Message);
         }
         /// <summary>
@@ -83,7 +83,7 @@ namespace ChessBoom.NUnitTests.GameTests
                     _board.CreatePiece('h', (1, 1));
                 });
 
-            if (exception != null)
+            if (exception is not null)
                 Assert.AreEqual("Error. h is an invalid piece type.", exception.Message);
         }
 
@@ -134,51 +134,51 @@ namespace ChessBoom.NUnitTests.GameTests
             Assert.IsNotNull(whitePawn);
             Assert.IsNotNull(blackPawn);
 
-            if (whiteKing != null)
+            if (whiteKing is not null)
             {
                 Assert.AreEqual(Player.White, whiteKing.GetPlayer());
             }
-            if (blackKing != null)
+            if (blackKing is not null)
             {
                 Assert.AreEqual(Player.Black, blackKing.GetPlayer());
             }
-            if (whiteQueen != null)
+            if (whiteQueen is not null)
             {
                 Assert.AreEqual(Player.White, whiteQueen.GetPlayer());
             }
-            if (blackQueen != null)
+            if (blackQueen is not null)
             {
                 Assert.AreEqual(Player.Black, blackQueen.GetPlayer());
             }
-            if (whiteBishop != null)
+            if (whiteBishop is not null)
             {
                 Assert.AreEqual(Player.White, whiteBishop.GetPlayer());
             }
-            if (blackBishop != null)
+            if (blackBishop is not null)
             {
                 Assert.AreEqual(Player.Black, blackBishop.GetPlayer());
             }
-            if (whiteKnight != null)
+            if (whiteKnight is not null)
             {
                 Assert.AreEqual(Player.White, whiteKnight.GetPlayer());
             }
-            if (blackKnight != null)
+            if (blackKnight is not null)
             {
                 Assert.AreEqual(Player.Black, blackKnight.GetPlayer());
             }
-            if (whiteRook != null)
+            if (whiteRook is not null)
             {
                 Assert.AreEqual(Player.White, whiteRook.GetPlayer());
             }
-            if (blackRook != null)
+            if (blackRook is not null)
             {
                 Assert.AreEqual(Player.Black, blackRook.GetPlayer());
             }
-            if (whitePawn != null)
+            if (whitePawn is not null)
             {
                 Assert.AreEqual(Player.White, whitePawn.GetPlayer());
             }
-            if (blackPawn != null)
+            if (blackPawn is not null)
             {
                 Assert.AreEqual(Player.Black, blackPawn.GetPlayer());
             }
@@ -219,7 +219,7 @@ namespace ChessBoom.NUnitTests.GameTests
                     _board.SetPlayerToPlay('h');
                 });
 
-            if (exception != null)
+            if (exception is not null)
                 Assert.AreEqual("Player \'h\' is not a valid player character.", exception.Message);
         }
 
@@ -287,15 +287,15 @@ namespace ChessBoom.NUnitTests.GameTests
                     _board.SetCastling("-KQ");
                 });
 
-            if (exception1 != null)
+            if (exception1 is not null)
                 Assert.AreEqual("Invalid character \'h\' in FEN file", exception1.Message);
-            if (exception2 != null)
+            if (exception2 is not null)
                 Assert.AreEqual("Duplicate character \'Q\' in FEN file", exception2.Message);
-            if (exception3 != null)
+            if (exception3 is not null)
                 Assert.AreEqual("FEN file must include castling rights", exception3.Message);
-            if (exception4 != null)
+            if (exception4 is not null)
                 Assert.AreEqual("Character \'-\' must exclusively represent null castling rights in FEN file", exception4.Message);
-            if (exception5 != null)
+            if (exception5 is not null)
                 Assert.AreEqual("Character \'-\' must exclusively represent null castling rights in FEN file", exception5.Message);
         }
     }
