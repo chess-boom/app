@@ -64,7 +64,7 @@ namespace ChessBoom.Models.Game
             base.MovePiece(coordinate);
             if (!m_hasMoved)
             {
-                if (m_board.m_game == null)
+                if (m_board.m_game is null)
                 {
                     return;
                 }

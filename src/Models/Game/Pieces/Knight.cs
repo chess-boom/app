@@ -30,7 +30,7 @@ namespace ChessBoom.Models.Game
                     continue;
                 }
                 Piece? occupant = m_board.GetPiece(coordinate);
-                if (occupant != null && occupant.GetPlayer() == m_owner)
+                if (occupant is not null && occupant.GetPlayer() == m_owner)
                 {
                     continue;
                 }

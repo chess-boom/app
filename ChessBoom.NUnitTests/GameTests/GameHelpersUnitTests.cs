@@ -46,9 +46,9 @@ namespace ChessBoom.NUnitTests.GameTests
                     GameHelpers.GetSquareFromCoordinate((8, 15));
                 });
 
-            if (exception1 != null)
+            if (exception1 is not null)
                 Assert.AreEqual("Coordinate (-1, 0) is an invalid square", exception1.Message);
-            if (exception2 != null)
+            if (exception2 is not null)
                 Assert.AreEqual("Coordinate (8, 15) is an invalid square", exception2.Message);
         }
 
@@ -98,11 +98,11 @@ namespace ChessBoom.NUnitTests.GameTests
                     GameHelpers.GetCoordinateFromSquare("bb");
                 });
 
-            if (exception1 != null)
+            if (exception1 is not null)
                 Assert.AreEqual("abc is not properly formatted.", exception1.Message);
-            if (exception2 != null)
+            if (exception2 is not null)
                 Assert.AreEqual("11 does not have a proper column coordinate.", exception2.Message);
-            if (exception3 != null)
+            if (exception3 is not null)
                 Assert.AreEqual("bb does not have a proper row coordinate.", exception3.Message);
         }
 

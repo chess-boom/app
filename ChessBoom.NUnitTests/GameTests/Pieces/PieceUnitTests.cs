@@ -61,7 +61,7 @@ namespace ChessBoom.NUnitTests.GameTests
 
             Assert.IsNotNull(bishop);
             // Free movement
-            if (bishop != null)
+            if (bishop is not null)
             {
                 var movementSquares = bishop.GetMovementSquares();
                 Assert.AreEqual(9, movementSquares.Count);
@@ -78,7 +78,7 @@ namespace ChessBoom.NUnitTests.GameTests
 
             _board.CreatePiece('P', (6, 6));
             // Blocked by allied piece
-            if (bishop != null)
+            if (bishop is not null)
             {
                 var movementSquares = bishop.GetMovementSquares();
                 Assert.AreEqual(7, movementSquares.Count);
@@ -93,7 +93,7 @@ namespace ChessBoom.NUnitTests.GameTests
 
             _board.CreatePiece('p', (3, 3));
             // Blocked by enemy piece
-            if (bishop != null)
+            if (bishop is not null)
             {
                 var movementSquares = bishop.GetMovementSquares();
                 Assert.AreEqual(5, movementSquares.Count);
@@ -116,7 +116,7 @@ namespace ChessBoom.NUnitTests.GameTests
 
             Assert.IsNotNull(king1);
             // Free movement
-            if (king1 != null)
+            if (king1 is not null)
             {
                 var movementSquares = king1.GetMovementSquares();
                 Assert.AreEqual(3, movementSquares.Count);
@@ -130,7 +130,7 @@ namespace ChessBoom.NUnitTests.GameTests
 
             Assert.IsNotNull(king2);
             // Free movement
-            if (king2 != null)
+            if (king2 is not null)
             {
                 var movementSquares = king2.GetMovementSquares();
                 Assert.AreEqual(8, movementSquares.Count);
@@ -146,7 +146,7 @@ namespace ChessBoom.NUnitTests.GameTests
 
             _board.CreatePiece('P', (4, 4));
             // Blocked by allied piece
-            if (king2 != null)
+            if (king2 is not null)
             {
                 var movementSquares = king2.GetMovementSquares();
                 Assert.AreEqual(7, movementSquares.Count);
@@ -161,7 +161,7 @@ namespace ChessBoom.NUnitTests.GameTests
 
             _board.CreatePiece('p', (3, 2));
             // Blocked by enemy piece
-            if (king2 != null)
+            if (king2 is not null)
             {
                 var movementSquares = king2.GetMovementSquares();
                 Assert.AreEqual(7, movementSquares.Count);
@@ -186,7 +186,7 @@ namespace ChessBoom.NUnitTests.GameTests
 
             Assert.IsNotNull(knight1);
             // Corner movement
-            if (knight1 != null)
+            if (knight1 is not null)
             {
                 var movementSquares = knight1.GetMovementSquares();
                 Assert.AreEqual(2, movementSquares.Count);
@@ -197,7 +197,7 @@ namespace ChessBoom.NUnitTests.GameTests
             _board.CreatePiece('N', (4, 4));
             var knight2 = _board.GetPiece((4, 4));
             // Free movement
-            if (knight2 != null)
+            if (knight2 is not null)
             {
                 var movementSquares = knight2.GetMovementSquares();
                 Assert.AreEqual(8, movementSquares.Count);
@@ -213,7 +213,7 @@ namespace ChessBoom.NUnitTests.GameTests
 
             _board.CreatePiece('P', (2, 3));
             // Blocked by allied piece
-            if (knight2 != null)
+            if (knight2 is not null)
             {
                 var movementSquares = knight2.GetMovementSquares();
                 Assert.AreEqual(7, movementSquares.Count);
@@ -228,7 +228,7 @@ namespace ChessBoom.NUnitTests.GameTests
 
             _board.CreatePiece('p', (2, 5));
             // Blocked by enemy piece
-            if (knight2 != null)
+            if (knight2 is not null)
             {
                 var movementSquares = knight2.GetMovementSquares();
                 Assert.AreEqual(7, movementSquares.Count);
@@ -253,7 +253,7 @@ namespace ChessBoom.NUnitTests.GameTests
 
             Assert.IsNotNull(pawn1);
             // Double movement
-            if (pawn1 != null)
+            if (pawn1 is not null)
             {
                 var movementSquares = pawn1.GetMovementSquares();
                 Assert.AreEqual(2, movementSquares.Count);
@@ -267,7 +267,7 @@ namespace ChessBoom.NUnitTests.GameTests
             _board.CreatePiece('n', (5, 5));
             var pawn2 = _board.GetPiece((4, 6));
             // Blocked and capture movement
-            if (pawn2 != null)
+            if (pawn2 is not null)
             {
                 var movementSquares = pawn2.GetMovementSquares();
                 Assert.AreEqual(2, movementSquares.Count);
@@ -280,7 +280,7 @@ namespace ChessBoom.NUnitTests.GameTests
             _board.m_enPassant = (6, 2);
             var pawn3 = _board.GetPiece((7, 1));
             // Double movement blocked with en passant
-            if (pawn3 != null)
+            if (pawn3 is not null)
             {
                 var movementSquares = pawn3.GetMovementSquares();
                 Assert.AreEqual(1, movementSquares.Count);
@@ -299,7 +299,7 @@ namespace ChessBoom.NUnitTests.GameTests
 
             Assert.IsNotNull(queen1);
             // Free movement
-            if (queen1 != null)
+            if (queen1 is not null)
             {
                 var movementSquares = queen1.GetMovementSquares();
                 Assert.AreEqual(23, movementSquares.Count);
@@ -338,7 +338,7 @@ namespace ChessBoom.NUnitTests.GameTests
             _board.CreatePiece('P', (6, 1));
             _board.CreatePiece('P', (1, 6));
             // Blocked by allied piece
-            if (queen1 != null)
+            if (queen1 is not null)
             {
                 var movementSquares = queen1.GetMovementSquares();
                 Assert.AreEqual(17, movementSquares.Count);
@@ -371,7 +371,7 @@ namespace ChessBoom.NUnitTests.GameTests
             _board.CreatePiece('p', (1, 3));
             _board.CreatePiece('p', (3, 1));
             // Blocked by enemy piece
-            if (queen1 != null)
+            if (queen1 is not null)
             {
                 var movementSquares = queen1.GetMovementSquares();
                 Assert.AreEqual(11, movementSquares.Count);
@@ -406,7 +406,7 @@ namespace ChessBoom.NUnitTests.GameTests
 
             Assert.IsNotNull(rook);
             // Free movement
-            if (rook != null)
+            if (rook is not null)
             {
                 var movementSquares = rook.GetMovementSquares();
                 Assert.AreEqual(14, movementSquares.Count);
@@ -433,7 +433,7 @@ namespace ChessBoom.NUnitTests.GameTests
             _board.CreatePiece('P', (6, 1));
             _board.CreatePiece('P', (1, 6));
             // Blocked by allied piece
-            if (rook != null)
+            if (rook is not null)
             {
                 var movementSquares = rook.GetMovementSquares();
                 Assert.AreEqual(10, movementSquares.Count);
@@ -457,7 +457,7 @@ namespace ChessBoom.NUnitTests.GameTests
             _board.CreatePiece('p', (1, 3));
             _board.CreatePiece('p', (3, 1));
             // Blocked by enemy piece
-            if (rook != null)
+            if (rook is not null)
             {
                 var movementSquares = rook.GetMovementSquares();
                 Assert.AreEqual(6, movementSquares.Count);

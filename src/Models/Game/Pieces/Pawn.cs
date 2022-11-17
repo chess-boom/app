@@ -34,14 +34,14 @@ namespace ChessBoom.Models.Game
                 captureRight = GameHelpers.AddVector(coordinates, (1, -1));
             }
 
-            if (GameHelpers.IsOnBoard(standardMove) && (m_board.GetPiece(standardMove) == null))
+            if (GameHelpers.IsOnBoard(standardMove) && (m_board.GetPiece(standardMove) is null))
             {
                 movementSquares.Add(standardMove);
             }
             if (GameHelpers.IsOnBoard(standardMove)
                 && GameHelpers.IsOnBoard(doubleMove)
-                && (m_board.GetPiece(standardMove) == null)
-                && (m_board.GetPiece(doubleMove) == null))
+                && (m_board.GetPiece(standardMove) is null)
+                && (m_board.GetPiece(doubleMove) is null))
             {
                 if ((m_owner == Player.White && m_row < 2)
                     || (m_owner == Player.Black && m_row > 5))
@@ -51,14 +51,14 @@ namespace ChessBoom.Models.Game
             }
             Piece? occupant = m_board.GetPiece(captureLeft);
             if (GameHelpers.IsOnBoard(captureLeft)
-                && ((occupant != null) && (occupant.GetPlayer() == GameHelpers.GetOpponent(m_owner)))
+                && ((occupant is not null) && (occupant.GetPlayer() == GameHelpers.GetOpponent(m_owner)))
                     || (captureLeft == m_board.m_enPassant))
             {
                 movementSquares.Add(captureLeft);
             }
             occupant = m_board.GetPiece(captureRight);
             if (GameHelpers.IsOnBoard(captureRight)
-                && ((occupant != null) && (occupant.GetPlayer() == GameHelpers.GetOpponent(m_owner)))
+                && ((occupant is not null) && (occupant.GetPlayer() == GameHelpers.GetOpponent(m_owner)))
                     || (captureRight == m_board.m_enPassant))
             {
                 movementSquares.Add(captureRight);
@@ -76,9 +76,13 @@ namespace ChessBoom.Models.Game
         {
             if (GetMovementSquares().Contains(coordinate))
             {
+                if (m_board.m_game is not null)
+                {
+                    m_board.m_game.ClearVisitedPositions();
+                }
                 m_board.m_halfmoveClock = 0;
 
-                if (m_board.GetPiece(coordinate) != null)
+                if (m_board.GetPiece(coordinate) is not null)
                 {
                     m_board.Capture(this, coordinate);
                 }
@@ -110,7 +114,7 @@ namespace ChessBoom.Models.Game
                 else
                 {
                     // If not 2-square movement, disable en passant
-                    if (m_board.m_enPassant != null)
+                    if (m_board.m_enPassant is not null)
                     {
                         m_board.m_enPassant = null;
                     }

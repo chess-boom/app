@@ -18,12 +18,17 @@ namespace ChessBoom.Models.Game
             }
         }
 
+        /// <summary>
+        /// The limiting number of moves that amount to "no progress" before a game ends in a draw
+        /// </summary>
+        private const int k_progressMoveLimit = 50;
+
         public override void Capture(Piece attacker, Board board, string square)
         {
             try
             {
                 Piece? capturedPiece = board.GetPiece(GameHelpers.GetCoordinateFromSquare(square));
-                if (capturedPiece != null)
+                if (capturedPiece is not null)
                 {
                     capturedPiece.Destroy();
                 }
@@ -89,8 +94,8 @@ namespace ChessBoom.Models.Game
                 return false;
             }
 
-            if (king == null
-                || rook == null
+            if (king is null
+                || rook is null
                 || king.GetType() != typeof(King)
                 || rook.GetType() != typeof(Rook))
             {
@@ -120,7 +125,7 @@ namespace ChessBoom.Models.Game
                     // An opponent's piece can see a square between the king and the rook (castling through check)
                     return false;
                 }
-                if (board.GetPiece(coordinate) != null)
+                if (board.GetPiece(coordinate) is not null)
                 {
                     // A piece exists between the king and the rook
                     return false;
@@ -158,8 +163,8 @@ namespace ChessBoom.Models.Game
                 throw new GameplayErrorException("Castling is illegal in this situation!");
             }
 
-            if (king == null
-                || rook == null)
+            if (king is null
+                || rook is null)
             {
                 // Pieces were not found. Should never occur since CanCastle must return true.
                 throw new GameplayErrorException("Castling is illegal in this situation!");
@@ -193,10 +198,17 @@ namespace ChessBoom.Models.Game
 
         public override void AssessBoardState(Game game, Board board)
         {
-            // Only the next player to play may be in checkmate, else an illegal move must have occurred
-            if (!IsInCheck(board.m_playerToPlay, board))
+            // 50-move rule
+            if (board.m_halfmoveClock >= (2 * k_progressMoveLimit))
             {
-                // TODO: Assess for stalemate
+                game.m_gameState = GameState.Draw;
+                return;
+            }
+
+            // Threefold repetition
+            if (game.HasThreefoldRepetition())
+            {
+                game.m_gameState = GameState.Draw;
                 return;
             }
 
@@ -210,12 +222,13 @@ namespace ChessBoom.Models.Game
 
                 foreach ((int, int) move in pieceMoves)
                 {
-                    testBoard = Game.CreateBoardFromFEN(game, Game.CreateFENFromBoard(board));
+                    Game testGame = new Game();
+                    testBoard = Game.CreateBoardFromFEN(testGame, Game.CreateFENFromBoard(board));
 
                     try
                     {
                         Piece? testPiece = testBoard.GetPiece(piece.GetCoordinates());
-                        if (testPiece != null)
+                        if (testPiece is not null)
                         {
                             testPiece.MovePiece(move);
                         }
@@ -248,7 +261,16 @@ namespace ChessBoom.Models.Game
 
             if (!legalMoveExists)
             {
-                game.m_gameState = (board.m_playerToPlay == Player.Black) ? GameState.VictoryWhite : GameState.VictoryBlack;
+                // Only the next player to play may be in checkmate, else an illegal move must have occurred
+                if (!IsInCheck(board.m_playerToPlay, board))
+                {
+                    game.m_gameState = GameState.Draw;
+                    return;
+                }
+                else
+                {
+                    game.m_gameState = (board.m_playerToPlay == Player.Black) ? GameState.VictoryWhite : GameState.VictoryBlack;
+                }
             }
         }
     }

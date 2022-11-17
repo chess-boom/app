@@ -52,12 +52,12 @@ namespace ChessBoom.Models.Game
         {
             if (GetMovementSquares().Contains(coordinate))
             {
-                if (m_board.m_enPassant != null)
+                if (m_board.m_enPassant is not null)
                 {
                     m_board.m_enPassant = null;
                 }
 
-                if (m_board.GetPiece(coordinate) != null)
+                if (m_board.GetPiece(coordinate) is not null)
                 {
                     m_board.Capture(this, coordinate);
                 }
@@ -81,12 +81,12 @@ namespace ChessBoom.Models.Game
             {
                 throw new ArgumentException($"Coordinate {coordinate} is not on the board!");
             }
-            if (m_board.m_enPassant != null)
+            if (m_board.m_enPassant is not null)
             {
                 m_board.m_enPassant = null;
             }
 
-            if (m_board.GetPiece(coordinate) != null)
+            if (m_board.GetPiece(coordinate) is not null)
             {
                 m_board.Capture(this, coordinate);
             }

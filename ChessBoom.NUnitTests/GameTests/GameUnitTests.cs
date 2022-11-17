@@ -156,17 +156,17 @@ namespace ChessBoom.NUnitTests.GameTests
                     _game.MakeExplicitMove("e7", "e6");
                 });
 
-            if (exception1 != null)
+            if (exception1 is not null)
                 Assert.AreEqual("Error. Piece R on a1 is unable to move to a3!", exception1.Message);
-            if (exception2 != null)
+            if (exception2 is not null)
                 Assert.AreEqual("Error. Piece N on g1 is unable to move to e2!", exception2.Message);
-            if (exception3 != null)
+            if (exception3 is not null)
                 Assert.AreEqual("Error. Piece P on e5 is unable to move to f6!", exception3.Message);
-            if (exception4 != null)
+            if (exception4 is not null)
                 Assert.AreEqual("Piece on square h3 not found!", exception4.Message);
-            if (exception5 != null)
+            if (exception5 is not null)
                 Assert.AreEqual($"i2 does not have a proper column coordinate.", exception5.Message);
-            if (exception6 != null)
+            if (exception6 is not null)
                 Assert.AreEqual("Piece p can not move because it is not Black\'s turn!", exception6.Message);
         }
 
@@ -232,7 +232,7 @@ namespace ChessBoom.NUnitTests.GameTests
                     _game.MakeExplicitMove("e1", "O-O");
                 });
 
-            if (exception != null)
+            if (exception is not null)
                 Assert.AreEqual("Castling is illegal in this situation!", exception.Message);
         }
 
@@ -258,7 +258,7 @@ namespace ChessBoom.NUnitTests.GameTests
                     _game.MakeExplicitMove("e1", "O-O");
                 });
 
-            if (exception != null)
+            if (exception is not null)
                 Assert.AreEqual("Castling is illegal in this situation!", exception.Message);
         }
 
@@ -286,7 +286,7 @@ namespace ChessBoom.NUnitTests.GameTests
                     _game.MakeExplicitMove("e1", "O-O");
                 });
 
-            if (exception != null)
+            if (exception is not null)
                 Assert.AreEqual("Castling is illegal in this situation!", exception.Message);
         }
 
@@ -335,9 +335,9 @@ namespace ChessBoom.NUnitTests.GameTests
                     _game.MakeExplicitMove("g7", "g5");
                 });
 
-            if (exception1 != null)
+            if (exception1 is not null)
                 Assert.AreEqual("Error! Illegal move!", exception1.Message);
-            if (exception2 != null)
+            if (exception2 is not null)
                 Assert.AreEqual("Error! Illegal move!", exception2.Message);
         }
 
@@ -396,7 +396,244 @@ namespace ChessBoom.NUnitTests.GameTests
                     _game.MakeExplicitMove("e2", "e3");
                 });
 
-            if (exception != null)
+            if (exception is not null)
+                Assert.AreEqual("Game is not in progress! Illegal move.", exception.Message);
+        }
+
+        /// <summary>
+        /// Ensure a draw is made in the case of threefold repetition
+        /// </summary>
+        [Test]
+        public void ThreefoldRepetitionTest()
+        {
+            _game.MakeExplicitMove("e2", "e4");
+            _game.MakeExplicitMove("e7", "e5");
+            _game.MakeExplicitMove("e1", "e2");
+            _game.MakeExplicitMove("e8", "e7");
+            _game.MakeExplicitMove("e2", "e1");
+            _game.MakeExplicitMove("e7", "e8");
+            _game.MakeExplicitMove("e1", "e2");
+            _game.MakeExplicitMove("e8", "e7");
+            _game.MakeExplicitMove("e2", "e1");
+            _game.MakeExplicitMove("e7", "e8");
+            _game.MakeExplicitMove("e1", "e2");
+            Assert.AreEqual(GameState.InProgress, _game.m_gameState);
+            _game.MakeExplicitMove("e8", "e7");
+            // Threefold repetition occurs
+            Assert.AreEqual(GameState.Draw, _game.m_gameState);
+
+            var exception = Assert.Throws<GameplayErrorException>(
+                delegate
+                {
+                    // Player attempts to play another random move
+                    _game.MakeExplicitMove("e2", "e3");
+                });
+
+            if (exception is not null)
+                Assert.AreEqual("Game is not in progress! Illegal move.", exception.Message);
+        }
+
+        /// <summary>
+        /// Ensure a draw is made in the case of stalemate
+        /// </summary>
+        [Test]
+        public void StalemateTest()
+        {
+            _game.MakeExplicitMove("e2", "e4");
+            _game.MakeExplicitMove("d7", "d5"); // 1
+            _game.MakeExplicitMove("d1", "h5");
+            _game.MakeExplicitMove("b8", "d7"); // 2
+            _game.MakeExplicitMove("h5", "h7");
+            _game.MakeExplicitMove("d7", "e5"); // 3
+            _game.MakeExplicitMove("h7", "h8");
+            _game.MakeExplicitMove("c8", "f5"); // 4
+            _game.MakeExplicitMove("h8", "g7");
+            _game.MakeExplicitMove("e8", "d7"); // 5
+            _game.MakeExplicitMove("g7", "g8");
+            _game.MakeExplicitMove("d7", "c8"); // 6
+            _game.MakeExplicitMove("g8", "f7");
+            _game.MakeExplicitMove("c8", "b8"); // 7
+            _game.MakeExplicitMove("f7", "f8");
+            _game.MakeExplicitMove("e5", "c6"); // 8
+            _game.MakeExplicitMove("f8", "e7");
+            _game.MakeExplicitMove("c6", "b4"); // 9
+            _game.MakeExplicitMove("e7", "d8");
+            _game.MakeExplicitMove("f5", "c8"); // 10
+            _game.MakeExplicitMove("d8", "d5");
+            _game.MakeExplicitMove("b4", "c6"); // 11
+            _game.MakeExplicitMove("d5", "c6");
+            _game.MakeExplicitMove("c8", "e6"); // 12
+            _game.MakeExplicitMove("c6", "e8");
+            _game.MakeExplicitMove("e6", "c8"); // 13
+            _game.MakeExplicitMove("d2", "d4");
+            _game.MakeExplicitMove("b7", "b5"); // 14
+            _game.MakeExplicitMove("c1", "f4");
+            _game.MakeExplicitMove("b5", "b4"); // 15
+            _game.MakeExplicitMove("f1", "a6");
+            _game.MakeExplicitMove("b4", "b3"); // 16
+            Assert.AreEqual(GameState.InProgress, _game.m_gameState);
+            _game.MakeExplicitMove("c2", "b3");
+            // Stalemate occurs
+            Assert.AreEqual(GameState.Draw, _game.m_gameState);
+
+            var exception = Assert.Throws<GameplayErrorException>(
+                delegate
+                {
+                    // Player attempts to play another random move
+                    _game.MakeExplicitMove("c7", "c6");
+                });
+
+            if (exception is not null)
+                Assert.AreEqual("Game is not in progress! Illegal move.", exception.Message);
+        }
+
+        /// <summary>
+        /// Ensure a draw is made in the case of the fifty move rule
+        /// </summary>
+        [Test]
+        public void FiftyMoveRuleTest()
+        {
+            Piece? whitePawn = _game.m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("e2"));
+            Piece? whiteQueen = _game.m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("d1"));
+            Piece? blackPawn = _game.m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("e7"));
+            Piece? blackQueen = _game.m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("d8"));
+            Piece? blackKnight = _game.m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("g8"));
+
+            if (whitePawn is null
+                || whiteQueen is null
+                || blackPawn is null
+                || blackQueen is null
+                || blackKnight is null)
+            {
+                Assert.Fail();
+                return;
+            }
+
+            List<(Piece, string)> moveList = new List<(Piece, string)>()
+            {
+                (whitePawn, "e4"),
+                (blackPawn, "e5"),      // 1
+                (whiteQueen, "h5"),
+                (blackQueen, "h4"),     // 2
+                (whiteQueen, "h6"),
+                (blackKnight, "e7"),    // 3
+                (whiteQueen, "g6"),
+                (blackKnight, "g8"),    // 4
+                (whiteQueen, "f6"),
+                (blackKnight, "e7"),    // 5
+                (whiteQueen, "d6"),
+                (blackKnight, "g8"),    // 6
+                (whiteQueen, "c6"),
+                (blackKnight, "e7"),    // 7
+                (whiteQueen, "b6"),
+                (blackKnight, "g8"),    // 8
+                (whiteQueen, "a6"),
+                (blackKnight, "e7"),    // 9
+                (whiteQueen, "a5"),
+                (blackKnight, "g8"),    // 10
+                (whiteQueen, "b5"),
+                (blackKnight, "e7"),    // 11
+                (whiteQueen, "c5"),
+                (blackKnight, "g8"),    // 12
+                (whiteQueen, "d5"),
+                (blackKnight, "e7"),    // 13
+                (whiteQueen, "d4"),
+                (blackKnight, "g8"),    // 14
+                (whiteQueen, "c4"),
+                (blackKnight, "e7"),    // 15
+                (whiteQueen, "b4"),
+                (blackKnight, "g8"),    // 16
+                (whiteQueen, "a4"),
+                (blackKnight, "e7"),    // 17
+                (whiteQueen, "a3"),
+                (blackKnight, "g8"),    // 18
+                (whiteQueen, "b3"),
+                (blackKnight, "e7"),    // 19
+                (whiteQueen, "c3"),
+                (blackKnight, "g8"),    // 20
+                (whiteQueen, "d3"),
+                (blackKnight, "e7"),    // 21
+                (whiteQueen, "e3"),
+                (blackKnight, "g8"),    // 22
+                (whiteQueen, "f3"),
+                (blackKnight, "e7"),    // 23
+                (whiteQueen, "g3"),
+                (blackKnight, "g8"),    // 24
+                (whiteQueen, "h3"),
+                (blackKnight, "e7"),    // 25
+                (whiteQueen, "g4"),
+                (blackKnight, "g8"),    // 26
+                (whiteQueen, "f4"),
+                (blackKnight, "e7"),    // 27
+                (whiteQueen, "f5"),
+                (blackKnight, "g8"),    // 28
+                (whiteQueen, "g5"),
+                (blackQueen, "h5"),     // 29
+                (whiteQueen, "h6"),
+                (blackKnight, "e7"),    // 30
+                (whiteQueen, "g6"),
+                (blackKnight, "g8"),    // 31
+                (whiteQueen, "f6"),
+                (blackKnight, "e7"),    // 32
+                (whiteQueen, "d6"),
+                (blackKnight, "g8"),    // 33
+                (whiteQueen, "c6"),
+                (blackKnight, "e7"),    // 34
+                (whiteQueen, "b6"),
+                (blackKnight, "g8"),    // 35
+                (whiteQueen, "a6"),
+                (blackKnight, "e7"),    // 36
+                (whiteQueen, "a5"),
+                (blackKnight, "g8"),    // 37
+                (whiteQueen, "b5"),
+                (blackKnight, "e7"),    // 38
+                (whiteQueen, "c5"),
+                (blackKnight, "g8"),    // 39
+                (whiteQueen, "d5"),
+                (blackKnight, "e7"),    // 40
+                (whiteQueen, "d4"),
+                (blackKnight, "g8"),    // 41
+                (whiteQueen, "c4"),
+                (blackKnight, "e7"),    // 42
+                (whiteQueen, "b4"),
+                (blackKnight, "g8"),    // 43
+                (whiteQueen, "a4"),
+                (blackKnight, "e7"),    // 44
+                (whiteQueen, "a3"),
+                (blackKnight, "g8"),    // 45
+                (whiteQueen, "b3"),
+                (blackKnight, "e7"),    // 46
+                (whiteQueen, "c3"),
+                (blackKnight, "g8"),    // 47
+                (whiteQueen, "d3"),
+                (blackKnight, "e7"),    // 48
+                (whiteQueen, "e3"),
+                (blackKnight, "g8"),    // 49
+                (whiteQueen, "f3"),
+                (blackKnight, "e7"),    // 50
+                (whiteQueen, "g3"),
+                (blackKnight, "g8")     // 51
+            };
+
+            // A 'for' loop is preferred over 'foreach' since last move should be avoided
+            for (int index = 0; index < moveList.Count - 1; index++)
+            {
+                _game.MakeMove(moveList[index].Item1, moveList[index].Item2);
+            }
+
+            Assert.AreEqual(GameState.InProgress, _game.m_gameState);
+            _game.MakeMove(moveList[moveList.Count - 1].Item1, moveList[moveList.Count - 1].Item2);
+            // Fifty move rule is enforced
+            Assert.AreEqual(GameState.Draw, _game.m_gameState);
+
+            var exception = Assert.Throws<GameplayErrorException>(
+                delegate
+                {
+                    // Player attempts to play another random move
+                    _game.MakeExplicitMove("e1", "e2");
+                });
+
+            if (exception is not null)
                 Assert.AreEqual("Game is not in progress! Illegal move.", exception.Message);
         }
     }

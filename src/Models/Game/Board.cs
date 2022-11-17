@@ -193,7 +193,7 @@ namespace ChessBoom.Models.Game
             }
 
             Piece? piece = GetPiece(startCoordinate);
-            if (piece == null)
+            if (piece is null)
             {
                 throw new ArgumentException($"Square {start} has no piece to move");
             }
@@ -237,7 +237,7 @@ namespace ChessBoom.Models.Game
         /// <returns>The game's ruleset. Returns standard chess rules if the board does not have a game.</returns>
         public Ruleset GetRuleset()
         {
-            if (m_game != null)
+            if (m_game is not null)
             {
                 return m_game.m_ruleset;
             }
@@ -338,7 +338,7 @@ namespace ChessBoom.Models.Game
             try
             {
                 m_castling.TryGetValue(player, out castling);
-                return (castling != null && castling.Contains(side));
+                return (castling is not null && castling.Contains(side));
             }
             catch (ArgumentNullException)
             {
@@ -354,6 +354,10 @@ namespace ChessBoom.Models.Game
         public void Capture(Piece attacker, (int, int) coordinate)
         {
             GetRuleset().Capture(attacker, this, GameHelpers.GetSquareFromCoordinate(coordinate));
+            if (m_game is not null)
+            {
+                m_game.ClearVisitedPositions();
+            }
             m_halfmoveClock = 0;
         }
 
@@ -379,7 +383,7 @@ namespace ChessBoom.Models.Game
         /// <summary>
         /// Request from the user which piece to promote a pawn to
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The character corresponding to the piece to which the pawn will promote</returns>
         public char RequestPromotionPiece()
         {
             // TODO: Ask the user for which piece to promote to
@@ -395,7 +399,7 @@ namespace ChessBoom.Models.Game
                 for (int x = 0; x < GameHelpers.k_BoardWidth; x++)
                 {
                     Piece? piece = GetPiece((x, y));
-                    if (piece == null)
+                    if (piece is null)
                     {
                         output += ".";
                     }
