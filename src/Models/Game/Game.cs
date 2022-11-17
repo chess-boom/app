@@ -289,7 +289,7 @@ namespace ChessBoom.Models.Game
         {
             foreach (KeyValuePair<string, int> visitedPosition in m_visitedPositions)
             {
-                if (visitedPosition.Value >= 3)
+                if (visitedPosition.Value >= Ruleset.k_threefoldRepetitionCount)
                 {
                     return true;
                 }

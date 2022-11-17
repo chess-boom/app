@@ -3,6 +3,10 @@ namespace ChessBoom.Models.Game
     public abstract class Ruleset
     {
         /// <summary>
+        /// The number of repetitions for threefold repetition to occur
+        /// </summary>
+        public const int k_threefoldRepetitionCount = 3;
+        /// <summary>
         /// Handle a capture by a piece on a specific square according to the ruleset
         /// </summary>
         /// <param name="attacker">The piece that initiates the capture sequence</param>
