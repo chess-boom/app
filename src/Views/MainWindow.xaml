@@ -23,6 +23,28 @@
       <GradientStop Color="Black" Offset="1"/>
     </LinearGradientBrush>
   </Window.Background>
+  <DockPanel>
+  <!-- App Navigation Bar -->
+      <Border DockPanel.Dock="Top"
+        BorderBrush="#4287f5"
+        BorderThickness="1"
+        Padding="15"
+        Background="Black">
+        <Menu Background="Black">
+              <!-- <Image Source="Assets/Icons/favicon.ico"/> -->
+            <MenuItem Header="ANALYSIS" FontSize="25">
+                <MenuItem Header="Template 1" Command="{Binding GoTemplate1}"/>
+                <MenuItem Header="Template 2" Command="{Binding GoTemplate1}"/>
+                <MenuItem Header="Template 3" Command="{Binding GoTemplate1}"/>
+                <MenuItem Header="Template 4" Command="{Binding GoTemplate1}"/>
+            </MenuItem>
+            <MenuItem Header="TUTORIALS" FontSize="25">
+                <MenuItem Header="Beginner" Command="{Binding GoTemplate1}"/>
+                <MenuItem Header="Intermediate" Command="{Binding GoTemplate1}"/>
+                <MenuItem Header="Expert" Command="{Binding GoTemplate1}"/>
+            </MenuItem>
+        </Menu>
+      </Border>
   <Grid RowDefinitions="*,Auto">
     <rxui:RoutedViewHost Grid.Row="0" Router="{Binding Path=Router}" PageTransition="{x:Null}">
       <rxui:RoutedViewHost.DefaultContent>
@@ -50,4 +72,5 @@
       <TextBlock Text="{Binding Router.NavigationStack.Count}" />
     </StackPanel>
   </Grid>
+  </DockPanel>
 </Window>
