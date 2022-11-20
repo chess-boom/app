@@ -32,11 +32,17 @@
         Background="Black">
         <Menu Background="Black">
               <!-- <Image Source="Assets/Icons/favicon.ico"/> -->
-            <MenuItem Header="ANALYSIS" FontSize="25">
-                <MenuItem Header="Template 1" Command="{Binding GoTemplate1}"/>
-                <MenuItem Header="Template 2" Command="{Binding GoTemplate1}"/>
+            <MenuItem Header="GAME ANALYSIS" FontSize="25">
+                <MenuItem Header="Game List" Command="{Binding GoTemplate1}"/>
+                <MenuItem Header="Analysis Breakdown" Command="{Binding GoTemplate1}"/>
                 <MenuItem Header="Template 3" Command="{Binding GoTemplate1}"/>
                 <MenuItem Header="Template 4" Command="{Binding GoTemplate1}"/>
+            </MenuItem>
+            <MenuItem Header="VARIANT ANALYSIS" FontSize="25">
+                <MenuItem Header="Variant 1" Command="{Binding GoTemplate1}"/>
+                <MenuItem Header="Variant 2" Command="{Binding GoTemplate1}"/>
+                <MenuItem Header="Variant 3" Command="{Binding GoTemplate1}"/>
+                <MenuItem Header="Variant 4" Command="{Binding GoTemplate1}"/>
             </MenuItem>
             <MenuItem Header="TUTORIALS" FontSize="25">
                 <MenuItem Header="Beginner" Command="{Binding GoTemplate1}"/>
