@@ -4,9 +4,11 @@ using Avalonia.ReactiveUI;
 using ChessBoom.Models.Game;
 using ChessBoom.ViewModels;
 using ReactiveUI;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ChessBoom;
 
+[ExcludeFromCodeCoverage]
 public class TutorialView : ReactiveUserControl<DashboardViewModel>
 {
     public TutorialView()

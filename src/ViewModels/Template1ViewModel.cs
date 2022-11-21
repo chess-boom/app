@@ -1,8 +1,10 @@
 using System;
 using ReactiveUI;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ChessBoom.ViewModels;
 
+[ExcludeFromCodeCoverage]
 public class Template1ViewModel : ReactiveObject, IRoutableViewModel
 {
     // Reference to IScreen that owns the routable view model.
