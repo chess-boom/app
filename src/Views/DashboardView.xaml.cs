@@ -16,7 +16,7 @@ public class DashboardView : ReactiveUserControl<DashboardViewModel>
         this.WhenActivated(_ => { });
         AvaloniaXamlLoader.Load(this);
     }
-        
+
     public void OnClickGameAnalysis(object? sender, RoutedEventArgs e)
     {
         System.Console.WriteLine("Game Analysis clicked");
