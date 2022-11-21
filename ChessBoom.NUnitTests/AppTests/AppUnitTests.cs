@@ -2,28 +2,29 @@ using NUnit.Framework;
 using ChessBoom;
 using System.IO;
 
-namespace ChessBoom.NUnitTests;
-
-public class AppUnitTests
+namespace ChessBoom.NUnitTests
 {
-    private App app = null!;
-
-    [SetUp]
-    public void Setup()
+    public class AppUnitTests
     {
-        app = new App();
-    }
+        private App app = null!;
 
-    /// <summary>
-    /// Test the current working directory
-    /// </summary>
-    [Test]
-    public void WorkingDirectoryTest()
-    {
-        App.SetWorkingDirectory();
-        string directory = new DirectoryInfo(Directory.GetCurrentDirectory()).Name;
+        [SetUp]
+        public void Setup()
+        {
+            app = new App();
+        }
 
-        // ChessBoom.NUnitTests and src are at the same hierarchy level
-        Assert.AreEqual("ChessBoom.NUnitTests", directory);
+        /// <summary>
+        /// Test the current working directory
+        /// </summary>
+        [Test]
+        public void WorkingDirectoryTest()
+        {
+            App.SetWorkingDirectory();
+            string directory = new DirectoryInfo(Directory.GetCurrentDirectory()).Name;
+
+            // ChessBoom.NUnitTests and src are at the same hierarchy level
+            Assert.AreEqual("ChessBoom.NUnitTests", directory);
+        }
     }
 }
