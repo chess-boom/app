@@ -8,8 +8,7 @@
         xmlns:views="clr-namespace:ChessBoom.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="ChessBoom.Views.MainWindow"
-        Title="ChessBoom"
-        >
+        Title="ChessBoom">
   <Design.DataContext>
     <viewModels:MainWindowViewModel />
   </Design.DataContext>
@@ -33,21 +32,21 @@
         <Menu Background="Black">
               <!-- <Image Source="Assets/Icons/favicon.ico"/> -->
             <MenuItem Header="GAME ANALYSIS" FontSize="25">
-                <MenuItem Header="Game List" Command="{Binding GoTemplate1}"/>
-                <MenuItem Header="Analysis Breakdown" Command="{Binding GoTemplate1}"/>
-                <MenuItem Header="Template 3" Command="{Binding GoTemplate1}"/>
-                <MenuItem Header="Template 4" Command="{Binding GoTemplate1}"/>
+                <MenuItem Header="Game List" Command="{Binding GoTemplate}"/>
+                <MenuItem Header="Analysis Breakdown" Command="{Binding GoTemplate}"/>
+                <MenuItem Header="Template 3" Command="{Binding GoTemplate}"/>
+                <MenuItem Header="Template 4" Command="{Binding GoTemplate}"/>
             </MenuItem>
             <MenuItem Header="VARIANT ANALYSIS" FontSize="25">
-                <MenuItem Header="Variant 1" Command="{Binding GoTemplate1}"/>
-                <MenuItem Header="Variant 2" Command="{Binding GoTemplate1}"/>
-                <MenuItem Header="Variant 3" Command="{Binding GoTemplate1}"/>
-                <MenuItem Header="Variant 4" Command="{Binding GoTemplate1}"/>
+                <MenuItem Header="Variant 1" Command="{Binding GoTemplate}"/>
+                <MenuItem Header="Variant 2" Command="{Binding GoTemplate}"/>
+                <MenuItem Header="Variant 3" Command="{Binding GoTemplate}"/>
+                <MenuItem Header="Variant 4" Command="{Binding GoTemplate}"/>
             </MenuItem>
             <MenuItem Header="TUTORIALS" FontSize="25">
-                <MenuItem Header="Beginner" Command="{Binding GoTemplate1}"/>
-                <MenuItem Header="Intermediate" Command="{Binding GoTemplate1}"/>
-                <MenuItem Header="Expert" Command="{Binding GoTemplate1}"/>
+                <MenuItem Header="Beginner" Command="{Binding GoTemplate}"/>
+                <MenuItem Header="Intermediate" Command="{Binding GoTemplate}"/>
+                <MenuItem Header="Expert" Command="{Binding GoTemplate}"/>
             </MenuItem>
         </Menu>
       </Border>

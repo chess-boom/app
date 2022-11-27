@@ -1,17 +1,15 @@
-using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using Avalonia.ReactiveUI;
-using ChessBoom.Models.Game;
-using ChessBoom.ViewModels;
 using ReactiveUI;
 using System.Diagnostics.CodeAnalysis;
+using Avalonia.ReactiveUI;
+using ChessBoom.ViewModels;
 
 namespace ChessBoom.Views;
 
 [ExcludeFromCodeCoverage]
-public class Template1View : ReactiveUserControl<Template1ViewModel>
+public partial class DashboardView : ReactiveUserControl<DashboardViewModel>
 {
-    public Template1View()
+    public DashboardView()
     {
         this.WhenActivated(_ => { });
         AvaloniaXamlLoader.Load(this);

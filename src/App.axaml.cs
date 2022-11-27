@@ -23,7 +23,7 @@ public class App : Application
     {
         var assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         const string getSrcFromAssembly = "../../../..";
-        if (assemblyPath != null)
+        if (assemblyPath is not null)
         {
             Directory.SetCurrentDirectory(assemblyPath + getSrcFromAssembly);
         }

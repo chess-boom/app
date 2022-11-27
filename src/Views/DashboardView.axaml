@@ -1,9 +1,9 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:viewModels="clr-namespace:ChessBoom.ViewModels"
-             x:Class="ChessBoom.Views.DashboardView"
-             >
+             x:Class="ChessBoom.Views.DashboardView">
     <Design.DataContext>
+        <!-- ReSharper disable once Xaml.ConstructorWarning -->
         <viewModels:DashboardViewModel />
     </Design.DataContext>
     <StackPanel
@@ -12,37 +12,37 @@
         <!-- TODO Icon-->
 
         <!-- Welcome Message -->
-        <TextBlock Text="{Binding m_greeting}" FontSize="50"
+        <TextBlock Text="{Binding m_greeting}"
+                   FontSize="50"
                    HorizontalAlignment="Center" />
         <!--Button Selection-->
         <Grid ColumnDefinitions="Auto, Auto, Auto" HorizontalAlignment="Center">
             <!--TODO Make spacing responsive-->
             <Button
-                    Grid.Column="0"
-                    Margin="25"
-                    Command="{Binding GoTutorial}"
-                    >
+                Grid.Column="0"
+                Margin="25"
+                Command="{Binding OnClickGameAnalysis}">
                 <StackPanel>
                     <Label Content="Game Analysis" FontSize="50" HorizontalAlignment="Center" />
-                    <!-- <Image Source="..\Assets\Images\Game.png" /> -->
+                    <Image Source="..\Assets\Images\Game.png" />
                 </StackPanel>
             </Button>
             <Button
-                    Grid.Column="1"
-                    Margin="25"
-                    Click="OnClickVariantGameAnalysis">
+                Grid.Column="1"
+                Margin="25"
+                Command="{Binding OnClickVariantGameAnalysis}">
                 <StackPanel>
                     <Label Content="Variant Analysis" FontSize="50" HorizontalAlignment="Center" />
-                    <!-- <Image Source="..\Assets\Images\Variant.png" /> -->
+                    <Image Source="..\Assets\Images\Variant.png" />
                 </StackPanel>
             </Button>
             <Button
-                    Grid.Column="2"
-                    Margin="25"
-                    Click="OnClickTutorial">
+                Grid.Column="2"
+                Margin="25"
+                Command="{Binding OnClickTutorial}">
                 <StackPanel>
                     <Label Content="Tutorials" FontSize="50" HorizontalAlignment="Center" />
-                    <!-- <Image Source="..\Assets\Images\Tutorial.png" /> -->
+                    <Image Source="..\Assets\Images\Tutorial.png" />
                 </StackPanel>
             </Button>
         </Grid>

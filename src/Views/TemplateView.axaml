@@ -2,11 +2,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:viewModels="clr-namespace:ChessBoom.ViewModels"
              xmlns:views="clr-namespace:ChessBoom.Views"
-             x:Class="ChessBoom.Views.Template1View">
+             x:Class="ChessBoom.Views.TemplateView">
     <Design.DataContext>
-        <viewModels:Template1ViewModel />
+        <viewModels:TemplateViewModel />
     </Design.DataContext>
     <StackPanel>
-        <Label Content="Template1" FontSize="50" HorizontalAlignment="Center" />
+        <Label Content="Template" FontSize="50" HorizontalAlignment="Center" />
     </StackPanel>
 </UserControl>

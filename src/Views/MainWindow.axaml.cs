@@ -7,7 +7,7 @@ using ReactiveUI;
 namespace ChessBoom.Views;
 
 [ExcludeFromCodeCoverage]
-public class MainWindow : ReactiveWindow<MainWindowViewModel>
+public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
 {
     public MainWindow()
     {

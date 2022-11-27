@@ -1,8 +1,9 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:viewModels="clr-namespace:ChessBoom.ViewModels"
-             x:Class="ChessBoom.TutorialView">
+             x:Class="ChessBoom.Views.TutorialView">
     <Design.DataContext>
+        <!-- ReSharper disable once Xaml.ConstructorWarning -->
         <viewModels:TutorialViewModel />
     </Design.DataContext>
     <StackPanel>

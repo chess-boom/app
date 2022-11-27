@@ -6,12 +6,12 @@ using ChessBoom.ViewModels;
 using ReactiveUI;
 using System.Diagnostics.CodeAnalysis;
 
-namespace ChessBoom;
+namespace ChessBoom.Views;
 
 [ExcludeFromCodeCoverage]
-public class TutorialView : ReactiveUserControl<DashboardViewModel>
+public partial class TemplateView : ReactiveUserControl<TemplateViewModel>
 {
-    public TutorialView()
+    public TemplateView()
     {
         this.WhenActivated(_ => { });
         AvaloniaXamlLoader.Load(this);

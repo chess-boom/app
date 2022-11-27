@@ -9,11 +9,11 @@ public class MainWindowViewModel : ReactiveObject, IScreen
 {
     // The Router associated with this Screen.
     // Required by the IScreen interface.
-    public RoutingState Router { get; } = new RoutingState();
+    public RoutingState Router { get; } = new();
 
     internal ReactiveCommand<Unit, IRoutableViewModel> GoHome { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoTutorial { get; }
-    internal ReactiveCommand<Unit, IRoutableViewModel> GoTemplate1 { get; }
+    internal ReactiveCommand<Unit, IRoutableViewModel> GoTemplate { get; }
 
     // The command that navigates a user back.
     public ReactiveCommand<Unit, Unit> GoBack => Router.NavigateBack;
@@ -33,8 +33,8 @@ public class MainWindowViewModel : ReactiveObject, IScreen
         GoTutorial = ReactiveCommand.CreateFromObservable(
             () => Router.Navigate.Execute(new TutorialViewModel(this))
         );
-        GoTemplate1 = ReactiveCommand.CreateFromObservable(
-            () => Router.Navigate.Execute(new Template1ViewModel(this))
+        GoTemplate = ReactiveCommand.CreateFromObservable(
+            () => Router.Navigate.Execute(new TemplateViewModel(this))
         );
     }
 }

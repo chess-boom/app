@@ -1,19 +1,30 @@
-using System;
-using System.Reactive;
+using ChessBoom.Models.Game;
 using ReactiveUI;
 
 namespace ChessBoom.ViewModels;
 
-public class DashboardViewModel : MainWindowViewModel, IRoutableViewModel
+public class DashboardViewModel : BaseViewModel
 {
-    // The Router associated with this Screen.
-    // Required by the IScreen interface.
+    public DashboardViewModel(IScreen hostScreen) : base(hostScreen) { }
 
-    public IScreen HostScreen { get; }
-    public string? UrlPathSegment { get; } = Guid.NewGuid().ToString()[..5];
+    protected static string m_greeting => "Welcome to Chess Boom!";
 
-    protected internal DashboardViewModel(IScreen hostScreen)
+    public static void OnClickGameAnalysis()
     {
-        HostScreen = hostScreen;
+        System.Console.WriteLine("Game Analysis clicked");
+        var game = new Game();
+        System.Console.WriteLine("Game Analysis done");
+    }
+
+    public static void OnClickVariantGameAnalysis()
+    {
+        System.Console.WriteLine("Variant Game Analysis clicked");
+        System.Console.WriteLine("variant Game Analysis done");
+    }
+
+    public static void OnClickTutorial()
+    {
+        System.Console.WriteLine("Tutorial clicked");
+        System.Console.WriteLine("Tutorial done");
     }
 }
