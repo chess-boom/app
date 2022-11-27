@@ -20,7 +20,7 @@ namespace ChessBoom.NUnitTests
         [Test]
         public void WorkingDirectoryTest()
         {
-            app.SetWorkingDirectory();
+            App.SetWorkingDirectory();
             string directory = new DirectoryInfo(Directory.GetCurrentDirectory()).Name;
 
             // ChessBoom.NUnitTests and src are at the same hierarchy level
