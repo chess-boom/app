@@ -38,6 +38,7 @@ public class Pawn : Piece
         {
             movementSquares.Add(standardMove);
         }
+
         if (GameHelpers.IsOnBoard(standardMove)
             && GameHelpers.IsOnBoard(doubleMove)
             && (m_board.GetPiece(standardMove) is null)
@@ -49,6 +50,7 @@ public class Pawn : Piece
                 movementSquares.Add(doubleMove);
             }
         }
+
         var occupant = m_board.GetPiece(captureLeft);
         if (GameHelpers.IsOnBoard(captureLeft)
             && ((occupant is not null) && (occupant.GetPlayer() == GameHelpers.GetOpponent(m_owner)))
@@ -56,6 +58,7 @@ public class Pawn : Piece
         {
             movementSquares.Add(captureLeft);
         }
+
         occupant = m_board.GetPiece(captureRight);
         if (GameHelpers.IsOnBoard(captureRight)
             && ((occupant is not null) && (occupant.GetPlayer() == GameHelpers.GetOpponent(m_owner)))
@@ -96,6 +99,7 @@ public class Pawn : Piece
                     // The captured piece must be 1 tile above than the capture square
                     captureCoordinate = GameHelpers.AddVector(captureCoordinate, (0, 1));
                 }
+
                 m_board.Capture(this, captureCoordinate);
             }
 
@@ -129,7 +133,8 @@ public class Pawn : Piece
         }
         else
         {
-            throw new ArgumentException($"Error. Piece {ToString()} on {GameHelpers.GetSquareFromCoordinate(GetCoordinates())} is unable to move to {GameHelpers.GetSquareFromCoordinate(coordinate)}!");
+            throw new ArgumentException(
+                $"Error. Piece {ToString()} on {GameHelpers.GetSquareFromCoordinate(GetCoordinates())} is unable to move to {GameHelpers.GetSquareFromCoordinate(coordinate)}!");
         }
     }
 

@@ -16,57 +16,63 @@ public class Board
     /// </summary>
     protected static readonly Dictionary<char, Func<Board, Player, (int, int), Piece>> k_pieceConstructor = new()
     {
-        {'K', (board, player, coordinate) => new King(board, player, coordinate)},
-        {'Q', (board, player, coordinate) => new Queen(board, player, coordinate)},
-        {'R', (board, player, coordinate) => new Rook(board, player, coordinate)},
-        {'N', (board, player, coordinate) => new Knight(board, player, coordinate)},
-        {'B', (board, player, coordinate) => new Bishop(board, player, coordinate)},
-        {'P', (board, player, coordinate) => new Pawn(board, player, coordinate)}
+        { 'K', (board, player, coordinate) => new King(board, player, coordinate) },
+        { 'Q', (board, player, coordinate) => new Queen(board, player, coordinate) },
+        { 'R', (board, player, coordinate) => new Rook(board, player, coordinate) },
+        { 'N', (board, player, coordinate) => new Knight(board, player, coordinate) },
+        { 'B', (board, player, coordinate) => new Bishop(board, player, coordinate) },
+        { 'P', (board, player, coordinate) => new Pawn(board, player, coordinate) }
     };
 
     protected static readonly char k_noCastling = '-';
 
     protected static readonly Dictionary<char, Tuple<Player?, Castling?>> k_FENToCastling = new()
     {
-        {'K', new Tuple<Player?, Castling?>(Player.White, Castling.Kingside)},
-        {'Q', new Tuple<Player?, Castling?>(Player.White, Castling.Queenside)},
-        {'k', new Tuple<Player?, Castling?>(Player.Black, Castling.Kingside)},
-        {'q', new Tuple<Player?, Castling?>(Player.Black, Castling.Queenside)},
-        {k_noCastling, new Tuple<Player?, Castling?>(null, null)}
+        { 'K', new Tuple<Player?, Castling?>(Player.White, Castling.Kingside) },
+        { 'Q', new Tuple<Player?, Castling?>(Player.White, Castling.Queenside) },
+        { 'k', new Tuple<Player?, Castling?>(Player.Black, Castling.Kingside) },
+        { 'q', new Tuple<Player?, Castling?>(Player.Black, Castling.Queenside) },
+        { k_noCastling, new Tuple<Player?, Castling?>(null, null) }
     };
 
     protected static readonly Dictionary<Tuple<Player, Castling>, char> k_castlingToFEN = new()
     {
-        {new Tuple<Player, Castling>(Player.White, Castling.Kingside), 'K'},
-        {new Tuple<Player, Castling>(Player.White, Castling.Queenside), 'Q'},
-        {new Tuple<Player, Castling>(Player.Black, Castling.Kingside), 'k'},
-        {new Tuple<Player, Castling>(Player.Black, Castling.Queenside), 'q'}
+        { new Tuple<Player, Castling>(Player.White, Castling.Kingside), 'K' },
+        { new Tuple<Player, Castling>(Player.White, Castling.Queenside), 'Q' },
+        { new Tuple<Player, Castling>(Player.Black, Castling.Kingside), 'k' },
+        { new Tuple<Player, Castling>(Player.Black, Castling.Queenside), 'q' }
     };
 
     /// <summary>
     /// The next player to move
     /// </summary>
     public Player m_playerToPlay { get; set; } = Player.White;
+
     /// <summary>
     /// The ability for each player to castle
     /// </summary>
     private Dictionary<Player, List<Castling>> m_castling { get; set; }
+
     /// <summary>
     /// The square on which en passant may be played (if any)
     /// </summary>
     public (int, int)? m_enPassant { get; set; }
+
     /// <summary>
     /// The number of half-moves since the last capture or pawn advance
     /// </summary>
     public int m_halfmoveClock { get; set; }
+
     /// <summary>
     /// The number of full moves (starting at 1, incremented after Black moves)
     /// </summary>
     public int m_fullmoveCount { get; set; }
+
     /// <summary>
     /// The list of chess pieces
     /// </summary>
     public List<Piece> m_pieces { get; set; }
+
     /// <summary>
     /// The game that contains this board
     /// </summary>
@@ -103,6 +109,7 @@ public class Board
                 return piece;
             }
         }
+
         return null;
     }
 
@@ -115,7 +122,8 @@ public class Board
     {
         if (!GameHelpers.IsOnBoard(coordinate))
         {
-            throw new ArgumentException($"Coordinate ({coordinate.Item1}, {coordinate.Item2}) is an invalid coordinate (x, y).");
+            throw new ArgumentException(
+                $"Coordinate ({coordinate.Item1}, {coordinate.Item2}) is an invalid coordinate (x, y).");
         }
 
         var player = Char.IsUpper(pieceType) ? Player.White : Player.Black;
@@ -159,8 +167,8 @@ public class Board
                     }
                     catch (ArgumentException)
                     {
-
                     }
+
                     col++;
                 }
             }
@@ -258,8 +266,8 @@ public class Board
     {
         m_castling = new Dictionary<Player, List<Castling>>()
         {
-            {Player.White, new List<Castling>()},
-            {Player.Black, new List<Castling>()},
+            { Player.White, new List<Castling>() },
+            { Player.Black, new List<Castling>() },
         };
 
         if (castling.Length < 1)
@@ -285,14 +293,17 @@ public class Board
                 {
                     throw new ArgumentException($"Duplicate character \'{c}\' in FEN file");
                 }
+
                 m_castling[player.Value].Add(side.Value);
             }
             else
             {
                 if (castling.Length > 1)
                 {
-                    throw new ArgumentException($"Character \'{k_noCastling}\' must exclusively represent null castling rights in FEN file");
+                    throw new ArgumentException(
+                        $"Character \'{k_noCastling}\' must exclusively represent null castling rights in FEN file");
                 }
+
                 break;
             }
         }
@@ -312,10 +323,12 @@ public class Board
                 castlingString.Append(c);
             }
         }
+
         if (castlingString.Length == 0)
         {
             return k_noCastling.ToString();
         }
+
         return castlingString.ToString();
     }
 
@@ -368,7 +381,9 @@ public class Board
         try
         {
             pawn.Destroy();
-            var promotionPiece = (pawn.GetPlayer() == Player.White) ? Char.ToUpper(RequestPromotionPiece()) : Char.ToLower(RequestPromotionPiece());
+            var promotionPiece = (pawn.GetPlayer() == Player.White)
+                ? Char.ToUpper(RequestPromotionPiece())
+                : Char.ToLower(RequestPromotionPiece());
             CreatePiece(promotionPiece, pawn.GetCoordinates());
         }
         catch (ArgumentException)
@@ -406,6 +421,7 @@ public class Board
                     output += piece.ToString();
                 }
             }
+
             output += "\n";
         }
 

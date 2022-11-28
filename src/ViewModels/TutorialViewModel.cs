@@ -6,5 +6,7 @@ namespace ChessBoom.ViewModels;
 [ExcludeFromCodeCoverage]
 public class TutorialViewModel : BaseViewModel
 {
-    public TutorialViewModel(IScreen hostScreen) : base(hostScreen) { }
+    public TutorialViewModel(IScreen hostScreen) : base(hostScreen)
+    {
+    }
 }

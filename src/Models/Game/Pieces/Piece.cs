@@ -61,12 +61,14 @@ public abstract class Piece
             {
                 m_board.Capture(this, coordinate);
             }
+
             m_column = coordinate.Item1;
             m_row = coordinate.Item2;
         }
         else
         {
-            throw new ArgumentException($"Error. Piece {ToString()} on {GameHelpers.GetSquareFromCoordinate(GetCoordinates())} is unable to move to {GameHelpers.GetSquareFromCoordinate(coordinate)}!");
+            throw new ArgumentException(
+                $"Error. Piece {ToString()} on {GameHelpers.GetSquareFromCoordinate(GetCoordinates())} is unable to move to {GameHelpers.GetSquareFromCoordinate(coordinate)}!");
         }
     }
 
@@ -81,6 +83,7 @@ public abstract class Piece
         {
             throw new ArgumentException($"Coordinate {coordinate} is not on the board!");
         }
+
         if (m_board.m_enPassant is not null)
         {
             m_board.m_enPassant = null;
@@ -90,6 +93,7 @@ public abstract class Piece
         {
             m_board.Capture(this, coordinate);
         }
+
         m_column = coordinate.Item1;
         m_row = coordinate.Item2;
     }

@@ -6,5 +6,7 @@ namespace ChessBoom.ViewModels;
 [ExcludeFromCodeCoverage]
 public class TemplateViewModel : BaseViewModel
 {
-    public TemplateViewModel(IScreen hostScreen) : base(hostScreen) { }
+    public TemplateViewModel(IScreen hostScreen) : base(hostScreen)
+    {
+    }
 }

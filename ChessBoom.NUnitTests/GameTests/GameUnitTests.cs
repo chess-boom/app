@@ -513,107 +513,107 @@ public class GameUnitTests
         var moveList = new List<(Piece, string)>()
         {
             (whitePawn, "e4"),
-            (blackPawn, "e5"),      // 1
+            (blackPawn, "e5"), // 1
             (whiteQueen, "h5"),
-            (blackQueen, "h4"),     // 2
+            (blackQueen, "h4"), // 2
             (whiteQueen, "h6"),
-            (blackKnight, "e7"),    // 3
+            (blackKnight, "e7"), // 3
             (whiteQueen, "g6"),
-            (blackKnight, "g8"),    // 4
+            (blackKnight, "g8"), // 4
             (whiteQueen, "f6"),
-            (blackKnight, "e7"),    // 5
+            (blackKnight, "e7"), // 5
             (whiteQueen, "d6"),
-            (blackKnight, "g8"),    // 6
+            (blackKnight, "g8"), // 6
             (whiteQueen, "c6"),
-            (blackKnight, "e7"),    // 7
+            (blackKnight, "e7"), // 7
             (whiteQueen, "b6"),
-            (blackKnight, "g8"),    // 8
+            (blackKnight, "g8"), // 8
             (whiteQueen, "a6"),
-            (blackKnight, "e7"),    // 9
+            (blackKnight, "e7"), // 9
             (whiteQueen, "a5"),
-            (blackKnight, "g8"),    // 10
+            (blackKnight, "g8"), // 10
             (whiteQueen, "b5"),
-            (blackKnight, "e7"),    // 11
+            (blackKnight, "e7"), // 11
             (whiteQueen, "c5"),
-            (blackKnight, "g8"),    // 12
+            (blackKnight, "g8"), // 12
             (whiteQueen, "d5"),
-            (blackKnight, "e7"),    // 13
+            (blackKnight, "e7"), // 13
             (whiteQueen, "d4"),
-            (blackKnight, "g8"),    // 14
+            (blackKnight, "g8"), // 14
             (whiteQueen, "c4"),
-            (blackKnight, "e7"),    // 15
+            (blackKnight, "e7"), // 15
             (whiteQueen, "b4"),
-            (blackKnight, "g8"),    // 16
+            (blackKnight, "g8"), // 16
             (whiteQueen, "a4"),
-            (blackKnight, "e7"),    // 17
+            (blackKnight, "e7"), // 17
             (whiteQueen, "a3"),
-            (blackKnight, "g8"),    // 18
+            (blackKnight, "g8"), // 18
             (whiteQueen, "b3"),
-            (blackKnight, "e7"),    // 19
+            (blackKnight, "e7"), // 19
             (whiteQueen, "c3"),
-            (blackKnight, "g8"),    // 20
+            (blackKnight, "g8"), // 20
             (whiteQueen, "d3"),
-            (blackKnight, "e7"),    // 21
+            (blackKnight, "e7"), // 21
             (whiteQueen, "e3"),
-            (blackKnight, "g8"),    // 22
+            (blackKnight, "g8"), // 22
             (whiteQueen, "f3"),
-            (blackKnight, "e7"),    // 23
+            (blackKnight, "e7"), // 23
             (whiteQueen, "g3"),
-            (blackKnight, "g8"),    // 24
+            (blackKnight, "g8"), // 24
             (whiteQueen, "h3"),
-            (blackKnight, "e7"),    // 25
+            (blackKnight, "e7"), // 25
             (whiteQueen, "g4"),
-            (blackKnight, "g8"),    // 26
+            (blackKnight, "g8"), // 26
             (whiteQueen, "f4"),
-            (blackKnight, "e7"),    // 27
+            (blackKnight, "e7"), // 27
             (whiteQueen, "f5"),
-            (blackKnight, "g8"),    // 28
+            (blackKnight, "g8"), // 28
             (whiteQueen, "g5"),
-            (blackQueen, "h5"),     // 29
+            (blackQueen, "h5"), // 29
             (whiteQueen, "h6"),
-            (blackKnight, "e7"),    // 30
+            (blackKnight, "e7"), // 30
             (whiteQueen, "g6"),
-            (blackKnight, "g8"),    // 31
+            (blackKnight, "g8"), // 31
             (whiteQueen, "f6"),
-            (blackKnight, "e7"),    // 32
+            (blackKnight, "e7"), // 32
             (whiteQueen, "d6"),
-            (blackKnight, "g8"),    // 33
+            (blackKnight, "g8"), // 33
             (whiteQueen, "c6"),
-            (blackKnight, "e7"),    // 34
+            (blackKnight, "e7"), // 34
             (whiteQueen, "b6"),
-            (blackKnight, "g8"),    // 35
+            (blackKnight, "g8"), // 35
             (whiteQueen, "a6"),
-            (blackKnight, "e7"),    // 36
+            (blackKnight, "e7"), // 36
             (whiteQueen, "a5"),
-            (blackKnight, "g8"),    // 37
+            (blackKnight, "g8"), // 37
             (whiteQueen, "b5"),
-            (blackKnight, "e7"),    // 38
+            (blackKnight, "e7"), // 38
             (whiteQueen, "c5"),
-            (blackKnight, "g8"),    // 39
+            (blackKnight, "g8"), // 39
             (whiteQueen, "d5"),
-            (blackKnight, "e7"),    // 40
+            (blackKnight, "e7"), // 40
             (whiteQueen, "d4"),
-            (blackKnight, "g8"),    // 41
+            (blackKnight, "g8"), // 41
             (whiteQueen, "c4"),
-            (blackKnight, "e7"),    // 42
+            (blackKnight, "e7"), // 42
             (whiteQueen, "b4"),
-            (blackKnight, "g8"),    // 43
+            (blackKnight, "g8"), // 43
             (whiteQueen, "a4"),
-            (blackKnight, "e7"),    // 44
+            (blackKnight, "e7"), // 44
             (whiteQueen, "a3"),
-            (blackKnight, "g8"),    // 45
+            (blackKnight, "g8"), // 45
             (whiteQueen, "b3"),
-            (blackKnight, "e7"),    // 46
+            (blackKnight, "e7"), // 46
             (whiteQueen, "c3"),
-            (blackKnight, "g8"),    // 47
+            (blackKnight, "g8"), // 47
             (whiteQueen, "d3"),
-            (blackKnight, "e7"),    // 48
+            (blackKnight, "e7"), // 48
             (whiteQueen, "e3"),
-            (blackKnight, "g8"),    // 49
+            (blackKnight, "g8"), // 49
             (whiteQueen, "f3"),
-            (blackKnight, "e7"),    // 50
+            (blackKnight, "e7"), // 50
             (whiteQueen, "g3"),
-            (blackKnight, "g8")     // 51
+            (blackKnight, "g8") // 51
         };
 
         // A 'for' loop is preferred over 'foreach' since last move should be avoided

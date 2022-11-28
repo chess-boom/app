@@ -9,6 +9,7 @@ public class Rook : Piece
     /// Flag to keep track of if the king has moved
     /// </summary>
     private bool m_hasMoved;
+
     public Rook(Board board, Player player, (int, int) coordinate) : base(board, player, coordinate)
     {
         m_hasMoved = false;
@@ -23,6 +24,7 @@ public class Rook : Piece
             {
                 m_board.RemoveCastling(m_owner, Castling.Kingside);
             }
+
             var queensideRookSquare = m_board.GetRuleset().GetInitialRookSquare(m_owner, Castling.Queenside);
             if (m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(queensideRookSquare)) == this)
             {
@@ -34,6 +36,7 @@ public class Rook : Piece
             Console.WriteLine("Error! Castling rights removal failed.");
             return;
         }
+
         base.Destroy();
     }
 
@@ -66,6 +69,7 @@ public class Rook : Piece
         {
             return;
         }
+
         try
         {
             var kingsideRookSquare = m_board.GetRuleset().GetInitialRookSquare(m_owner, Castling.Kingside);
@@ -73,6 +77,7 @@ public class Rook : Piece
             {
                 m_board.RemoveCastling(m_owner, Castling.Kingside);
             }
+
             var queensideRookSquare = m_board.GetRuleset().GetInitialRookSquare(m_owner, Castling.Queenside);
             if (m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(queensideRookSquare)) == this)
             {

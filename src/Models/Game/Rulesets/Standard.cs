@@ -7,6 +7,7 @@ namespace ChessBoom.Models.Game.Rulesets;
 public class Standard : Ruleset
 {
     private static readonly Standard _instance = new();
+
     private Standard()
     {
     }
@@ -51,6 +52,7 @@ public class Standard : Ruleset
                 return true;
             }
         }
+
         return false;
     }
 
@@ -60,6 +62,7 @@ public class Standard : Ruleset
         {
             return false;
         }
+
         var playerRow = (player == Player.White) ? "1" : "8";
         var rookCol = (side == Castling.Kingside) ? "h" : "a";
         Piece? king;
@@ -110,6 +113,7 @@ public class Standard : Ruleset
                 // An opponent's piece can see a square between the king and the rook (castling through check)
                 return false;
             }
+
             if (board.GetPiece(coordinate) is not null)
             {
                 // A piece exists between the king and the rook
@@ -228,6 +232,7 @@ public class Standard : Ruleset
                     break;
                 }
             }
+
             if (legalMoveExists)
             {
                 break;

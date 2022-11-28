@@ -13,6 +13,7 @@ public static class GameHelpers
     /// The names of the columns of the chess board are here defined
     /// </summary>
     public static readonly string[] k_boardColumnNames = { "a", "b", "c", "d", "e", "f", "g", "h" };
+
     /// <summary>
     /// The names of the rows of the chess board are here defined
     /// </summary>
@@ -22,6 +23,7 @@ public static class GameHelpers
     /// The width of the chess board is here defined
     /// </summary>
     public static readonly int k_boardWidth = 8;
+
     /// <summary>
     /// The height of the chess board is here defined
     /// </summary>
@@ -35,7 +37,8 @@ public static class GameHelpers
     /// <returns>The corresponding board square as a string</returns>
     public static string GetSquareFromCoordinate((int row, int col) coordinate)
     {
-        if (coordinate.Item1 < 0 || coordinate.Item1 >= k_boardHeight || coordinate.Item2 < 0 || coordinate.Item2 >= k_boardHeight)
+        if (coordinate.Item1 < 0 || coordinate.Item1 >= k_boardHeight || coordinate.Item2 < 0 ||
+            coordinate.Item2 >= k_boardHeight)
         {
             throw new ArgumentException($"Coordinate ({coordinate.Item1}, {coordinate.Item2}) is an invalid square");
         }
@@ -66,6 +69,7 @@ public static class GameHelpers
                 break;
             }
         }
+
         if (column == -1)
         {
             throw new ArgumentException($"{square} does not have a proper column coordinate.");
@@ -81,6 +85,7 @@ public static class GameHelpers
                 break;
             }
         }
+
         if (row == -1)
         {
             throw new ArgumentException($"{square} does not have a proper row coordinate.");
@@ -126,6 +131,7 @@ public static class GameHelpers
                 playerPieces.Add(piece);
             }
         }
+
         return playerPieces;
     }
 
@@ -152,6 +158,7 @@ public static class GameHelpers
                 return false;
             }
         }
+
         return false;
     }
 
@@ -177,7 +184,8 @@ public static class GameHelpers
     /// <param name="player">The player considered an "ally"</param>
     /// <param name="startingPosition">The position (not counted) at which the movement begins</param>
     /// <param name="movementVector">The vector that is repeatedly added to the current position</param>
-    public static void GetVectorMovementSquares(ref List<(int, int)> movementSquares, Board board, Player player, (int, int) startingPosition, (int, int) movementVector)
+    public static void GetVectorMovementSquares(ref List<(int, int)> movementSquares, Board board, Player player,
+        (int, int) startingPosition, (int, int) movementVector)
     {
         if (!IsOnBoard(startingPosition))
         {
@@ -210,7 +218,6 @@ public static class GameHelpers
             }
 
             movementSquares.Add((position.Item1, position.Item2));
-        }
-        while (movementFlag);
+        } while (movementFlag);
     }
 }

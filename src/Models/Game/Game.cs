@@ -33,8 +33,10 @@ public enum GameState
     InProgress,
     VictoryWhite,
     VictoryBlack,
+
     // TODO: Implement draw checks
     Draw,
+
     // TODO: Implement game aborting
     Aborted
 }
@@ -48,16 +50,19 @@ struct Move
     /// The notation for kingside castling
     /// </summary>
     public const string k_kingsideCastleNotation = "O-O";
+
     /// <summary>
     /// The notation for kingside castling
     /// </summary>
     public const string k_queensideCastleNotation = "O-O-O";
+
     public Move(Piece piece, string square)
     {
         m_piece = piece;
         m_square = square;
         m_variations = null;
     }
+
     public Piece m_piece { get; }
     public string m_square { get; }
     public List<Move>? m_variations { get; set; }
@@ -69,6 +74,7 @@ struct Move
         {
             m_variations = new List<Move>();
         }
+
         if (!m_variations.Contains(move))
         {
             m_variations.Add(move);
@@ -93,14 +99,17 @@ public class GameplayErrorException : Exception
 {
     public GameplayErrorException()
     {
+        
     }
 
     public GameplayErrorException(string message) : base(message)
     {
+        
     }
 
     public GameplayErrorException(string message, Exception inner) : base(message, inner)
     {
+        
     }
 }
 
@@ -113,18 +122,22 @@ public class Game
     /// The chosen variant for this game
     /// </summary>
     private readonly Variant m_variant = Variant.Standard;
+
     /// <summary>
     /// The chosen ruleset for this game
     /// </summary>
     public Ruleset m_ruleset { get; set; }
+
     /// <summary>
     /// The board created for this game
     /// </summary>
     public Board m_board { get; set; }
+
     /// <summary>
     /// The data structure for all moves and variations
     /// </summary>
     private readonly List<Move> m_moveList;
+
     /// <summary>
     /// Maps repeatable unique board positions to the number of times they have been reached
     /// </summary>
@@ -193,6 +206,7 @@ public class Game
         {
             throw new ArgumentException($"Piece on square {startingSquare} not found!");
         }
+
         MakeMove(piece, destinationSquare);
     }
 
@@ -209,17 +223,21 @@ public class Game
         {
             throw new GameplayErrorException("Game is not in progress! Illegal move.");
         }
+
         if (piece.GetPlayer() != m_board.m_playerToPlay)
         {
-            throw new GameplayErrorException($"Piece {piece} can not move because it is not {piece.GetPlayer()}\'s turn!");
+            throw new GameplayErrorException(
+                $"Piece {piece} can not move because it is not {piece.GetPlayer()}\'s turn!");
         }
+
         m_board.m_halfmoveClock++;
 
         var legacyBoard = CreateBoardFromFEN(this, CreateFENFromBoard(m_board));
 
         if (square is Move.k_kingsideCastleNotation or Move.k_queensideCastleNotation)
         {
-            m_ruleset.Castle(m_board, piece.GetPlayer(), (square == Move.k_kingsideCastleNotation) ? Castling.Kingside : Castling.Queenside);
+            m_ruleset.Castle(m_board, piece.GetPlayer(),
+                (square == Move.k_kingsideCastleNotation) ? Castling.Kingside : Castling.Queenside);
         }
         else
         {
@@ -230,6 +248,7 @@ public class Game
         {
             m_board.m_fullmoveCount++;
         }
+
         m_board.m_playerToPlay = GameHelpers.GetOpponent(m_board.m_playerToPlay);
 
         if (m_ruleset.IsIllegalBoardState(m_board))
@@ -252,6 +271,7 @@ public class Game
         {
             m_visitedPositions.Add(boardPosition, 1);
         }
+
         m_moveList.Add(new Move(piece, square));
 
         m_ruleset.AssessBoardState(this, m_board);
@@ -278,6 +298,7 @@ public class Game
                 return true;
             }
         }
+
         return false;
     }
 
@@ -305,6 +326,7 @@ public class Game
         {
             throw new ArgumentException($"Player \"{fenSplit[1]}\" does not denote a single player.");
         }
+
         try
         {
             board.SetPlayerToPlay(fenSplit[1][0]);
@@ -447,6 +469,7 @@ public class Game
             {
                 return GameHelpers.GetSquareFromCoordinate(board.m_enPassant.Value);
             }
+
             return "-";
         }
         catch (ArgumentException)

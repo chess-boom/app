@@ -8,6 +8,7 @@ public class King : Piece
     /// Flag to keep track of if the king has moved
     /// </summary>
     private bool m_hasMoved;
+
     public King(Board board, Player player, (int, int) coordinate) : base(board, player, coordinate)
     {
         m_hasMoved = false;
@@ -34,6 +35,7 @@ public class King : Piece
             {
                 continue;
             }
+
             var occupant = m_board.GetPiece(coordinate);
             if (occupant is not null && occupant.GetPlayer() == m_owner)
             {
@@ -42,6 +44,7 @@ public class King : Piece
 
             movementSquares.Add(coordinate);
         }
+
         return movementSquares;
     }
 

@@ -30,7 +30,8 @@ public class BoardUnitTests
         _board.CreatePiece('r', (5, 1));
         _board.CreatePiece('R', (7, 7));
 
-        Assert.AreEqual(".......R\n........\n.pq.....\n.pk.....\n.p......\n.p......\n.p...r..\n........\n", _board.ToString());
+        Assert.AreEqual(".......R\n........\n.pq.....\n.pk.....\n.p......\n.p......\n.p...r..\n........\n",
+            _board.ToString());
     }
 
     /// <summary>
@@ -41,29 +42,17 @@ public class BoardUnitTests
     {
         //Out of bounds negative
         var exception1 = Assert.Throws<ArgumentException>(
-            delegate
-            {
-                _board.CreatePiece('p', (-1, 1));
-            });
+            delegate { _board.CreatePiece('p', (-1, 1)); });
 
         var exception2 = Assert.Throws<ArgumentException>(
-            delegate
-            {
-                _board.CreatePiece('p', (1, -1));
-            });
+            delegate { _board.CreatePiece('p', (1, -1)); });
 
         //Out of bounds positive (board is 8x8, we index by 0)
         var exception3 = Assert.Throws<ArgumentException>(
-            delegate
-            {
-                _board.CreatePiece('p', (8, 1));
-            });
+            delegate { _board.CreatePiece('p', (8, 1)); });
 
         var exception4 = Assert.Throws<ArgumentException>(
-            delegate
-            {
-                _board.CreatePiece('p', (1, 8));
-            });
+            delegate { _board.CreatePiece('p', (1, 8)); });
 
         //Do not need to do for all messages, validating here is enough
         if (exception1 is not null)
@@ -71,6 +60,7 @@ public class BoardUnitTests
         if (exception2 is not null)
             Assert.AreEqual("Coordinate (1, -1) is an invalid coordinate (x, y).", exception2.Message);
     }
+
     /// <summary>
     /// If an invalid piece, such as 'h' is created, we get an ArgumentException
     /// </summary>
@@ -78,10 +68,7 @@ public class BoardUnitTests
     public void InvalidPieceThrowsBoardCreationTest()
     {
         var exception = Assert.Throws<ArgumentException>(
-            delegate
-            {
-                _board.CreatePiece('h', (1, 1));
-            });
+            delegate { _board.CreatePiece('h', (1, 1)); });
 
         if (exception is not null)
             Assert.AreEqual("Error. h is an invalid piece type.", exception.Message);
@@ -138,46 +125,57 @@ public class BoardUnitTests
         {
             Assert.AreEqual(Player.White, whiteKing.GetPlayer());
         }
+
         if (blackKing is not null)
         {
             Assert.AreEqual(Player.Black, blackKing.GetPlayer());
         }
+
         if (whiteQueen is not null)
         {
             Assert.AreEqual(Player.White, whiteQueen.GetPlayer());
         }
+
         if (blackQueen is not null)
         {
             Assert.AreEqual(Player.Black, blackQueen.GetPlayer());
         }
+
         if (whiteBishop is not null)
         {
             Assert.AreEqual(Player.White, whiteBishop.GetPlayer());
         }
+
         if (blackBishop is not null)
         {
             Assert.AreEqual(Player.Black, blackBishop.GetPlayer());
         }
+
         if (whiteKnight is not null)
         {
             Assert.AreEqual(Player.White, whiteKnight.GetPlayer());
         }
+
         if (blackKnight is not null)
         {
             Assert.AreEqual(Player.Black, blackKnight.GetPlayer());
         }
+
         if (whiteRook is not null)
         {
             Assert.AreEqual(Player.White, whiteRook.GetPlayer());
         }
+
         if (blackRook is not null)
         {
             Assert.AreEqual(Player.Black, blackRook.GetPlayer());
         }
+
         if (whitePawn is not null)
         {
             Assert.AreEqual(Player.White, whitePawn.GetPlayer());
         }
+
         if (blackPawn is not null)
         {
             Assert.AreEqual(Player.Black, blackPawn.GetPlayer());
@@ -214,10 +212,7 @@ public class BoardUnitTests
     public void InvalidPlayingPlayerThrowsTest()
     {
         var exception = Assert.Throws<ArgumentException>(
-            delegate
-            {
-                _board.SetPlayerToPlay('h');
-            });
+            delegate { _board.SetPlayerToPlay('h'); });
 
         if (exception is not null)
             Assert.AreEqual("Player \'h\' is not a valid player character.", exception.Message);
@@ -258,34 +253,19 @@ public class BoardUnitTests
     {
         // Improper character
         var exception1 = Assert.Throws<ArgumentException>(
-            delegate
-            {
-                _board.SetCastling("h");
-            });
+            delegate { _board.SetCastling("h"); });
         // Repeated character
         var exception2 = Assert.Throws<ArgumentException>(
-            delegate
-            {
-                _board.SetCastling("QQ");
-            });
+            delegate { _board.SetCastling("QQ"); });
         // Empty argument
         var exception3 = Assert.Throws<ArgumentException>(
-            delegate
-            {
-                _board.SetCastling("");
-            });
+            delegate { _board.SetCastling(""); });
         // Appended hyphen
         var exception4 = Assert.Throws<ArgumentException>(
-            delegate
-            {
-                _board.SetCastling("KQ-");
-            });
+            delegate { _board.SetCastling("KQ-"); });
         // Prepended hyphen
         var exception5 = Assert.Throws<ArgumentException>(
-            delegate
-            {
-                _board.SetCastling("-KQ");
-            });
+            delegate { _board.SetCastling("-KQ"); });
 
         if (exception1 is not null)
             Assert.AreEqual("Invalid character \'h\' in FEN file", exception1.Message);
@@ -294,8 +274,10 @@ public class BoardUnitTests
         if (exception3 is not null)
             Assert.AreEqual("FEN file must include castling rights", exception3.Message);
         if (exception4 is not null)
-            Assert.AreEqual("Character \'-\' must exclusively represent null castling rights in FEN file", exception4.Message);
+            Assert.AreEqual("Character \'-\' must exclusively represent null castling rights in FEN file",
+                exception4.Message);
         if (exception5 is not null)
-            Assert.AreEqual("Character \'-\' must exclusively represent null castling rights in FEN file", exception5.Message);
+            Assert.AreEqual("Character \'-\' must exclusively represent null castling rights in FEN file",
+                exception5.Message);
     }
 }

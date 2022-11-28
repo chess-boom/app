@@ -9,6 +9,7 @@ public abstract class Ruleset
     /// The number of repetitions for threefold repetition to occur
     /// </summary>
     public const int k_threefoldRepetitionCount = 3;
+
     /// <summary>
     /// Handle a capture by a piece on a specific square according to the ruleset
     /// </summary>

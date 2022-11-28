@@ -17,6 +17,7 @@ public class PieceUnitTests
         _whitePlayer = Player.White;
         _blackPlayer = Player.Black;
     }
+
     /// <summary>
     /// Ensure that a Piece outputs a capital letter of on the White team and a lowercase letter if on the Black team.
     /// </summary>

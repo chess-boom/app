@@ -29,6 +29,7 @@ public class Knight : Piece
             {
                 continue;
             }
+
             var occupant = m_board.GetPiece(coordinate);
             if (occupant is not null && occupant.GetPlayer() == m_owner)
             {
@@ -37,6 +38,7 @@ public class Knight : Piece
 
             movementSquares.Add(coordinate);
         }
+
         return movementSquares;
     }
 

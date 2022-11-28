@@ -36,15 +36,9 @@ public class GameHelpersUnitTests
     public void GetOoBSquareFromCoordinateTest()
     {
         var exception1 = Assert.Throws<ArgumentException>(
-            delegate
-            {
-                GameHelpers.GetSquareFromCoordinate((-1, 0));
-            });
+            delegate { GameHelpers.GetSquareFromCoordinate((-1, 0)); });
         var exception2 = Assert.Throws<ArgumentException>(
-            delegate
-            {
-                GameHelpers.GetSquareFromCoordinate((8, 15));
-            });
+            delegate { GameHelpers.GetSquareFromCoordinate((8, 15)); });
 
         if (exception1 is not null)
             Assert.AreEqual("Coordinate (-1, 0) is an invalid square", exception1.Message);
@@ -83,20 +77,11 @@ public class GameHelpersUnitTests
     public void GetOoBCoordinateFromSquareTest()
     {
         var exception1 = Assert.Throws<ArgumentException>(
-            delegate
-            {
-                GameHelpers.GetCoordinateFromSquare("abc");
-            });
+            delegate { GameHelpers.GetCoordinateFromSquare("abc"); });
         var exception2 = Assert.Throws<ArgumentException>(
-            delegate
-            {
-                GameHelpers.GetCoordinateFromSquare("11");
-            });
+            delegate { GameHelpers.GetCoordinateFromSquare("11"); });
         var exception3 = Assert.Throws<ArgumentException>(
-            delegate
-            {
-                GameHelpers.GetCoordinateFromSquare("bb");
-            });
+            delegate { GameHelpers.GetCoordinateFromSquare("bb"); });
 
         if (exception1 is not null)
             Assert.AreEqual("abc is not properly formatted.", exception1.Message);
