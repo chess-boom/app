@@ -8,6 +8,7 @@
         xmlns:views="clr-namespace:ChessBoom.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="ChessBoom.Views.MainWindow"
+        Icon="/Assets/Icons/favicon.ico"
         Title="ChessBoom">
     <Design.DataContext>
         <viewModels:MainWindowViewModel />
