@@ -4,12 +4,12 @@ namespace ChessBoom.NUnitTests.AppTests;
 
 public class AppUnitTests
 {
-    private App app = null!;
+    private App _app = null!;
 
     [SetUp]
     public void Setup()
     {
-        app = new App();
+        _app = new App();
     }
 
     /// <summary>

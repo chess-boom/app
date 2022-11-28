@@ -124,7 +124,7 @@ public class Pawn : Piece
             m_column = coordinate.Item1;
             m_row = coordinate.Item2;
 
-            if ((m_row == GameHelpers.k_BoardHeight - 1 && m_owner == Player.White)
+            if ((m_row == GameHelpers.k_boardHeight - 1 && m_owner == Player.White)
                 || (m_row == 0 && m_owner == Player.Black))
             {
                 m_board.RequestPromotion(this);

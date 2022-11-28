@@ -140,7 +140,7 @@ public class Board
     public void CreateBoard(string fen)
     {
         string[] pieceSplit = fen.Split('/');
-        for (int row = 0; row < GameHelpers.k_BoardHeight; row++)
+        for (int row = 0; row < GameHelpers.k_boardHeight; row++)
         {
             int col = 0;
 
@@ -154,7 +154,7 @@ public class Board
                 {
                     try
                     {
-                        (int, int) coordinate = (col, (GameHelpers.k_BoardHeight - 1) - row);
+                        (int, int) coordinate = (col, (GameHelpers.k_boardHeight - 1) - row);
                         CreatePiece(piece, coordinate);
                     }
                     catch (ArgumentException)
@@ -396,9 +396,9 @@ public class Board
     {
         string output = "";
 
-        for (int y = GameHelpers.k_BoardHeight - 1; y >= 0; y--)
+        for (int y = GameHelpers.k_boardHeight - 1; y >= 0; y--)
         {
-            for (int x = 0; x < GameHelpers.k_BoardWidth; x++)
+            for (int x = 0; x < GameHelpers.k_boardWidth; x++)
             {
                 Piece? piece = GetPiece((x, y));
                 if (piece is null)

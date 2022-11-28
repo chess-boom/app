@@ -405,10 +405,10 @@ public class Game
     {
         string fen = "";
 
-        for (int row = GameHelpers.k_BoardHeight - 1; row >= 0; row--)
+        for (int row = GameHelpers.k_boardHeight - 1; row >= 0; row--)
         {
             int emptySquareCount = 0;
-            for (int col = 0; col < GameHelpers.k_BoardWidth; col++)
+            for (int col = 0; col < GameHelpers.k_boardWidth; col++)
             {
                 Piece? piece = board.GetPiece((col, row));
                 if (piece is null)

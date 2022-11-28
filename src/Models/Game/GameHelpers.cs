@@ -12,20 +12,20 @@ public static class GameHelpers
     /// <summary>
     /// The names of the columns of the chess board are here defined
     /// </summary>
-    public static readonly string[] k_BoardColumnNames = { "a", "b", "c", "d", "e", "f", "g", "h" };
+    public static readonly string[] k_boardColumnNames = { "a", "b", "c", "d", "e", "f", "g", "h" };
     /// <summary>
     /// The names of the rows of the chess board are here defined
     /// </summary>
-    public static readonly string[] k_BoardRowNames = { "1", "2", "3", "4", "5", "6", "7", "8" };
+    public static readonly string[] k_boardRowNames = { "1", "2", "3", "4", "5", "6", "7", "8" };
 
     /// <summary>
     /// The width of the chess board is here defined
     /// </summary>
-    public static readonly int k_BoardWidth = 8;
+    public static readonly int k_boardWidth = 8;
     /// <summary>
     /// The height of the chess board is here defined
     /// </summary>
-    public static readonly int k_BoardHeight = 8;
+    public static readonly int k_boardHeight = 8;
 
     /// <summary>
     /// The corresponding square is retrieved from its board coordinates
@@ -35,12 +35,12 @@ public static class GameHelpers
     /// <returns>The corresponding board square as a string</returns>
     public static string GetSquareFromCoordinate((int row, int col) coordinate)
     {
-        if (coordinate.Item1 < 0 || coordinate.Item1 >= k_BoardHeight || coordinate.Item2 < 0 || coordinate.Item2 >= k_BoardHeight)
+        if (coordinate.Item1 < 0 || coordinate.Item1 >= k_boardHeight || coordinate.Item2 < 0 || coordinate.Item2 >= k_boardHeight)
         {
             throw new ArgumentException($"Coordinate ({coordinate.Item1}, {coordinate.Item2}) is an invalid square");
         }
 
-        return k_BoardColumnNames[coordinate.Item1] + k_BoardRowNames[coordinate.Item2];
+        return k_boardColumnNames[coordinate.Item1] + k_boardRowNames[coordinate.Item2];
     }
 
     /// <summary>
@@ -58,9 +58,9 @@ public static class GameHelpers
 
         // Get the column
         int column = -1;
-        for (int index = 0; index < k_BoardColumnNames.Length; index++)
+        for (int index = 0; index < k_boardColumnNames.Length; index++)
         {
-            if (square[0].ToString().Equals(k_BoardColumnNames[index]))
+            if (square[0].ToString().Equals(k_boardColumnNames[index]))
             {
                 column = index;
                 break;
@@ -73,9 +73,9 @@ public static class GameHelpers
 
         // Get the row
         int row = -1;
-        for (int index = 0; index < k_BoardRowNames.Length; index++)
+        for (int index = 0; index < k_boardRowNames.Length; index++)
         {
-            if (square[1].ToString().Equals(k_BoardRowNames[index]))
+            if (square[1].ToString().Equals(k_boardRowNames[index]))
             {
                 row = index;
                 break;
@@ -96,8 +96,8 @@ public static class GameHelpers
     /// <returns>Whether or not the coordinate exists on a board</returns>
     public static bool IsOnBoard((int, int) coordinate)
     {
-        return (coordinate.Item1 >= 0 && coordinate.Item1 < k_BoardWidth
-                                      && coordinate.Item2 >= 0 && coordinate.Item2 < k_BoardHeight);
+        return (coordinate.Item1 >= 0 && coordinate.Item1 < k_boardWidth
+                                      && coordinate.Item2 >= 0 && coordinate.Item2 < k_boardHeight);
     }
 
     /// <summary>

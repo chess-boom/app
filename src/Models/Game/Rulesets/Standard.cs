@@ -6,18 +6,12 @@ namespace ChessBoom.Models.Game.Rulesets;
 
 public class Standard : Ruleset
 {
-    private static readonly Standard instance = new Standard();
+    private static readonly Standard _instance = new();
     private Standard()
     {
     }
 
-    public static Standard Instance
-    {
-        get
-        {
-            return instance;
-        }
-    }
+    public static Standard Instance => _instance;
 
     /// <summary>
     /// The limiting number of moves that amount to "no progress" before a game ends in a draw
