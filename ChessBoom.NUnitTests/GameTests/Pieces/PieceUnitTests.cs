@@ -1,7 +1,8 @@
-﻿using NUnit.Framework;
-using ChessBoom.Models.Game;
+﻿using ChessBoom.Models.Game;
+using ChessBoom.Models.Game.Pieces;
+using NUnit.Framework;
 
-namespace ChessBoom.NUnitTests.GameTests;
+namespace ChessBoom.NUnitTests.GameTests.Pieces;
 
 public class PieceUnitTests
 {

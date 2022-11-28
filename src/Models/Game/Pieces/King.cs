@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace ChessBoom.Models.Game;
+namespace ChessBoom.Models.Game.Pieces;
 
 public class King : Piece
 {

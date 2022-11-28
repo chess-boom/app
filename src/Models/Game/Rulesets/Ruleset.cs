@@ -1,4 +1,6 @@
-namespace ChessBoom.Models.Game;
+using ChessBoom.Models.Game.Pieces;
+
+namespace ChessBoom.Models.Game.Rulesets;
 
 public abstract class Ruleset
 {

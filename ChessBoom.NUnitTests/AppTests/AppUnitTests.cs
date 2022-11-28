@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace ChessBoom.NUnitTests;
+namespace ChessBoom.NUnitTests.AppTests;
 
 public class AppUnitTests
 {

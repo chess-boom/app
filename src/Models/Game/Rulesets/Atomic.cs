@@ -1,6 +1,7 @@
 using System;
+using ChessBoom.Models.Game.Pieces;
 
-namespace ChessBoom.Models.Game;
+namespace ChessBoom.Models.Game.Rulesets;
 
 public class Atomic : Ruleset
 {

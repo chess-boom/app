@@ -1,6 +1,8 @@
 using System;
 using System.Text;
 using System.Collections.Generic;
+using ChessBoom.Models.Game.Pieces;
+using ChessBoom.Models.Game.Rulesets;
 
 namespace ChessBoom.Models.Game;
 
