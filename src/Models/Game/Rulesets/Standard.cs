@@ -20,17 +20,10 @@ public class Standard : Ruleset
 
     public override void Capture(Piece attacker, Board board, string square)
     {
-        try
+        var capturedPiece = board.GetPiece(GameHelpers.GetCoordinateFromSquare(square));
+        if (capturedPiece is not null)
         {
-            var capturedPiece = board.GetPiece(GameHelpers.GetCoordinateFromSquare(square));
-            if (capturedPiece is not null)
-            {
-                capturedPiece.Destroy();
-            }
-        }
-        catch (ArgumentException)
-        {
-            throw;
+            capturedPiece.Destroy();
         }
     }
 
@@ -165,15 +158,8 @@ public class Standard : Ruleset
             throw new GameplayErrorException("Castling is illegal in this situation!");
         }
 
-        try
-        {
-            king.CommandMovePiece(GameHelpers.GetCoordinateFromSquare(newKingCol + playerRow));
-            rook.CommandMovePiece(GameHelpers.GetCoordinateFromSquare(newRookCol + playerRow));
-        }
-        catch (ArgumentException)
-        {
-            throw;
-        }
+        king.CommandMovePiece(GameHelpers.GetCoordinateFromSquare(newKingCol + playerRow));
+        rook.CommandMovePiece(GameHelpers.GetCoordinateFromSquare(newRookCol + playerRow));
 
         board.RemoveCastling(player, Castling.Kingside);
         board.RemoveCastling(player, Castling.Queenside);

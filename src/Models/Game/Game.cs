@@ -188,19 +188,12 @@ public class Game
     /// <exception cref="ArgumentException">Thrown the piece on the starting square can not be found or be moved, or the square can not be found</exception>
     public void MakeExplicitMove(string startingSquare, string destinationSquare)
     {
-        try
+        var piece = m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(startingSquare));
+        if (piece is null)
         {
-            var piece = m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(startingSquare));
-            if (piece is null)
-            {
-                throw new ArgumentException($"Piece on square {startingSquare} not found!");
-            }
-            MakeMove(piece, destinationSquare);
+            throw new ArgumentException($"Piece on square {startingSquare} not found!");
         }
-        catch (ArgumentException)
-        {
-            throw;
-        }
+        MakeMove(piece, destinationSquare);
     }
 
     /// <summary>
@@ -224,24 +217,13 @@ public class Game
 
         var legacyBoard = CreateBoardFromFEN(this, CreateFENFromBoard(m_board));
 
-        try
+        if (square == Move.k_kingsideCastleNotation || square == Move.k_queensideCastleNotation)
         {
-            if (square == Move.k_kingsideCastleNotation || square == Move.k_queensideCastleNotation)
-            {
-                m_ruleset.Castle(m_board, piece.GetPlayer(), (square == Move.k_kingsideCastleNotation) ? Castling.Kingside : Castling.Queenside);
-            }
-            else
-            {
-                piece.MovePiece(GameHelpers.GetCoordinateFromSquare(square));
-            }
+            m_ruleset.Castle(m_board, piece.GetPlayer(), (square == Move.k_kingsideCastleNotation) ? Castling.Kingside : Castling.Queenside);
         }
-        catch (ArgumentException)
+        else
         {
-            throw;
-        }
-        catch (GameplayErrorException)
-        {
-            throw;
+            piece.MovePiece(GameHelpers.GetCoordinateFromSquare(square));
         }
 
         if (m_board.m_playerToPlay == Player.Black)
