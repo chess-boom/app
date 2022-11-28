@@ -1,0 +1,143 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:viewModels="clr-namespace:ChessBoom.ViewModels"
+    x:Class="ChessBoom.Views.BoardView">
+    <Design.DataContext>
+        <viewModels:BoardViewModel />
+    </Design.DataContext>
+    <StackPanel>
+        <Label Content="Board" FontSize="50" HorizontalAlignment="Center" />
+        <!-- TODO : Add CanvasControl OR DockPanel with Drag/Drop events -->
+        <!-- <SKCanvasControl Name="CanvasControl" /> -->
+        <Grid ShowGridLines="False">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="45"></RowDefinition>
+                <RowDefinition Height="45"></RowDefinition>
+                <RowDefinition Height="45"></RowDefinition>
+                <RowDefinition Height="45"></RowDefinition>
+                <RowDefinition Height="45"></RowDefinition>
+                <RowDefinition Height="45"></RowDefinition>
+                <RowDefinition Height="45"></RowDefinition>
+                <RowDefinition Height="45"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="45"></ColumnDefinition>
+                <ColumnDefinition Width="45"></ColumnDefinition>
+                <ColumnDefinition Width="45"></ColumnDefinition>
+                <ColumnDefinition Width="45"></ColumnDefinition>
+                <ColumnDefinition Width="45"></ColumnDefinition>
+                <ColumnDefinition Width="45"></ColumnDefinition>
+                <ColumnDefinition Width="45"></ColumnDefinition>
+                <ColumnDefinition Width="45"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Svg Grid.Row="0" Grid.Column="0" Path="Assets/Tiles/white.svg" />
+            <Svg Grid.Row="0" Grid.Column="2" Path="Assets/Tiles/white.svg" />
+            <Svg Grid.Row="0" Grid.Column="4" Path="Assets/Tiles/white.svg" />
+            <Svg Grid.Row="0" Grid.Column="6" Path="Assets/Tiles/white.svg" />
+            <Svg Grid.Row="1" Grid.Column="1" Path="Assets/Tiles/white.svg" />
+            <Svg Grid.Row="1" Grid.Column="3" Path="Assets/Tiles/white.svg" />
+            <Svg Grid.Row="1" Grid.Column="5" Path="Assets/Tiles/white.svg" />
+            <Svg Grid.Row="1" Grid.Column="7" Path="Assets/Tiles/white.svg" />
+
+            <Svg Grid.Row="2" Grid.Column="0" Path="Assets/Tiles/white.svg" />
+            <Svg Grid.Row="2" Grid.Column="2" Path="Assets/Tiles/white.svg" />
+            <Svg Grid.Row="2" Grid.Column="4" Path="Assets/Tiles/white.svg" />
+            <Svg Grid.Row="2" Grid.Column="6" Path="Assets/Tiles/white.svg" />
+            <Svg Grid.Row="3" Grid.Column="1" Path="Assets/Tiles/white.svg" />
+            <Svg Grid.Row="3" Grid.Column="3" Path="Assets/Tiles/white.svg" />
+            <Svg Grid.Row="3" Grid.Column="5" Path="Assets/Tiles/white.svg" />
+            <Svg Grid.Row="3" Grid.Column="7" Path="Assets/Tiles/white.svg" />
+
+            <Svg Grid.Row="4" Grid.Column="0" Path="Assets/Tiles/white.svg" />
+            <Svg Grid.Row="4" Grid.Column="2" Path="Assets/Tiles/white.svg" />
+            <Svg Grid.Row="4" Grid.Column="4" Path="Assets/Tiles/white.svg" />
+            <Svg Grid.Row="4" Grid.Column="6" Path="Assets/Tiles/white.svg" />
+            <Svg Grid.Row="5" Grid.Column="1" Path="Assets/Tiles/white.svg" />
+            <Svg Grid.Row="5" Grid.Column="3" Path="Assets/Tiles/white.svg" />
+            <Svg Grid.Row="5" Grid.Column="5" Path="Assets/Tiles/white.svg" />
+            <Svg Grid.Row="5" Grid.Column="7" Path="Assets/Tiles/white.svg" />
+
+            <Svg Grid.Row="6" Grid.Column="0" Path="Assets/Tiles/white.svg" />
+            <Svg Grid.Row="6" Grid.Column="2" Path="Assets/Tiles/white.svg" />
+            <Svg Grid.Row="6" Grid.Column="4" Path="Assets/Tiles/white.svg" />
+            <Svg Grid.Row="6" Grid.Column="6" Path="Assets/Tiles/white.svg" />
+            <Svg Grid.Row="7" Grid.Column="1" Path="Assets/Tiles/white.svg" />
+            <Svg Grid.Row="7" Grid.Column="3" Path="Assets/Tiles/white.svg" />
+            <Svg Grid.Row="7" Grid.Column="5" Path="Assets/Tiles/white.svg" />
+            <Svg Grid.Row="7" Grid.Column="7" Path="Assets/Tiles/white.svg" />
+
+            <Svg Grid.Row="0" Grid.Column="1" Path="Assets/Tiles/black.svg" />
+            <Svg Grid.Row="0" Grid.Column="3" Path="Assets/Tiles/black.svg" />
+            <Svg Grid.Row="0" Grid.Column="5" Path="Assets/Tiles/black.svg" />
+            <Svg Grid.Row="0" Grid.Column="7" Path="Assets/Tiles/black.svg" />
+            <Svg Grid.Row="1" Grid.Column="0" Path="Assets/Tiles/black.svg" />
+            <Svg Grid.Row="1" Grid.Column="2" Path="Assets/Tiles/black.svg" />
+            <Svg Grid.Row="1" Grid.Column="4" Path="Assets/Tiles/black.svg" />
+            <Svg Grid.Row="1" Grid.Column="6" Path="Assets/Tiles/black.svg" />
+
+            <Svg Grid.Row="2" Grid.Column="1" Path="Assets/Tiles/black.svg" />
+            <Svg Grid.Row="2" Grid.Column="3" Path="Assets/Tiles/black.svg" />
+            <Svg Grid.Row="2" Grid.Column="5" Path="Assets/Tiles/black.svg" />
+            <Svg Grid.Row="2" Grid.Column="7" Path="Assets/Tiles/black.svg" />
+            <Svg Grid.Row="3" Grid.Column="0" Path="Assets/Tiles/black.svg" />
+            <Svg Grid.Row="3" Grid.Column="2" Path="Assets/Tiles/black.svg" />
+            <Svg Grid.Row="3" Grid.Column="4" Path="Assets/Tiles/black.svg" />
+            <Svg Grid.Row="3" Grid.Column="6" Path="Assets/Tiles/black.svg" />
+
+            <Svg Grid.Row="4" Grid.Column="1" Path="Assets/Tiles/black.svg" />
+            <Svg Grid.Row="4" Grid.Column="3" Path="Assets/Tiles/black.svg" />
+            <Svg Grid.Row="4" Grid.Column="5" Path="Assets/Tiles/black.svg" />
+            <Svg Grid.Row="4" Grid.Column="7" Path="Assets/Tiles/black.svg" />
+            <Svg Grid.Row="5" Grid.Column="0" Path="Assets/Tiles/black.svg" />
+            <Svg Grid.Row="5" Grid.Column="2" Path="Assets/Tiles/black.svg" />
+            <Svg Grid.Row="5" Grid.Column="4" Path="Assets/Tiles/black.svg" />
+            <Svg Grid.Row="5" Grid.Column="6" Path="Assets/Tiles/black.svg" />
+
+            <Svg Grid.Row="6" Grid.Column="1" Path="Assets/Tiles/black.svg" />
+            <Svg Grid.Row="6" Grid.Column="3" Path="Assets/Tiles/black.svg" />
+            <Svg Grid.Row="6" Grid.Column="5" Path="Assets/Tiles/black.svg" />
+            <Svg Grid.Row="6" Grid.Column="7" Path="Assets/Tiles/black.svg" />
+            <Svg Grid.Row="7" Grid.Column="0" Path="Assets/Tiles/black.svg" />
+            <Svg Grid.Row="7" Grid.Column="2" Path="Assets/Tiles/black.svg" />
+            <Svg Grid.Row="7" Grid.Column="4" Path="Assets/Tiles/black.svg" />
+            <Svg Grid.Row="7" Grid.Column="6" Path="Assets/Tiles/black.svg" />
+
+            <Svg Grid.Row="0" Grid.Column="0" Path="Assets/Pieces/R.svg" />
+            <Svg Grid.Row="0" Grid.Column="1" Path="Assets/Pieces/N.svg" />
+            <Svg Grid.Row="0" Grid.Column="2" Path="Assets/Pieces/B.svg" />
+            <Svg Grid.Row="0" Grid.Column="3" Path="Assets/Pieces/K.svg" />
+            <Svg Grid.Row="0" Grid.Column="4" Path="Assets/Pieces/Q.svg" />
+            <Svg Grid.Row="0" Grid.Column="5" Path="Assets/Pieces/B.svg" />
+            <Svg Grid.Row="0" Grid.Column="6" Path="Assets/Pieces/N.svg" />
+            <Svg Grid.Row="0" Grid.Column="7" Path="Assets/Pieces/R.svg" />
+
+            <Svg Grid.Row="1" Grid.Column="0" Path="Assets/Pieces/P.svg" />
+            <Svg Grid.Row="1" Grid.Column="1" Path="Assets/Pieces/P.svg" />
+            <Svg Grid.Row="1" Grid.Column="2" Path="Assets/Pieces/P.svg" />
+            <Svg Grid.Row="1" Grid.Column="3" Path="Assets/Pieces/P.svg" />
+            <Svg Grid.Row="1" Grid.Column="4" Path="Assets/Pieces/P.svg" />
+            <Svg Grid.Row="1" Grid.Column="5" Path="Assets/Pieces/P.svg" />
+            <Svg Grid.Row="1" Grid.Column="6" Path="Assets/Pieces/P.svg" />
+            <Svg Grid.Row="1" Grid.Column="7" Path="Assets/Pieces/P.svg" />
+
+            <Svg Grid.Row="6" Grid.Column="0" Path="Assets/Pieces/p.svg" />
+            <Svg Grid.Row="6" Grid.Column="1" Path="Assets/Pieces/p.svg" />
+            <Svg Grid.Row="6" Grid.Column="2" Path="Assets/Pieces/p.svg" />
+            <Svg Grid.Row="6" Grid.Column="3" Path="Assets/Pieces/p.svg" />
+            <Svg Grid.Row="6" Grid.Column="4" Path="Assets/Pieces/p.svg" />
+            <Svg Grid.Row="6" Grid.Column="5" Path="Assets/Pieces/p.svg" />
+            <Svg Grid.Row="6" Grid.Column="6" Path="Assets/Pieces/p.svg" />
+            <Svg Grid.Row="6" Grid.Column="7" Path="Assets/Pieces/p.svg" />
+
+            <Svg Grid.Row="7" Grid.Column="0" Path="Assets/Pieces/r.svg" />
+            <Svg Grid.Row="7" Grid.Column="1" Path="Assets/Pieces/n.svg" />
+            <Svg Grid.Row="7" Grid.Column="2" Path="Assets/Pieces/b.svg" />
+            <Svg Grid.Row="7" Grid.Column="3" Path="Assets/Pieces/k.svg" />
+            <Svg Grid.Row="7" Grid.Column="4" Path="Assets/Pieces/q.svg" />
+            <Svg Grid.Row="7" Grid.Column="5" Path="Assets/Pieces/b.svg" />
+            <Svg Grid.Row="7" Grid.Column="6" Path="Assets/Pieces/n.svg" />
+            <Svg Grid.Row="7" Grid.Column="7" Path="Assets/Pieces/r.svg" />
+        </Grid>
+    </StackPanel>
+</UserControl>
