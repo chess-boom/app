@@ -16,12 +16,12 @@ public class Board
     /// </summary>
     protected static readonly Dictionary<char, Func<Board, Player, (int, int), Piece>> k_pieceConstructor = new Dictionary<char, Func<Board, Player, (int, int), Piece>>()
     {
-        {'K', (Board board, Player player, (int, int) coordinate) => new King(board, player, coordinate)},
-        {'Q', (Board board, Player player, (int, int) coordinate) => new Queen(board, player, coordinate)},
-        {'R', (Board board, Player player, (int, int) coordinate) => new Rook(board, player, coordinate)},
-        {'N', (Board board, Player player, (int, int) coordinate) => new Knight(board, player, coordinate)},
-        {'B', (Board board, Player player, (int, int) coordinate) => new Bishop(board, player, coordinate)},
-        {'P', (Board board, Player player, (int, int) coordinate) => new Pawn(board, player, coordinate)}
+        {'K', (board, player, coordinate) => new King(board, player, coordinate)},
+        {'Q', (board, player, coordinate) => new Queen(board, player, coordinate)},
+        {'R', (board, player, coordinate) => new Rook(board, player, coordinate)},
+        {'N', (board, player, coordinate) => new Knight(board, player, coordinate)},
+        {'B', (board, player, coordinate) => new Bishop(board, player, coordinate)},
+        {'P', (board, player, coordinate) => new Pawn(board, player, coordinate)}
     };
 
     protected static readonly char k_noCastling = '-';
