@@ -61,33 +61,31 @@ public class Rook : Piece
     public override void MovePiece((int, int) coordinate)
     {
         base.MovePiece(coordinate);
-        if (!m_hasMoved)
+        if (m_hasMoved) return;
+        if (m_board.m_game is null)
         {
-            if (m_board.m_game is null)
-            {
-                return;
-            }
-            try
-            {
-                var kingsideRookSquare = m_board.GetRuleset().GetInitialRookSquare(m_owner, Castling.Kingside);
-                if (m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(kingsideRookSquare)) == this)
-                {
-                    m_board.RemoveCastling(m_owner, Castling.Kingside);
-                }
-                var queensideRookSquare = m_board.GetRuleset().GetInitialRookSquare(m_owner, Castling.Queenside);
-                if (m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(queensideRookSquare)) == this)
-                {
-                    m_board.RemoveCastling(m_owner, Castling.Queenside);
-                }
-            }
-            catch (ArgumentException)
-            {
-                Console.WriteLine("Error! Castling rights removal failed.");
-                return;
-            }
-
-            m_hasMoved = true;
+            return;
         }
+        try
+        {
+            var kingsideRookSquare = m_board.GetRuleset().GetInitialRookSquare(m_owner, Castling.Kingside);
+            if (m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(kingsideRookSquare)) == this)
+            {
+                m_board.RemoveCastling(m_owner, Castling.Kingside);
+            }
+            var queensideRookSquare = m_board.GetRuleset().GetInitialRookSquare(m_owner, Castling.Queenside);
+            if (m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(queensideRookSquare)) == this)
+            {
+                m_board.RemoveCastling(m_owner, Castling.Queenside);
+            }
+        }
+        catch (ArgumentException)
+        {
+            Console.WriteLine("Error! Castling rights removal failed.");
+            return;
+        }
+
+        m_hasMoved = true;
     }
 
     public override string ToString()
