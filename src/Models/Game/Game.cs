@@ -183,8 +183,8 @@ public class Game
     /// <summary>
     /// Handle the capture that has occurred on a specific square
     /// </summary>
-    /// <param name="attacker">The piece that initiated the capture</param>
-    /// <param name="coordinate">The square on which the capture takes place</param>
+    /// <param name="startingSquare">The piece that initiated the capture</param>
+    /// <param name="destinationSquare">The square on which the capture takes place</param>
     /// <exception cref="ArgumentException">Thrown the piece on the starting square can not be found or be moved, or the square can not be found</exception>
     public void MakeExplicitMove(string startingSquare, string destinationSquare)
     {
@@ -207,7 +207,7 @@ public class Game
     {
         if (m_gameState != GameState.InProgress)
         {
-            throw new GameplayErrorException($"Game is not in progress! Illegal move.");
+            throw new GameplayErrorException("Game is not in progress! Illegal move.");
         }
         if (piece.GetPlayer() != m_board.m_playerToPlay)
         {
@@ -217,7 +217,7 @@ public class Game
 
         var legacyBoard = CreateBoardFromFEN(this, CreateFENFromBoard(m_board));
 
-        if (square == Move.k_kingsideCastleNotation || square == Move.k_queensideCastleNotation)
+        if (square is Move.k_kingsideCastleNotation or Move.k_queensideCastleNotation)
         {
             m_ruleset.Castle(m_board, piece.GetPlayer(), (square == Move.k_kingsideCastleNotation) ? Castling.Kingside : Castling.Queenside);
         }
@@ -291,6 +291,7 @@ public class Game
     ///     The fifth part denotes the halfmove clock, useful for enforcing the fifty-move rule.
     ///     The sixth part denotes the fullmove number.
     /// </summary>
+    /// <param name="game">The game which the resultant Board will correspond to</param>
     /// <param name="fen">The contents of the .FEN file</param>
     public static Board CreateBoardFromFEN(Game game, string fen)
     {
@@ -446,10 +447,7 @@ public class Game
             {
                 return GameHelpers.GetSquareFromCoordinate(board.m_enPassant.Value);
             }
-            else
-            {
-                return "-";
-            }
+            return "-";
         }
         catch (ArgumentException)
         {

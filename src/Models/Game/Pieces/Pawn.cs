@@ -100,13 +100,13 @@ public class Pawn : Piece
             }
 
             // Handle 2-square movement (enables en passant)
-            if (coordinate == GameHelpers.AddVector(this.GetCoordinates(), (0, 2)))
+            if (coordinate == GameHelpers.AddVector(GetCoordinates(), (0, 2)))
             {
-                m_board.m_enPassant = GameHelpers.AddVector(this.GetCoordinates(), (0, 1));
+                m_board.m_enPassant = GameHelpers.AddVector(GetCoordinates(), (0, 1));
             }
-            else if (coordinate == GameHelpers.AddVector(this.GetCoordinates(), (0, -2)))
+            else if (coordinate == GameHelpers.AddVector(GetCoordinates(), (0, -2)))
             {
-                m_board.m_enPassant = GameHelpers.AddVector(this.GetCoordinates(), (0, -1));
+                m_board.m_enPassant = GameHelpers.AddVector(GetCoordinates(), (0, -1));
             }
             else
             {
@@ -129,7 +129,7 @@ public class Pawn : Piece
         }
         else
         {
-            throw new ArgumentException($"Error. Piece {this.ToString()} on {GameHelpers.GetSquareFromCoordinate(GetCoordinates())} is unable to move to {GameHelpers.GetSquareFromCoordinate(coordinate)}!");
+            throw new ArgumentException($"Error. Piece {ToString()} on {GameHelpers.GetSquareFromCoordinate(GetCoordinates())} is unable to move to {GameHelpers.GetSquareFromCoordinate(coordinate)}!");
         }
     }
 

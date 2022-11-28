@@ -58,11 +58,11 @@ public class Board
     /// <summary>
     /// The number of half-moves since the last capture or pawn advance
     /// </summary>
-    public int m_halfmoveClock { get; set; } = 0;
+    public int m_halfmoveClock { get; set; }
     /// <summary>
     /// The number of full moves (starting at 1, incremented after Black moves)
     /// </summary>
-    public int m_fullmoveCount { get; set; } = 0;
+    public int m_fullmoveCount { get; set; }
     /// <summary>
     /// The list of chess pieces
     /// </summary>
@@ -275,7 +275,7 @@ public class Board
                 throw new ArgumentException($"Invalid character \'{c}\' in FEN file");
             }
 
-            (var player, var side) = k_FENToCastling[c];
+            var (player, side) = k_FENToCastling[c];
 
             // character was not '-'
             // not a guard clause because compiler uses HasValue check for casting Nullable<>
@@ -305,7 +305,7 @@ public class Board
     public string GetCastling()
     {
         var castlingString = new StringBuilder(k_FENToCastling.Keys.Count - 1);
-        foreach (((var player, var castling), var c) in k_castlingToFEN)
+        foreach (var ((player, castling), c) in k_castlingToFEN)
         {
             if (m_castling[player].Contains(castling))
             {
@@ -336,10 +336,9 @@ public class Board
     /// <param name="side">The side on which the player wishes to castle</param>
     public bool CanCastleFromFEN(Player player, Castling side)
     {
-        List<Castling>? castling;
         try
         {
-            m_castling.TryGetValue(player, out castling);
+            m_castling.TryGetValue(player, out var castling);
             return (castling is not null && castling.Contains(side));
         }
         catch (ArgumentNullException)

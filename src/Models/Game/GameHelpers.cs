@@ -138,11 +138,11 @@ public static class GameHelpers
     /// <returns>Whether or not the coordinate is visible to the player</returns>
     public static bool IsSquareVisible(Board board, Player searchingPlayer, (int, int) coordinate)
     {
-        foreach (var piece in GameHelpers.GetPlayerPieces(searchingPlayer, board))
+        foreach (var piece in GetPlayerPieces(searchingPlayer, board))
         {
             try
             {
-                if (piece.CanMoveToSquare(GameHelpers.GetSquareFromCoordinate(coordinate)))
+                if (piece.CanMoveToSquare(GetSquareFromCoordinate(coordinate)))
                 {
                     return true;
                 }
@@ -191,7 +191,7 @@ public static class GameHelpers
             position = AddVector(position, movementVector);
 
             // Handle board boundaries
-            if (!GameHelpers.IsOnBoard(position))
+            if (!IsOnBoard(position))
             {
                 movementFlag = false;
                 break;
