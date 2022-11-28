@@ -24,7 +24,7 @@
                 Command="{Binding OnClickGameAnalysis}">
                 <StackPanel>
                     <Label Content="Game Analysis" FontSize="50" HorizontalAlignment="Center" />
-                    <Image Source="..\Assets\Images\Game.png" />
+                    <Image Source="/Assets/Images/Game.png" />
                 </StackPanel>
             </Button>
             <Button
@@ -33,7 +33,7 @@
                 Command="{Binding OnClickVariantGameAnalysis}">
                 <StackPanel>
                     <Label Content="Variant Analysis" FontSize="50" HorizontalAlignment="Center" />
-                    <Image Source="..\Assets\Images\Variant.png" />
+                    <Image Source="/Assets/Images/Variant.png" />
                 </StackPanel>
             </Button>
             <Button
@@ -42,7 +42,7 @@
                 Command="{Binding OnClickTutorial}">
                 <StackPanel>
                     <Label Content="Tutorials" FontSize="50" HorizontalAlignment="Center" />
-                    <Image Source="..\Assets\Images\Tutorial.png" />
+                    <Image Source="/Assets/Images/Tutorial.png" />
                 </StackPanel>
             </Button>
         </Grid>

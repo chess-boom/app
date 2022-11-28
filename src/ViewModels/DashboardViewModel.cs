@@ -1,8 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using ChessBoom.Models.Game;
 using ReactiveUI;
 
 namespace ChessBoom.ViewModels;
 
+[ExcludeFromCodeCoverage]
 public class DashboardViewModel : BaseViewModel
 {
     public DashboardViewModel(IScreen hostScreen) : base(hostScreen) { }
