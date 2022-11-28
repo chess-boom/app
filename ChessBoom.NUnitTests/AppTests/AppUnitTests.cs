@@ -1,6 +1,4 @@
 using NUnit.Framework;
-using ChessBoom;
-using System.IO;
 
 namespace ChessBoom.NUnitTests;
 
