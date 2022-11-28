@@ -40,11 +40,10 @@ public class Rook : Piece
     public override List<(int, int)> GetMovementSquares()
     {
         var movementSquares = new List<(int, int)>();
-        (int, int) movementVector;
         var position = GetCoordinates();
 
         // Top
-        movementVector = (0, 1);
+        var movementVector = (0, 1);
         GameHelpers.GetVectorMovementSquares(ref movementSquares, m_board, m_owner, position, movementVector);
         // Left
         movementVector = (-1, 0);
