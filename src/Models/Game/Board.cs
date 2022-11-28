@@ -14,7 +14,7 @@ public class Board
     /// <summary>
     /// Map for piece types and their constructors
     /// </summary>
-    protected static readonly Dictionary<char, Func<Board, Player, (int, int), Piece>> k_pieceConstructor = new Dictionary<char, Func<Board, Player, (int, int), Piece>>()
+    protected static readonly Dictionary<char, Func<Board, Player, (int, int), Piece>> k_pieceConstructor = new()
     {
         {'K', (board, player, coordinate) => new King(board, player, coordinate)},
         {'Q', (board, player, coordinate) => new Queen(board, player, coordinate)},
@@ -26,7 +26,7 @@ public class Board
 
     protected static readonly char k_noCastling = '-';
 
-    protected static readonly Dictionary<char, Tuple<Player?, Castling?>> k_FENToCastling = new Dictionary<char, Tuple<Player?, Castling?>>()
+    protected static readonly Dictionary<char, Tuple<Player?, Castling?>> k_FENToCastling = new()
     {
         {'K', new Tuple<Player?, Castling?>(Player.White, Castling.Kingside)},
         {'Q', new Tuple<Player?, Castling?>(Player.White, Castling.Queenside)},
@@ -35,7 +35,7 @@ public class Board
         {k_noCastling, new Tuple<Player?, Castling?>(null, null)}
     };
 
-    protected static readonly Dictionary<Tuple<Player, Castling>, char> k_castlingToFEN = new Dictionary<Tuple<Player, Castling>, char>()
+    protected static readonly Dictionary<Tuple<Player, Castling>, char> k_castlingToFEN = new()
     {
         {new Tuple<Player, Castling>(Player.White, Castling.Kingside), 'K'},
         {new Tuple<Player, Castling>(Player.White, Castling.Queenside), 'Q'},
@@ -356,10 +356,7 @@ public class Board
     public void Capture(Piece attacker, (int, int) coordinate)
     {
         GetRuleset().Capture(attacker, this, GameHelpers.GetSquareFromCoordinate(coordinate));
-        if (m_game is not null)
-        {
-            m_game.ClearVisitedPositions();
-        }
+        m_game?.ClearVisitedPositions();
         m_halfmoveClock = 0;
     }
 

@@ -21,10 +21,7 @@ public class Standard : Ruleset
     public override void Capture(Piece attacker, Board board, string square)
     {
         var capturedPiece = board.GetPiece(GameHelpers.GetCoordinateFromSquare(square));
-        if (capturedPiece is not null)
-        {
-            capturedPiece.Destroy();
-        }
+        capturedPiece?.Destroy();
     }
 
     public override bool IsInCheck(Player player, Board board)
