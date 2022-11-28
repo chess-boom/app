@@ -97,20 +97,11 @@ struct Move
 /// </summary>
 public class GameplayErrorException : Exception
 {
-    public GameplayErrorException()
-    {
-        
-    }
+    public GameplayErrorException() { }
 
-    public GameplayErrorException(string message) : base(message)
-    {
-        
-    }
+    public GameplayErrorException(string message) : base(message) { }
 
-    public GameplayErrorException(string message, Exception inner) : base(message, inner)
-    {
-        
-    }
+    public GameplayErrorException(string message, Exception inner) : base(message, inner) { }
 }
 
 /// <summary>

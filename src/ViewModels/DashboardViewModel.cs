@@ -7,10 +7,7 @@ namespace ChessBoom.ViewModels;
 [ExcludeFromCodeCoverage]
 public class DashboardViewModel : BaseViewModel
 {
-    public DashboardViewModel(IScreen hostScreen) : base(hostScreen)
-    {
-        
-    }
+    public DashboardViewModel(IScreen hostScreen) : base(hostScreen) { }
 
     protected static string m_greeting => "Welcome to Chess Boom!";
 
