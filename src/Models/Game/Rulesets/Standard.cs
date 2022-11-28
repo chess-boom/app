@@ -134,11 +134,9 @@ public class Standard : Ruleset
         Piece? king;
         Piece? rook;
 
-        (int, int) kingCoordinate;
-
         try
         {
-            kingCoordinate = GameHelpers.GetCoordinateFromSquare("e" + playerRow);
+            var kingCoordinate = GameHelpers.GetCoordinateFromSquare("e" + playerRow);
             king = board.GetPiece(kingCoordinate);
             rook = board.GetPiece(GameHelpers.GetCoordinateFromSquare(rookCol + playerRow));
         }
@@ -191,7 +189,6 @@ public class Standard : Ruleset
         }
 
         var pieces = GameHelpers.GetPlayerPieces(board.m_playerToPlay, board);
-        Board testBoard;
         var legalMoveExists = false;
 
         foreach (var piece in pieces)
@@ -201,7 +198,7 @@ public class Standard : Ruleset
             foreach (var move in pieceMoves)
             {
                 var testGame = new Game();
-                testBoard = Game.CreateBoardFromFEN(testGame, Game.CreateFENFromBoard(board));
+                var testBoard = Game.CreateBoardFromFEN(testGame, Game.CreateFENFromBoard(board));
 
                 try
                 {
@@ -237,18 +234,15 @@ public class Standard : Ruleset
             }
         }
 
-        if (!legalMoveExists)
+        if (legalMoveExists) return;
+        // Only the next player to play may be in checkmate, else an illegal move must have occurred
+        if (!IsInCheck(board.m_playerToPlay, board))
         {
-            // Only the next player to play may be in checkmate, else an illegal move must have occurred
-            if (!IsInCheck(board.m_playerToPlay, board))
-            {
-                game.m_gameState = GameState.Draw;
-                return;
-            }
-            else
-            {
-                game.m_gameState = (board.m_playerToPlay == Player.Black) ? GameState.VictoryWhite : GameState.VictoryBlack;
-            }
+            game.m_gameState = GameState.Draw;
+        }
+        else
+        {
+            game.m_gameState = (board.m_playerToPlay == Player.Black) ? GameState.VictoryWhite : GameState.VictoryBlack;
         }
     }
 }

@@ -396,7 +396,6 @@ public class Game
                 if (piece is null)
                 {
                     emptySquareCount++;
-                    continue;
                 }
                 else
                 {
