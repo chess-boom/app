@@ -81,7 +81,7 @@ struct Move
 
     public override string ToString()
     {
-        string? pieceString = m_piece.ToString();
+        var pieceString = m_piece.ToString();
         return pieceString?.ToLower() + m_square;
     }
 }
@@ -159,7 +159,7 @@ public class Game
     /// <param name="variant">The chosen variant for the board</param>
     private Board InitializeBoard(Variant variant)
     {
-        string fen = "";
+        var fen = "";
 
         // Note: Standard and Atomic use the default board. Chess960 and Horde use different initial configurations
         switch (variant)
@@ -190,7 +190,7 @@ public class Game
     {
         try
         {
-            Piece? piece = m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(startingSquare));
+            var piece = m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(startingSquare));
             if (piece is null)
             {
                 throw new ArgumentException($"Piece on square {startingSquare} not found!");
@@ -222,7 +222,7 @@ public class Game
         }
         m_board.m_halfmoveClock++;
 
-        Board legacyBoard = CreateBoardFromFEN(this, CreateFENFromBoard(m_board));
+        var legacyBoard = CreateBoardFromFEN(this, CreateFENFromBoard(m_board));
 
         try
         {
@@ -256,7 +256,7 @@ public class Game
             throw new GameplayErrorException("Error! Illegal move!");
         }
 
-        string boardPosition = String.Format("{0} {1} {2} {3}",
+        var boardPosition = String.Format("{0} {1} {2} {3}",
             GetPiecesFENFromBoard(m_board),
             GetPlayerFENFromBoard(m_board),
             m_board.GetCastling(),
@@ -289,7 +289,7 @@ public class Game
     /// <returns>If threefold repetition has occurred</returns>
     public bool HasThreefoldRepetition()
     {
-        foreach (KeyValuePair<string, int> visitedPosition in m_visitedPositions)
+        foreach (var visitedPosition in m_visitedPositions)
         {
             if (visitedPosition.Value >= Ruleset.k_threefoldRepetitionCount)
             {
@@ -312,8 +312,8 @@ public class Game
     /// <param name="fen">The contents of the .FEN file</param>
     public static Board CreateBoardFromFEN(Game game, string fen)
     {
-        Board board = new Board(game);
-        string[] fenSplit = fen.Split(' ');
+        var board = new Board(game);
+        var fenSplit = fen.Split(' ');
 
         board.CreateBoard(fenSplit[0]);
 
@@ -403,14 +403,14 @@ public class Game
     /// <returns>The board state of the pieces as the contents of a .FEN file</returns>
     private static string GetPiecesFENFromBoard(Board board)
     {
-        string fen = "";
+        var fen = "";
 
-        for (int row = GameHelpers.k_boardHeight - 1; row >= 0; row--)
+        for (var row = GameHelpers.k_boardHeight - 1; row >= 0; row--)
         {
-            int emptySquareCount = 0;
-            for (int col = 0; col < GameHelpers.k_boardWidth; col++)
+            var emptySquareCount = 0;
+            for (var col = 0; col < GameHelpers.k_boardWidth; col++)
             {
-                Piece? piece = board.GetPiece((col, row));
+                var piece = board.GetPiece((col, row));
                 if (piece is null)
                 {
                     emptySquareCount++;

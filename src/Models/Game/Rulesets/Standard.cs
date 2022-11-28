@@ -22,7 +22,7 @@ public class Standard : Ruleset
     {
         try
         {
-            Piece? capturedPiece = board.GetPiece(GameHelpers.GetCoordinateFromSquare(square));
+            var capturedPiece = board.GetPiece(GameHelpers.GetCoordinateFromSquare(square));
             if (capturedPiece is not null)
             {
                 capturedPiece.Destroy();
@@ -37,8 +37,8 @@ public class Standard : Ruleset
     public override bool IsInCheck(Player player, Board board)
     {
         // Get any Kings owned by the player (usually just 1 king)
-        List<Piece> playerKings = new List<Piece>();
-        foreach (Piece piece in GameHelpers.GetPlayerPieces(player, board))
+        var playerKings = new List<Piece>();
+        foreach (var piece in GameHelpers.GetPlayerPieces(player, board))
         {
             if (piece.GetType() == typeof(King))
             {
@@ -47,14 +47,14 @@ public class Standard : Ruleset
         }
 
         // Get the squares of all those kings
-        List<(int, int)> kingSquares = new List<(int, int)>();
-        foreach (Piece king in playerKings)
+        var kingSquares = new List<(int, int)>();
+        foreach (var king in playerKings)
         {
             kingSquares.Add(king.GetCoordinates());
         }
 
         // Check if any of the opponent's pieces can move to a square occupied by a king
-        foreach ((int, int) coordinate in kingSquares)
+        foreach (var coordinate in kingSquares)
         {
             if (GameHelpers.IsSquareVisible(board, GameHelpers.GetOpponent(player), coordinate))
             {
@@ -70,8 +70,8 @@ public class Standard : Ruleset
         {
             return false;
         }
-        string playerRow = (player == Player.White) ? "1" : "8";
-        string rookCol = (side == Castling.Kingside) ? "h" : "a";
+        var playerRow = (player == Player.White) ? "1" : "8";
+        var rookCol = (side == Castling.Kingside) ? "h" : "a";
         Piece? king;
         Piece? rook;
 
@@ -104,8 +104,8 @@ public class Standard : Ruleset
             return false;
         }
 
-        (int, int) castlingVector = (side == Castling.Kingside) ? (1, 0) : (-1, 0);
-        List<(int, int)> intermediateSquares = new List<(int, int)>();
+        var castlingVector = (side == Castling.Kingside) ? (1, 0) : (-1, 0);
+        var intermediateSquares = new List<(int, int)>();
         GameHelpers.GetVectorMovementSquares(
             ref intermediateSquares,
             board,
@@ -113,7 +113,7 @@ public class Standard : Ruleset
             kingCoordinate,
             castlingVector);
 
-        foreach ((int, int) coordinate in intermediateSquares)
+        foreach (var coordinate in intermediateSquares)
         {
             if (GameHelpers.IsSquareVisible(board, GameHelpers.GetOpponent(player), coordinate))
             {
@@ -137,10 +137,10 @@ public class Standard : Ruleset
             throw new GameplayErrorException("Castling is illegal in this situation!");
         }
 
-        string playerRow = (player == Player.White) ? "1" : "8";
-        string rookCol = (side == Castling.Kingside) ? "h" : "a";
-        string newKingCol = (side == Castling.Kingside) ? "g" : "c";
-        string newRookCol = (side == Castling.Kingside) ? "f" : "d";
+        var playerRow = (player == Player.White) ? "1" : "8";
+        var rookCol = (side == Castling.Kingside) ? "h" : "a";
+        var newKingCol = (side == Castling.Kingside) ? "g" : "c";
+        var newRookCol = (side == Castling.Kingside) ? "f" : "d";
         Piece? king;
         Piece? rook;
 
@@ -181,8 +181,8 @@ public class Standard : Ruleset
 
     public override string GetInitialRookSquare(Player player, Castling side)
     {
-        string playerRow = (player == Player.White) ? "1" : "8";
-        string rookCol = (side == Castling.Kingside) ? "h" : "a";
+        var playerRow = (player == Player.White) ? "1" : "8";
+        var rookCol = (side == Castling.Kingside) ? "h" : "a";
         return rookCol + playerRow;
     }
 
@@ -207,22 +207,22 @@ public class Standard : Ruleset
             return;
         }
 
-        List<Piece> pieces = GameHelpers.GetPlayerPieces(board.m_playerToPlay, board);
+        var pieces = GameHelpers.GetPlayerPieces(board.m_playerToPlay, board);
         Board testBoard;
-        bool legalMoveExists = false;
+        var legalMoveExists = false;
 
-        foreach (Piece piece in pieces)
+        foreach (var piece in pieces)
         {
-            List<(int, int)> pieceMoves = piece.GetMovementSquares();
+            var pieceMoves = piece.GetMovementSquares();
 
-            foreach ((int, int) move in pieceMoves)
+            foreach (var move in pieceMoves)
             {
-                Game testGame = new Game();
+                var testGame = new Game();
                 testBoard = Game.CreateBoardFromFEN(testGame, Game.CreateFENFromBoard(board));
 
                 try
                 {
-                    Piece? testPiece = testBoard.GetPiece(piece.GetCoordinates());
+                    var testPiece = testBoard.GetPiece(piece.GetCoordinates());
                     if (testPiece is not null)
                     {
                         testPiece.MovePiece(move);

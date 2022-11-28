@@ -11,14 +11,14 @@ public class GameHelpersUnitTests
     [Test]
     public void GetSquareFromCoordinateTest()
     {
-        string square1 = GameHelpers.GetSquareFromCoordinate((2, 2));
-        string square2 = GameHelpers.GetSquareFromCoordinate((6, 0));
-        string square3 = GameHelpers.GetSquareFromCoordinate((7, 7));
-        string square4 = GameHelpers.GetSquareFromCoordinate((1, 5));
-        string square5 = GameHelpers.GetSquareFromCoordinate((3, 4));
-        string square6 = GameHelpers.GetSquareFromCoordinate((5, 2));
-        string square7 = GameHelpers.GetSquareFromCoordinate((1, 7));
-        string square8 = GameHelpers.GetSquareFromCoordinate((0, 0));
+        var square1 = GameHelpers.GetSquareFromCoordinate((2, 2));
+        var square2 = GameHelpers.GetSquareFromCoordinate((6, 0));
+        var square3 = GameHelpers.GetSquareFromCoordinate((7, 7));
+        var square4 = GameHelpers.GetSquareFromCoordinate((1, 5));
+        var square5 = GameHelpers.GetSquareFromCoordinate((3, 4));
+        var square6 = GameHelpers.GetSquareFromCoordinate((5, 2));
+        var square7 = GameHelpers.GetSquareFromCoordinate((1, 7));
+        var square8 = GameHelpers.GetSquareFromCoordinate((0, 0));
         Assert.AreEqual("c3", square1);
         Assert.AreEqual("g1", square2);
         Assert.AreEqual("h8", square3);
@@ -58,14 +58,14 @@ public class GameHelpersUnitTests
     [Test]
     public void GetCoordinateFromSquareTest()
     {
-        (int, int) coordinate1 = GameHelpers.GetCoordinateFromSquare("c3");
-        (int, int) coordinate2 = GameHelpers.GetCoordinateFromSquare("g1");
-        (int, int) coordinate3 = GameHelpers.GetCoordinateFromSquare("h8");
-        (int, int) coordinate4 = GameHelpers.GetCoordinateFromSquare("b6");
-        (int, int) coordinate5 = GameHelpers.GetCoordinateFromSquare("d5");
-        (int, int) coordinate6 = GameHelpers.GetCoordinateFromSquare("f3");
-        (int, int) coordinate7 = GameHelpers.GetCoordinateFromSquare("b8");
-        (int, int) coordinate8 = GameHelpers.GetCoordinateFromSquare("a1");
+        var coordinate1 = GameHelpers.GetCoordinateFromSquare("c3");
+        var coordinate2 = GameHelpers.GetCoordinateFromSquare("g1");
+        var coordinate3 = GameHelpers.GetCoordinateFromSquare("h8");
+        var coordinate4 = GameHelpers.GetCoordinateFromSquare("b6");
+        var coordinate5 = GameHelpers.GetCoordinateFromSquare("d5");
+        var coordinate6 = GameHelpers.GetCoordinateFromSquare("f3");
+        var coordinate7 = GameHelpers.GetCoordinateFromSquare("b8");
+        var coordinate8 = GameHelpers.GetCoordinateFromSquare("a1");
         Assert.AreEqual((2, 2), coordinate1);
         Assert.AreEqual((6, 0), coordinate2);
         Assert.AreEqual((7, 7), coordinate3);
@@ -112,9 +112,9 @@ public class GameHelpersUnitTests
     [Test]
     public void GetMovementSquaresOoBTest()
     {
-        List<(int, int)> movementSquares = new List<(int, int)>();
-        Board board = new Board();
-        Player player = Player.White;
+        var movementSquares = new List<(int, int)>();
+        var board = new Board();
+        var player = Player.White;
 
         // Should return immediately, adding no movement squares, despite all hit squares being valid
         GameHelpers.GetVectorMovementSquares(ref movementSquares, board, player, (-1, 4), (1, 0));

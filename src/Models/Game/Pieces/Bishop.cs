@@ -10,9 +10,9 @@ public class Bishop : Piece
 
     public override List<(int, int)> GetMovementSquares()
     {
-        List<(int, int)> movementSquares = new List<(int, int)>();
+        var movementSquares = new List<(int, int)>();
         (int, int) movementVector;
-        (int, int) position = GetCoordinates();
+        var position = GetCoordinates();
 
         // Top left
         movementVector = (-1, 1);

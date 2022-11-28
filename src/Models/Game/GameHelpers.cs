@@ -57,8 +57,8 @@ public static class GameHelpers
         }
 
         // Get the column
-        int column = -1;
-        for (int index = 0; index < k_boardColumnNames.Length; index++)
+        var column = -1;
+        for (var index = 0; index < k_boardColumnNames.Length; index++)
         {
             if (square[0].ToString().Equals(k_boardColumnNames[index]))
             {
@@ -72,8 +72,8 @@ public static class GameHelpers
         }
 
         // Get the row
-        int row = -1;
-        for (int index = 0; index < k_boardRowNames.Length; index++)
+        var row = -1;
+        for (var index = 0; index < k_boardRowNames.Length; index++)
         {
             if (square[1].ToString().Equals(k_boardRowNames[index]))
             {
@@ -118,8 +118,8 @@ public static class GameHelpers
     /// <returns>The player's pieces</returns>
     public static List<Piece> GetPlayerPieces(Player player, Board board)
     {
-        List<Piece> playerPieces = new List<Piece>();
-        foreach (Piece piece in board.m_pieces)
+        var playerPieces = new List<Piece>();
+        foreach (var piece in board.m_pieces)
         {
             if (piece.GetPlayer() == player)
             {
@@ -138,7 +138,7 @@ public static class GameHelpers
     /// <returns>Whether or not the coordinate is visible to the player</returns>
     public static bool IsSquareVisible(Board board, Player searchingPlayer, (int, int) coordinate)
     {
-        foreach (Piece piece in GameHelpers.GetPlayerPieces(searchingPlayer, board))
+        foreach (var piece in GameHelpers.GetPlayerPieces(searchingPlayer, board))
         {
             try
             {
@@ -163,7 +163,7 @@ public static class GameHelpers
     /// <returns>The sum of the two vectors</returns>
     public static (int, int) AddVector((int, int) v1, (int, int) v2)
     {
-        (int, int) vector = v1;
+        var vector = v1;
         vector.Item1 += v2.Item1;
         vector.Item2 += v2.Item2;
         return vector;
@@ -184,8 +184,8 @@ public static class GameHelpers
             return;
         }
 
-        (int, int) position = startingPosition;
-        bool movementFlag = true;
+        var position = startingPosition;
+        var movementFlag = true;
         do
         {
             position = AddVector(position, movementVector);
@@ -197,7 +197,7 @@ public static class GameHelpers
                 break;
             }
 
-            Piece? occupant = board.GetPiece(position);
+            var occupant = board.GetPiece(position);
             // Handle running into a piece
             if (occupant is not null)
             {

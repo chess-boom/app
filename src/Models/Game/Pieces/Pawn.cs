@@ -11,9 +11,9 @@ public class Pawn : Piece
 
     public override List<(int, int)> GetMovementSquares()
     {
-        List<(int, int)> movementSquares = new List<(int, int)>();
+        var movementSquares = new List<(int, int)>();
 
-        (int, int) coordinates = GetCoordinates();
+        var coordinates = GetCoordinates();
         (int, int) standardMove;
         (int, int) doubleMove;
         (int, int) captureLeft;
@@ -49,7 +49,7 @@ public class Pawn : Piece
                 movementSquares.Add(doubleMove);
             }
         }
-        Piece? occupant = m_board.GetPiece(captureLeft);
+        var occupant = m_board.GetPiece(captureLeft);
         if (GameHelpers.IsOnBoard(captureLeft)
             && ((occupant is not null) && (occupant.GetPlayer() == GameHelpers.GetOpponent(m_owner)))
             || (captureLeft == m_board.m_enPassant))
@@ -88,7 +88,7 @@ public class Pawn : Piece
             }
             else if (coordinate == m_board.m_enPassant) // Capture en passant
             {
-                (int, int) captureCoordinate = coordinate;
+                var captureCoordinate = coordinate;
                 if (m_owner == Player.White)
                 {
                     // The captured piece must be 1 tile lower than the capture square

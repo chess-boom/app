@@ -96,7 +96,7 @@ public class Board
     /// <returns>The piece found on the passed square. If none, returns null</returns>
     public Piece? GetPiece((int, int) coordinate)
     {
-        foreach (Piece piece in m_pieces)
+        foreach (var piece in m_pieces)
         {
             if (coordinate == piece.GetCoordinates())
             {
@@ -118,7 +118,7 @@ public class Board
             throw new ArgumentException($"Coordinate ({coordinate.Item1}, {coordinate.Item2}) is an invalid coordinate (x, y).");
         }
 
-        Player player = Char.IsUpper(pieceType) ? Player.White : Player.Black;
+        var player = Char.IsUpper(pieceType) ? Player.White : Player.Black;
 
         Piece piece;
         try
@@ -139,12 +139,12 @@ public class Board
     /// <param name="fen">Each rank is described, starting with rank 8 and ending with rank 1, with a "/" between each one; within each rank, the contents of the squares are described in order from the a-file to the h-file.</param>
     public void CreateBoard(string fen)
     {
-        string[] pieceSplit = fen.Split('/');
-        for (int row = 0; row < GameHelpers.k_boardHeight; row++)
+        var pieceSplit = fen.Split('/');
+        for (var row = 0; row < GameHelpers.k_boardHeight; row++)
         {
-            int col = 0;
+            var col = 0;
 
-            foreach (char piece in pieceSplit[row])
+            foreach (var piece in pieceSplit[row])
             {
                 if (Char.IsDigit(piece))
                 {
@@ -267,7 +267,7 @@ public class Board
             throw new ArgumentException("FEN file must include castling rights");
         }
 
-        foreach (char c in castling)
+        foreach (var c in castling)
         {
             // Here we do 2 lookups, but unpacking in-place is awkward
             if (!k_FENToCastling.TryGetValue(c, out _))
@@ -275,7 +275,7 @@ public class Board
                 throw new ArgumentException($"Invalid character \'{c}\' in FEN file");
             }
 
-            (Player? player, Castling? side) = k_FENToCastling[c];
+            (var player, var side) = k_FENToCastling[c];
 
             // character was not '-'
             // not a guard clause because compiler uses HasValue check for casting Nullable<>
@@ -304,8 +304,8 @@ public class Board
     /// <returns>The castling privileges in .FEN format</returns>
     public string GetCastling()
     {
-        StringBuilder castlingString = new StringBuilder(k_FENToCastling.Keys.Count - 1);
-        foreach (((Player player, Castling castling), char c) in k_castlingToFEN)
+        var castlingString = new StringBuilder(k_FENToCastling.Keys.Count - 1);
+        foreach (((var player, var castling), var c) in k_castlingToFEN)
         {
             if (m_castling[player].Contains(castling))
             {
@@ -372,7 +372,7 @@ public class Board
         try
         {
             pawn.Destroy();
-            char promotionPiece = (pawn.GetPlayer() == Player.White) ? Char.ToUpper(RequestPromotionPiece()) : Char.ToLower(RequestPromotionPiece());
+            var promotionPiece = (pawn.GetPlayer() == Player.White) ? Char.ToUpper(RequestPromotionPiece()) : Char.ToLower(RequestPromotionPiece());
             CreatePiece(promotionPiece, pawn.GetCoordinates());
         }
         catch (ArgumentException)
@@ -394,13 +394,13 @@ public class Board
 
     public override string ToString()
     {
-        string output = "";
+        var output = "";
 
-        for (int y = GameHelpers.k_boardHeight - 1; y >= 0; y--)
+        for (var y = GameHelpers.k_boardHeight - 1; y >= 0; y--)
         {
-            for (int x = 0; x < GameHelpers.k_boardWidth; x++)
+            for (var x = 0; x < GameHelpers.k_boardWidth; x++)
             {
-                Piece? piece = GetPiece((x, y));
+                var piece = GetPiece((x, y));
                 if (piece is null)
                 {
                     output += ".";

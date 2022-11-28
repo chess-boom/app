@@ -18,12 +18,12 @@ public class Rook : Piece
     {
         try
         {
-            string kingsideRookSquare = m_board.GetRuleset().GetInitialRookSquare(m_owner, Castling.Kingside);
+            var kingsideRookSquare = m_board.GetRuleset().GetInitialRookSquare(m_owner, Castling.Kingside);
             if (m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(kingsideRookSquare)) == this)
             {
                 m_board.RemoveCastling(m_owner, Castling.Kingside);
             }
-            string queensideRookSquare = m_board.GetRuleset().GetInitialRookSquare(m_owner, Castling.Queenside);
+            var queensideRookSquare = m_board.GetRuleset().GetInitialRookSquare(m_owner, Castling.Queenside);
             if (m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(queensideRookSquare)) == this)
             {
                 m_board.RemoveCastling(m_owner, Castling.Queenside);
@@ -39,9 +39,9 @@ public class Rook : Piece
 
     public override List<(int, int)> GetMovementSquares()
     {
-        List<(int, int)> movementSquares = new List<(int, int)>();
+        var movementSquares = new List<(int, int)>();
         (int, int) movementVector;
-        (int, int) position = GetCoordinates();
+        var position = GetCoordinates();
 
         // Top
         movementVector = (0, 1);
@@ -70,12 +70,12 @@ public class Rook : Piece
             }
             try
             {
-                string kingsideRookSquare = m_board.GetRuleset().GetInitialRookSquare(m_owner, Castling.Kingside);
+                var kingsideRookSquare = m_board.GetRuleset().GetInitialRookSquare(m_owner, Castling.Kingside);
                 if (m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(kingsideRookSquare)) == this)
                 {
                     m_board.RemoveCastling(m_owner, Castling.Kingside);
                 }
-                string queensideRookSquare = m_board.GetRuleset().GetInitialRookSquare(m_owner, Castling.Queenside);
+                var queensideRookSquare = m_board.GetRuleset().GetInitialRookSquare(m_owner, Castling.Queenside);
                 if (m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(queensideRookSquare)) == this)
                 {
                     m_board.RemoveCastling(m_owner, Castling.Queenside);

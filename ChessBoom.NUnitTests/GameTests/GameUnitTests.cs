@@ -20,7 +20,7 @@ public class GameUnitTests
     [Test]
     public void CheckDefaultFENSetupTest()
     {
-        string fen = Game.CreateFENFromBoard(_game.m_board);
+        var fen = Game.CreateFENFromBoard(_game.m_board);
         Assert.AreEqual("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", fen);
     }
 
@@ -36,7 +36,7 @@ public class GameUnitTests
         _game.MakeExplicitMove("b8", "c6");
         _game.MakeExplicitMove("f1", "b5");
 
-        string fen = Game.CreateFENFromBoard(_game.m_board);
+        var fen = Game.CreateFENFromBoard(_game.m_board);
         Assert.AreEqual("r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3", fen);
     }
 
@@ -55,7 +55,7 @@ public class GameUnitTests
         _game.MakeExplicitMove("c3", "d5");
         _game.MakeExplicitMove("e6", "d5");
 
-        string fen = Game.CreateFENFromBoard(_game.m_board);
+        var fen = Game.CreateFENFromBoard(_game.m_board);
         Assert.AreEqual("rn2kbnr/ppp1pppp/8/3b4/8/8/PPPP1PPP/R1BQKBNR w KQkq - 0 5", fen);
     }
 
@@ -71,7 +71,7 @@ public class GameUnitTests
         _game.MakeExplicitMove("d7", "d5");
 
         // Ensure the FEN enables an "en passant" capture on square d6
-        string fen = Game.CreateFENFromBoard(_game.m_board);
+        var fen = Game.CreateFENFromBoard(_game.m_board);
         Assert.AreEqual("rnbqkbnr/1pp1pppp/p7/3pP3/8/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 3", fen);
 
         // Ensure the capture takes place
@@ -99,7 +99,7 @@ public class GameUnitTests
         // Ensure the promotion takes place
         _game.MakeExplicitMove("g7", "h8");
         _game.MakeExplicitMove("a2", "b1");
-        string fen = Game.CreateFENFromBoard(_game.m_board);
+        var fen = Game.CreateFENFromBoard(_game.m_board);
         Assert.AreEqual("rnbqkbnQ/p1pppp1p/8/8/8/8/1PPPPPP1/RqBQKBNR w KQq - 0 6", fen);
     }
 
@@ -187,7 +187,7 @@ public class GameUnitTests
         _game.MakeExplicitMove("e8", "O-O");
 
         // Ensure the FEN allows kingside castling
-        string fen = Game.CreateFENFromBoard(_game.m_board);
+        var fen = Game.CreateFENFromBoard(_game.m_board);
         Assert.AreEqual("rnbq1rk1/pppp1ppp/5n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w - - 6 5", fen);
     }
 
@@ -209,7 +209,7 @@ public class GameUnitTests
         _game.MakeExplicitMove("e8", "O-O-O");
 
         // Ensure the FEN allows queenside castling
-        string fen = Game.CreateFENFromBoard(_game.m_board);
+        var fen = Game.CreateFENFromBoard(_game.m_board);
         Assert.AreEqual("2kr1bnr/ppp1pppp/2nqb3/3p4/3P4/2NQB3/PPP1PPPP/2KR1BNR w - - 8 6", fen);
     }
 
@@ -308,7 +308,7 @@ public class GameUnitTests
         _game.MakeExplicitMove("b5", "d7");
         _game.MakeExplicitMove("e8", "f7"); // Check is sidestepped
 
-        string fen = Game.CreateFENFromBoard(_game.m_board);
+        var fen = Game.CreateFENFromBoard(_game.m_board);
         Assert.AreEqual("rnbq2nr/pppBpk2/6pb/5p2/4P3/8/PPPP1PPP/RNB1K1NR w KQ - 1 6", fen);
     }
 
@@ -356,7 +356,7 @@ public class GameUnitTests
         _game.MakeExplicitMove("d1", "h5");
         Assert.AreEqual(_game.m_gameState, GameState.VictoryWhite);
 
-        string fen = Game.CreateFENFromBoard(_game.m_board);
+        var fen = Game.CreateFENFromBoard(_game.m_board);
         Assert.AreEqual("rnbqkbnr/ppppp2p/5p2/6pQ/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 1 3", fen);
     }
 
@@ -373,7 +373,7 @@ public class GameUnitTests
         _game.MakeExplicitMove("d8", "h4");
         Assert.AreEqual(_game.m_gameState, GameState.VictoryBlack);
 
-        string fen = Game.CreateFENFromBoard(_game.m_board);
+        var fen = Game.CreateFENFromBoard(_game.m_board);
         Assert.AreEqual("rnb1kbnr/pppp1ppp/4p3/8/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq - 1 3", fen);
     }
 
@@ -494,11 +494,11 @@ public class GameUnitTests
     [Test]
     public void FiftyMoveRuleTest()
     {
-        Piece? whitePawn = _game.m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("e2"));
-        Piece? whiteQueen = _game.m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("d1"));
-        Piece? blackPawn = _game.m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("e7"));
-        Piece? blackQueen = _game.m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("d8"));
-        Piece? blackKnight = _game.m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("g8"));
+        var whitePawn = _game.m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("e2"));
+        var whiteQueen = _game.m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("d1"));
+        var blackPawn = _game.m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("e7"));
+        var blackQueen = _game.m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("d8"));
+        var blackKnight = _game.m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("g8"));
 
         if (whitePawn is null
             || whiteQueen is null
@@ -510,7 +510,7 @@ public class GameUnitTests
             return;
         }
 
-        List<(Piece, string)> moveList = new List<(Piece, string)>()
+        var moveList = new List<(Piece, string)>()
         {
             (whitePawn, "e4"),
             (blackPawn, "e5"),      // 1
@@ -617,7 +617,7 @@ public class GameUnitTests
         };
 
         // A 'for' loop is preferred over 'foreach' since last move should be avoided
-        for (int index = 0; index < moveList.Count - 1; index++)
+        for (var index = 0; index < moveList.Count - 1; index++)
         {
             _game.MakeMove(moveList[index].Item1, moveList[index].Item2);
         }
