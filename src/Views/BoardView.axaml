@@ -115,6 +115,18 @@
             <Svg Grid.Row="7" Grid.Column="6" Path="Assets/Tiles/black.svg"/>
         </Grid>
 
-        <!-- TODO : Add ItemsRepeater -->
+        <StackPanel>
+            <ItemsRepeater Items="{Binding pieces}">
+                <ItemsRepeater.ItemTemplate>
+                    <DataTemplate>
+                        <!-- TODO : IN PROGRESS -->
+                        <TextBlock Text="p"/>
+                        <!-- <TextBlock Text="{Binding c}" /> -->
+                        <!-- <Svg Path="{Binding pieces^.ToString, StringFormat='/Assets/Pieces/{0}.svg'}"  /> -->
+                        <!-- <Svg Path="{Binding c, StringFormat='/Assets/Pieces/{0}.svg'}" /> -->
+                    </DataTemplate>
+                </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
+        </StackPanel>
     </StackPanel>
 </UserControl>
