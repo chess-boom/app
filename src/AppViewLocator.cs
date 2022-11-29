@@ -13,6 +13,7 @@ public class AppViewLocator : IViewLocator
     {
         DashboardViewModel context => new DashboardView { DataContext = context },
         TutorialViewModel context => new TutorialView { DataContext = context },
+        BoardViewModel context => new BoardView { DataContext = context },
         TemplateViewModel context => new TemplateView { DataContext = context },
         _ => throw new ArgumentOutOfRangeException(nameof(viewModel))
     };
