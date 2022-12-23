@@ -636,5 +636,46 @@ namespace ChessBoom.NUnitTests.GameTests
             if (exception is not null)
                 Assert.AreEqual("Game is not in progress! Illegal move.", exception.Message);
         }
+
+        /// <summary>
+        /// Ensure the legal moves of a king can be retrieved properly
+        /// </summary>
+        [Test]
+        public void KingGetLegalMovesTest()
+        {
+            Console.WriteLine(_game.m_board);
+            Piece? king = _game.m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("e1"));
+            if (king is null || king.GetType() != typeof(King))
+            {
+                Assert.Fail("Failed test - king can not be found");
+            }
+
+            // Starting position: trapped
+            if (king is not null)
+            {
+                var movementSquares = king.GetLegalMoves();
+                foreach (string move in movementSquares)
+                {
+                    Console.WriteLine(move);
+                }
+                Assert.AreEqual(0, movementSquares.Count);
+            }
+
+            _game.MakeExplicitMove("e2", "e4"); // e4
+            _game.MakeExplicitMove("g7", "g6"); // g6
+            _game.MakeExplicitMove("g1", "f3"); // Nf3
+            _game.MakeExplicitMove("f8", "h6"); // Bh6
+            _game.MakeExplicitMove("f1", "c4"); // Bc4
+            _game.MakeExplicitMove("g8", "f6"); // Nf6
+            // Can move or castle
+            if (king is not null)
+            {
+                var movementSquares = king.GetLegalMoves();
+                Assert.AreEqual(3, movementSquares.Count);
+                Assert.Contains("e2", movementSquares);
+                Assert.Contains("f1", movementSquares);
+                Assert.Contains("O-O", movementSquares);
+            }
+        }
     }
 }

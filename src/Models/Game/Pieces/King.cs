@@ -57,6 +57,56 @@ namespace ChessBoom.Models.Game
             }
         }
 
+        public override List<string> GetLegalMoves()
+        {
+            List<string> legalSquares = new List<string>();
+            if (m_board.m_game is null)
+            {
+                Console.WriteLine($"Game is null! Legal moves not found");
+                return legalSquares;
+            }
+
+            foreach ((int, int) square in GetMovementSquares())
+            {
+                Board newBoard = Game.CreateBoardFromFEN(m_board.m_game, Game.CreateFENFromBoard(m_board));
+                string squareName = GameHelpers.GetSquareFromCoordinate(square);
+                try
+                {
+                    newBoard.MovePiece(this, squareName);
+                }
+                catch (ArgumentException)
+                {
+                    continue;
+                }
+
+                if (!newBoard.GetRuleset().IsIllegalBoardState(m_board))
+                {
+                    legalSquares.Add(squareName);
+                }
+            }
+
+            Board castlingBoard = Game.CreateBoardFromFEN(m_board.m_game, Game.CreateFENFromBoard(m_board));
+            try
+            {
+                castlingBoard.GetRuleset().Castle(castlingBoard, m_owner, Castling.Kingside);
+                legalSquares.Add(Move.k_kingsideCastleNotation);
+            }
+            catch (GameplayErrorException)
+            {
+            }
+            castlingBoard = Game.CreateBoardFromFEN(m_board.m_game, Game.CreateFENFromBoard(m_board));
+            try
+            {
+                castlingBoard.GetRuleset().Castle(castlingBoard, m_owner, Castling.Queenside);
+                legalSquares.Add(Move.k_queensideCastleNotation);
+            }
+            catch (GameplayErrorException)
+            {
+            }
+
+            return legalSquares;
+        }
+
         public override string ToString()
         {
             return (m_owner == Player.White) ? "K" : "k";
