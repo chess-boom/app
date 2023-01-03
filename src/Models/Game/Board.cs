@@ -157,7 +157,7 @@ namespace ChessBoom.Models.Game
                         }
                         catch (ArgumentException)
                         {
-
+                            Console.WriteLine("Error! Unable to create piece!");
                         }
                         col++;
                     }

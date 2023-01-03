@@ -118,6 +118,11 @@ namespace ChessBoom.Models.Game
                 kingCoordinate,
                 castlingVector);
 
+            if (intermediateSquares.Count == 0)
+            {
+                return false;
+            }
+
             foreach ((int, int) coordinate in intermediateSquares)
             {
                 if (GameHelpers.IsSquareVisible(board, GameHelpers.GetOpponent(player), coordinate))

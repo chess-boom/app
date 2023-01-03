@@ -308,9 +308,17 @@ namespace ChessBoom.Models.Game
         ///     The sixth part denotes the fullmove number.
         /// </summary>
         /// <param name="fen">The contents of the .FEN file</param>
-        public static Board CreateBoardFromFEN(Game game, string fen)
+        public static Board CreateBoardFromFEN(Game? game, string fen)
         {
-            Board board = new Board(game);
+            Board board;
+            if (game is not null)
+            {
+                board = new Board(game);
+            }
+            else
+            {
+                board = new Board();
+            }
             string[] fenSplit = fen.Split(' ');
 
             board.CreateBoard(fenSplit[0]);

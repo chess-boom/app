@@ -68,11 +68,15 @@ namespace ChessBoom.Models.Game
 
             foreach ((int, int) square in GetMovementSquares())
             {
-                Board newBoard = Game.CreateBoardFromFEN(m_board.m_game, Game.CreateFENFromBoard(m_board));
+                Board newBoard = Game.CreateBoardFromFEN(null, Game.CreateFENFromBoard(m_board));
                 string squareName = GameHelpers.GetSquareFromCoordinate(square);
                 try
                 {
-                    newBoard.MovePiece(this, squareName);
+                    Piece? king = newBoard.GetPiece(this.GetCoordinates());
+                    if (king is not null)
+                    {
+                        newBoard.MovePiece(king, squareName);
+                    }
                 }
                 catch (ArgumentException)
                 {
