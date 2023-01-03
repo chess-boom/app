@@ -57,7 +57,11 @@ namespace ChessBoom.Models.Game
                 string squareName = GameHelpers.GetSquareFromCoordinate(square);
                 try
                 {
-                    newBoard.MovePiece(this, squareName);
+                    Piece? piece = newBoard.GetPiece(this.GetCoordinates());
+                    if (piece is not null)
+                    {
+                        newBoard.MovePiece(piece, squareName);
+                    }
                 }
                 catch (ArgumentException)
                 {
