@@ -61,6 +61,7 @@ namespace ChessBoom.Models.Game
                     if (piece is not null)
                     {
                         newBoard.MovePiece(piece, squareName);
+                        newBoard.m_playerToPlay = GameHelpers.GetOpponent(m_owner);
                     }
                 }
                 catch (ArgumentException)
@@ -68,7 +69,7 @@ namespace ChessBoom.Models.Game
                     continue;
                 }
 
-                if (!newBoard.GetRuleset().IsIllegalBoardState(m_board))
+                if (!newBoard.GetRuleset().IsIllegalBoardState(newBoard))
                 {
                     legalSquares.Add(squareName);
                 }
