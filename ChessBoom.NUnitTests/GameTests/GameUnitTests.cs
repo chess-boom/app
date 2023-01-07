@@ -790,7 +790,6 @@ namespace ChessBoom.NUnitTests.GameTests
             _game.MakeExplicitMove("f8", "b4"); // Bb4
 
 
-            // BUG
             // Can move to block check
             if (queen is not null)
             {
@@ -885,7 +884,6 @@ namespace ChessBoom.NUnitTests.GameTests
             _game.MakeExplicitMove("g5", "e5"); // re5
 
             // Can move to block check
-            // BUG
             if (rook is not null)
             {
                 var movementSquares = rook.GetLegalMoves();
@@ -958,7 +956,6 @@ namespace ChessBoom.NUnitTests.GameTests
             _game.MakeExplicitMove("e6","e5"); // Ne5
 
             // Can move to block check by killing rook
-            //BUG
             if (knight is not null)
             {
                 var movementSquares = knight.GetLegalMoves();
@@ -1020,7 +1017,6 @@ namespace ChessBoom.NUnitTests.GameTests
             _game.MakeExplicitMove("g6", "e6"); // re6
 
             // Can move to block check by moving bishop to e2
-            // BUG
             if (bishop is not null)
             {
                 var movementSquares = bishop.GetLegalMoves();
