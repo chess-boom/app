@@ -787,7 +787,7 @@ public class GameUnitTests
         _game.MakeExplicitMove("h7", "h5"); // h5
         _game.MakeExplicitMove("d2", "d3"); // d3
         _game.MakeExplicitMove("a7", "a6"); // a6
-        _game.MakeExplicitMove("g4","f4"); // Qf4
+        _game.MakeExplicitMove("g4", "f4"); // Qf4
         _game.MakeExplicitMove("f8", "b4"); // Bb4
 
 
@@ -954,7 +954,7 @@ public class GameUnitTests
         _game.MakeExplicitMove("e4", "e5"); // e5
         _game.MakeExplicitMove("g6", "e6"); // Ne6
         _game.MakeExplicitMove("a2", "a4"); // a4
-        _game.MakeExplicitMove("e6","e5"); // Ne5
+        _game.MakeExplicitMove("e6", "e5"); // Ne5
 
         // Can move to block check by killing rook
         if (knight is not null)
