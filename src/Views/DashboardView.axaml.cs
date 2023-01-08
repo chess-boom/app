@@ -1,15 +1,15 @@
-using System.Diagnostics.CodeAnalysis;
 using Avalonia.Markup.Xaml;
+using ReactiveUI;
+using System.Diagnostics.CodeAnalysis;
 using Avalonia.ReactiveUI;
 using ChessBoom.ViewModels;
-using ReactiveUI;
 
 namespace ChessBoom.Views;
 
 [ExcludeFromCodeCoverage]
-public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
+public partial class DashboardView : ReactiveUserControl<DashboardViewModel>
 {
-    public MainWindow()
+    public DashboardView()
     {
         this.WhenActivated(_ => { });
         AvaloniaXamlLoader.Load(this);
