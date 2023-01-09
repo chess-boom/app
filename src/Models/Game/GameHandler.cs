@@ -106,4 +106,45 @@ public class GameHandler
         }
         return m_game.m_board.m_pieces;
     }
+
+    /// <summary>
+    /// Get the legal moves from the piece on a square
+    /// </summary>
+    /// <param name="square">The name of the square</param>
+    /// <returns>The list of legal moves</returns>
+    public List<string> GetLegalMoves(string square)
+    {
+        return GetLegalMoves(GameHelpers.GetCoordinateFromSquare(square));
+    }
+
+    /// <summary>
+    /// Get the legal moves from the piece on a square
+    /// </summary>
+    /// <param name="coordinate">The coordinate of the square</param>
+    /// <returns>The list of legal moves</returns>
+    public List<string> GetLegalMoves((int, int) coordinate)
+    {
+        if (m_game is null)
+        {
+            Console.WriteLine("Error! No game has been found!");
+            return new List<string>();
+        }
+        Piece? piece = m_game.m_board.GetPiece(coordinate);
+        if (piece is null)
+        {
+            Console.WriteLine("Error! No piece has been found!");
+            return new List<string>();
+        }
+        return GetLegalMoves(piece);
+    }
+
+    /// <summary>
+    /// Get the legal moves from a piece
+    /// </summary>
+    /// <param name="piece">The piece</param>
+    /// <returns>The list of legal moves</returns>
+    public List<string> GetLegalMoves(Piece piece)
+    {
+        return piece.GetLegalMoves();
+    }
 }
