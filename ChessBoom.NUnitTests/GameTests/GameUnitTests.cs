@@ -637,4 +637,392 @@ public class GameUnitTests
         if (exception is not null)
             Assert.AreEqual("Game is not in progress! Illegal move.", exception.Message);
     }
+
+    /// <summary>
+    /// Ensure the legal moves of a king can be retrieved properly
+    /// </summary>
+    [Test]
+    public void KingGetLegalMovesTest()
+    {
+        Piece? king = _game.m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("e1"));
+        if (king is null || king.GetType() != typeof(King))
+        {
+            Assert.Fail("Failed test - king can not be found");
+        }
+
+        // Starting position: trapped
+        if (king is not null)
+        {
+            var movementSquares = king.GetLegalMoves();
+            Assert.AreEqual(0, movementSquares.Count);
+        }
+
+        _game.MakeExplicitMove("e2", "e4"); // e4
+        _game.MakeExplicitMove("g7", "g6"); // g6
+        _game.MakeExplicitMove("g1", "f3"); // Nf3
+        _game.MakeExplicitMove("f8", "h6"); // Bh6
+        _game.MakeExplicitMove("f1", "c4"); // Bc4
+        _game.MakeExplicitMove("g8", "f6"); // Nf6
+        // Can move or castle
+        if (king is not null)
+        {
+            var movementSquares = king.GetLegalMoves();
+            Assert.AreEqual(3, movementSquares.Count);
+            Assert.Contains("e2", movementSquares);
+            Assert.Contains("f1", movementSquares);
+            Assert.Contains("O-O", movementSquares);
+        }
+    }
+
+    /// <summary>
+    /// Ensure the legal moves of a pawn can be retrieved properly
+    /// </summary>
+    [Test]
+    public void PawnGetLegalMovesTest()
+    {
+        Piece? pawn = _game.m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("f2"));
+        if (pawn is null || pawn.GetType() != typeof(Pawn))
+        {
+            Assert.Fail("Failed test - king can not be found");
+        }
+
+        _game.MakeExplicitMove("g1", "f3"); // Nf3
+        _game.MakeExplicitMove("a7", "a5"); // a5
+
+        // Trapped
+        if (pawn is not null)
+        {
+            var movementSquares = pawn.GetLegalMoves();
+            Assert.AreEqual(0, movementSquares.Count);
+        }
+
+        _game.MakeExplicitMove("f3", "d4"); // Nd4
+        _game.MakeExplicitMove("a5", "a4"); // a4
+
+        // Single/double move
+        if (pawn is not null)
+        {
+            var movementSquares = pawn.GetLegalMoves();
+            Assert.AreEqual(2, movementSquares.Count);
+            Assert.Contains("f3", movementSquares);
+            Assert.Contains("f4", movementSquares);
+        }
+
+        _game.MakeExplicitMove("f2", "f4"); // f4
+        _game.MakeExplicitMove("e7", "e6"); // e6
+        _game.MakeExplicitMove("f4", "f5"); // f5
+        _game.MakeExplicitMove("g7", "g5"); // g5
+
+        // Move, capture, or en passant
+        if (pawn is not null)
+        {
+            var movementSquares = pawn.GetLegalMoves();
+            Assert.AreEqual(3, movementSquares.Count);
+            Assert.Contains("f6", movementSquares);
+            Assert.Contains("e6", movementSquares);
+            Assert.Contains("g6", movementSquares);
+        }
+    }
+
+    /// <summary>
+    /// Ensure the legal moves of a queen can be retrieved properly
+    /// </summary>
+    [Test]
+    public void QueenGetLegalMovesTest()
+    {
+        Piece? queen = _game.m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("d1"));
+        if (queen is null || queen.GetType() != typeof(Queen))
+        {
+            Assert.Fail("Failed test - queen can not be found");
+        }
+
+        // Starting position: trapped
+        if (queen is not null)
+        {
+            var movementSquares = queen.GetLegalMoves();
+            Assert.AreEqual(0, movementSquares.Count);
+        }
+
+        _game.MakeExplicitMove("e2", "e4"); // e4
+        _game.MakeExplicitMove("g7", "g6"); // g6
+
+        // Diagonal movement
+        if (queen is not null)
+        {
+            var movementSquares = queen.GetLegalMoves();
+            Assert.AreEqual(4, movementSquares.Count);
+            Assert.Contains("e2", movementSquares);
+            Assert.Contains("f3", movementSquares);
+            Assert.Contains("g4", movementSquares);
+            Assert.Contains("h5", movementSquares);
+        }
+
+        _game.MakeExplicitMove("d1", "g4"); // Qg4
+        _game.MakeExplicitMove("g8", "f6"); // Nf6
+
+        // Free to move in many directions
+        if (queen is not null)
+        {
+            var movementSquares = queen.GetLegalMoves();
+            Assert.AreEqual(13, movementSquares.Count);
+            Assert.Contains("g3", movementSquares);
+            Assert.Contains("g5", movementSquares);
+            Assert.Contains("g6", movementSquares); // Pawn location
+            Assert.Contains("f4", movementSquares);
+            Assert.Contains("f5", movementSquares);
+            Assert.Contains("e6", movementSquares);
+            Assert.Contains("d7", movementSquares); // Pawn location
+            Assert.Contains("h3", movementSquares);
+            Assert.Contains("h4", movementSquares);
+            Assert.Contains("h5", movementSquares);
+            Assert.Contains("f3", movementSquares);
+            Assert.Contains("e2", movementSquares);
+            Assert.Contains("d1", movementSquares);
+        }
+
+        // Get white King into check that can be blocked by queen
+        _game.MakeExplicitMove("h2", "h3"); // h3
+        _game.MakeExplicitMove("e7", "e6"); // e6
+        _game.MakeExplicitMove("h3", "h4"); // h4
+        _game.MakeExplicitMove("h7", "h5"); // h5
+        _game.MakeExplicitMove("d2", "d3"); // d3
+        _game.MakeExplicitMove("a7", "a6"); // a6
+        _game.MakeExplicitMove("g4", "f4"); // Qf4
+        _game.MakeExplicitMove("f8", "b4"); // Bb4
+
+
+        // Can move to block check
+        if (queen is not null)
+        {
+            var movementSquares = queen.GetLegalMoves();
+            Assert.AreEqual(1, movementSquares.Count);
+            Assert.Contains("d2", movementSquares);
+        }
+
+    }
+
+    /// <summary>
+    /// Ensure the legal moves of a rook can be retrieved properly
+    /// </summary>
+    [Test]
+    public void RookGetLegalMovesTest()
+    {
+        Piece? rook = _game.m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("h1"));
+        if (rook is null || rook.GetType() != typeof(Rook))
+        {
+            Assert.Fail("Failed test - rook can not be found");
+        }
+
+        // Starting position: trapped
+        if (rook is not null)
+        {
+            var movementSquares = rook.GetLegalMoves();
+            Assert.AreEqual(0, movementSquares.Count);
+        }
+
+        _game.MakeExplicitMove("h2", "h4"); // h4
+        _game.MakeExplicitMove("g7", "g6"); // g6
+
+        // Vertical movement (blocked by pawn, but can move 2 squares)
+        if (rook is not null)
+        {
+            var movementSquares = rook.GetLegalMoves();
+            Assert.AreEqual(2, movementSquares.Count);
+            Assert.Contains("h2", movementSquares);
+            Assert.Contains("h3", movementSquares);
+        }
+
+        _game.MakeExplicitMove("h1", "h3"); // Rh3
+        _game.MakeExplicitMove("g8", "f6"); // Nf6
+
+
+        // Horizontal movement, can move all of the third row
+        if (rook is not null)
+        {
+            var movementSquares = rook.GetLegalMoves();
+            Assert.AreEqual(9, movementSquares.Count);
+            Assert.Contains("h1", movementSquares);
+            Assert.Contains("h2", movementSquares);
+            Assert.Contains("g3", movementSquares);
+            Assert.Contains("f3", movementSquares);
+            Assert.Contains("e3", movementSquares);
+            Assert.Contains("d3", movementSquares);
+            Assert.Contains("c3", movementSquares);
+            Assert.Contains("b3", movementSquares);
+            Assert.Contains("a3", movementSquares);
+        }
+
+
+        _game.MakeExplicitMove("h4", "h5"); // h5
+        _game.MakeExplicitMove("g6", "h5"); // h5
+
+
+        // Can move in many directions
+        if (rook is not null)
+        {
+            var movementSquares = rook.GetLegalMoves();
+            Assert.AreEqual(11, movementSquares.Count);
+            Assert.Contains("g3", movementSquares);
+            Assert.Contains("f3", movementSquares);
+            Assert.Contains("e3", movementSquares);
+            Assert.Contains("d3", movementSquares);
+            Assert.Contains("c3", movementSquares);
+            Assert.Contains("b3", movementSquares);
+            Assert.Contains("a3", movementSquares);
+            Assert.Contains("h1", movementSquares);
+            Assert.Contains("h2", movementSquares);
+            Assert.Contains("h4", movementSquares);
+            Assert.Contains("h5", movementSquares);
+
+        }
+
+        // Get white King into check that can be blocked by rook
+        _game.MakeExplicitMove("e2", "e4"); // e4
+        _game.MakeExplicitMove("h8", "g8"); // rg8
+        _game.MakeExplicitMove("e4", "e5"); // e5
+        _game.MakeExplicitMove("g8", "g5"); // rg5
+        _game.MakeExplicitMove("e5", "e6"); // e6
+        _game.MakeExplicitMove("g5", "e5"); // re5
+
+        // Can move to block check
+        if (rook is not null)
+        {
+            var movementSquares = rook.GetLegalMoves();
+            Assert.AreEqual(1, movementSquares.Count);
+            Assert.Contains("e3", movementSquares);
+        }
+
+    }
+
+    /// <summary>
+    /// Ensure the legal moves of a knight can be retrieved properly
+    /// </summary>
+    [Test]
+    public void KnightGetLegalMovesTest()
+    {
+        Piece? knight = _game.m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("g1"));
+        if (knight is null || knight.GetType() != typeof(Knight))
+        {
+            Assert.Fail("Failed test - knight can not be found");
+        }
+
+        // Initial state, can move to 2 squares
+        if (knight is not null)
+        {
+            var movementSquares = knight.GetLegalMoves();
+            Assert.AreEqual(2, movementSquares.Count);
+            Assert.Contains("f3", movementSquares);
+            Assert.Contains("h3", movementSquares);
+        }
+
+        // Block the knight
+        _game.MakeExplicitMove("f2", "f3"); // f3
+        _game.MakeExplicitMove("g8", "f6"); // Nf6
+        _game.MakeExplicitMove("h2", "h3"); // h3
+        _game.MakeExplicitMove("f6", "g4"); // Ng4
+
+        // Knight is blocked
+        if (knight is not null)
+        {
+            var movementSquares = knight.GetLegalMoves();
+            Assert.AreEqual(0, movementSquares.Count);
+        }
+
+        // Unblock the knight
+        _game.MakeExplicitMove("f3", "g4"); // g4
+        _game.MakeExplicitMove("g7", "g5"); // g5
+        _game.MakeExplicitMove("g1", "f3"); // Nf3
+        _game.MakeExplicitMove("h8", "g8"); // rg8
+
+
+        // Can move 6 squares
+        if (knight is not null)
+        {
+            var movementSquares = knight.GetLegalMoves();
+            Assert.AreEqual(6, movementSquares.Count);
+            Assert.Contains("h4", movementSquares);
+            Assert.Contains("h2", movementSquares);
+            Assert.Contains("e5", movementSquares);
+            Assert.Contains("d4", movementSquares);
+            Assert.Contains("g5", movementSquares);
+            Assert.Contains("g1", movementSquares);
+        }
+
+        // Get white King into check that can be blocked by knight
+        _game.MakeExplicitMove("e2", "e4"); // e4
+        _game.MakeExplicitMove("g8", "g6"); // Ng6
+        _game.MakeExplicitMove("e4", "e5"); // e5
+        _game.MakeExplicitMove("g6", "e6"); // Ne6
+        _game.MakeExplicitMove("a2", "a4"); // a4
+        _game.MakeExplicitMove("e6", "e5"); // Ne5
+
+        // Can move to block check by killing rook
+        if (knight is not null)
+        {
+            var movementSquares = knight.GetLegalMoves();
+            Assert.AreEqual(1, movementSquares.Count);
+            Assert.Contains("e5", movementSquares);
+        }
+    }
+
+    /// <summary>
+    /// Ensure the legal moves of a bishop can be retrieved properly
+    /// </summary>
+    [Test]
+    public void BishopGetLegalMovesTest()
+    {
+        Piece? bishop = _game.m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("f1"));
+        if (bishop is null || bishop.GetType() != typeof(Bishop))
+        {
+            Assert.Fail("Failed test - bishop can not be found");
+        }
+
+        // Initial state, blocked
+        if (bishop is not null)
+        {
+            var movementSquares = bishop.GetLegalMoves();
+            Assert.AreEqual(0, movementSquares.Count);
+        }
+
+        // Unblock the bishop
+        _game.MakeExplicitMove("e2", "e4"); // e4
+        _game.MakeExplicitMove("g8", "f6"); // Nf6
+        _game.MakeExplicitMove("g2", "g4"); // g4
+        _game.MakeExplicitMove("g7", "g5"); // Ng4
+
+
+        // Can move diagonally
+        if (bishop is not null)
+        {
+            var movementSquares = bishop.GetLegalMoves();
+            Assert.AreEqual(7, movementSquares.Count);
+            Assert.Contains("g2", movementSquares);
+            Assert.Contains("h3", movementSquares);
+            Assert.Contains("e2", movementSquares);
+            Assert.Contains("d3", movementSquares);
+            Assert.Contains("c4", movementSquares);
+            Assert.Contains("b5", movementSquares);
+            Assert.Contains("a6", movementSquares);
+        }
+
+        // Get white King into check that can be blocked by bishop
+        _game.MakeExplicitMove("a2", "a4"); // a4
+        _game.MakeExplicitMove("f6", "e4"); // Ne4
+        _game.MakeExplicitMove("a4", "a5"); // a5
+        _game.MakeExplicitMove("e4", "c3"); // Nc3
+        _game.MakeExplicitMove("a5", "a6"); // a6
+        _game.MakeExplicitMove("h8", "g8"); // rg8
+        _game.MakeExplicitMove("a6", "b7"); // b7
+        _game.MakeExplicitMove("g8", "g6"); // rg6
+        _game.MakeExplicitMove("b2", "b4"); // b4
+        _game.MakeExplicitMove("g6", "e6"); // re6
+
+        // Can move to block check by moving bishop to e2
+        if (bishop is not null)
+        {
+            var movementSquares = bishop.GetLegalMoves();
+            Assert.AreEqual(1, movementSquares.Count);
+            Assert.Contains("e2", movementSquares);
+        }
+    }
 }

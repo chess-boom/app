@@ -324,9 +324,17 @@ public class Game
     /// </summary>
     /// <param name="game">The game which the resultant Board will correspond to</param>
     /// <param name="fen">The contents of the .FEN file</param>
-    public static Board CreateBoardFromFEN(Game game, string fen)
+    public static Board CreateBoardFromFEN(Game? game, string fen)
     {
-        var board = new Board(game);
+        Board board;
+        if (game is not null)
+        {
+            board = new Board(game);
+        }
+        else
+        {
+            board = new Board();
+        }
         var fenSplit = fen.Split(' ');
 
         board.CreateBoard(fenSplit[0]);
