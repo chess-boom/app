@@ -11,7 +11,7 @@
         <Label Content="Board" FontSize="50" HorizontalAlignment="Center"/>
         <!-- TODO : Add CanvasControl OR DockPanel with Drag/Drop events
         <SKCanvasControl Name="CanvasControl" /> -->
-        <Grid ShowGridLines="False">
+        <!-- <Grid ShowGridLines="False">
             <Grid.RowDefinitions>
                 <RowDefinition Height="45"></RowDefinition>
                 <RowDefinition Height="45"></RowDefinition>
@@ -113,8 +113,8 @@
             <Svg Grid.Row="7" Grid.Column="2" Path="Assets/Tiles/black.svg"/>
             <Svg Grid.Row="7" Grid.Column="4" Path="Assets/Tiles/black.svg"/>
             <Svg Grid.Row="7" Grid.Column="6" Path="Assets/Tiles/black.svg"/>
-        </Grid>
-
+        </Grid> -->
+        <Grid Name="chessBoard"/>
         <StackPanel>
             <ItemsRepeater Items="{Binding pieces}">
                 <ItemsRepeater.ItemTemplate>
