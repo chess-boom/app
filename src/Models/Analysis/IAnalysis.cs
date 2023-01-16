@@ -12,6 +12,6 @@ namespace ChessBoom.Models.Analysis
     internal interface IAnalysis
     {
         string FenPosition { get; set;}
-        Evaluation GetEvaluation();
+        Evaluation GetStaticEvaluation();
     }
 }

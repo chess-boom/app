@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Avalonia.Animation;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -15,13 +17,21 @@ namespace ChessBoom.Models.Analysis
         protected Process m_stockfish;
         readonly int s_millisecondDelay = 100;
         readonly int s_maxRetries = 15;
+
         /// <summary>
-        /// FEN position we wish to analyze.
+        /// FEN position we wish to analyze. When setting the fen position, sends a command to Stockfish to set the position in the engine.
         /// </summary>
         public string FenPosition
         {
             get { return m_fenPosition; }
-            set { m_fenPosition = value; }
+            set
+            {
+                m_fenPosition = value;
+                if (IsReady())
+                {
+                    WriteCommand($"position fen {m_fenPosition}");
+                }
+            }
         }
 
         public Stockfish()
@@ -52,10 +62,10 @@ namespace ChessBoom.Models.Analysis
             m_stockfish.Start();
             Thread.Sleep(500);
             ReadOutput(); // Read initial output
-            
+
             // Start of new game
             NewGame();
-            
+
         }
         /// <summary>
         /// Initializes the Stockfish process so we can perform analysis in Chess Boom
@@ -141,19 +151,18 @@ namespace ChessBoom.Models.Analysis
             WriteCommand("position startpos");
         }
         /// <summary>
-        /// Gets the evaluation of the current position as a float, and which side the value is relative to (White or Black).
+        /// Gets the static evaluation of the current position as a float, and which side the value is relative to (White or Black).
         /// </summary>
         /// <returns>Evaluation Object</returns>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ApplicationException"></exception>
         /// <exception cref="InvalidOperationException"></exception>
-        public Evaluation GetEvaluation()
+        public Evaluation GetStaticEvaluation()
         {
             if (m_fenPosition != null)
             {
                 if (IsReady())
                 {
-                    WriteCommand($"position fen {FenPosition}");
                     WriteCommand("eval");
 
                     string output = ReadOutput();
@@ -180,6 +189,64 @@ namespace ChessBoom.Models.Analysis
             throw new InvalidOperationException("Cannot get an evaluation with no fen position!");
         }
         /// <summary>
+        /// Returns the N best moves based on your position.
+        /// </summary>
+        /// <param name="n">Number of moves you want to return. Value greater than 0. Ordered by descending cp value). Default: 3</param>
+        /// <param name="depth">Depth you want the search to go to. Value greater than 0. Default: 10</param>
+        /// <returns></returns>
+        public List<(string, int)> GetNBestMoves(int n = 3, int depth = 10)
+        {
+            if (n <= 0 || depth <= 0)
+                throw new ArgumentOutOfRangeException("Depth and n must be greater than 0.");
+
+            string[] bestMoves = new string[n];
+            List<string> outputList = new List<string>();
+
+            if (IsReady())
+            {
+                // Get Stockfish to return N best moves
+                WriteCommand($"setoption name MultiPV value {n}");
+
+                // Run analysis to specified depth
+                WriteCommand($"go depth {depth}");
+
+                // Keep reading output until analysis ends
+                string output = ReadOutput();
+                outputList.Add(output);
+                while (!output.Contains("bestmove"))
+                {
+                    output = ReadOutput();
+                    outputList.Add(output);
+                }
+
+                //Last N+1 lines are the N best moves and the bestmove line.
+                List <(string, int)> moves = new List<(string, int)>();
+                for (int i = outputList.Count - (n + 1); i < outputList.Count - 1; i++)
+                {
+                    string[] splitOutput = outputList[i].Split();
+                    int cp_index = Array.IndexOf(splitOutput, "cp"); // Find the position of "cp" because the next line is the cp value (cp = centipawn)
+                    int move_index = Array.IndexOf(splitOutput, "pv"); // Find the position of "pv" because the next line is the move;
+
+                    string move = "";
+                    int cp = int.MaxValue;
+                    if (cp_index != -1)
+                        cp = int.Parse(splitOutput[cp_index+1]);
+                    if (move_index != -1)
+                        move = splitOutput[move_index+1];
+                        
+                    moves.Add((move,cp));
+                }
+
+                moves.Sort((x,y) => (y.Item2).CompareTo(x.Item2)); // Sort in place, descending order
+
+                return moves;
+            }
+
+            return null;
+
+
+        }
+        /// <summary>
         /// Close the Stockfish process
         /// </summary>
         public void Close()
@@ -204,20 +271,28 @@ namespace ChessBoom.Models.Analysis
             m_stockfish.Start();
         }
     }
-        /// <summary>
-        /// Temp, TODO remove. To get this to work in Visual Studio:
-        /// 1. Go to Project --> ChessBoom Properties
-        /// 2. Set Startup Object as MainClass
-        /// 3. Set Output Type to Console Application
-        /// </summary>
-        //class MainClass
-        //{
-        //    static void Main(string[] args)
-        //    {
-        //        Stockfish stockfish = new Stockfish();
-        //        stockfish.FenPosition = "rnbqkbnr/ppp1pppp/8/3pP3/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2";
-        //        Console.WriteLine(stockfish.GetEvaluation());
-        //    }
-        //}
+    /// <summary>
+    /// Temp, TODO remove. To get this to work in Visual Studio:
+    /// 1. Go to Project --> ChessBoom Properties
+    /// 2. Set Startup Object as MainClass
+    /// 3. Set Output Type to Console Application
+    /// </summary>
+    //class MainClass
+    //{
+    //    static void Main(string[] args)
+    //    {
+    //        Stockfish stockfish = new Stockfish();
+    //        stockfish.FenPosition = "rnbqkbnr/ppp1pppp/8/3pP3/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2";
+    //        Console.WriteLine(stockfish.GetStaticEvaluation());
+    //        int n = 5;
+    //        Console.WriteLine($"{n} best moves");
+    //        var nBestMoves = stockfish.GetNBestMoves(n);
+
+    //        foreach (var move in nBestMoves)
+    //        {
+    //            Console.WriteLine($"Move: {move.Item1}, cp: {move.Item2}");
+    //        }
+    //    }
+    //}
 }
 
