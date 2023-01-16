@@ -188,6 +188,105 @@ public class Game
     public void MakePGNMove(string pgnNotation)
     {
         // TODO;
+
+        // Gather extra data
+        List<string> rowInstances = new List<string>();
+        List<string> colInstances = new List<string>();
+        foreach (char c in pgnNotation)
+        {
+            if (GameHelpers.k_boardColumnNames.Contains(c.ToString()))
+            {
+                colInstances.Add(c.ToString());
+                continue;
+            }
+            if (GameHelpers.k_boardRowNames.Contains(c.ToString()))
+            {
+                rowInstances.Add(c.ToString());
+                continue;
+            }
+        }
+
+        bool containsCapture = (pgnNotation.IndexOf('x') != -1);
+        bool containsCheck = (pgnNotation.IndexOf('+') != -1);
+        bool containsCheckmate = (pgnNotation.IndexOf('#') != -1);
+        bool containsPromotion = (pgnNotation.IndexOf('=') != -1);
+
+        // Get the target square
+        Board dummyBoard = new Board();
+        string square = colInstances[colInstances.Count - 1] + rowInstances[rowInstances.Count - 1];
+        (int, int) squareCoordinates = GameHelpers.GetCoordinateFromSquare(square);
+
+        // Get piece type
+        Piece dummyPiece = null!;
+
+        // Consider reimplementing like Board's k_pieceConstructor
+        List<(int, int)> possibleOrigins;
+        switch ((char) pgnNotation[0])
+        {
+            case 'Q':
+                dummyPiece = new Queen(dummyBoard, dummyBoard.m_playerToPlay, squareCoordinates);
+                possibleOrigins = dummyPiece.GetMovementSquares();
+                break;
+            case 'K':
+                dummyPiece = new King(dummyBoard, dummyBoard.m_playerToPlay, squareCoordinates);
+                // TODO: Account for castling
+                possibleOrigins = dummyPiece.GetMovementSquares();
+                break;
+            case 'R':
+                dummyPiece = new Rook(dummyBoard, dummyBoard.m_playerToPlay, squareCoordinates);
+                // TODO: Account for castling
+                possibleOrigins = dummyPiece.GetMovementSquares();
+                break;
+            case 'N':
+                dummyPiece = new Knight(dummyBoard, dummyBoard.m_playerToPlay, squareCoordinates);
+                possibleOrigins = dummyPiece.GetMovementSquares();
+                break;
+            case 'B':
+                dummyPiece = new Bishop(dummyBoard, dummyBoard.m_playerToPlay, squareCoordinates);
+                possibleOrigins = dummyPiece.GetMovementSquares();
+                break;
+            default:
+                dummyPiece = new Pawn(dummyBoard, dummyBoard.m_playerToPlay, squareCoordinates);
+                // TODO: Support movement
+                possibleOrigins = dummyPiece.GetMovementSquares();
+                break;
+        }
+
+        // Get the piece
+        List<Piece> possiblePieces = new List<Piece>();
+        foreach ((int, int) originCoordinate in possibleOrigins)
+        {
+            Piece? candidatePiece = m_board.GetPiece(originCoordinate);
+            if (candidatePiece is not null)
+            {
+                possiblePieces.Add(candidatePiece);
+            }
+        }
+        // Get correct piece
+        Piece correctPiece = null!;
+        foreach (Piece candidatePiece in possiblePieces)
+        {
+            if (candidatePiece.GetType() != dummyPiece.GetType())
+            {
+                continue;
+            }
+            if (rowInstances.Count == 1 && colInstances.Count == 1)
+            {
+                correctPiece = candidatePiece;
+                break;
+            }
+            if (rowInstances.Count != 1 && candidatePiece.GetCoordinates().Item2 != GameHelpers.k_boardRowNames.IndexOf(rowInstances[0]))
+            {
+                continue;
+            }
+            if (colInstances.Count != 1 && candidatePiece.GetCoordinates().Item1 != GameHelpers.k_boardColumnNames.IndexOf(colInstances[0]))
+            {
+                continue;
+            }
+            correctPiece = candidatePiece;
+            break;
+        }
+
         return;
     }
 
