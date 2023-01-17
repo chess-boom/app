@@ -187,7 +187,6 @@ public class Game
     /// <exception cref="ArgumentException">Thrown if the PGN notation does not denote a unique, valid move</exception>
     public void MakePGNMove(string pgnNotation)
     {
-        // TODO: Support promotion!
         // Castling
         if (pgnNotation == Move.k_kingsideCastleNotation
             || pgnNotation == Move.k_kingsideCastleNotation)
@@ -342,9 +341,10 @@ public class Game
     /// </summary>
     /// <param name="piece">The piece that will attempt to move</param>
     /// <param name="square">The square that the piece should move to</param>
+    /// <param name="promotionPiece">Optional parameter denoting which piece type the piece will promote into</param>
     /// <exception cref="ArgumentException">Thrown the piece can not be found or be moved, or the square can not be found</exception>
     /// <exception cref="GameplayErrorException">Thrown if the wrong player attempts to make a move or if castling is attempted when illegal</exception>
-    public void MakeMove(Piece piece, string square)
+    public void MakeMove(Piece piece, string square, char? promotionPiece = null)
     {
         if (m_gameState != GameState.InProgress)
         {
@@ -368,7 +368,7 @@ public class Game
         }
         else
         {
-            piece.MovePiece(GameHelpers.GetCoordinateFromSquare(square));
+            piece.MovePiece(GameHelpers.GetCoordinateFromSquare(square), promotionPiece);
         }
 
         if (m_board.m_playerToPlay == Player.Black)

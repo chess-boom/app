@@ -356,14 +356,16 @@ public class Board
     /// Handle a pawn's request to promote
     /// </summary>
     /// <param name="pawn">The pawn that wishes to promote</param>
-    public void RequestPromotion(Pawn pawn)
+    /// <param name="piece">The piece type into which the pawn will promote. May be null</param>
+    public void RequestPromotion(Pawn pawn, char? piece)
     {
         try
         {
             pawn.Destroy();
+            char pieceType = (piece is not null) ? (char) piece : RequestPromotionPiece();
             var promotionPiece = (pawn.GetPlayer() == Player.White)
-                ? Char.ToUpper(RequestPromotionPiece())
-                : Char.ToLower(RequestPromotionPiece());
+                ? Char.ToUpper(pieceType)
+                : Char.ToLower(pieceType);
             CreatePiece(promotionPiece, pawn.GetCoordinates());
         }
         catch (ArgumentException)

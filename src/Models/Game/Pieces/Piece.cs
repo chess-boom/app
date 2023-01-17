@@ -87,8 +87,9 @@ public abstract class Piece
     /// Attempt to move the piece to a new square. Initiates a capture if required
     /// </summary>
     /// <param name="coordinate">The coordinate to which the piece will try to move</param>
+    /// <param name="promotionPiece">Optional parameter denoting which piece type the piece will promote into. Typically only used for pawns</param>
     /// <exception cref="ArgumentException">Thrown the piece is unable to move to the specified coordinate</exception>
-    public virtual void MovePiece((int, int) coordinate)
+    public virtual void MovePiece((int, int) coordinate, char? promotionPiece = null)
     {
         if (GetMovementSquares().Contains(coordinate))
         {

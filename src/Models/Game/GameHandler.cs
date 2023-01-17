@@ -11,8 +11,8 @@ namespace ChessBoom.Models.Game;
 /// </summary>
 public class GameHandler
 {
-    Game? m_game;
-    Board? m_board;
+    public Game? m_game;
+    public Board? m_board;
 
     public GameHandler()
     {
@@ -43,7 +43,24 @@ public class GameHandler
             throw new NullReferenceException();
         }
 
-        Dictionary<string, string> pgn = ReadPGN(path);
+        Dictionary<string, string> pgn;
+        try
+        {
+            pgn = ReadPGN(path);
+        }
+        catch (FileNotFoundException)
+        {
+            throw;
+        }
+        catch (ArgumentException)
+        {
+            throw;
+        }
+        catch (DirectoryNotFoundException)
+        {
+            throw;
+        }
+
         try
         {
             foreach (string move in ExtractMovesFromPGN(pgn["Moves"]))
@@ -53,10 +70,8 @@ public class GameHandler
         }
         catch (ArgumentException)
         {
-            Console.WriteLine("Error! PGN contains invalid move!");
-            throw;
+            throw new ArgumentException("Error! PGN contains invalid move!");
         }
-        Console.WriteLine("Game successfully loaded!");
     }
 
     public static Dictionary<string, string> ReadPGN(string path)
