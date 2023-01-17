@@ -106,11 +106,6 @@ public class Standard : Ruleset
             kingCoordinate,
             castlingVector);
 
-        if (intermediateSquares.Count == 0)
-        {
-            return false;
-        }
-
         foreach (var coordinate in intermediateSquares)
         {
             if (GameHelpers.IsSquareVisible(board, GameHelpers.GetOpponent(player), coordinate))
