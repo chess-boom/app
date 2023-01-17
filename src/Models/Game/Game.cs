@@ -28,13 +28,9 @@ public enum Castling
 
 public enum GameState
 {
-    // TODO: Create a game loop
-    Setup,
     InProgress,
     VictoryWhite,
     VictoryBlack,
-
-    // TODO: Implement draw checks
     Draw,
 
     // TODO: Implement game aborting
@@ -185,11 +181,23 @@ public class Game
     }
 
     /// <summary>
-    /// Handle the capture that has occurred on a specific square
+    /// Make a move using PGN notation format
     /// </summary>
-    /// <param name="startingSquare">The piece that initiated the capture</param>
-    /// <param name="destinationSquare">The square on which the capture takes place</param>
+    /// <param name="pgnNotation">The PGN notation representing the move</param>
+    /// <exception cref="ArgumentException">Thrown if the PGN notation does not denote a unique, valid move</exception>
+    public void MakePGNMove(string pgnNotation)
+    {
+        // TODO;
+        return;
+    }
+
+    /// <summary>
+    /// Make a move from two specified squares
+    /// </summary>
+    /// <param name="startingSquare">The square from which a piece moves</param>
+    /// <param name="destinationSquare">The square to which a piece moves</param>
     /// <exception cref="ArgumentException">Thrown the piece on the starting square can not be found or be moved, or the square can not be found</exception>
+    /// <exception cref="GameplayErrorException">Thrown if the attempted move is invalid as per gameplay rules</exception>
     public void MakeExplicitMove(string startingSquare, string destinationSquare)
     {
         var piece = m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(startingSquare));
@@ -198,7 +206,18 @@ public class Game
             throw new ArgumentException($"Piece on square {startingSquare} not found!");
         }
 
-        MakeMove(piece, destinationSquare);
+        try
+        {
+            MakeMove(piece, destinationSquare);
+        }
+        catch (ArgumentException)
+        {
+            throw;
+        }
+        catch (GameplayErrorException)
+        {
+            throw;
+        }
     }
 
     /// <summary>
@@ -305,9 +324,17 @@ public class Game
     /// </summary>
     /// <param name="game">The game which the resultant Board will correspond to</param>
     /// <param name="fen">The contents of the .FEN file</param>
-    public static Board CreateBoardFromFEN(Game game, string fen)
+    public static Board CreateBoardFromFEN(Game? game, string fen)
     {
-        var board = new Board(game);
+        Board board;
+        if (game is not null)
+        {
+            board = new Board(game);
+        }
+        else
+        {
+            board = new Board();
+        }
         var fenSplit = fen.Split(' ');
 
         board.CreateBoard(fenSplit[0]);
