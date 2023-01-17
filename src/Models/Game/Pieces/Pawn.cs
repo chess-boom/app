@@ -70,6 +70,33 @@ public class Pawn : Piece
         return movementSquares;
     }
 
+    // TODO: Document this!
+    public List<(int, int)> GetPossibleOriginSquares()
+    {
+        List<(int, int)> squares = new List<(int, int)>();
+        int playerVectorMultiplier = (m_owner == Player.White) ? -1 : 1;
+
+        if (m_board.GetPiece(GameHelpers.AddVector(GetCoordinates(), (0, playerVectorMultiplier * 1))) is null)
+        {
+            squares.Add(GameHelpers.AddVector(GetCoordinates(), (0, playerVectorMultiplier * 1)));
+            if (((m_owner != Player.White) || m_row < 4)
+                && ((m_owner != Player.Black) || m_row >= 4)
+                && m_board.GetPiece(GameHelpers.AddVector(GetCoordinates(), (0, playerVectorMultiplier * 2))) is null)
+            {
+                squares.Add(GameHelpers.AddVector(GetCoordinates(), (0, playerVectorMultiplier * 2)));
+            }
+        }
+        if (m_board.GetPiece(GameHelpers.AddVector(GetCoordinates(), (-1, playerVectorMultiplier * 1))) is null)
+        {
+            squares.Add(GameHelpers.AddVector(GetCoordinates(), (-1, playerVectorMultiplier * 1)));
+        }
+        if (m_board.GetPiece(GameHelpers.AddVector(GetCoordinates(), (1, playerVectorMultiplier * 1))) is null)
+        {
+            squares.Add(GameHelpers.AddVector(GetCoordinates(), (1, playerVectorMultiplier * 1)));
+        }
+        return squares;
+    }
+
     /// <summary>
     /// Attempt to move the piece to a new square. Initiates a capture if required
     /// </summary>

@@ -187,7 +187,24 @@ public class Game
     /// <exception cref="ArgumentException">Thrown if the PGN notation does not denote a unique, valid move</exception>
     public void MakePGNMove(string pgnNotation)
     {
-        // TODO;
+        // TODO: Support promotion!
+        // Castling
+        if (pgnNotation == Move.k_kingsideCastleNotation
+            || pgnNotation == Move.k_kingsideCastleNotation)
+        {
+            // TODO: Implement a GetKing() function, as this will break when implementing the Chess960 variant
+            Piece? king = (m_board.m_playerToPlay == Player.White)
+                ? m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("e1"))
+                : m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("e8"));
+            
+            if (king is null || king.GetType() != typeof(King))
+            {
+                throw new ArgumentException("King was not found!");
+            }
+
+            MakeMove(king, pgnNotation);
+            return;
+        }
 
         // Gather extra data
         List<string> rowInstances = new List<string>();
@@ -224,31 +241,28 @@ public class Game
         switch ((char) pgnNotation[0])
         {
             case 'Q':
-                dummyPiece = new Queen(dummyBoard, dummyBoard.m_playerToPlay, squareCoordinates);
+                dummyPiece = new Queen(dummyBoard, m_board.m_playerToPlay, squareCoordinates);
                 possibleOrigins = dummyPiece.GetMovementSquares();
                 break;
             case 'K':
-                dummyPiece = new King(dummyBoard, dummyBoard.m_playerToPlay, squareCoordinates);
-                // TODO: Account for castling
+                dummyPiece = new King(dummyBoard, m_board.m_playerToPlay, squareCoordinates);
                 possibleOrigins = dummyPiece.GetMovementSquares();
                 break;
             case 'R':
-                dummyPiece = new Rook(dummyBoard, dummyBoard.m_playerToPlay, squareCoordinates);
-                // TODO: Account for castling
+                dummyPiece = new Rook(dummyBoard, m_board.m_playerToPlay, squareCoordinates);
                 possibleOrigins = dummyPiece.GetMovementSquares();
                 break;
             case 'N':
-                dummyPiece = new Knight(dummyBoard, dummyBoard.m_playerToPlay, squareCoordinates);
+                dummyPiece = new Knight(dummyBoard, m_board.m_playerToPlay, squareCoordinates);
                 possibleOrigins = dummyPiece.GetMovementSquares();
                 break;
             case 'B':
-                dummyPiece = new Bishop(dummyBoard, dummyBoard.m_playerToPlay, squareCoordinates);
+                dummyPiece = new Bishop(dummyBoard, m_board.m_playerToPlay, squareCoordinates);
                 possibleOrigins = dummyPiece.GetMovementSquares();
                 break;
             default:
-                dummyPiece = new Pawn(dummyBoard, dummyBoard.m_playerToPlay, squareCoordinates);
-                // TODO: Support movement
-                possibleOrigins = dummyPiece.GetMovementSquares();
+                dummyPiece = new Pawn(dummyBoard, m_board.m_playerToPlay, squareCoordinates);
+                possibleOrigins = ((Pawn) dummyPiece).GetPossibleOriginSquares();
                 break;
         }
 
@@ -270,6 +284,10 @@ public class Game
             {
                 continue;
             }
+            if (!candidatePiece.GetLegalMoves().Contains(square))
+            {
+                continue;
+            }
             if (rowInstances.Count == 1 && colInstances.Count == 1)
             {
                 correctPiece = candidatePiece;
@@ -287,7 +305,7 @@ public class Game
             break;
         }
 
-        return;
+        MakeMove(correctPiece, square);
     }
 
     /// <summary>
