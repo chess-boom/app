@@ -12,4 +12,3 @@
         <Grid Name="ChessBoard" HorizontalAlignment="Center" />
     </StackPanel>
 </UserControl>
-

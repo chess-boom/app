@@ -8,7 +8,7 @@ namespace ChessBoom.ViewModels;
 
 public class BoardViewModel : BaseViewModel
 {
-    public Game game;
+    private Game game;
 
     public BoardViewModel(IScreen hostScreen) : base(hostScreen)
     {

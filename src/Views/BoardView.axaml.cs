@@ -28,9 +28,10 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         ChessBoard = this.Find<Grid>("ChessBoard");
         this.WhenActivated(_ =>
         {
-            DrawChessBoard();
-            DrawPieces();
+            // DrawChessBoard();
+            // DrawPieces();
         });
+        DrawChessBoard();
         AvaloniaXamlLoader.Load(this);
     }
 
@@ -38,8 +39,10 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     {
         for (var i = 0; i < GameHelpers.k_boardWidth; i++)
         {
+            // ChessBoard.ColumnDefinitions.Add(new ColumnDefinition());
             for (var j = 0; j < GameHelpers.k_boardHeight; j++)
             {
+                // ChessBoard.RowDefinitions.Add(new RowDefinition());
                 var tile = new Rectangle
                 {
                     Width = Tile.Width,
@@ -52,16 +55,6 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
                 Grid.SetColumn(tile, j);
                 ChessBoard.Children.Add(tile);
             }
-        }
-
-        for (var i = 0; i < GameHelpers.k_boardWidth; i++)
-        {
-            ChessBoard.RowDefinitions.Add(new RowDefinition());
-            ChessBoard.ColumnDefinitions.Add(new ColumnDefinition
-                {
-                    Width = new GridLength(Tile.Width, GridUnitType.Pixel)
-                }
-            );
         }
     }
 
