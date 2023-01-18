@@ -35,7 +35,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         this.WhenActivated(_ =>
         {
             DrawChessBoard();
-            DrawPieces();
+            // DrawPieces();
         });
         AvaloniaXamlLoader.Load(this);
         ChessBoard = this.Find<Grid>("ChessBoard");
@@ -79,10 +79,10 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         // var svg = new SKSvg();
         // svg.Load(piecePath);
         // canvas.DrawPicture(svg.Picture);
-        
+
         // Grid.SetRow(canvas, 0);
         // Grid.SetColumn(canvas, 0);
-        
+
         // foreach (var piece in ViewModel.game.m_board.m_pieces)
         // {
         //     var tile = this.Find<Rectangle>(GameHelpers.GetSquareFromCoordinate(piece.GetCoordinates()));
