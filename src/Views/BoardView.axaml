@@ -116,17 +116,18 @@
         </Grid> -->
         <Grid Name="chessBoard"/>
         <StackPanel>
-            <ItemsRepeater Items="{Binding pieces}">
+			 <TextBlock Text="{Binding C}" />
+            <!--<ItemsRepeater Items="{Binding pieces}">
                 <ItemsRepeater.ItemTemplate>
                     <DataTemplate>
-                        <!-- TODO : IN PROGRESS -->
-                        <TextBlock Text="p"/>
-                        <!-- <TextBlock Text="{Binding c}" /> -->
-                        <!-- <Svg Path="{Binding pieces^.ToString, StringFormat='/Assets/Pieces/{0}.svg'}"  /> -->
-                        <!-- <Svg Path="{Binding c, StringFormat='/Assets/Pieces/{0}.svg'}" /> -->
+                         --><!--TODO : IN PROGRESS--><!-- 
+                        --><!--<TextBlock Text="p"/>--><!--
+                         <TextBlock Text="{Binding c}" />
+						--><!--<Svg Path="{Binding pieces^.ToString, StringFormat='/Assets/Pieces/{0}.svg'}"  /> 
+                         <Svg Path="{Binding c, StringFormat='/Assets/Pieces/{0}.svg'}" />--><!--
                     </DataTemplate>
                 </ItemsRepeater.ItemTemplate>
-            </ItemsRepeater>
+            </ItemsRepeater>-->
         </StackPanel>
     </StackPanel>
 </UserControl>
