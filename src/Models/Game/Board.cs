@@ -362,7 +362,7 @@ public class Board
         try
         {
             pawn.Destroy();
-            char pieceType = (piece is not null) ? (char) piece : RequestPromotionPiece();
+            char pieceType = (piece is not null) ? (char)piece : RequestPromotionPiece();
             var promotionPiece = (pawn.GetPlayer() == Player.White)
                 ? Char.ToUpper(pieceType)
                 : Char.ToLower(pieceType);

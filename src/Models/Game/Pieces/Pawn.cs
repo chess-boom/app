@@ -70,7 +70,10 @@ public class Pawn : Piece
         return movementSquares;
     }
 
-    // TODO: Document this!
+    /// <summary>
+    /// Retrieves the list of squares from which a pawn might have reached this pawn's current location in a single move
+    /// </summary>
+    /// <returns>The possible squares that the pawn may have made its last move from</returns>
     public List<(int, int)> GetPossibleOriginSquares()
     {
         List<(int, int)> squares = new List<(int, int)>();

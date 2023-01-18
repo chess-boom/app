@@ -11,8 +11,8 @@ namespace ChessBoom.Models.Game;
 /// </summary>
 public class GameHandler
 {
-    public Game? m_game;
-    public Board? m_board;
+    Game? m_game;
+    Board? m_board;
 
     public GameHandler()
     {
@@ -33,7 +33,9 @@ public class GameHandler
     /// </summary>
     /// <param name="path">The PGN file of the game to load</param>
     /// <exception cref="ArgumentException">Thrown if the PGN is invalid</exception>
+    /// <exception cref="FileNotFoundException">Thrown if the PGN could not be found</exception>
     /// <exception cref="NullReferenceException">Thrown if the game has not yet started. Should not be thrown</exception>
+    /// <exception cref="DirectoryNotFoundException">Thrown if the PGN's directory could not be found</exception>
     public void LoadGame(string path)
     {
         StartGame();
@@ -74,6 +76,11 @@ public class GameHandler
         }
     }
 
+    /// <summary>
+    /// Processes a PGN file. Parses it for all relevant information and returns that information as a dictionary
+    /// </summary>
+    /// <param name="path">The PGN file</param>
+    /// <returns>The contents of the PGN file, parsed into a dictionary</returns>
     public static Dictionary<string, string> ReadPGN(string path)
     {
         string pgn = File.ReadAllText(path);
@@ -123,6 +130,7 @@ public class GameHandler
     /// Retrieves the list of moves from a game
     /// </summary>
     /// <param name="moveList">List of moves in PGN format</param>
+    /// <exception cref="ArgumentException">Thrown if the list of moves extracted from the PGN is invalid</exception>
     private List<string> ExtractMovesFromPGN(string moveList)
     {
         string editedList = moveList;
@@ -139,7 +147,7 @@ public class GameHandler
             {
                 break;
             }
-            closeParenthesisIndex = editedList.IndexOf("}"); 
+            closeParenthesisIndex = editedList.IndexOf("}");
             if (closeParenthesisIndex == -1)
             {
                 // There is an '{' without a '}'
@@ -157,7 +165,7 @@ public class GameHandler
             {
                 break;
             }
-            closeParenthesisIndex = editedList.IndexOf(")"); 
+            closeParenthesisIndex = editedList.IndexOf(")");
             if (closeParenthesisIndex == -1)
             {
                 // There is an '(' without a ')'
@@ -220,13 +228,14 @@ public class GameHandler
     /// Get the list of pieces
     /// </summary>
     /// <returns>The list of pieces</returns>
+    /// <exception cref="NullReferenceException">Thrown if no game is in progress</exception>
     public List<Piece> GetPieces()
     {
-        if (m_game is null)
+        if (m_board is null)
         {
             throw new NullReferenceException("Error! No game is in progress!");
         }
-        return m_game.m_board.m_pieces;
+        return m_board.m_pieces;
     }
 
     /// <summary>
@@ -234,6 +243,7 @@ public class GameHandler
     /// </summary>
     /// <param name="square">The name of the square</param>
     /// <returns>The list of legal moves</returns>
+    /// <exception cref="ArgumentException">Thrown if the square parameter is not on the chess board</exception>
     public List<string> GetLegalMoves(string square)
     {
         return GetLegalMoves(GameHelpers.GetCoordinateFromSquare(square));
@@ -268,5 +278,33 @@ public class GameHandler
     public List<string> GetLegalMoves(Piece piece)
     {
         return piece.GetLegalMoves();
+    }
+
+    /// <summary>
+    /// Get the current position in FEN format
+    /// </summary>
+    /// <returns>The FEN of the game's current position</returns>
+    /// <exception cref="NullReferenceException">Thrown if no game is in progress</exception>
+    public string GetCurrentFENPosition()
+    {
+        if (m_board is null)
+        {
+            throw new NullReferenceException("Error! No game is in progress!");
+        }
+        return Game.CreateFENFromBoard(m_board);
+    }
+
+    /// <summary>
+    /// Accessor for the game's current state
+    /// </summary>
+    /// <returns>The current game state</returns>
+    /// <exception cref="NullReferenceException">Thrown if no game is in progress</exception>
+    public GameState GetCurrentGameState()
+    {
+        if (m_game is null)
+        {
+            throw new NullReferenceException("Error! No game is in progress!");
+        }
+        return m_game.m_gameState;
     }
 }

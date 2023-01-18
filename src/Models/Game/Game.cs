@@ -195,7 +195,7 @@ public class Game
             Piece? king = (m_board.m_playerToPlay == Player.White)
                 ? m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("e1"))
                 : m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("e8"));
-            
+
             if (king is null || king.GetType() != typeof(King))
             {
                 throw new ArgumentException("King was not found!");
@@ -237,7 +237,7 @@ public class Game
 
         // Consider reimplementing like Board's k_pieceConstructor
         List<(int, int)> possibleOrigins;
-        switch ((char) pgnNotation[0])
+        switch ((char)pgnNotation[0])
         {
             case 'Q':
                 dummyPiece = new Queen(dummyBoard, m_board.m_playerToPlay, squareCoordinates);
@@ -261,7 +261,7 @@ public class Game
                 break;
             default:
                 dummyPiece = new Pawn(dummyBoard, m_board.m_playerToPlay, squareCoordinates);
-                possibleOrigins = ((Pawn) dummyPiece).GetPossibleOriginSquares();
+                possibleOrigins = ((Pawn)dummyPiece).GetPossibleOriginSquares();
                 break;
         }
 
