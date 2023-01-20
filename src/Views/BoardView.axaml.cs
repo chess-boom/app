@@ -16,6 +16,9 @@ namespace ChessBoom.Views;
 
 public partial class BoardView : ReactiveUserControl<BoardViewModel>
 {
+    /// <summary>
+    /// Defines attributes related to rendered Tiles
+    /// </summary>
     private abstract class Tile
     {
         internal static int Width => 100;
@@ -25,12 +28,18 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         internal static readonly Color k_black = Color.FromRgb(179, 140, 99);
     }
 
+    /// <summary>
+    /// Defines attributes related to rendered Pieces
+    /// </summary>
     private abstract class Piece
     {
         internal const string k_white = "Assets/Pieces/{0}.svg";
         internal const string k_black = "Assets/Pieces/{0}_.svg";
     }
 
+    /// <summary>
+    /// Load BoardView into the ViewModel
+    /// </summary>
     public BoardView()
     {
         this.WhenActivated(_ =>
@@ -39,6 +48,8 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             DrawPieces();
         });
         AvaloniaXamlLoader.Load(this);
+        // WARN : VS Code Complains: `The name 'ChessBoard' does not exist in the current context [ChessBoom]csharp(CS0103)`
+        // ChessBoard is defined at build time in Avalonia.NameGenerator/Avalonia.NameGenerator.AvaloniaNameSourceGenerator/BoardView.g.cs
         ChessBoard = this.Find<Grid>("ChessBoard");
     }
 
