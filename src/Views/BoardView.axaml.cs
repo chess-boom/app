@@ -11,6 +11,7 @@ using ChessBoom.ViewModels;
 using ReactiveUI;
 using SkiaSharp;
 using Svg.Skia;
+using Avalonia.Input;
 
 namespace ChessBoom.Views;
 
@@ -21,8 +22,8 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     /// </summary>
     private abstract class Tile
     {
-        internal static int Width => 100;
-        internal static int Height => 100;
+        internal static int Width => 50;
+        internal static int Height => 50;
 
         internal static readonly Color k_white = Color.FromRgb(243, 219, 180);
         internal static readonly Color k_black = Color.FromRgb(179, 140, 99);
@@ -131,5 +132,39 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
 
             bitmap.InvalidateVisual();
         }
+    }
+    private void ChessBoard_MouseLeftButtonDown(object sender, PointerPressedEventArgs e)
+    {
+    try{
+        Console.WriteLine("Mouse Left Button Down");
+        var tile = e.Source as Rectangle;
+        var row = Grid.GetRow(tile);
+        var column = Grid.GetColumn(tile);
+        var source = (0, 0);
+        var destination = "";
+        if (ViewModel == null) return;
+        //var square = GameHelpers.GetSquareFromCoordinate((row, column));
+
+        if(ViewModel.FirstClick){
+            source = (row, column);        
+        }
+        else{
+            destination = GameHelpers.GetSquareFromCoordinate((row, column));
+            if(ViewModel.Game.m_board.GetPiece(source) != null){
+                try{
+                    ViewModel.Game.MakeMove(ViewModel.Game.m_board.GetPiece(source), destination);
+                    Grid.SetRow(ChessBoard.Children.OfType<SKBitmapControl>().FirstOrDefault(x => x.Name ==  GameHelpers.GetSquareFromCoordinate(source)), row);
+                    Grid.SetColumn(ChessBoard.Children.OfType<SKBitmapControl>().FirstOrDefault(x => x.Name ==  GameHelpers.GetSquareFromCoordinate(source)), column);
+                }
+                catch(Exception ex){
+                    Console.WriteLine(ex.Message);
+                }
+            }
+        }
+        ViewModel.FirstClick = !ViewModel.FirstClick;
+    }
+    catch(Exception ex){
+        Console.WriteLine("Error: " + ex.Message);
+    }
     }
 }
