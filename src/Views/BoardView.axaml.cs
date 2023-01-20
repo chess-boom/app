@@ -17,6 +17,8 @@ namespace ChessBoom.Views;
 
 public partial class BoardView : ReactiveUserControl<BoardViewModel>
 {
+    (int, int) gridSource;
+    (int, int) peaceSource;
     /// <summary>
     /// Defines attributes related to rendered Tiles
     /// </summary>
@@ -131,30 +133,46 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             }
 
             bitmap.InvalidateVisual();
+            Console.WriteLine(bitmap);
         }
     }
     private void ChessBoard_MouseLeftButtonDown(object sender, PointerPressedEventArgs e)
     {
     try{
-        Console.WriteLine("Mouse Left Button Down");
-        var tile = e.Source as Rectangle;
+        if(ViewModel == null) return;
+        Control tile;
+        if (ViewModel.FirstClick)
+        {
+            tile = e.Source as SKBitmapControl;
+        }
+        else
+        {
+            try {
+                tile = e.Source as Rectangle;
+            }
+            catch(Exception ex)
+            {
+                tile = e.Source as SKBitmapControl;
+            }
+        }
+        if(tile == null) return;
         var row = Grid.GetRow(tile);
         var column = Grid.GetColumn(tile);
-        var source = (0, 0);
         var destination = "";
-        if (ViewModel == null) return;
         //var square = GameHelpers.GetSquareFromCoordinate((row, column));
 
         if(ViewModel.FirstClick){
-            source = (row, column);        
-        }
+            peaceSource = (column, 8 - row - 1);
+                gridSource = (8 - row - 1, column);
+            }
         else{
-            destination = GameHelpers.GetSquareFromCoordinate((row, column));
-            if(ViewModel.Game.m_board.GetPiece(source) != null){
+                
+                destination = GameHelpers.GetSquareFromCoordinate((8 - row - 1, column));
+            if(ViewModel.Game.m_board.GetPiece(peaceSource) != null){
                 try{
-                    ViewModel.Game.MakeMove(ViewModel.Game.m_board.GetPiece(source), destination);
-                    Grid.SetRow(ChessBoard.Children.OfType<SKBitmapControl>().FirstOrDefault(x => x.Name ==  GameHelpers.GetSquareFromCoordinate(source)), row);
-                    Grid.SetColumn(ChessBoard.Children.OfType<SKBitmapControl>().FirstOrDefault(x => x.Name ==  GameHelpers.GetSquareFromCoordinate(source)), column);
+                    ViewModel.Game.MakeMove(ViewModel.Game.m_board.GetPiece(peaceSource), destination);
+                    Grid.SetRow(ChessBoard.Children.OfType<SKBitmapControl>().FirstOrDefault(x => x.Name ==  GameHelpers.GetSquareFromCoordinate(gridSource)), row);
+                    Grid.SetColumn(ChessBoard.Children.OfType<SKBitmapControl>().FirstOrDefault(x => x.Name ==  GameHelpers.GetSquareFromCoordinate(gridSource)), column);
                 }
                 catch(Exception ex){
                     Console.WriteLine(ex.Message);
