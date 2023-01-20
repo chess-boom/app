@@ -1,16 +1,16 @@
-using Avalonia.Controls;
+using System;
+using System.Linq;
 using Avalonia.Controls.Shapes;
+using Avalonia.Controls.Skia;
+using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.ReactiveUI;
-using ChessBoom.Models.Game.Pieces;
 using ChessBoom.Models.Game;
 using ChessBoom.ViewModels;
 using ReactiveUI;
 using SkiaSharp;
 using Svg.Skia;
-using System;
-using Avalonia.Controls.Skia;
 
 namespace ChessBoom.Views;
 
@@ -18,8 +18,8 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
 {
     private abstract class Tile
     {
-        internal static int Width => 50;
-        internal static int Height => 50;
+        internal static int Width => 100;
+        internal static int Height => 100;
 
         internal static readonly Color k_white = Color.FromRgb(243, 219, 180);
         internal static readonly Color k_black = Color.FromRgb(179, 140, 99);
@@ -41,66 +41,84 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         AvaloniaXamlLoader.Load(this);
         ChessBoard = this.Find<Grid>("ChessBoard");
     }
-
+    
+    /// <summary>
+    /// Initialize the ChessBoard Control with tiles (Rectangles) and Piece placeholders (SKBitmapControl)
+    /// </summary>
     private void DrawChessBoard()
     {
-        for (var i = 0; i < GameHelpers.k_boardWidth; i++)
+        for (var row = GameHelpers.k_boardHeight - 1; row >= 0; row--)
         {
-            ChessBoard.ColumnDefinitions.Add(new ColumnDefinition());
-            for (var j = 0; j < GameHelpers.k_boardHeight; j++)
+            ChessBoard.RowDefinitions.Add(new RowDefinition());
+            for (var col = 0; col < GameHelpers.k_boardWidth; col++)
             {
-                ChessBoard.RowDefinitions.Add(new RowDefinition());
+                var square = GameHelpers.GetSquareFromCoordinate((GameHelpers.k_boardHeight - (row + 1), col));
+                
                 var tile = new Rectangle
                 {
                     Width = Tile.Width,
                     Height = Tile.Height,
-                    Name = GameHelpers.GetSquareFromCoordinate((i, j)),
+                    Name = square,
                     StrokeThickness = 0,
-                    Fill = (i + j) % 2 == 0 ? new SolidColorBrush(Tile.k_white) : new SolidColorBrush(Tile.k_black)
+                    Fill = (row + col) % 2 == 0 ? new SolidColorBrush(Tile.k_white) : new SolidColorBrush(Tile.k_black)
                 };
-
-                Grid.SetRow(tile, i);
-                Grid.SetColumn(tile, j);
+        
+                Grid.SetRow(tile, row);
+                Grid.SetColumn(tile, col);
                 ChessBoard.Children.Add(tile);
-
+        
                 var bitmap = new SKBitmapControl
                 {
                     Width = Tile.Width,
                     Height = Tile.Height,
-                    Name = GameHelpers.GetSquareFromCoordinate((i, j)),
+                    Name = square,
                     ZIndex = 1
                 };
-                Grid.SetRow(bitmap, i);
-                Grid.SetColumn(bitmap, j);
+        
+                // each square gets an SKBitmapControl to be able to render a piece svg
+                Grid.SetRow(bitmap, row);
+                Grid.SetColumn(bitmap, col);
                 ChessBoard.Children.Add(bitmap);
             }
+            ChessBoard.ColumnDefinitions.Add(new ColumnDefinition());
         }
     }
 
+    /// <summary>
+    /// Draw the Game's pieces to the ChessBoard Grid Control
+    /// </summary>
     private void DrawPieces()
     {
-        // In Progress
-        var piece = new Pawn(ViewModel!.game.m_board, Player.Black, (0, 0));
-        var piecePath = piece.GetPlayer() switch
+        if (ViewModel == null) return;
+        foreach (var piece in ViewModel.Game.m_board.m_pieces)
         {
-            Player.White => string.Format(Piece.k_white, piece),
-            Player.Black => string.Format(Piece.k_black, piece),
-            _ => throw new ArgumentOutOfRangeException()
-        };
-        string square = GameHelpers.GetSquareFromCoordinate(piece.GetCoordinates());
-        SKBitmapControl bitmap = ChessBoard.Find<SKBitmapControl>(square);
-        SKCanvas canvas = new SKCanvas(bitmap.Bitmap);
-        var svg = new SKSvg();
-        svg.Load(piecePath);
-        canvas.DrawPicture(svg.Picture);
+            var piecePath = piece.GetPlayer() switch
+            {
+                Player.White => string.Format(Piece.k_white, piece),
+                Player.Black => string.Format(Piece.k_black, piece),
+                _ => throw new ArgumentOutOfRangeException()
+            };
 
-        // Grid.SetRow(canvas, 0);
-        // Grid.SetColumn(canvas, 0);
+            var (col, row) = piece.GetCoordinates();
+            var square = GameHelpers.GetSquareFromCoordinate((row, col));
+            var bitmap = ChessBoard.Children.OfType<SKBitmapControl>().FirstOrDefault(x => x.Name == square);
 
-        // foreach (var piece in ViewModel.game.m_board.m_pieces)
-        // {
-        //     var tile = this.Find<Rectangle>(GameHelpers.GetSquareFromCoordinate(piece.GetCoordinates()));
-        //     var
-        // }
+            if (bitmap == null) throw new ArgumentNullException();
+
+            using (var svg = new SKSvg())
+            {
+                bitmap.Bitmap = new SKBitmap(Tile.Width, Tile.Height);
+                svg.Load(piecePath);
+                if (svg.Picture == null) throw new ArgumentNullException();
+                var canvas = new SKCanvas(bitmap.Bitmap);
+                var matrix = SKMatrix.CreateScale(
+                    Tile.Width / svg.Picture.CullRect.Width,
+                    Tile.Height / svg.Picture.CullRect.Height
+                );
+                canvas.DrawPicture(svg.Picture, ref matrix);
+            }
+
+            bitmap.InvalidateVisual();
+        }
     }
 }
