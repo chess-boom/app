@@ -38,4 +38,8 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Assets\Tiles\black.svg" />
+    <UpToDateCheckInput Remove="Assets\Tiles\white.svg" />
+  </ItemGroup>
 </Project>
