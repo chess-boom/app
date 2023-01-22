@@ -61,7 +61,7 @@ public class Rook : Piece
         return movementSquares;
     }
 
-    public override void MovePiece((int, int) coordinate)
+    public override void MovePiece((int, int) coordinate, char? promotionPiece = null)
     {
         base.MovePiece(coordinate);
         if (m_hasMoved) return;
