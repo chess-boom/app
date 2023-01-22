@@ -219,7 +219,7 @@ public class Stockfish : IAnalysis
             }
 
             //Last N+1 lines are the N best moves and the bestmove line.
-            List <(string, int)> moves = new List<(string, int)>();
+            List<(string, int)> moves = new List<(string, int)>();
             for (int i = outputList.Count - (n + 1); i < outputList.Count - 1; i++)
             {
                 string[] splitOutput = outputList[i].Split();
@@ -229,14 +229,14 @@ public class Stockfish : IAnalysis
                 string move = "";
                 int cp = int.MaxValue;
                 if (cp_index != -1)
-                    cp = int.Parse(splitOutput[cp_index+1]);
+                    cp = int.Parse(splitOutput[cp_index + 1]);
                 if (move_index != -1)
-                    move = splitOutput[move_index+1];
-                    
-                moves.Add((move,cp));
+                    move = splitOutput[move_index + 1];
+
+                moves.Add((move, cp));
             }
 
-            moves.Sort((x,y) => (y.Item2).CompareTo(x.Item2)); // Sort in place, descending order
+            moves.Sort((x, y) => (y.Item2).CompareTo(x.Item2)); // Sort in place, descending order
 
             return moves;
         }
