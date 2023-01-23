@@ -12,13 +12,15 @@ using ReactiveUI;
 using SkiaSharp;
 using Svg.Skia;
 using Avalonia.Input;
+using Avalonia.Layout;
 
 namespace ChessBoom.Views;
 
 public partial class BoardView : ReactiveUserControl<BoardViewModel>
 {
-    (int, int) gridSource;
-    (int, int) peaceSource;
+    (int, int) pieceSource;
+    string sourceTile;
+    string destinationTile;
     /// <summary>
     /// Defines attributes related to rendered Tiles
     /// </summary>
@@ -61,9 +63,13 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     /// </summary>
     private void DrawChessBoard()
     {
-        for (var row = GameHelpers.k_boardHeight - 1; row >= 0; row--)
+        for(int i = 0; i < 8; i++)
         {
             ChessBoard.RowDefinitions.Add(new RowDefinition());
+            ChessBoard.ColumnDefinitions.Add(new ColumnDefinition());
+        }
+        for (var row = 0; row < GameHelpers.k_boardHeight; row++)
+        {
             for (var col = 0; col < GameHelpers.k_boardWidth; col++)
             {
                 var square = GameHelpers.GetSquareFromCoordinate((col, GameHelpers.k_boardHeight - (row + 1)));
@@ -94,7 +100,21 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
                 Grid.SetColumn(bitmap, col);
                 ChessBoard.Children.Add(bitmap);
             }
-            ChessBoard.ColumnDefinitions.Add(new ColumnDefinition());
+        }
+
+        // add the letters and numbers to the board
+        ChessBoard.RowDefinitions.Add(new RowDefinition { Height = new GridLength(Tile.Height) });
+        ChessBoard.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(Tile.Width) });
+        for (int i = 0; i < 8; i++)
+        {
+            var letter = new TextBlock { Text = ((char)('A' + i)).ToString(), FontWeight = FontWeight.Bold, TextAlignment = TextAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
+            ChessBoard.Children.Add(letter);
+            Grid.SetRow(letter, 8);
+            Grid.SetColumn(letter, i);
+            var number = new TextBlock { Text = (8 - i).ToString(),  FontWeight = FontWeight.Bold,TextAlignment = TextAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
+            ChessBoard.Children.Add(number);
+            Grid.SetRow(number, i);
+            Grid.SetColumn(number, 8);
         }
     }
 
@@ -141,6 +161,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     try{
         if(ViewModel == null) return;
         Control tile;
+        bool capture = false;
         if (ViewModel.FirstClick)
         {
             tile = e.Source as SKBitmapControl;
@@ -152,27 +173,30 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             }
             catch(Exception ex)
             {
+                capture = true;
                 tile = e.Source as SKBitmapControl;
             }
         }
         if(tile == null) return;
         var row = Grid.GetRow(tile);
         var column = Grid.GetColumn(tile);
-        var destination = "";
-        //var square = GameHelpers.GetSquareFromCoordinate((row, column));
 
         if(ViewModel.FirstClick){
-            peaceSource = (column, 8 - row - 1);
-                gridSource = (8 - row - 1, column);
-            }
+            sourceTile = tile.Name;
+            pieceSource = (column, 7 - row);
+        }
         else{
-                
-                destination = GameHelpers.GetSquareFromCoordinate((8 - row - 1, column));
-            if(ViewModel.Game.m_board.GetPiece(peaceSource) != null){
+            destinationTile = tile.Name;
+            var piece = ViewModel.Game.m_board.GetPiece(pieceSource);
+            if(piece != null){
                 try{
-                    ViewModel.Game.MakeMove(ViewModel.Game.m_board.GetPiece(peaceSource), destination);
-                    Grid.SetRow(ChessBoard.Children.OfType<SKBitmapControl>().FirstOrDefault(x => x.Name ==  GameHelpers.GetSquareFromCoordinate(gridSource)), row);
-                    Grid.SetColumn(ChessBoard.Children.OfType<SKBitmapControl>().FirstOrDefault(x => x.Name ==  GameHelpers.GetSquareFromCoordinate(gridSource)), column);
+                    ViewModel.Game.MakeMove(piece, destinationTile);
+                    var gridPiece = ChessBoard.Children.OfType<SKBitmapControl>().FirstOrDefault(x => x.Name ==  sourceTile);
+                    if(capture){
+                        //TODO remove the captured piece from the board
+                    }
+                    Grid.SetRow(gridPiece, row);
+                    Grid.SetColumn(gridPiece, column);
                 }
                 catch(Exception ex){
                     Console.WriteLine(ex.Message);
