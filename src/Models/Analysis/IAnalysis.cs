@@ -10,7 +10,7 @@ public interface IAnalysis
     /// <summary>
     /// FEN position we wish to analyze. When setting the fen position, sends a command to set the position in the engine.
     /// </summary>
-    string FenPosition { get; set; }
+    string? FenPosition { get; set; }
 
     /// <summary>
     /// Gets the static evaluation of the current position as a float, and which side the value is relative to (White or Black).
