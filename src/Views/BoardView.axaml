@@ -7,8 +7,10 @@
         <!-- ReSharper disable once Xaml.ConstructorWarning -->
         <viewModels:BoardViewModel />
     </Design.DataContext>
-    <StackPanel HorizontalAlignment="Center">
+    <StackPanel Name="StackPanel" HorizontalAlignment="Center">
         <Label Content="Board" FontSize="50" HorizontalAlignment="Center" />
+        <TextBlock Name="tb1"></TextBlock>
+        <TextBlock Name="tb2"></TextBlock>
         <Grid Name="ChessBoard" HorizontalAlignment="Center" />
     </StackPanel>
 </UserControl>

@@ -3,6 +3,8 @@ using System.Linq;
 using Avalonia.Controls.Shapes;
 using Avalonia.Controls.Skia;
 using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.ReactiveUI;
@@ -46,11 +48,57 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         {
             DrawChessBoard();
             DrawPieces();
+            Debug();
         });
         AvaloniaXamlLoader.Load(this);
         // WARN : VS Code Complains: `The name 'ChessBoard' does not exist in the current context [ChessBoom]csharp(CS0103)`
         // ChessBoard is defined at build time in Avalonia.NameGenerator/Avalonia.NameGenerator.AvaloniaNameSourceGenerator/BoardView.g.cs
         ChessBoard = this.Find<Grid>("ChessBoard");
+    }
+
+    // A method named Debug that adds a list box to the view and binds in to mouse events
+    private void Debug()
+    {
+        
+        var squareFrom = "";
+        var squareTo = "";
+        
+        var textBlock1 = this.Find<TextBlock>("tb1");
+        var textBlock2 = this.Find<TextBlock>("tb2");
+
+        ChessBoard.PointerPressed += (sender, e) =>
+        {
+            if (!e.GetCurrentPoint(ChessBoard).Properties.IsRightButtonPressed) return;
+
+            var source = e.Source as Control;
+            squareFrom = source?.Name ?? "";
+            textBlock1.Text = $"Square from: {squareFrom}";
+            
+            var bitmapFrom = ChessBoard.Children.OfType<SKBitmapControl>().FirstOrDefault(x => x.Name == squareFrom);
+        };
+
+        ChessBoard.PointerMoved += (sender, e) =>
+        {
+            if (!e.GetCurrentPoint(ChessBoard).Properties.IsRightButtonPressed) return;
+
+            var position = e.GetCurrentPoint(ChessBoard).Position;
+
+            var row = (int)(position.X / Tile.Width);
+            var col = GameHelpers.k_boardHeight - (int)(position.Y / Tile.Height) - 1;
+            
+            // only if cursor is on ChessBoard
+            if (row < 0 || row >= GameHelpers.k_boardWidth || col < 0 || col >= GameHelpers.k_boardHeight) return;
+
+            squareFrom = GameHelpers.GetSquareFromCoordinate((row, col));
+            textBlock1.Text = $"Square from: {squareFrom}";
+        };
+
+        ChessBoard.PointerReleased += (sender, e) =>
+        {
+            var bitmapTo = ChessBoard.Children.OfType<SKBitmapControl>().FirstOrDefault(x => x.Name == squareTo);
+            
+            
+        };
     }
 
     /// <summary>
@@ -63,7 +111,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             ChessBoard.RowDefinitions.Add(new RowDefinition());
             for (var col = 0; col < GameHelpers.k_boardWidth; col++)
             {
-                var square = GameHelpers.GetSquareFromCoordinate((GameHelpers.k_boardHeight - (row + 1), col));
+                var square = GameHelpers.GetSquareFromCoordinate((col, GameHelpers.k_boardHeight - (row + 1)));
 
                 var tile = new Rectangle
                 {
@@ -78,6 +126,19 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
                 Grid.SetColumn(tile, col);
                 ChessBoard.Children.Add(tile);
 
+                var name = new TextBlock
+                {
+                    Name = square,
+                    Text = square,
+                    HorizontalAlignment = HorizontalAlignment.Right,
+                    VerticalAlignment = VerticalAlignment.Top,
+                    Foreground = new SolidColorBrush(Colors.Black),
+                    FontSize = 10,
+                };
+                Grid.SetRow(name, row);
+                Grid.SetColumn(name, col);
+                ChessBoard.Children.Add(name);
+
                 var bitmap = new SKBitmapControl
                 {
                     Width = Tile.Width,
@@ -91,6 +152,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
                 Grid.SetColumn(bitmap, col);
                 ChessBoard.Children.Add(bitmap);
             }
+
             ChessBoard.ColumnDefinitions.Add(new ColumnDefinition());
         }
     }
@@ -111,7 +173,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             };
 
             var (col, row) = piece.GetCoordinates();
-            var square = GameHelpers.GetSquareFromCoordinate((row, col));
+            var square = GameHelpers.GetSquareFromCoordinate((col, row));
             var bitmap = ChessBoard.Children.OfType<SKBitmapControl>().FirstOrDefault(x => x.Name == square);
 
             if (bitmap == null) throw new ArgumentNullException();
@@ -129,7 +191,44 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
                 canvas.DrawPicture(svg.Picture, ref matrix);
             }
 
+            bitmap.Tag = piece;
+
             bitmap.InvalidateVisual();
         }
+    }
+
+    // a method that on right click draws an arrow from the selected square to the clicked square
+    private void ChessBoard_OnPointerPressed(object? sender, PointerEventArgs e)
+    {
+        if (!e.GetCurrentPoint(ChessBoard).Properties.IsRightButtonPressed) return;
+
+        var clickedX = (int)(e.GetPosition(ChessBoard).X / Tile.Width);
+        var clickedY = GameHelpers.k_boardHeight - (int)(e.GetPosition(ChessBoard).Y / Tile.Height) - 1;
+        var clickedSquare = GameHelpers.GetSquareFromCoordinate((clickedY, clickedX));
+        var selectedSquare = GameHelpers.GetSquareFromCoordinate(
+            (GameHelpers.k_boardHeight - (int)(e.GetPosition(ChessBoard).Y / Tile.Height) - 1,
+                (int)(e.GetPosition(ChessBoard).X / Tile.Width))
+        );
+
+        var clickedBitmap = ChessBoard.Children.OfType<SKBitmapControl>().FirstOrDefault(x => x.Name == clickedSquare);
+        var selectedBitmap =
+            ChessBoard.Children.OfType<SKBitmapControl>().FirstOrDefault(x => x.Name == selectedSquare);
+
+        if (clickedBitmap == null || selectedBitmap == null) throw new ArgumentNullException();
+
+        var canvas = new SKCanvas(clickedBitmap.Bitmap);
+        var paint = new SKPaint
+        {
+            Color = SKColors.Red,
+            StrokeWidth = 5,
+            IsStroke = true,
+            IsAntialias = true
+        };
+        canvas.DrawLine(
+            new SKPoint((float)selectedBitmap.Width / 2, (float)selectedBitmap.Height / 2),
+            new SKPoint((float)clickedBitmap.Width / 2, (float)clickedBitmap.Height / 2),
+            paint
+        );
+        clickedBitmap.InvalidateVisual();
     }
 }
