@@ -66,7 +66,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             ChessBoard.RowDefinitions.Add(new RowDefinition());
             for (var col = 0; col < GameHelpers.k_boardWidth; col++)
             {
-                var square = GameHelpers.GetSquareFromCoordinate((GameHelpers.k_boardHeight - (row + 1), col));
+                var square = GameHelpers.GetSquareFromCoordinate((col, GameHelpers.k_boardHeight - (row + 1)));
 
                 var tile = new Rectangle
                 {
@@ -114,7 +114,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             };
 
             var (col, row) = piece.GetCoordinates();
-            var square = GameHelpers.GetSquareFromCoordinate((row, col));
+            var square = GameHelpers.GetSquareFromCoordinate((col, row));
             var bitmap = ChessBoard.Children.OfType<SKBitmapControl>().FirstOrDefault(x => x.Name == square);
 
             if (bitmap == null) throw new ArgumentNullException();
