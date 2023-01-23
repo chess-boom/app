@@ -63,7 +63,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     /// </summary>
     private void DrawChessBoard()
     {
-        for(int i = 0; i < 8; i++)
+        for (int i = 0; i < 8; i++)
         {
             ChessBoard.RowDefinitions.Add(new RowDefinition());
             ChessBoard.ColumnDefinitions.Add(new ColumnDefinition());
@@ -105,16 +105,31 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         // add the letters and numbers to the board
         ChessBoard.RowDefinitions.Add(new RowDefinition { Height = new GridLength(Tile.Height) });
         ChessBoard.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(Tile.Width) });
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < GameHelpers.k_boardWidth; i++)
         {
-            var letter = new TextBlock { Text = ((char)('A' + i)).ToString(), FontWeight = FontWeight.Bold, TextAlignment = TextAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
+            var letter = new TextBlock
+            {
+                Text = ((char)('A' + i)).ToString(),
+                FontWeight = FontWeight.Bold,
+                TextAlignment = TextAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
+            };
             ChessBoard.Children.Add(letter);
-            Grid.SetRow(letter, 8);
+            Grid.SetRow(letter, GameHelpers.k_boardHeight);
             Grid.SetColumn(letter, i);
-            var number = new TextBlock { Text = (8 - i).ToString(),  FontWeight = FontWeight.Bold,TextAlignment = TextAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
+        }
+        for (int i = 0; i < GameHelpers.k_boardHeight; i++)
+        {
+            var number = new TextBlock
+            {
+                Text = (GameHelpers.k_boardWidth - i).ToString(),
+                FontWeight = FontWeight.Bold,
+                TextAlignment = TextAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
+            };
             ChessBoard.Children.Add(number);
             Grid.SetRow(number, i);
-            Grid.SetColumn(number, 8);
+            Grid.SetColumn(number, GameHelpers.k_boardWidth);
         }
     }
 
