@@ -1,0 +1,114 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:viewModels="clr-namespace:ChessBoom.ViewModels"
+             xmlns:views="clr-namespace:ChessBoom.Views"
+             x:Class="ChessBoom.Views.VariantAnalysisView">
+    <Design.DataContext>
+        <viewModels:VariantAnalysisViewModel />
+    </Design.DataContext>
+    <StackPanel>
+        <Label Content="Variant Game List" FontSize="50" HorizontalAlignment="Center" />
+        <Grid Width="1500" HorizontalAlignment="Center" Background="#6AC1FF">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" Content="Match History" FontSize="18" />
+            <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="7" Orientation="Horizontal" Background="Black">
+                <Label Grid.Column="0" Content="Opponent" FontSize="18" />
+                <Label Grid.Column="1" Content="Variant" FontSize="18" />
+                <Label Grid.Column="2" Content="Match Status" FontSize="18" />
+                <Label Grid.Column="3" Content="Moves" FontSize="18" />
+                <Label Grid.Column="4" Content="Blunders" FontSize="18" />
+                <Label Grid.Column="5" Content="Missed wins" FontSize="18" />
+                <Label Grid.Column="6" Content="Improvement" FontSize="18" />
+            </StackPanel>
+            <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="7" Orientation="Horizontal" Width="1500" Background="Gray">
+                <Button Width="1500" Content="Button 1">
+                    <Button.Background>
+                        <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                            <GradientStop Color="#454545" Offset="0.0" />
+                            <GradientStop Color="#555555" Offset="0.1" />
+                            <GradientStop Color="#696969" Offset="0.5" />
+                            <GradientStop Color="#555555" Offset="0.9" />
+                            <GradientStop Color="#454545" Offset="1" />
+                        </LinearGradientBrush>
+                    </Button.Background>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Grid.Column="0" Content="J0ND03"/>
+                        <Label Grid.Column="1" Content="Atomic Chess"/>
+                        <Label Grid.Column="2" Content="Victory!"/>
+                        <Label Grid.Column="3" Content="32"/>
+                        <Label Grid.Column="4" Content="2"/>
+                        <Label Grid.Column="5" Content="0"/>
+                        <Label Grid.Column="6" Content="++"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <Button Grid.Row="3" Content="Button 2">
+                <Button.Background>
+                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                        <GradientStop Color="#454545" Offset="0.0" />
+                        <GradientStop Color="#555555" Offset="0.1" />
+                        <GradientStop Color="#696969" Offset="0.5" />
+                        <GradientStop Color="#555555" Offset="0.9" />
+                        <GradientStop Color="#454545" Offset="1" />
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+            <Button Grid.Row="4" Content="Button 3">
+                <Button.Background>
+                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                        <GradientStop Color="#454545" Offset="0.0" />
+                        <GradientStop Color="#555555" Offset="0.1" />
+                        <GradientStop Color="#696969" Offset="0.5" />
+                        <GradientStop Color="#555555" Offset="0.9" />
+                        <GradientStop Color="#454545" Offset="1" />
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+            <Button Grid.Row="5" Content="Button 4">
+                <Button.Background>
+                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                        <GradientStop Color="#454545" Offset="0.0" />
+                        <GradientStop Color="#555555" Offset="0.1" />
+                        <GradientStop Color="#696969" Offset="0.5" />
+                        <GradientStop Color="#555555" Offset="0.9" />
+                        <GradientStop Color="#454545" Offset="1" />
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+            <Button Grid.Row="6" Content="Button 5">
+            </Button>
+            <Button Grid.Row="7" Content="Button 6">
+            </Button>
+            <Button Grid.Row="8" Content="Button 7">
+            </Button>
+            <Button Grid.Row="9" Content="Button 8">
+            </Button>
+            <Button Grid.Row="10" Content="Button 9">
+            </Button>
+            <Button Grid.Row="11" Content="Button 10">
+            </Button>
+        </Grid>
+    </StackPanel>
+</UserControl>

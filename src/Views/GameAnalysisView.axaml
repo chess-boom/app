@@ -1,0 +1,13 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:viewModels="clr-namespace:ChessBoom.ViewModels"
+             xmlns:views="clr-namespace:ChessBoom.Views"
+             x:Class="ChessBoom.Views.GameAnalysisView">
+    <Design.DataContext>
+        <viewModels:GameAnalysisViewModel />
+    </Design.DataContext>
+    <!-- TODO Uses same template as Variant Analysis, but needs fixing in navbar -->
+    <StackPanel>
+        <Label Content="Template your mom" FontSize="50" HorizontalAlignment="Center" />
+    </StackPanel>
+</UserControl>
