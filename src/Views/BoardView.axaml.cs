@@ -18,9 +18,9 @@ namespace ChessBoom.Views;
 
 public partial class BoardView : ReactiveUserControl<BoardViewModel>
 {
-    (int, int) pieceSource;
-    string sourceTile;
-    string destinationTile;
+    SKBitmapControl sourcePiece;
+    Control destinationTile;
+
     /// <summary>
     /// Defines attributes related to rendered Tiles
     /// </summary>
@@ -158,55 +158,33 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     }
     private void ChessBoard_MouseLeftButtonDown(object sender, PointerPressedEventArgs e)
     {
-    try{
-        if(ViewModel == null) return;
-        Control tile;
-        bool capture = false;
+        if (ViewModel == null) return;
         if (ViewModel.FirstClick)
         {
-            tile = e.Source as SKBitmapControl;
+            sourcePiece = e.Source as SKBitmapControl;
+            if (sourcePiece == null) return;
         }
         else
         {
-            try {
-                tile = e.Source as Rectangle;
-            }
-            catch(Exception ex)
+            destinationTile = e.Source switch
             {
-                capture = true;
-                tile = e.Source as SKBitmapControl;
+                Rectangle tile => (Rectangle)tile,
+                SKBitmapControl tile => (SKBitmapControl)tile
+            };
+            var piece = ViewModel.Game.m_board.GetPiece(sourceCoordinates);
+            if (piece == null) return;
+            try
+            {
+                ViewModel.Game.MakeMove(piece, destinationTile.Name);
+                SKBitmapControl destinationBitmap = ChessBoard.Children.OfType<SKBitmapControl>().FirstOrDefault(x => x.Name == destinationTile.Name);
+                destinationBitmap.Bitmap = sourcePiece.Bitmap;
+                sourcePiece.Bitmap = null;
             }
-        }
-        if(tile == null) return;
-        var row = Grid.GetRow(tile);
-        var column = Grid.GetColumn(tile);
-
-        if(ViewModel.FirstClick){
-            sourceTile = tile.Name;
-            pieceSource = (column, 7 - row);
-        }
-        else{
-            destinationTile = tile.Name;
-            var piece = ViewModel.Game.m_board.GetPiece(pieceSource);
-            if(piece != null){
-                try{
-                    ViewModel.Game.MakeMove(piece, destinationTile);
-                    var gridPiece = ChessBoard.Children.OfType<SKBitmapControl>().FirstOrDefault(x => x.Name ==  sourceTile);
-                    if(capture){
-                        //TODO remove the captured piece from the board
-                    }
-                    Grid.SetRow(gridPiece, row);
-                    Grid.SetColumn(gridPiece, column);
-                }
-                catch(Exception ex){
-                    Console.WriteLine(ex.Message);
-                }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
         ViewModel.FirstClick = !ViewModel.FirstClick;
-    }
-    catch(Exception ex){
-        Console.WriteLine("Error: " + ex.Message);
-    }
     }
 }
