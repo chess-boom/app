@@ -47,10 +47,6 @@ public class AnalysisUnitTests
         _engine.FenPosition = "rnbqkbnr/ppp1pppp/8/3pP3/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2";
 
         var topNMoves = _engine.GetNBestMoves(n);
-        foreach (var move in topNMoves)
-        {
-            Console.WriteLine($"Move {move.Item1} CP: {move.Item2}");
-        }
 
         Assert.AreEqual(n, topNMoves.Count);
 
