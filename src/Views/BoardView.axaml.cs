@@ -18,8 +18,8 @@ namespace ChessBoom.Views;
 
 public partial class BoardView : ReactiveUserControl<BoardViewModel>
 {
-    SKBitmapControl sourcePiece;
-    Control destinationTile;
+    private SKBitmapControl sourcePiece;
+    private (int, int) sourceCoordinates;
 
     /// <summary>
     /// Defines attributes related to rendered Tiles
@@ -163,13 +163,15 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         {
             sourcePiece = e.Source as SKBitmapControl;
             if (sourcePiece == null) return;
+            sourceCoordinates = GameHelpers.GetCoordinateFromSquare(sourcePiece.Name);
         }
         else
         {
-            destinationTile = e.Source switch
+            Control destinationTile = e.Source switch
             {
                 Rectangle tile => (Rectangle)tile,
-                SKBitmapControl tile => (SKBitmapControl)tile
+                SKBitmapControl tile => (SKBitmapControl)tile,
+                _ => throw new ArgumentOutOfRangeException()
             };
             var piece = ViewModel.Game.m_board.GetPiece(sourceCoordinates);
             if (piece == null) return;
