@@ -62,7 +62,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     /// </summary>
     private void DrawChessBoard()
     {
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < GameHelpers.k_boardHeight; i++)
         {
             ChessBoard.RowDefinitions.Add(new RowDefinition());
             ChessBoard.ColumnDefinitions.Add(new ColumnDefinition());
@@ -140,6 +140,19 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     private void DrawPieces()
     {
         if (ViewModel == null) return;
+        for(int i = 0; i<GameHelpers.k_boardHeight; i++){
+            for(int j = 0; j<GameHelpers.k_boardHeight; j++){
+                if(ViewModel.Game.m_board.GetPiece((i, j)) == null){
+                    var square = GameHelpers.GetSquareFromCoordinate((i, j));
+                    var bitmap = ChessBoard.Children.OfType<SKBitmapControl>().FirstOrDefault(x => x.Name == square);
+                    if(bitmap != null) {
+                        if(bitmap.Bitmap !=null) {
+                            bitmap.Bitmap = null;
+                        }
+                    }
+                }
+            }
+        }
         foreach (var piece in ViewModel.Game.m_board.m_pieces)
         {
             var piecePath = piece.GetPlayer() switch
@@ -176,40 +189,37 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     private void ChessBoard_MouseLeftButtonDown(object? sender, PointerPressedEventArgs e)
     {
         if (e.GetCurrentPoint(ChessBoard).Properties.IsLeftButtonPressed == false) return;
-
         if (ViewModel == null) return;
-        if (ViewModel.FirstClick)
-        {
-            _sourcePiece = e.Source as SKBitmapControl;
-            if (_sourcePiece?.Name == null) return;
-            _sourceCoordinates = GameHelpers.GetCoordinateFromSquare(_sourcePiece.Name);
-        }
-        else
-        {
-            Control destinationTile = e.Source switch
+
+        try{
+            if (ViewModel.FirstClick)
             {
-                Rectangle tile => tile,
-                SKBitmapControl tile => tile,
-                _ => throw new ArgumentOutOfRangeException()
-            };
-            var piece = ViewModel.Game.m_board.GetPiece(_sourceCoordinates);
-            if (piece == null) return;
-            try
+                _sourcePiece = e.Source as SKBitmapControl;
+                if (_sourcePiece?.Name == null) return;
+                _sourceCoordinates = GameHelpers.GetCoordinateFromSquare(_sourcePiece.Name);
+            }
+            else
             {
+                Control destinationTile = e.Source switch
+                {
+                    Rectangle tile => tile,
+                    SKBitmapControl tile => tile,
+                    _ => throw new ArgumentOutOfRangeException()
+                };
+                var piece = ViewModel.Game.m_board.GetPiece(_sourceCoordinates);
+                if (piece == null) return;
                 if (destinationTile.Name == null) return;
                 ViewModel.Game.MakeMove(piece, destinationTile.Name);
-                var destinationBitmap = ChessBoard.Children.OfType<SKBitmapControl>()
-                    .FirstOrDefault(x => x.Name == destinationTile.Name);
-                if (destinationBitmap != null) destinationBitmap.Bitmap = _sourcePiece?.Bitmap;
-
-                if (_sourcePiece != null) _sourcePiece.Bitmap = null;
+                // var destinationBitmap = ChessBoard.Children.OfType<SKBitmapControl>()
+                //     .FirstOrDefault(x => x.Name == destinationTile.Name);
+                // if (destinationBitmap != null) destinationBitmap.Bitmap = _sourcePiece?.Bitmap;
+                
+                //if (_sourcePiece != null) _sourcePiece.Bitmap = null;
+                DrawPieces();
             }
-            catch (Exception ex)
-            {
-                Console.Error.WriteLine(ex.Message);
-            }
+        }catch(Exception ex){
+            Console.Error.WriteLine(ex.Message);
         }
-
         ViewModel.FirstClick = !ViewModel.FirstClick;
     }
 }
