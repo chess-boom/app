@@ -3,6 +3,7 @@ using System.Linq;
 using Avalonia.Controls.Shapes;
 using Avalonia.Controls.Skia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.ReactiveUI;
@@ -11,15 +12,15 @@ using ChessBoom.ViewModels;
 using ReactiveUI;
 using SkiaSharp;
 using Svg.Skia;
-using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
 
 namespace ChessBoom.Views;
 
 public partial class BoardView : ReactiveUserControl<BoardViewModel>
 {
-    private SKBitmapControl sourcePiece;
-    private (int, int) sourceCoordinates;
+    private SKBitmapControl? _sourcePiece;
+    private (int, int) _sourceCoordinates;
 
     /// <summary>
     /// Defines attributes related to rendered Tiles
@@ -53,8 +54,6 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             DrawPieces();
         });
         AvaloniaXamlLoader.Load(this);
-        // WARN : VS Code Complains: `The name 'ChessBoard' does not exist in the current context [ChessBoom]csharp(CS0103)`
-        // ChessBoard is defined at build time in Avalonia.NameGenerator/Avalonia.NameGenerator.AvaloniaNameSourceGenerator/BoardView.g.cs
         ChessBoard = this.Find<Grid>("ChessBoard");
     }
 
@@ -68,6 +67,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             ChessBoard.RowDefinitions.Add(new RowDefinition());
             ChessBoard.ColumnDefinitions.Add(new ColumnDefinition());
         }
+
         for (var row = 0; row < GameHelpers.k_boardHeight; row++)
         {
             for (var col = 0; col < GameHelpers.k_boardWidth; col++)
@@ -118,6 +118,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             Grid.SetRow(letter, GameHelpers.k_boardHeight);
             Grid.SetColumn(letter, i);
         }
+
         for (int i = 0; i < GameHelpers.k_boardHeight; i++)
         {
             var number = new TextBlock
@@ -168,40 +169,45 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             }
 
             bitmap.InvalidateVisual();
-            Console.WriteLine(bitmap);
         }
     }
-    private void ChessBoard_MouseLeftButtonDown(object sender, PointerPressedEventArgs e)
+
+    // ReSharper disable once UnusedParameter.Local
+    private void ChessBoard_MouseLeftButtonDown(object? sender, PointerPressedEventArgs e)
     {
         if (ViewModel == null) return;
         if (ViewModel.FirstClick)
         {
-            sourcePiece = e.Source as SKBitmapControl;
-            if (sourcePiece == null) return;
-            sourceCoordinates = GameHelpers.GetCoordinateFromSquare(sourcePiece.Name);
+            _sourcePiece = e.Source as SKBitmapControl;
+            if (_sourcePiece?.Name == null) return;
+            _sourceCoordinates = GameHelpers.GetCoordinateFromSquare(_sourcePiece.Name);
         }
         else
         {
             Control destinationTile = e.Source switch
             {
-                Rectangle tile => (Rectangle)tile,
-                SKBitmapControl tile => (SKBitmapControl)tile,
+                Rectangle tile => tile,
+                SKBitmapControl tile => tile,
                 _ => throw new ArgumentOutOfRangeException()
             };
-            var piece = ViewModel.Game.m_board.GetPiece(sourceCoordinates);
+            var piece = ViewModel.Game.m_board.GetPiece(_sourceCoordinates);
             if (piece == null) return;
             try
             {
+                if (destinationTile.Name == null) return;
                 ViewModel.Game.MakeMove(piece, destinationTile.Name);
-                SKBitmapControl destinationBitmap = ChessBoard.Children.OfType<SKBitmapControl>().FirstOrDefault(x => x.Name == destinationTile.Name);
-                destinationBitmap.Bitmap = sourcePiece.Bitmap;
-                sourcePiece.Bitmap = null;
+                var destinationBitmap = ChessBoard.Children.OfType<SKBitmapControl>()
+                    .FirstOrDefault(x => x.Name == destinationTile.Name);
+                if (destinationBitmap != null) destinationBitmap.Bitmap = _sourcePiece?.Bitmap;
+
+                if (_sourcePiece != null) _sourcePiece.Bitmap = null;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.Error.WriteLine(ex.Message);
             }
         }
+
         ViewModel.FirstClick = !ViewModel.FirstClick;
     }
 }
