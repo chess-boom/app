@@ -175,6 +175,8 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     // ReSharper disable once UnusedParameter.Local
     private void ChessBoard_MouseLeftButtonDown(object? sender, PointerPressedEventArgs e)
     {
+        if (e.GetCurrentPoint(ChessBoard).Properties.IsLeftButtonPressed == false) return;
+
         if (ViewModel == null) return;
         if (ViewModel.FirstClick)
         {
