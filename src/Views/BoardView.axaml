@@ -1,16 +1,108 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:viewModels="clr-namespace:ChessBoom.ViewModels"
-             x:Class="ChessBoom.Views.BoardView"
-             x:DataType="viewModels:BoardViewModel">
-    <Design.DataContext>
-        <!-- ReSharper disable once Xaml.ConstructorWarning -->
-        <viewModels:BoardViewModel />
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:viewModels="clr-namespace:ChessBoom.ViewModels" x:Class="ChessBoom.Views.BoardView" x:DataType="viewModels:BoardViewModel">
+    <Design.DataContext><!-- ReSharper disable once Xaml.ConstructorWarning -->
+        <viewModels:BoardViewModel/>
     </Design.DataContext>
     <StackPanel Name="StackPanel" HorizontalAlignment="Center">
-        <Label Content="Board" FontSize="50" HorizontalAlignment="Center" />
+        <Label Content="Board" FontSize="50" HorizontalAlignment="Center"/>
+        <Grid>
+            <Grid Name="ChessBoard"/>
+            <Canvas Name="Arrows">
+                <!-- <Path Stretch="Fill" Fill="LimeGreen" Opacity="0.8">
+                    <Path.Data>
+                        <PathGeometry>
+                            <PathFigure StartPoint="0,-4">
+                                <LineSegment Point="30,-4" />
+                                <LineSegment Point="30,-15" />
+                                <LineSegment Point="45,0" />
+                                <LineSegment Point="30,15" />
+                                <LineSegment Point="30,4" />
+                                <LineSegment Point="0,4" />
+                            </PathFigure>
+                        </PathGeometry>
+                    </Path.Data>
+                </Path> -->
+                <!--Horizontal movement-->
+                <!-- <Path Stretch="Fill" Fill="LimeGreen" Opacity="0.8">
+                    <Path.Data>
+                        <PathGeometry Figures="M 
+                            0 -4
+                            30 -4
+                            30 -15
+                            45 0
+                            30 15
+                            30 4
+                            0 4
+                            Z"/>
+                    </Path.Data>
+                </Path> -->
+                <!--Vertical movement--><!-- <Path Stretch="Fill" Fill="LimeGreen" Opacity="0.6" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="2" Grid.RowSpan="3" Width="30" Height="90">
+                    <Path.Data>
+                        <PathGeometry Figures="M 
+                    -4 0 
+                    -4 75
+                    -15 75 
+                    0 90
+                    15 75 
+                    4 75 
+                    4 0 
+                    Z"/>
+                    </Path.Data>
+                </Path> --><!--Circle--><!-- <Path StrokeThickness="2" Stroke="LimeGreen" Opacity="0.6" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1" Width="40" Height="40">
+                    <Path.Data>
+                        <EllipseGeometry RadiusX="20" RadiusY="20" Center="20,20"/>
+                    </Path.Data>
+                </Path> --><!--Diagonal movement--><!-- <Path Stretch="Fill" Fill="LimeGreen" Opacity="0.6" HorizontalAlignment="Center" Grid.Row="2" Grid.Column="4" Grid.ColumnSpan="2" Grid.RowSpan="2" Width="45" Height="45">
+                    <Path.Data>
+                        <PathGeometry Figures="M 
+                    -3.53 -3.53 
+                    30.86 -37.93
+                    23.79 -45 
+                    45 -45 
+                    45 -23.79 
+                    37.93 -30.86 
+                    3.53 3.53 
+                    Z"/>
+                    </Path.Data>
+                </Path> --><!-- <Path Stretch="Fill" Fill="LimeGreen" Opacity="0.6" HorizontalAlignment="Center" Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="3" Grid.RowSpan="3" Width="90" Height="90">
+                    <Path.Data>
+                        <PathGeometry Figures="M 
+                    3.53 -3.53 
+                    -75.86 -82.93
+                    -68.79 -90 
+                    -90 -90 
+                    -90 -68.79 
+                    -82.93 -75.86 
+                    -3.53 3.53 
+                    Z"/>
+                    </Path.Data>
+                </Path> --><!--Knight movement (vertical)--><!-- <Path Stretch="Fill" Fill="LimeGreen" Opacity="0.6" HorizontalAlignment="Center" Grid.Row="5" Grid.Column="5" Grid.ColumnSpan="2" Grid.RowSpan="3" Width="45" Height="90">
+                    <Path.Data>
+                        <PathGeometry Figures="M 
+                    4.16 -2.77 
+                    -32.52 -80.29
+                    -24.2 -85.84 
+                    -45 -90 
+                    -49.16 -69.2
+                    -40.84 -74.75 
+                    -4.16 2.77 
+                    Z"/>
+                    </Path.Data>
+                </Path> --><!--Knight movement (horizontal)--><!-- <Path Stretch="Fill" Fill="LimeGreen" Opacity="0.6" HorizontalAlignment="Center" Grid.Row="6" Grid.Column="4" Grid.ColumnSpan="3" Grid.RowSpan="2" Width="90" Height="45">
+                    <Path.Data>
+                        <PathGeometry Figures="M 
+                    -2.77 4.16
+                    -80.29 -32.52
+                    -85.84 -24.2
+                    -90 -45
+                    -69.2 -49.16
+                    -74.75 -40.84
+                    2.77 -4.16
+                    Z"/>
+                    </Path.Data>
+                </Path> -->
+            </Canvas>
+        </Grid>
         <TextBlock Name="tb1"></TextBlock>
         <TextBlock Name="tb2"></TextBlock>
-        <Grid Name="ChessBoard" HorizontalAlignment="Center" />
     </StackPanel>
 </UserControl>

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Avalonia;
 using Avalonia.Controls.Shapes;
 using Avalonia.Controls.Skia;
 using Avalonia.Controls;
@@ -13,18 +14,21 @@ using ChessBoom.ViewModels;
 using ReactiveUI;
 using SkiaSharp;
 using Svg.Skia;
+using System.Collections.Generic;
 
 namespace ChessBoom.Views;
 
 public partial class BoardView : ReactiveUserControl<BoardViewModel>
 {
+    private Dictionary<(int, int), (int, int)> _arrowMap = new Dictionary<(int, int), (int, int)>();
+
     /// <summary>
     /// Defines attributes related to rendered Tiles
     /// </summary>
     private abstract class Tile
     {
-        internal static int Width => 100;
-        internal static int Height => 100;
+        internal static int Width => 50;
+        internal static int Height => 50;
 
         internal static readonly Color k_white = Color.FromRgb(243, 219, 180);
         internal static readonly Color k_black = Color.FromRgb(179, 140, 99);
@@ -59,10 +63,10 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     // A method named Debug that adds a list box to the view and binds in to mouse events
     private void Debug()
     {
-        
-        var squareFrom = "";
-        var squareTo = "";
-        
+
+        (int, int)? from = null;
+        (int, int)? to = null;
+
         var textBlock1 = this.Find<TextBlock>("tb1");
         var textBlock2 = this.Find<TextBlock>("tb2");
 
@@ -71,10 +75,11 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             if (!e.GetCurrentPoint(ChessBoard).Properties.IsRightButtonPressed) return;
 
             var source = e.Source as Control;
-            squareFrom = source?.Name ?? "";
-            textBlock1.Text = $"Square from: {squareFrom}";
-            
-            var bitmapFrom = ChessBoard.Children.OfType<SKBitmapControl>().FirstOrDefault(x => x.Name == squareFrom);
+            if (source?.Name == null) return;
+            var position = GameHelpers.GetCoordinateFromSquare(source.Name);
+
+            from = (position.Item1, GameHelpers.k_boardHeight - position.Item2 - 1);
+            textBlock1.Text = $"Square from: {from}";
         };
 
         ChessBoard.PointerMoved += (sender, e) =>
@@ -84,20 +89,31 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             var position = e.GetCurrentPoint(ChessBoard).Position;
 
             var row = (int)(position.X / Tile.Width);
-            var col = GameHelpers.k_boardHeight - (int)(position.Y / Tile.Height) - 1;
-            
+            var col = (int)(position.Y / Tile.Height);
+
             // only if cursor is on ChessBoard
             if (row < 0 || row >= GameHelpers.k_boardWidth || col < 0 || col >= GameHelpers.k_boardHeight) return;
 
-            squareFrom = GameHelpers.GetSquareFromCoordinate((row, col));
-            textBlock1.Text = $"Square from: {squareFrom}";
+            to = (row, col);
+            textBlock2.Text = $"Square to: {to}";
         };
 
         ChessBoard.PointerReleased += (sender, e) =>
         {
-            var bitmapTo = ChessBoard.Children.OfType<SKBitmapControl>().FirstOrDefault(x => x.Name == squareTo);
-            
-            
+            if (!e.GetCurrentPoint(ChessBoard).Properties.IsRightButtonPressed) return;
+
+            if (from == null || to == null) return;
+
+            if (_arrowMap.ContainsKey(((int, int))from))
+            {
+                _arrowMap.Remove(((int, int))from);
+            }
+            else
+            {
+                _arrowMap.Add(((int, int))from, ((int, int))to);
+                
+            }
+            Console.WriteLine($"ArrowMap: {string.Join(", ", _arrowMap.Select(x => $"{x.Key} -> {x.Value}"))}");
         };
     }
 
@@ -197,13 +213,42 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         }
     }
 
+    public PathGeometry CreateArrowPath((int x, int y) a, (int x, int y) b)
+    {
+        var startPoint = new Point(a.x, a.y);
+        var endPoint = new Point(b.x, b.y);
+        var direction = new Vector(endPoint.X - startPoint.X, endPoint.Y - startPoint.Y);
+        direction.Normalize();
+        var lineEnd = endPoint - direction * 20;
+        var angle = Math.Atan2(direction.Y, direction.X);
+
+        var pathGeometry = new PathGeometry();
+        var pathFigure = new PathFigure();
+        pathFigure.StartPoint = startPoint;
+        pathGeometry.Figures.Add(pathFigure);
+
+        var lineSegment1 = new LineSegment();
+        lineSegment1.Point = lineEnd;
+        pathFigure.Segments.Add(lineSegment1);
+
+        var lineSegment2 = new LineSegment();
+        lineSegment2.Point = new Point(lineEnd.X - 15 * Math.Sin(angle + Math.PI / 6), lineEnd.Y + 15 * Math.Cos(angle + Math.PI / 6));
+        pathFigure.Segments.Add(lineSegment2);
+
+        var lineSegment3 = new LineSegment();
+        lineSegment3.Point = endPoint;
+        pathFigure.Segments.Add(lineSegment3);
+
+        return pathGeometry;
+    }
+
     // a method that on right click draws an arrow from the selected square to the clicked square
     private void ChessBoard_OnPointerPressed(object? sender, PointerEventArgs e)
     {
         if (!e.GetCurrentPoint(ChessBoard).Properties.IsRightButtonPressed) return;
 
         var clickedX = (int)(e.GetPosition(ChessBoard).X / Tile.Width);
-        var clickedY = GameHelpers.k_boardHeight - (int)(e.GetPosition(ChessBoard).Y / Tile.Height) - 1;
+        int clickedY = GameHelpers.k_boardHeight - (int)(e.GetPosition(ChessBoard).Y / Tile.Height) - 1;
         var clickedSquare = GameHelpers.GetSquareFromCoordinate((clickedY, clickedX));
         var selectedSquare = GameHelpers.GetSquareFromCoordinate(
             (GameHelpers.k_boardHeight - (int)(e.GetPosition(ChessBoard).Y / Tile.Height) - 1,
