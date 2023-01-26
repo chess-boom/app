@@ -14,12 +14,15 @@ using SkiaSharp;
 using Svg.Skia;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
+using System.Collections.Generic;
 
 namespace ChessBoom.Views;
 
 public partial class BoardView : ReactiveUserControl<BoardViewModel>
 {
     private SKBitmapControl? _sourcePiece;
+    private Rectangle? _sourceTile;
+    private IBrush? _sourceColor;
     private (int, int) _sourceCoordinates;
 
     /// <summary>
@@ -32,6 +35,16 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
 
         internal static readonly Color k_white = Color.FromRgb(243, 219, 180);
         internal static readonly Color k_black = Color.FromRgb(179, 140, 99);
+        internal static readonly Color k_blue = Color.FromRgb(102, 178, 255);
+    }
+
+    private abstract class Dot
+    {
+        internal static int Width => 10;
+        internal static int Height => 10;
+
+        internal static readonly Color k_green = Color.FromRgb(0, 153, 0);
+        internal static readonly Color k_red = Color.FromRgb(153, 0, 0);
     }
 
     /// <summary>
@@ -197,29 +210,73 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
                 _sourcePiece = e.Source as SKBitmapControl;
                 if (_sourcePiece?.Name == null) return;
                 _sourceCoordinates = GameHelpers.GetCoordinateFromSquare(_sourcePiece.Name);
+                _sourceTile = ChessBoard.Children.OfType<Rectangle>().FirstOrDefault(x => x.Name == _sourcePiece.Name);
+                if (_sourceTile != null) {
+                    _sourceColor = _sourceTile.Fill;
+                    _sourceTile.Fill  = new SolidColorBrush(Tile.k_blue);
+                }
+                var piece = ViewModel.Game.m_board.GetPiece(_sourceCoordinates);
+                var availableMoves = piece?.GetMovementSquares();                
+                if (availableMoves != null) {
+                    displayAvailableMoves(availableMoves);
+                }
             }
             else
             {
+                if (_sourceTile != null) _sourceTile.Fill  = _sourceColor;
+                var dots = ChessBoard.Children.OfType<Ellipse>();
+                var count = dots.Count();
+                for(int i = 0; i<count; i++){
+                    ChessBoard.Children.Remove(dots.ElementAt(0));
+                }
                 Control destinationTile = e.Source switch
                 {
                     Rectangle tile => tile,
                     SKBitmapControl tile => tile,
+                    Ellipse tile => tile,
                     _ => throw new ArgumentOutOfRangeException()
                 };
                 var piece = ViewModel.Game.m_board.GetPiece(_sourceCoordinates);
                 if (piece == null) return;
                 if (destinationTile.Name == null) return;
                 ViewModel.Game.MakeMove(piece, destinationTile.Name);
-                // var destinationBitmap = ChessBoard.Children.OfType<SKBitmapControl>()
-                //     .FirstOrDefault(x => x.Name == destinationTile.Name);
-                // if (destinationBitmap != null) destinationBitmap.Bitmap = _sourcePiece?.Bitmap;
-                
-                //if (_sourcePiece != null) _sourcePiece.Bitmap = null;
                 DrawPieces();
             }
         }catch(Exception ex){
             Console.Error.WriteLine(ex.Message);
         }
         ViewModel.FirstClick = !ViewModel.FirstClick;
+    }
+
+    private void displayAvailableMoves(List<(int, int)> availableMoves){
+        foreach (var move in availableMoves)
+        {
+            var col = move.Item1;
+            var row = move.Item2;
+            var square = GameHelpers.GetSquareFromCoordinate((col, row));
+            Ellipse dot;
+            if(ViewModel?.Game.m_board.GetPiece((col, row)) == null){
+                dot = new Ellipse(){
+                    Width = Dot.Width,
+                    Height = Dot.Height,
+                    Fill = new SolidColorBrush(Dot.k_green),
+                    ZIndex = 2,
+                    Name = square
+                };
+            }
+            else{
+                dot = new Ellipse(){
+                    Width = 50,
+                    Height = 50,
+                    ZIndex = 2,
+                    Name = square,
+                    Stroke = new SolidColorBrush(Dot.k_red),
+                    StrokeThickness = 3
+                };
+            }
+            Grid.SetRow(dot, 7 - row);
+            Grid.SetColumn(dot, col);
+            ChessBoard.Children.Add(dot);
+        }
     }
 }
