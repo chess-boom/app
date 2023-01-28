@@ -34,7 +34,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     private abstract class Tile
     {
         internal static int Width => 50;
-        internal static int Height => 50;
+        internal static int Height => 50; 
 
         internal static readonly Color k_white = Color.FromRgb(243, 219, 180);
         internal static readonly Color k_black = Color.FromRgb(179, 140, 99);
@@ -280,8 +280,8 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             {
                 dot = new Ellipse
                 {
-                    Width = 50,
-                    Height = 50,
+                    Width = Tile.Width,
+                    Height = Tile.Height,
                     ZIndex = 2,
                     Name = square,
                     Stroke = new SolidColorBrush(Dot.k_red),
@@ -300,7 +300,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
                 };
             }
 
-            Grid.SetRow(dot, 7 - row);
+            Grid.SetRow(dot, GameHelpers.k_boardWidth - 1 - row);
             Grid.SetColumn(dot, col);
             ChessBoard.Children.Add(dot);
         }
