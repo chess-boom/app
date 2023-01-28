@@ -71,11 +71,42 @@ public class Pawn : Piece
     }
 
     /// <summary>
+    /// Retrieves the list of squares from which a pawn might have reached this pawn's current location in a single move
+    /// </summary>
+    /// <returns>The possible squares that the pawn may have made its last move from</returns>
+    public List<(int, int)> GetPossibleOriginSquares()
+    {
+        List<(int, int)> squares = new List<(int, int)>();
+        int playerVectorMultiplier = (m_owner == Player.White) ? -1 : 1;
+
+        if (m_board.GetPiece(GameHelpers.AddVector(GetCoordinates(), (0, playerVectorMultiplier * 1))) is null)
+        {
+            squares.Add(GameHelpers.AddVector(GetCoordinates(), (0, playerVectorMultiplier * 1)));
+            if (((m_owner != Player.White) || m_row < 4)
+                && ((m_owner != Player.Black) || m_row >= 4)
+                && m_board.GetPiece(GameHelpers.AddVector(GetCoordinates(), (0, playerVectorMultiplier * 2))) is null)
+            {
+                squares.Add(GameHelpers.AddVector(GetCoordinates(), (0, playerVectorMultiplier * 2)));
+            }
+        }
+        if (m_board.GetPiece(GameHelpers.AddVector(GetCoordinates(), (-1, playerVectorMultiplier * 1))) is null)
+        {
+            squares.Add(GameHelpers.AddVector(GetCoordinates(), (-1, playerVectorMultiplier * 1)));
+        }
+        if (m_board.GetPiece(GameHelpers.AddVector(GetCoordinates(), (1, playerVectorMultiplier * 1))) is null)
+        {
+            squares.Add(GameHelpers.AddVector(GetCoordinates(), (1, playerVectorMultiplier * 1)));
+        }
+        return squares;
+    }
+
+    /// <summary>
     /// Attempt to move the piece to a new square. Initiates a capture if required
     /// </summary>
     /// <param name="coordinate">The coordinate to which the piece will try to move</param>
+    /// <param name="promotionPiece">Optional parameter denoting which piece type the pawn will promote into</param>
     /// <exception cref="ArgumentException">Thrown the piece is unable to move to the specified coordinate</exception>
-    public override void MovePiece((int, int) coordinate)
+    public override void MovePiece((int, int) coordinate, char? promotionPiece = null)
     {
         if (GetMovementSquares().Contains(coordinate))
         {
@@ -128,7 +159,7 @@ public class Pawn : Piece
             if ((m_row == GameHelpers.k_boardHeight - 1 && m_owner == Player.White)
                 || (m_row == 0 && m_owner == Player.Black))
             {
-                m_board.RequestPromotion(this);
+                m_board.RequestPromotion(this, promotionPiece);
             }
         }
         else
