@@ -34,7 +34,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     private abstract class Tile
     {
         internal static int Width => 50;
-        internal static int Height => 50; 
+        internal static int Height => 50;
 
         internal static readonly Color k_white = Color.FromRgb(243, 219, 180);
         internal static readonly Color k_black = Color.FromRgb(179, 140, 99);
