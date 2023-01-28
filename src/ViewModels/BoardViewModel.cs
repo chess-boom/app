@@ -1,8 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using ChessBoom.Models.Game;
 using ReactiveUI;
 
 namespace ChessBoom.ViewModels;
 
+[ExcludeFromCodeCoverage]
 public class BoardViewModel : BaseViewModel
 {
     public Game Game { get; }

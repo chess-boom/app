@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Avalonia.Controls.Shapes;
 using Avalonia.Controls.Skia;
@@ -19,6 +20,7 @@ using Svg.Skia;
 
 namespace ChessBoom.Views;
 
+[ExcludeFromCodeCoverage]
 public partial class BoardView : ReactiveUserControl<BoardViewModel>
 {
     private SKBitmapControl? _sourcePiece;
