@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Controls.Shapes;
 using Avalonia.Controls.Skia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.ReactiveUI;
@@ -12,9 +14,8 @@ using ChessBoom.ViewModels;
 using ReactiveUI;
 using SkiaSharp;
 using Svg.Skia;
-using Avalonia.Interactivity;
-using Avalonia.Layout;
-using System.Collections.Generic;
+
+// ReSharper disable SuggestBaseTypeForParameter
 
 namespace ChessBoom.Views;
 
@@ -38,6 +39,9 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         internal static readonly Color k_blue = Color.FromRgb(102, 178, 255);
     }
 
+    /// <summary>
+    /// Defines attributes related to rendered Dots
+    /// </summary>
     private abstract class Dot
     {
         internal static int Width => 10;
@@ -75,7 +79,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     /// </summary>
     private void DrawChessBoard()
     {
-        for (int i = 0; i < GameHelpers.k_boardHeight; i++)
+        for (var i = 0; i < GameHelpers.k_boardHeight; i++)
         {
             ChessBoard.RowDefinitions.Add(new RowDefinition());
             ChessBoard.ColumnDefinitions.Add(new ColumnDefinition());
@@ -118,7 +122,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         // add the letters and numbers to the board
         ChessBoard.RowDefinitions.Add(new RowDefinition { Height = new GridLength(Tile.Height) });
         ChessBoard.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(Tile.Width) });
-        for (int i = 0; i < GameHelpers.k_boardWidth; i++)
+        for (var i = 0; i < GameHelpers.k_boardWidth; i++)
         {
             var letter = new TextBlock
             {
@@ -132,7 +136,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             Grid.SetColumn(letter, i);
         }
 
-        for (int i = 0; i < GameHelpers.k_boardHeight; i++)
+        for (var i = 0; i < GameHelpers.k_boardHeight; i++)
         {
             var number = new TextBlock
             {
@@ -153,19 +157,20 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     private void DrawPieces()
     {
         if (ViewModel == null) return;
-        for(int i = 0; i<GameHelpers.k_boardHeight; i++){
-            for(int j = 0; j<GameHelpers.k_boardHeight; j++){
-                if(ViewModel.Game.m_board.GetPiece((i, j)) == null){
-                    var square = GameHelpers.GetSquareFromCoordinate((i, j));
-                    var bitmap = ChessBoard.Children.OfType<SKBitmapControl>().FirstOrDefault(x => x.Name == square);
-                    if(bitmap != null) {
-                        if(bitmap.Bitmap !=null) {
-                            bitmap.Bitmap = null;
-                        }
-                    }
+        for (var i = 0; i < GameHelpers.k_boardHeight; i++)
+        {
+            for (var j = 0; j < GameHelpers.k_boardHeight; j++)
+            {
+                if (ViewModel.Game.m_board.GetPiece((i, j)) != null) continue;
+                var square = GameHelpers.GetSquareFromCoordinate((i, j));
+                var bitmap = ChessBoard.Children.OfType<SKBitmapControl>().FirstOrDefault(x => x.Name == square);
+                if (bitmap?.Bitmap != null)
+                {
+                    bitmap.Bitmap = null;
                 }
             }
         }
+
         foreach (var piece in ViewModel.Game.m_board.m_pieces)
         {
             var piecePath = piece.GetPlayer() switch
@@ -198,37 +203,45 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         }
     }
 
+    /// <summary>
+    /// Handle LeftButton events for the ChessBoard Grid Control
+    /// </summary>
     // ReSharper disable once UnusedParameter.Local
     private void ChessBoard_MouseLeftButtonDown(object? sender, PointerPressedEventArgs e)
     {
         if (e.GetCurrentPoint(ChessBoard).Properties.IsLeftButtonPressed == false) return;
         if (ViewModel == null) return;
 
-        try{
+        try
+        {
             if (ViewModel.FirstClick)
             {
                 _sourcePiece = e.Source as SKBitmapControl;
                 if (_sourcePiece?.Name == null) return;
                 _sourceCoordinates = GameHelpers.GetCoordinateFromSquare(_sourcePiece.Name);
                 _sourceTile = ChessBoard.Children.OfType<Rectangle>().FirstOrDefault(x => x.Name == _sourcePiece.Name);
-                if (_sourceTile != null) {
+                if (_sourceTile != null)
+                {
                     _sourceColor = _sourceTile.Fill;
-                    _sourceTile.Fill  = new SolidColorBrush(Tile.k_blue);
+                    _sourceTile.Fill = new SolidColorBrush(Tile.k_blue);
                 }
+
                 var piece = ViewModel.Game.m_board.GetPiece(_sourceCoordinates);
-                var availableMoves = piece?.GetMovementSquares();                
-                if (availableMoves != null) {
-                    displayAvailableMoves(availableMoves);
+                var availableMoves = piece?.GetMovementSquares();
+                if (availableMoves != null && (piece?.GetPlayer() == ViewModel?.Game.m_board.m_playerToPlay))
+                {
+                    DisplayAvailableMoves(availableMoves);
                 }
             }
             else
             {
-                if (_sourceTile != null) _sourceTile.Fill  = _sourceColor;
-                var dots = ChessBoard.Children.OfType<Ellipse>();
-                var count = dots.Count();
-                for(int i = 0; i<count; i++){
-                    ChessBoard.Children.Remove(dots.ElementAt(0));
+                if (_sourceTile != null) _sourceTile.Fill = _sourceColor;
+                var dots = ChessBoard.Children.OfType<Ellipse>().ToList();
+                foreach (var dot in dots)
+                {
+                    ChessBoard.Children.Remove(dot);
                 }
+
                 Control destinationTile = e.Source switch
                 {
                     Rectangle tile => tile,
@@ -242,30 +255,29 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
                 ViewModel.Game.MakeMove(piece, destinationTile.Name);
                 DrawPieces();
             }
-        }catch(Exception ex){
+        }
+        catch (Exception ex)
+        {
             Console.Error.WriteLine(ex.Message);
         }
-        ViewModel.FirstClick = !ViewModel.FirstClick;
+
+        if (ViewModel != null) ViewModel.FirstClick = !ViewModel.FirstClick;
     }
 
-    private void displayAvailableMoves(List<(int, int)> availableMoves){
-        foreach (var move in availableMoves)
+    /// <summary>
+    /// Display the available moves for the selected piece
+    /// </summary>
+    private void DisplayAvailableMoves(List<(int, int)> availableMoves)
+    {
+        foreach (var (col, row) in availableMoves)
         {
-            var col = move.Item1;
-            var row = move.Item2;
             var square = GameHelpers.GetSquareFromCoordinate((col, row));
             Ellipse dot;
-            if(ViewModel?.Game.m_board.GetPiece((col, row)) == null){
-                dot = new Ellipse(){
-                    Width = Dot.Width,
-                    Height = Dot.Height,
-                    Fill = new SolidColorBrush(Dot.k_green),
-                    ZIndex = 2,
-                    Name = square
-                };
-            }
-            else{
-                dot = new Ellipse(){
+            var attackedPiece = ViewModel?.Game.m_board.GetPiece((col, row));
+            if (attackedPiece != null)
+            {
+                dot = new Ellipse
+                {
                     Width = 50,
                     Height = 50,
                     ZIndex = 2,
@@ -274,6 +286,18 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
                     StrokeThickness = 3
                 };
             }
+            else
+            {
+                dot = new Ellipse
+                {
+                    Width = Dot.Width,
+                    Height = Dot.Height,
+                    Fill = new SolidColorBrush(Dot.k_green),
+                    ZIndex = 2,
+                    Name = square
+                };
+            }
+
             Grid.SetRow(dot, 7 - row);
             Grid.SetColumn(dot, col);
             ChessBoard.Children.Add(dot);
