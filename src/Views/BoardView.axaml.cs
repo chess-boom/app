@@ -20,6 +20,8 @@ namespace ChessBoom.Views;
 
 public partial class BoardView : ReactiveUserControl<BoardViewModel>
 {
+    private (int, int) _from;
+    private (int, int) _to;
     private Dictionary<(int, int), (int, int)> _arrowMap = new Dictionary<(int, int), (int, int)>();
 
     /// <summary>
@@ -63,12 +65,10 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     // A method named Debug that adds a list box to the view and binds in to mouse events
     private void Debug()
     {
-
-        (int, int)? from = null;
-        (int, int)? to = null;
-
         var textBlock1 = this.Find<TextBlock>("tb1");
         var textBlock2 = this.Find<TextBlock>("tb2");
+
+        Arrows = this.Find<Canvas>("Arrows");
 
         ChessBoard.PointerPressed += (sender, e) =>
         {
@@ -78,8 +78,8 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             if (source?.Name == null) return;
             var position = GameHelpers.GetCoordinateFromSquare(source.Name);
 
-            from = (position.Item1, GameHelpers.k_boardHeight - position.Item2 - 1);
-            textBlock1.Text = $"Square from: {from}";
+            _from = (position.Item1, GameHelpers.k_boardHeight - position.Item2 - 1);
+            textBlock1.Text = $"Square from: {_from}";
         };
 
         ChessBoard.PointerMoved += (sender, e) =>
@@ -94,25 +94,27 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             // only if cursor is on ChessBoard
             if (row < 0 || row >= GameHelpers.k_boardWidth || col < 0 || col >= GameHelpers.k_boardHeight) return;
 
-            to = (row, col);
-            textBlock2.Text = $"Square to: {to}";
+            _to = (row, col);
+            textBlock2.Text = $"Square to: {_to}";
         };
 
         ChessBoard.PointerReleased += (sender, e) =>
         {
-            if (!e.GetCurrentPoint(ChessBoard).Properties.IsRightButtonPressed) return;
+            // if (!e.GetCurrentPoint(ChessBoard).Properties.IsRightButtonPressed) return;
 
-            if (from == null || to == null) return;
-
-            if (_arrowMap.ContainsKey(((int, int))from))
+            if (_arrowMap.ContainsKey(_from))
             {
-                _arrowMap.Remove(((int, int))from);
+                _arrowMap.Remove(_from);
             }
             else
             {
-                _arrowMap.Add(((int, int))from, ((int, int))to);
-                
+                _arrowMap.Add(_from, _to);
+                var arrowPath = CreateArrowPath(_from, _to);
+                var path = new Path
+                    { Data = arrowPath, Stretch = Stretch.Fill, Fill = Brushes.LimeGreen, Opacity = 0.8 };
+                Arrows.Children.Add(path);
             }
+
             Console.WriteLine($"ArrowMap: {string.Join(", ", _arrowMap.Select(x => $"{x.Key} -> {x.Value}"))}");
         };
     }
@@ -213,34 +215,54 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         }
     }
 
-    public PathGeometry CreateArrowPath((int x, int y) a, (int x, int y) b)
+    private PathGeometry CreateArrowPath((int x, int y) from, (int x, int y) to)
     {
-        var startPoint = new Point(a.x, a.y);
-        var endPoint = new Point(b.x, b.y);
+        var tileWidth = Tile.Width;
+        var tileHeight = Tile.Height;
+        
+        var startPoint = new Point(from.x * tileWidth + tileWidth / 2, from.y * tileHeight + tileHeight / 2);
+        var endPoint = new Point(to.x * tileWidth + tileWidth / 2, to.y * tileHeight + tileHeight / 2);
         var direction = new Vector(endPoint.X - startPoint.X, endPoint.Y - startPoint.Y);
         direction.Normalize();
-        var lineEnd = endPoint - direction * 20;
+        var lineEnd = endPoint - direction;
         var angle = Math.Atan2(direction.Y, direction.X);
 
         var pathGeometry = new PathGeometry();
-        var pathFigure = new PathFigure();
-        pathFigure.StartPoint = startPoint;
+        var pathFigure = new PathFigure
+        {
+            StartPoint = startPoint
+        };
         pathGeometry.Figures.Add(pathFigure);
 
-        var lineSegment1 = new LineSegment();
-        lineSegment1.Point = lineEnd;
+        var lineSegment1 = new LineSegment
+        {
+            Point = new Point(lineEnd.X - 30 * Math.Sin(angle),
+                lineEnd.Y + 30 * Math.Cos(angle))
+        };
         pathFigure.Segments.Add(lineSegment1);
 
-        var lineSegment2 = new LineSegment();
-        lineSegment2.Point = new Point(lineEnd.X - 15 * Math.Sin(angle + Math.PI / 6), lineEnd.Y + 15 * Math.Cos(angle + Math.PI / 6));
+        var lineSegment2 = new LineSegment
+        {
+            Point = new Point(lineEnd.X - 15 * Math.Sin(angle - Math.PI / 6),
+                lineEnd.Y + 15 * Math.Cos(angle - Math.PI / 6))
+        };
         pathFigure.Segments.Add(lineSegment2);
 
-        var lineSegment3 = new LineSegment();
-        lineSegment3.Point = endPoint;
+        var lineSegment3 = new LineSegment
+        {
+            Point = new Point(lineEnd.X - 15 * Math.Sin(angle + Math.PI / 6),
+                lineEnd.Y + 15 * Math.Cos(angle + Math.PI / 6))
+        };
         pathFigure.Segments.Add(lineSegment3);
 
+        var lineSegment4 = new LineSegment
+        {
+            Point = lineEnd
+        };
+        pathFigure.Segments.Add(lineSegment4);
+
         return pathGeometry;
-    }
+    } 
 
     // a method that on right click draws an arrow from the selected square to the clicked square
     private void ChessBoard_OnPointerPressed(object? sender, PointerEventArgs e)
