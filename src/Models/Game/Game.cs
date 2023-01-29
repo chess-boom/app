@@ -189,7 +189,7 @@ public class Game
     {
         // Castling
         if (pgnNotation == Move.k_kingsideCastleNotation
-            || pgnNotation == Move.k_kingsideCastleNotation)
+            || pgnNotation == Move.k_queensideCastleNotation)
         {
             // TODO: Implement a GetKing() function, as this will break when implementing the Chess960 variant
             Piece? king = (m_board.m_playerToPlay == Player.White)
