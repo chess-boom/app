@@ -51,7 +51,7 @@ public class King : Piece
 
     public override void MovePiece((int, int) coordinate, char? promotionPiece = null)
     {
-        base.MovePiece(coordinate);
+        base.MovePiece(coordinate, promotionPiece);
         if (!m_hasMoved)
         {
             m_board.RemoveCastling(m_owner, Castling.Kingside);

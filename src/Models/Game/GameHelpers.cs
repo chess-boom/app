@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using ChessBoom.Models.Game.Pieces;
 
 namespace ChessBoom.Models.Game;
@@ -12,12 +13,12 @@ public static class GameHelpers
     /// <summary>
     /// The names of the columns of the chess board are here defined
     /// </summary>
-    public static readonly List<String> k_boardColumnNames = new List<String> { "a", "b", "c", "d", "e", "f", "g", "h" };
+    public static readonly ImmutableList<String> k_boardColumnNames = ImmutableList.Create<String>("a", "b", "c", "d", "e", "f", "g", "h");
 
     /// <summary>
     /// The names of the rows of the chess board are here defined
     /// </summary>
-    public static readonly List<String> k_boardRowNames = new List<String> { "1", "2", "3", "4", "5", "6", "7", "8" };
+    public static readonly ImmutableList<String> k_boardRowNames = ImmutableList.Create<String>("1", "2", "3", "4", "5", "6", "7", "8");
 
     /// <summary>
     /// The width of the chess board is here defined
