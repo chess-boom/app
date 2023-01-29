@@ -8,5 +8,99 @@
     </Design.DataContext>
     <StackPanel>
         <Label Content="Tutorials" FontSize="50" HorizontalAlignment="Center" />
+        <Grid HorizontalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button
+                Grid.Row="0" 
+                Grid.Column="0"
+                Margin="50">
+                <Button.Background>
+                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                        <GradientStop Color="#454545" Offset="0.0" />
+                        <GradientStop Color="#555555" Offset="0.1" />
+                        <GradientStop Color="#696969" Offset="0.5" />
+                        <GradientStop Color="#555555" Offset="0.9" />
+                        <GradientStop Color="#454545" Offset="1" />
+                    </LinearGradientBrush>
+                </Button.Background>
+                <StackPanel>
+                    <Label Content="Beginner" FontSize="50" HorizontalAlignment="Center" />
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Assets/Images/Beginner.png" Width="250" Height="250"/>
+                        <Label Content="Sample Description" FontSize="18" Margin="5,0,0,0"/>
+                    </StackPanel>
+                </StackPanel>              
+            </Button>
+            <Button
+                Grid.Row="0" 
+                Grid.Column="1"
+                Margin="50">
+                <Button.Background>
+                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                        <GradientStop Color="#454545" Offset="0.0" />
+                        <GradientStop Color="#555555" Offset="0.1" />
+                        <GradientStop Color="#696969" Offset="0.5" />
+                        <GradientStop Color="#555555" Offset="0.9" />
+                        <GradientStop Color="#454545" Offset="1" />
+                    </LinearGradientBrush>
+                </Button.Background>
+                <StackPanel>
+                    <Label Content="Tactics" FontSize="50" HorizontalAlignment="Center" />
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Assets/Images/Tactics.png" Width="250" Height="250"/>
+                        <Label Content="Sample Description" FontSize="18" Margin="5,0,0,0"/>
+                    </StackPanel>
+                </StackPanel>              
+            </Button>
+            <Button
+                Grid.Row="1" 
+                Grid.Column="0"
+                Margin="50">
+                <Button.Background>
+                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                        <GradientStop Color="#454545" Offset="0.0" />
+                        <GradientStop Color="#555555" Offset="0.1" />
+                        <GradientStop Color="#696969" Offset="0.5" />
+                        <GradientStop Color="#555555" Offset="0.9" />
+                        <GradientStop Color="#454545" Offset="1" />
+                    </LinearGradientBrush>
+                </Button.Background>
+                <StackPanel>
+                    <Label Content="Openings" FontSize="50" HorizontalAlignment="Center" />
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Assets/Images/Openings.png" Width="250" Height="250"/>
+                        <Label Content="Sample Description" FontSize="18" Margin="5,0,0,0"/>
+                    </StackPanel>
+                </StackPanel>              
+            </Button>
+            <Button
+                Grid.Row="1" 
+                Grid.Column="1"
+                Margin="50">
+                <Button.Background>
+                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                        <GradientStop Color="#454545" Offset="0.0" />
+                        <GradientStop Color="#555555" Offset="0.1" />
+                        <GradientStop Color="#696969" Offset="0.5" />
+                        <GradientStop Color="#555555" Offset="0.9" />
+                        <GradientStop Color="#454545" Offset="1" />
+                    </LinearGradientBrush>
+                </Button.Background>
+                <StackPanel>
+                    <Label Content="Endgame" FontSize="50" HorizontalAlignment="Center" />
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Assets/Images/Endgame.png" Width="250" Height="250"/>
+                        <Label Content="Sample Description" FontSize="18" Margin="5,0,0,0"/>
+                    </StackPanel>
+                </StackPanel>              
+            </Button>
+        </Grid>
     </StackPanel>
 </UserControl>

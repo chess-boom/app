@@ -12,6 +12,8 @@ public class AppViewLocator : IViewLocator
     public IViewFor ResolveView<T>(T viewModel, string? contract = null) => viewModel switch
     {
         DashboardViewModel context => new DashboardView { DataContext = context },
+        GameAnalysisViewModel context => new GameAnalysisView { DataContext = context },
+        VariantAnalysisViewModel context => new VariantAnalysisView { DataContext = context },
         TutorialViewModel context => new TutorialView { DataContext = context },
         BoardViewModel context => new BoardView { DataContext = context },
         TemplateViewModel context => new TemplateView { DataContext = context },
