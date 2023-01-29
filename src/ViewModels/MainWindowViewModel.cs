@@ -13,30 +13,16 @@ public class MainWindowViewModel : ReactiveObject, IScreen
     // The Router associated with this Screen.
     // Required by the IScreen interface.
     public RoutingState Router { get; } = new();
-    public SolidColorBrush HomeBackground  { get; set; } = new SolidColorBrush(Colors.Transparent);
-    // public SolidColorBrush ol GameAnalysisBackground { get; set; } = new SolidColorBrush(Colors.Transparent);
-    // public SolidColorBrush  VariantBackground { get; set; } = new SolidColorBrush(Colors.Transparent);
     internal ReactiveCommand<Unit, IRoutableViewModel> GoHome { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoTutorial { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoTemplate { get; }
+    internal ReactiveCommand<Unit, IRoutableViewModel> GoBoard { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoAnalysis { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoVariant { get; }
 
     // The command that navigates a user back.
     public ReactiveCommand<Unit, Unit> GoBack => Router.NavigateBack;
 
-    // private void MenuItem_Click(object sender, RoutedEventArgs e)
-    // {
-    //     var menuItem = (MenuItem)sender;
-    //     if (menuItem.Header.ToString() == "TUTORIALS")
-    //     {
-    //         HomeBackground  = new SolidColorBrush(Colors.LightBlue);
-    //     }
-    //     else if (menuItem.Header.ToString() == "About")
-    //     {
-    //          TutorialBackground = new SolidColorBrush(Colors.LightGreen);
-    //     }
-    // }
     protected internal MainWindowViewModel()
     {
         // Manage the routing state. Use the Router.Navigate.Execute
@@ -51,6 +37,9 @@ public class MainWindowViewModel : ReactiveObject, IScreen
         );
         GoTutorial = ReactiveCommand.CreateFromObservable(
             () => Router.Navigate.Execute(new TutorialViewModel(this))
+        );
+        GoBoard = ReactiveCommand.CreateFromObservable(
+            () => Router.Navigate.Execute(new BoardViewModel(this))
         );
         GoTemplate = ReactiveCommand.CreateFromObservable(
             () => Router.Navigate.Execute(new TemplateViewModel(this))

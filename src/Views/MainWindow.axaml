@@ -32,7 +32,6 @@
         <Menu Background="Black">
               <!-- <Image Source="Assets/Icons/favicon.ico"/> -->
             <MenuItem Header="GAME ANALYSIS" FontSize="25">
-                <!-- TODO Fix GoBoard Binding -->
                 <MenuItem Header="Board" Command="{Binding GoBoard}"/>
                 <MenuItem Header="Game List" Command="{Binding GoAnalysis}"/>
                 <MenuItem Header="Analysis Breakdown" Command="{Binding GoTemplate}"/>

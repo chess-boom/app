@@ -6,8 +6,363 @@
     <Design.DataContext>
         <viewModels:GameAnalysisViewModel />
     </Design.DataContext>
-    <!-- TODO Uses same template as Variant Analysis, but needs fixing in navbar -->
-    <StackPanel>
-        <Label Content="Template your mom" FontSize="50" HorizontalAlignment="Center" />
+        <StackPanel>
+        <Label Content="Game List" FontSize="50" HorizontalAlignment="Center" />
+        <Grid Width="1500" HorizontalAlignment="Center" Background="#6AC1FF">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <!-- TODO Fix spacing (make it less hardcoded) -->
+            <Label Grid.Row="0" Content="Match History" FontSize="18" />
+            <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="7" Orientation="Horizontal" Background="Black">
+                <Label Grid.Row="1" Grid.Column="0" Content="Opponent" FontSize="18"/>
+                <Label Grid.Row="1" Grid.Column="1" Content="Variant" FontSize="18" Margin="140,0,0,0"/>
+                <Label Grid.Row="1" Grid.Column="2" Content="Match Status" FontSize="18" Margin="120,0,0,0"/>
+                <Label Grid.Row="1" Grid.Column="3" Content="Moves" FontSize="18"  Margin="100,0,0,0"/>
+                <Label Grid.Row="1" Grid.Column="4" Content="Blunders" FontSize="18"  Margin="100,0,0,0"/>
+                <Label Grid.Row="1" Grid.Column="5" Content="Missed wins" FontSize="18"  Margin="100,0,0,0"/>
+                <Label Grid.Row="1" Grid.Column="6" Content="Improvement" FontSize="18"  Margin="100,0,0,0"/>
+            </StackPanel>
+            <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="7" Orientation="Horizontal" Width="1500" Background="#696969">
+                <Button Width="1500">
+                    <Button.Background>
+                        <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                            <GradientStop Color="#454545" Offset="0.0" />
+                            <GradientStop Color="#555555" Offset="0.1" />
+                            <GradientStop Color="#696969" Offset="0.5" />
+                            <GradientStop Color="#555555" Offset="0.9" />
+                            <GradientStop Color="#454545" Offset="1" />
+                        </LinearGradientBrush>
+                    </Button.Background>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Grid.Column="0" Content="J0ND03"/>
+                        <Label Grid.Column="1" Content="Atomic Chess" Margin="140,0,0,0"/>
+                        <Label Grid.Column="2" Content="Win!" Margin="140,0,0,0"> 
+                            <Label.Background>
+                                <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                                    <GradientStop Color="#008C00" Offset="0.0" />
+                                    <GradientStop Color="#00CC00" Offset="0.1" />
+                                    <GradientStop Color="#00FF00" Offset="0.5" />
+                                    <GradientStop Color="#00CC00" Offset="0.9" />
+                                    <GradientStop Color="#008C00" Offset="1" />
+                                </LinearGradientBrush>
+                            </Label.Background>
+                        </Label>
+                        <Label Grid.Column="3" Content="32" Margin="170,0,0,0"/>
+                        <Label Grid.Column="4" Content="2" Margin="150,0,0,0"/>
+                        <Label Grid.Column="5" Content="0" Margin="180,0,0,0"/>
+                        <Label Grid.Column="6" Content="++" Margin="200,0,0,0"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="7" Orientation="Horizontal" Width="1500" Background="#848484">
+                <Button Width="1500">
+                    <Button.Background>
+                        <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                            <GradientStop Color="#797979" Offset="0.0" />
+                            <GradientStop Color="#555555" Offset="0.1" />
+                            <GradientStop Color="#848484" Offset="0.5" />
+                            <GradientStop Color="#797979" Offset="0.9" />
+                            <GradientStop Color="#696969" Offset="1" />
+                        </LinearGradientBrush>
+                    </Button.Background>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Grid.Column="0" Content="J0ND03"/>
+                        <Label Grid.Column="1" Content="Atomic Chess" Margin="140,0,0,0"/>
+                        <Label Grid.Column="2" Content="Win!" Margin="140,0,0,0"> 
+                            <Label.Background>
+                                <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                                    <GradientStop Color="#008C00" Offset="0.0" />
+                                    <GradientStop Color="#00CC00" Offset="0.1" />
+                                    <GradientStop Color="#00FF00" Offset="0.5" />
+                                    <GradientStop Color="#00CC00" Offset="0.9" />
+                                    <GradientStop Color="#008C00" Offset="1" />
+                                </LinearGradientBrush>
+                            </Label.Background>
+                        </Label>
+                        <Label Grid.Column="3" Content="32" Margin="170,0,0,0"/>
+                        <Label Grid.Column="4" Content="2" Margin="150,0,0,0"/>
+                        <Label Grid.Column="5" Content="0" Margin="180,0,0,0"/>
+                        <Label Grid.Column="6" Content="++" Margin="200,0,0,0"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="7" Orientation="Horizontal" Width="1500" Background="#696969">
+                <Button Width="1500">
+                    <Button.Background>
+                        <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                            <GradientStop Color="#454545" Offset="0.0" />
+                            <GradientStop Color="#555555" Offset="0.1" />
+                            <GradientStop Color="#696969" Offset="0.5" />
+                            <GradientStop Color="#555555" Offset="0.9" />
+                            <GradientStop Color="#454545" Offset="1" />
+                        </LinearGradientBrush>
+                    </Button.Background>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Grid.Column="0" Content="J0ND03"/>
+                        <Label Grid.Column="1" Content="Atomic Chess" Margin="140,0,0,0"/>
+                        <Label Grid.Column="2" Content="Win!" Margin="140,0,0,0"> 
+                            <Label.Background>
+                                <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                                    <GradientStop Color="#008C00" Offset="0.0" />
+                                    <GradientStop Color="#00CC00" Offset="0.1" />
+                                    <GradientStop Color="#00FF00" Offset="0.5" />
+                                    <GradientStop Color="#00CC00" Offset="0.9" />
+                                    <GradientStop Color="#008C00" Offset="1" />
+                                </LinearGradientBrush>
+                            </Label.Background>
+                        </Label>
+                        <Label Grid.Column="3" Content="32" Margin="170,0,0,0"/>
+                        <Label Grid.Column="4" Content="2" Margin="150,0,0,0"/>
+                        <Label Grid.Column="5" Content="0" Margin="180,0,0,0"/>
+                        <Label Grid.Column="6" Content="++" Margin="200,0,0,0"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="7" Orientation="Horizontal" Width="1500" Background="#848484">
+                <Button Width="1500">
+                    <Button.Background>
+                        <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                            <GradientStop Color="#797979" Offset="0.0" />
+                            <GradientStop Color="#555555" Offset="0.1" />
+                            <GradientStop Color="#848484" Offset="0.5" />
+                            <GradientStop Color="#797979" Offset="0.9" />
+                            <GradientStop Color="#696969" Offset="1" />
+                        </LinearGradientBrush>
+                    </Button.Background>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Grid.Column="0" Content="J0ND03"/>
+                        <Label Grid.Column="1" Content="Atomic Chess" Margin="140,0,0,0"/>
+                        <Label Grid.Column="2" Content="Win!" Margin="140,0,0,0"> 
+                            <Label.Background>
+                                <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                                    <GradientStop Color="#008C00" Offset="0.0" />
+                                    <GradientStop Color="#00CC00" Offset="0.1" />
+                                    <GradientStop Color="#00FF00" Offset="0.5" />
+                                    <GradientStop Color="#00CC00" Offset="0.9" />
+                                    <GradientStop Color="#008C00" Offset="1" />
+                                </LinearGradientBrush>
+                            </Label.Background>
+                        </Label>
+                        <Label Grid.Column="3" Content="32" Margin="170,0,0,0"/>
+                        <Label Grid.Column="4" Content="2" Margin="150,0,0,0"/>
+                        <Label Grid.Column="5" Content="0" Margin="180,0,0,0"/>
+                        <Label Grid.Column="6" Content="++" Margin="200,0,0,0"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="7" Orientation="Horizontal" Width="1500" Background="#696969">
+                <Button Width="1500">
+                    <Button.Background>
+                        <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                            <GradientStop Color="#454545" Offset="0.0" />
+                            <GradientStop Color="#555555" Offset="0.1" />
+                            <GradientStop Color="#696969" Offset="0.5" />
+                            <GradientStop Color="#555555" Offset="0.9" />
+                            <GradientStop Color="#454545" Offset="1" />
+                        </LinearGradientBrush>
+                    </Button.Background>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Grid.Column="0" Content="J0ND03"/>
+                        <Label Grid.Column="1" Content="Atomic Chess" Margin="140,0,0,0"/>
+                        <Label Grid.Column="2" Content="Win!" Margin="140,0,0,0"> 
+                            <Label.Background>
+                                <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                                    <GradientStop Color="#008C00" Offset="0.0" />
+                                    <GradientStop Color="#00CC00" Offset="0.1" />
+                                    <GradientStop Color="#00FF00" Offset="0.5" />
+                                    <GradientStop Color="#00CC00" Offset="0.9" />
+                                    <GradientStop Color="#008C00" Offset="1" />
+                                </LinearGradientBrush>
+                            </Label.Background>
+                        </Label>
+                        <Label Grid.Column="3" Content="32" Margin="170,0,0,0"/>
+                        <Label Grid.Column="4" Content="2" Margin="150,0,0,0"/>
+                        <Label Grid.Column="5" Content="0" Margin="180,0,0,0"/>
+                        <Label Grid.Column="6" Content="++" Margin="200,0,0,0"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <StackPanel Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="7" Orientation="Horizontal" Width="1500" Background="#848484">
+                <Button Width="1500">
+                    <Button.Background>
+                        <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                            <GradientStop Color="#797979" Offset="0.0" />
+                            <GradientStop Color="#555555" Offset="0.1" />
+                            <GradientStop Color="#848484" Offset="0.5" />
+                            <GradientStop Color="#797979" Offset="0.9" />
+                            <GradientStop Color="#696969" Offset="1" />
+                        </LinearGradientBrush>
+                    </Button.Background>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Grid.Column="0" Content="J0ND03"/>
+                        <Label Grid.Column="1" Content="Atomic Chess" Margin="140,0,0,0"/>
+                        <Label Grid.Column="2" Content="Win!" Margin="140,0,0,0"> 
+                            <Label.Background>
+                                <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                                    <GradientStop Color="#008C00" Offset="0.0" />
+                                    <GradientStop Color="#00CC00" Offset="0.1" />
+                                    <GradientStop Color="#00FF00" Offset="0.5" />
+                                    <GradientStop Color="#00CC00" Offset="0.9" />
+                                    <GradientStop Color="#008C00" Offset="1" />
+                                </LinearGradientBrush>
+                            </Label.Background>
+                        </Label>
+                        <Label Grid.Column="3" Content="32" Margin="170,0,0,0"/>
+                        <Label Grid.Column="4" Content="2" Margin="150,0,0,0"/>
+                        <Label Grid.Column="5" Content="0" Margin="180,0,0,0"/>
+                        <Label Grid.Column="6" Content="++" Margin="200,0,0,0"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <StackPanel Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="7" Orientation="Horizontal" Width="1500" Background="#696969">
+                <Button Width="1500">
+                    <Button.Background>
+                        <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                            <GradientStop Color="#454545" Offset="0.0" />
+                            <GradientStop Color="#555555" Offset="0.1" />
+                            <GradientStop Color="#696969" Offset="0.5" />
+                            <GradientStop Color="#555555" Offset="0.9" />
+                            <GradientStop Color="#454545" Offset="1" />
+                        </LinearGradientBrush>
+                    </Button.Background>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Grid.Column="0" Content="J0ND03"/>
+                        <Label Grid.Column="1" Content="Atomic Chess" Margin="140,0,0,0"/>
+                        <Label Grid.Column="2" Content="Win!" Margin="140,0,0,0"> 
+                            <Label.Background>
+                                <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                                    <GradientStop Color="#008C00" Offset="0.0" />
+                                    <GradientStop Color="#00CC00" Offset="0.1" />
+                                    <GradientStop Color="#00FF00" Offset="0.5" />
+                                    <GradientStop Color="#00CC00" Offset="0.9" />
+                                    <GradientStop Color="#008C00" Offset="1" />
+                                </LinearGradientBrush>
+                            </Label.Background>
+                        </Label>
+                        <Label Grid.Column="3" Content="32" Margin="170,0,0,0"/>
+                        <Label Grid.Column="4" Content="2" Margin="150,0,0,0"/>
+                        <Label Grid.Column="5" Content="0" Margin="180,0,0,0"/>
+                        <Label Grid.Column="6" Content="++" Margin="200,0,0,0"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <StackPanel Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="7" Orientation="Horizontal" Width="1500" Background="#848484">
+                <Button Width="1500">
+                    <Button.Background>
+                        <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                            <GradientStop Color="#797979" Offset="0.0" />
+                            <GradientStop Color="#555555" Offset="0.1" />
+                            <GradientStop Color="#848484" Offset="0.5" />
+                            <GradientStop Color="#797979" Offset="0.9" />
+                            <GradientStop Color="#696969" Offset="1" />
+                        </LinearGradientBrush>
+                    </Button.Background>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Grid.Column="0" Content="J0ND03"/>
+                        <Label Grid.Column="1" Content="Atomic Chess" Margin="140,0,0,0"/>
+                        <Label Grid.Column="2" Content="Win!" Margin="140,0,0,0"> 
+                            <Label.Background>
+                                <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                                    <GradientStop Color="#008C00" Offset="0.0" />
+                                    <GradientStop Color="#00CC00" Offset="0.1" />
+                                    <GradientStop Color="#00FF00" Offset="0.5" />
+                                    <GradientStop Color="#00CC00" Offset="0.9" />
+                                    <GradientStop Color="#008C00" Offset="1" />
+                                </LinearGradientBrush>
+                            </Label.Background>
+                        </Label>
+                        <Label Grid.Column="3" Content="32" Margin="170,0,0,0"/>
+                        <Label Grid.Column="4" Content="2" Margin="150,0,0,0"/>
+                        <Label Grid.Column="5" Content="0" Margin="180,0,0,0"/>
+                        <Label Grid.Column="6" Content="++" Margin="200,0,0,0"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <StackPanel Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="7" Orientation="Horizontal" Width="1500" Background="#696969">
+                <Button Width="1500">
+                    <Button.Background>
+                        <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                            <GradientStop Color="#454545" Offset="0.0" />
+                            <GradientStop Color="#555555" Offset="0.1" />
+                            <GradientStop Color="#696969" Offset="0.5" />
+                            <GradientStop Color="#555555" Offset="0.9" />
+                            <GradientStop Color="#454545" Offset="1" />
+                        </LinearGradientBrush>
+                    </Button.Background>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Grid.Column="0" Content="J0ND03"/>
+                        <Label Grid.Column="1" Content="Atomic Chess" Margin="140,0,0,0"/>
+                        <Label Grid.Column="2" Content="Win!" Margin="140,0,0,0"> 
+                            <Label.Background>
+                                <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                                    <GradientStop Color="#008C00" Offset="0.0" />
+                                    <GradientStop Color="#00CC00" Offset="0.1" />
+                                    <GradientStop Color="#00FF00" Offset="0.5" />
+                                    <GradientStop Color="#00CC00" Offset="0.9" />
+                                    <GradientStop Color="#008C00" Offset="1" />
+                                </LinearGradientBrush>
+                            </Label.Background>
+                        </Label>
+                        <Label Grid.Column="3" Content="32" Margin="170,0,0,0"/>
+                        <Label Grid.Column="4" Content="2" Margin="150,0,0,0"/>
+                        <Label Grid.Column="5" Content="0" Margin="180,0,0,0"/>
+                        <Label Grid.Column="6" Content="++" Margin="200,0,0,0"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <StackPanel Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="7" Orientation="Horizontal" Width="1500" Background="#848484">
+                <Button Width="1500">
+                    <Button.Background>
+                        <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                            <GradientStop Color="#797979" Offset="0.0" />
+                            <GradientStop Color="#555555" Offset="0.1" />
+                            <GradientStop Color="#848484" Offset="0.5" />
+                            <GradientStop Color="#797979" Offset="0.9" />
+                            <GradientStop Color="#696969" Offset="1" />
+                        </LinearGradientBrush>
+                    </Button.Background>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Grid.Column="0" Content="J0ND03"/>
+                        <Label Grid.Column="1" Content="Atomic Chess" Margin="140,0,0,0"/>
+                        <Label Grid.Column="2" Content="Win!" Margin="140,0,0,0"> 
+                            <Label.Background>
+                                <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                                    <GradientStop Color="#008C00" Offset="0.0" />
+                                    <GradientStop Color="#00CC00" Offset="0.1" />
+                                    <GradientStop Color="#00FF00" Offset="0.5" />
+                                    <GradientStop Color="#00CC00" Offset="0.9" />
+                                    <GradientStop Color="#008C00" Offset="1" />
+                                </LinearGradientBrush>
+                            </Label.Background>
+                        </Label>
+                        <Label Grid.Column="3" Content="32" Margin="170,0,0,0"/>
+                        <Label Grid.Column="4" Content="2" Margin="150,0,0,0"/>
+                        <Label Grid.Column="5" Content="0" Margin="180,0,0,0"/>
+                        <Label Grid.Column="6" Content="++" Margin="200,0,0,0"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
     </StackPanel>
 </UserControl>
