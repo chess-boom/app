@@ -663,7 +663,9 @@ public class GameUnitTests
         _game.MakeExplicitMove("f8", "h6"); // Bh6
         _game.MakeExplicitMove("f1", "c4"); // Bc4
         _game.MakeExplicitMove("g8", "f6"); // Nf6
-        // Can move or castle
+        _game.MakeExplicitMove("d2", "d3"); // d3
+        _game.MakeExplicitMove("c7", "c6"); // c6
+        // Can move or castle, but not into check (on d2)
         if (king is not null)
         {
             var movementSquares = king.GetLegalMoves();
@@ -671,6 +673,31 @@ public class GameUnitTests
             Assert.Contains("e2", movementSquares);
             Assert.Contains("f1", movementSquares);
             Assert.Contains("O-O", movementSquares);
+        }
+
+        _game.MakeExplicitMove("d3", "d4"); // d4
+        _game.MakeExplicitMove("h6", "d2"); // Bd2+
+        // Can capture or move out of check, but not castle
+        if (king is not null)
+        {
+            var movementSquares = king.GetLegalMoves();
+            Assert.AreEqual(3, movementSquares.Count);
+            Assert.Contains("d2", movementSquares);
+            Assert.Contains("e2", movementSquares);
+            Assert.Contains("f1", movementSquares);
+        }
+
+        _game.MakeExplicitMove("e1", "d2"); // Kxc2
+        _game.MakeExplicitMove("d8", "a5"); // Qa5+
+
+        // Can move out of check, but not into check, while in check
+        if (king is not null)
+        {
+            var movementSquares = king.GetLegalMoves();
+            Assert.AreEqual(3, movementSquares.Count);
+            Assert.Contains("d3", movementSquares);
+            Assert.Contains("e2", movementSquares);
+            Assert.Contains("e3", movementSquares);
         }
     }
 

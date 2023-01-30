@@ -229,7 +229,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
                 }
 
                 var piece = ViewModel.Game.m_board.GetPiece(_sourceCoordinates);
-                var availableMoves = piece?.GetMovementSquares();
+                var availableMoves = piece?.GetLegalMoves();
                 if (availableMoves != null && (piece?.GetPlayer() == ViewModel?.Game.m_board.m_playerToPlay))
                 {
                     DisplayAvailableMoves(availableMoves);
@@ -269,13 +269,12 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     /// <summary>
     /// Display the available moves for the selected piece
     /// </summary>
-    private void DisplayAvailableMoves(List<(int, int)> availableMoves)
+    private void DisplayAvailableMoves(List<string> availableMoves)
     {
-        foreach (var (col, row) in availableMoves)
+        foreach (var square in availableMoves)
         {
-            var square = GameHelpers.GetSquareFromCoordinate((col, row));
             Ellipse dot;
-            var attackedPiece = ViewModel?.Game.m_board.GetPiece((col, row));
+            var attackedPiece = ViewModel?.Game.m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(square));
             if (attackedPiece != null)
             {
                 dot = new Ellipse
@@ -299,9 +298,9 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
                     Name = square
                 };
             }
-
-            Grid.SetRow(dot, GameHelpers.k_boardWidth - 1 - row);
-            Grid.SetColumn(dot, col);
+            (int col, int row) coordinates = GameHelpers.GetCoordinateFromSquare(square);
+            Grid.SetRow(dot, GameHelpers.k_boardWidth - 1 - coordinates.row);
+            Grid.SetColumn(dot, coordinates.col);
             ChessBoard.Children.Add(dot);
         }
     }
