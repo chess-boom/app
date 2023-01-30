@@ -239,6 +239,16 @@ public class GameHandler
     }
 
     /// <summary>
+    /// Retrieves a piece from its coordinates
+    /// </summary>
+    /// <param name="coordinate">The 2-tuple containing the row and column coordinates (0-7, 0-7)</param>
+    /// <returns>The piece found on the passed square. If none, returns null</returns>
+    public Piece? GetPiece((int, int) coordinate)
+    {
+        if (m_board is not null) return m_board.GetPiece(coordinate); else return null;
+    }
+
+    /// <summary>
     /// Get the legal moves from the piece on a square
     /// </summary>
     /// <param name="square">The name of the square</param>
@@ -306,5 +316,14 @@ public class GameHandler
             throw new NullReferenceException("Error! No game is in progress!");
         }
         return m_game.m_gameState;
+    }
+
+    /// <summary>
+    /// Accessor for the board's current player to play
+    /// </summary>
+    /// <returns>The current player to play or null</returns>
+    public Player? GetPlayerToPlay()
+    {
+        if (m_board is not null) return m_board.m_playerToPlay; else return null;
     }
 }

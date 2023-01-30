@@ -163,7 +163,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         {
             for (var j = 0; j < GameHelpers.k_boardHeight; j++)
             {
-                if (ViewModel.Game.m_board.GetPiece((i, j)) != null) continue;
+                if (ViewModel.GameHandler.GetPiece((i, j)) != null) continue;
                 var square = GameHelpers.GetSquareFromCoordinate((i, j));
                 var bitmap = ChessBoard.Children.OfType<SKBitmapControl>().FirstOrDefault(x => x.Name == square);
                 if (bitmap?.Bitmap != null)
@@ -173,7 +173,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             }
         }
 
-        foreach (var piece in ViewModel.Game.m_board.m_pieces)
+        foreach (var piece in ViewModel.GameHandler.GetPieces())
         {
             var piecePath = piece.GetPlayer() switch
             {
@@ -228,9 +228,9 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
                     _sourceTile.Fill = new SolidColorBrush(Tile.k_blue);
                 }
 
-                var piece = ViewModel.Game.m_board.GetPiece(_sourceCoordinates);
+                var piece = ViewModel.GameHandler.GetPiece(_sourceCoordinates);
                 var availableMoves = piece?.GetLegalMoves();
-                if (availableMoves != null && (piece?.GetPlayer() == ViewModel?.Game.m_board.m_playerToPlay))
+                if (availableMoves != null && (piece?.GetPlayer() == ViewModel?.GameHandler.GetPlayerToPlay()))
                 {
                     DisplayAvailableMoves(availableMoves);
                 }
@@ -251,10 +251,8 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
                     Ellipse tile => tile,
                     _ => throw new ArgumentOutOfRangeException()
                 };
-                var piece = ViewModel.Game.m_board.GetPiece(_sourceCoordinates);
-                if (piece == null) return;
-                if (destinationTile.Name == null) return;
-                ViewModel.Game.MakeMove(piece, destinationTile.Name);
+                if (_sourceTile?.Name is null || destinationTile.Name is null) return;
+                ViewModel.GameHandler.MakeMove(_sourceTile.Name, destinationTile.Name);
                 DrawPieces();
             }
         }
@@ -274,7 +272,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         foreach (var square in availableMoves)
         {
             Ellipse dot;
-            var attackedPiece = ViewModel?.Game.m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(square));
+            var attackedPiece = ViewModel?.GameHandler.GetPiece(GameHelpers.GetCoordinateFromSquare(square));
             if (attackedPiece != null)
             {
                 dot = new Ellipse

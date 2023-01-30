@@ -7,11 +7,11 @@ namespace ChessBoom.ViewModels;
 [ExcludeFromCodeCoverage]
 public class BoardViewModel : BaseViewModel
 {
-    public Game Game { get; }
+    public GameHandler GameHandler { get; }
     public bool FirstClick = true;
 
     public BoardViewModel(IScreen hostScreen) : base(hostScreen)
     {
-        Game = new Game();
+        GameHandler = new GameHandler();
     }
 }
