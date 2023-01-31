@@ -273,7 +273,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         foreach (var square in availableMoves)
         {
             Ellipse dot;
-            
+
             var attackedPiece = ViewModel?.GameHandler.GetPiece(GameHelpers.GetCoordinateFromSquare(square));
 
             if (attackedPiece != null)
