@@ -70,6 +70,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         this.WhenActivated(_ =>
         {
             DrawChessBoard();
+            DrawGridLabels();
             DrawPieces();
         });
         AvaloniaXamlLoader.Load(this);
@@ -81,14 +82,11 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     /// </summary>
     private void DrawChessBoard()
     {
-        for (var i = 0; i < GameHelpers.k_boardHeight; i++)
+        for (var row = 0; row < GameHelpers.k_boardHeight; row++)
         {
             ChessBoard.RowDefinitions.Add(new RowDefinition());
             ChessBoard.ColumnDefinitions.Add(new ColumnDefinition());
-        }
-
-        for (var row = 0; row < GameHelpers.k_boardHeight; row++)
-        {
+            
             for (var col = 0; col < GameHelpers.k_boardWidth; col++)
             {
                 var square = GameHelpers.GetSquareFromCoordinate((col, GameHelpers.k_boardHeight - (row + 1)));
@@ -120,8 +118,13 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
                 ChessBoard.Children.Add(bitmap);
             }
         }
+    }
 
-        // add the letters and numbers to the board
+    /// <summary>
+    /// Add letters and numbers to the ChessBoard
+    /// </summary>
+    private void DrawGridLabels()
+    {
         ChessBoard.RowDefinitions.Add(new RowDefinition { Height = new GridLength(Tile.Height) });
         ChessBoard.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(Tile.Width) });
         for (var i = 0; i < GameHelpers.k_boardWidth; i++)
