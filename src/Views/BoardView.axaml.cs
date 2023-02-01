@@ -23,10 +23,10 @@ namespace ChessBoom.Views;
 [ExcludeFromCodeCoverage]
 public partial class BoardView : ReactiveUserControl<BoardViewModel>
 {
-    private SKBitmapControl? _sourcePiece;
+    private SKBitmapControl? _sourcePieceBitmapControl;
     private Rectangle? _sourceTile;
     private IBrush? _sourceColor;
-    private (int, int) _sourceCoordinates;
+    private List<string> _legalMoves = new();
 
     /// <summary>
     /// Defines attributes related to rendered Tiles
@@ -38,7 +38,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
 
         internal static readonly Color k_white = Color.FromRgb(243, 219, 180);
         internal static readonly Color k_black = Color.FromRgb(179, 140, 99);
-        internal static readonly Color k_blue = Color.FromRgb(102, 178, 255);
+        internal static readonly Color k_highlight = Color.FromRgb(102, 178, 255);
     }
 
     /// <summary>
@@ -46,8 +46,8 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     /// </summary>
     private abstract class Dot
     {
-        internal static int Width => 10;
-        internal static int Height => 10;
+        internal static int Width => Tile.Width / 5;
+        internal static int Height => Tile.Height / 5;
 
         internal static readonly Color k_green = Color.FromRgb(0, 153, 0);
         internal static readonly Color k_red = Color.FromRgb(153, 0, 0);
@@ -86,7 +86,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         {
             ChessBoard.RowDefinitions.Add(new RowDefinition());
             ChessBoard.ColumnDefinitions.Add(new ColumnDefinition());
-            
+
             for (var col = 0; col < GameHelpers.k_boardWidth; col++)
             {
                 var square = GameHelpers.GetSquareFromCoordinate((col, GameHelpers.k_boardHeight - (row + 1)));
@@ -161,47 +161,35 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     /// </summary>
     private void DrawPieces()
     {
-        if (ViewModel == null) return;
-        for (var i = 0; i < GameHelpers.k_boardHeight; i++)
+        if (ViewModel is null) return;
+
+        foreach (var bitmap in ChessBoard.Children.OfType<SKBitmapControl>())
         {
-            for (var j = 0; j < GameHelpers.k_boardHeight; j++)
+            if (bitmap.Name is null) return;
+            var piece = ViewModel.GameHandler.GetPiece(bitmap.Name);
+            if (piece is not null)
             {
-                if (ViewModel.GameHandler.GetPiece((i, j)) != null) continue;
-                var square = GameHelpers.GetSquareFromCoordinate((i, j));
-                var bitmap = ChessBoard.Children.OfType<SKBitmapControl>().FirstOrDefault(x => x.Name == square);
-                if (bitmap?.Bitmap != null)
+                var piecePath = piece.GetPlayer() switch
                 {
-                    bitmap.Bitmap = null;
-                }
-            }
-        }
+                    Player.White => string.Format(Piece.k_white, piece),
+                    Player.Black => string.Format(Piece.k_black, piece),
+                    _ => throw new ArgumentOutOfRangeException()
+                };
 
-        foreach (var piece in ViewModel.GameHandler.GetPieces())
-        {
-            var piecePath = piece.GetPlayer() switch
-            {
-                Player.White => string.Format(Piece.k_white, piece),
-                Player.Black => string.Format(Piece.k_black, piece),
-                _ => throw new ArgumentOutOfRangeException()
-            };
-
-            var (col, row) = piece.GetCoordinates();
-            var square = GameHelpers.GetSquareFromCoordinate((col, row));
-            var bitmap = ChessBoard.Children.OfType<SKBitmapControl>().FirstOrDefault(x => x.Name == square);
-
-            if (bitmap == null) throw new ArgumentNullException();
-
-            using (var svg = new SKSvg())
-            {
+                using var svg = new SKSvg();
                 bitmap.Bitmap = new SKBitmap(Tile.Width, Tile.Height);
                 svg.Load(piecePath);
-                if (svg.Picture == null) throw new ArgumentNullException();
+                if (svg.Picture is null) throw new ArgumentNullException();
                 var canvas = new SKCanvas(bitmap.Bitmap);
                 var matrix = SKMatrix.CreateScale(
                     Tile.Width / svg.Picture.CullRect.Width,
                     Tile.Height / svg.Picture.CullRect.Height
                 );
                 canvas.DrawPicture(svg.Picture, ref matrix);
+            }
+            else
+            {
+                bitmap.Bitmap = null;
             }
 
             bitmap.InvalidateVisual();
@@ -211,67 +199,72 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     /// <summary>
     /// Handle LeftButton events for the ChessBoard Grid Control
     /// </summary>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
     // ReSharper disable once UnusedParameter.Local
     private void ChessBoard_MouseLeftButtonDown(object? sender, PointerPressedEventArgs e)
     {
-        if (e.GetCurrentPoint(ChessBoard).Properties.IsLeftButtonPressed == false) return;
-        if (ViewModel == null) return;
+        if (ViewModel is null) return;
+        if (!e.GetCurrentPoint(ChessBoard).Properties.IsLeftButtonPressed) return;
 
-        try
+        if (_sourcePieceBitmapControl is null)
         {
-            if (ViewModel.FirstClick)
+            _sourcePieceBitmapControl = e.Source as SKBitmapControl;
+            _sourceTile = ChessBoard.Children.OfType<Rectangle>().FirstOrDefault(x => x.Name == _sourcePieceBitmapControl?.Name);
+
+            _sourceColor = _sourceTile?.Fill;
+            if (_sourceTile is not null) _sourceTile.Fill = new SolidColorBrush(Tile.k_highlight);
+
+            if (_sourcePieceBitmapControl?.Name is null) return;
+            var sourcePiece = ViewModel.GameHandler.GetPiece(_sourcePieceBitmapControl.Name);
+            if (sourcePiece?.GetPlayer() != ViewModel?.GameHandler.GetPlayerToPlay()) return;
+            if (sourcePiece is not null) _legalMoves = sourcePiece.GetLegalMoves();
+            DisplayLegalMoves(_legalMoves);
+        }
+        else
+        {
+            _sourcePieceBitmapControl = null;
+            
+            Control destinationTile = e.Source switch
             {
-                _sourcePiece = e.Source as SKBitmapControl;
-                if (_sourcePiece?.Name == null) return;
-                _sourceCoordinates = GameHelpers.GetCoordinateFromSquare(_sourcePiece.Name);
-                _sourceTile = ChessBoard.Children.OfType<Rectangle>().FirstOrDefault(x => x.Name == _sourcePiece.Name);
-                if (_sourceTile != null)
-                {
-                    _sourceColor = _sourceTile.Fill;
-                    _sourceTile.Fill = new SolidColorBrush(Tile.k_blue);
-                }
-
-                var piece = ViewModel.GameHandler.GetPiece(_sourceCoordinates);
-                var availableMoves = piece?.GetLegalMoves();
-                if (availableMoves != null && (piece?.GetPlayer() == ViewModel?.GameHandler.GetPlayerToPlay()))
-
-                {
-                    DisplayAvailableMoves(availableMoves);
-                }
-            }
-            else
+                Rectangle tile => tile,
+                SKBitmapControl tile => tile,
+                Ellipse tile => tile,
+                _ => throw new ArgumentOutOfRangeException()
+            };
+            
+            if (_sourceTile is null) return;
+            
+            // un-highlight the source tile
+            _sourceTile.Fill = _sourceColor;
+            RemoveLegalMoves();
+            
+            // if the destination tile is the source tile, do nothing
+            if (destinationTile?.Name == _sourceTile.Name) return;
+            
+            if (_sourceTile?.Name is null || destinationTile?.Name is null) return;
+            
+            // if the destination tile is not a legal move, do nothing
+            if (!_legalMoves.Contains(destinationTile.Name)) return;
+            
+            try
             {
-                if (_sourceTile != null) _sourceTile.Fill = _sourceColor;
-                var dots = ChessBoard.Children.OfType<Ellipse>().ToList();
-                foreach (var dot in dots)
-                {
-                    ChessBoard.Children.Remove(dot);
-                }
-
-                Control destinationTile = e.Source switch
-                {
-                    Rectangle tile => tile,
-                    SKBitmapControl tile => tile,
-                    Ellipse tile => tile,
-                    _ => throw new ArgumentOutOfRangeException()
-                };
-                if (_sourceTile?.Name is null || destinationTile.Name is null) return;
                 ViewModel.GameHandler.MakeMove(_sourceTile.Name, destinationTile.Name);
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.Message);
+            }
+            finally
+            {
                 DrawPieces();
             }
         }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine(ex.Message);
-        }
-
-        if (ViewModel != null) ViewModel.FirstClick = !ViewModel.FirstClick;
     }
 
     /// <summary>
     /// Display the available moves for the selected piece
     /// </summary>
-    private void DisplayAvailableMoves(List<string> availableMoves)
+    private void DisplayLegalMoves(List<string> availableMoves)
     {
         foreach (var square in availableMoves)
         {
@@ -279,7 +272,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
 
             var attackedPiece = ViewModel?.GameHandler.GetPiece(GameHelpers.GetCoordinateFromSquare(square));
 
-            if (attackedPiece != null)
+            if (attackedPiece is not null)
             {
                 dot = new Ellipse
                 {
@@ -302,10 +295,23 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
                     Name = square
                 };
             }
+
             (int col, int row) coordinates = GameHelpers.GetCoordinateFromSquare(square);
             Grid.SetRow(dot, GameHelpers.k_boardWidth - 1 - coordinates.row);
             Grid.SetColumn(dot, coordinates.col);
             ChessBoard.Children.Add(dot);
+        }
+    }
+    
+    /// <summary>
+    /// Remove drawn dots from the ChessBoard
+    /// </summary>
+    private void RemoveLegalMoves()
+    {
+        var dots = ChessBoard.Children.OfType<Ellipse>().ToList();
+        foreach (var dot in dots)
+        {
+            ChessBoard.Children.Remove(dot);
         }
     }
 }

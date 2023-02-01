@@ -235,6 +235,16 @@ public class GameHandler
     {
         return m_board.GetPiece(coordinate);
     }
+    
+    /// <summary>
+    /// Retrieves a piece from its square
+    /// </summary>
+    /// <param name="square">The piece's square</param>
+    /// <returns>The piece found on the passed square. If none, returns null</returns>
+    public Piece? GetPiece(string square)
+    {
+        return m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(square));
+    }
 
     /// <summary>
     /// Get the legal moves from the piece on a square
