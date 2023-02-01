@@ -223,7 +223,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         else
         {
             _sourcePieceBitmapControl = null;
-            
+
             Control destinationTile = e.Source switch
             {
                 Rectangle tile => tile,
@@ -231,21 +231,21 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
                 Ellipse tile => tile,
                 _ => throw new ArgumentOutOfRangeException()
             };
-            
+
             if (_sourceTile is null) return;
-            
+
             // un-highlight the source tile
             _sourceTile.Fill = _sourceColor;
             RemoveLegalMoves();
-            
+
             // if the destination tile is the source tile, do nothing
             if (destinationTile?.Name == _sourceTile.Name) return;
-            
+
             if (_sourceTile?.Name is null || destinationTile?.Name is null) return;
-            
+
             // if the destination tile is not a legal move, do nothing
             if (!_legalMoves.Contains(destinationTile.Name)) return;
-            
+
             try
             {
                 ViewModel.GameHandler.MakeMove(_sourceTile.Name, destinationTile.Name);
@@ -302,7 +302,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             ChessBoard.Children.Add(dot);
         }
     }
-    
+
     /// <summary>
     /// Remove drawn dots from the ChessBoard
     /// </summary>
