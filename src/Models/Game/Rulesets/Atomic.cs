@@ -37,6 +37,39 @@ public class Atomic : Ruleset
         }
     }
 
+    /// <summary>
+    /// TODO
+    /// </summary>
+    private bool CaptureExplodesKing(Player player, Board board, string square)
+    {
+        // Get all surrounding pieces (not pawns) and destroy them as well
+        (int col, int row) coordinate = GameHelpers.GetCoordinateFromSquare(square);
+        List<Piece> explodingPieces = new List<Piece>();
+        Piece? capturedPiece = board.GetPiece(GameHelpers.GetCoordinateFromSquare(square));
+        if (capturedPiece is not null) explodingPieces.Add(capturedPiece);
+        for (int xIndex = coordinate.col - 1; xIndex <= coordinate.col + 1; xIndex++)
+        {
+            for (int yIndex = coordinate.row - 1; yIndex <= coordinate.row + 1; yIndex++)
+            {
+                Piece? piece = board.GetPiece((xIndex, yIndex));
+                if (piece is not null)
+                {
+                    explodingPieces.Add(piece);
+                }
+            }
+        }
+
+        foreach (Piece piece in explodingPieces)
+        {
+            if (piece.GetType() == typeof(King)
+                || piece.GetPlayer() == player)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public override bool IsInCheck(Player player, Board board)
     {
         throw new NotImplementedException();
