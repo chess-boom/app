@@ -11,11 +11,15 @@ namespace ChessBoom.Models.Game;
 /// </summary>
 public class GameHandler
 {
-    Game? m_game;
-    Board? m_board;
+    Game m_game;
+    Board m_board;
 
     public GameHandler()
     {
+        // Define the game and board as null to appease compiler
+        // Game and board are defined in the StartGame() method
+        m_game = null!;
+        m_board = null!;
         StartGame();
     }
 
@@ -34,16 +38,10 @@ public class GameHandler
     /// <param name="path">The PGN file of the game to load</param>
     /// <exception cref="ArgumentException">Thrown if the PGN is invalid</exception>
     /// <exception cref="FileNotFoundException">Thrown if the PGN could not be found</exception>
-    /// <exception cref="NullReferenceException">Thrown if the game has not yet started. Should not be thrown</exception>
     /// <exception cref="DirectoryNotFoundException">Thrown if the PGN's directory could not be found</exception>
     public void LoadGame(string path)
     {
         StartGame();
-        if (m_game is null)
-        {
-            // Should never be thrown - StartGame() should guarantee m_game is not null
-            throw new NullReferenceException();
-        }
 
         Dictionary<string, string> pgn;
         try
@@ -203,13 +201,8 @@ public class GameHandler
     /// <param name="destinationSquare">The square to which a piece moves</param>
     /// <exception cref="ArgumentException">Thrown the piece on the starting square can not be found or be moved, or the square can not be found</exception>
     /// <exception cref="GameplayErrorException">Thrown if the attempted move is invalid as per gameplay rules</exception>
-    /// <exception cref="NullReferenceException">Thrown if the game has not yet started</exception>
     public void MakeMove(string startingSquare, string destinationSquare)
     {
-        if (m_game is null)
-        {
-            throw new NullReferenceException("Error! No game is in progress!");
-        }
         try
         {
             m_game.MakeExplicitMove(startingSquare, destinationSquare);
@@ -228,14 +221,29 @@ public class GameHandler
     /// Get the list of pieces
     /// </summary>
     /// <returns>The list of pieces</returns>
-    /// <exception cref="NullReferenceException">Thrown if no game is in progress</exception>
     public List<Piece> GetPieces()
     {
-        if (m_board is null)
-        {
-            throw new NullReferenceException("Error! No game is in progress!");
-        }
         return m_board.m_pieces;
+    }
+
+    /// <summary>
+    /// Retrieves a piece from its coordinates
+    /// </summary>
+    /// <param name="coordinate">The 2-tuple containing the row and column coordinates (0-7, 0-7)</param>
+    /// <returns>The piece found on the passed square. If none, returns null</returns>
+    public Piece? GetPiece((int, int) coordinate)
+    {
+        return m_board.GetPiece(coordinate);
+    }
+
+    /// <summary>
+    /// Retrieves a piece from its square
+    /// </summary>
+    /// <param name="square">The piece's square</param>
+    /// <returns>The piece found on the passed square. If none, returns null</returns>
+    public Piece? GetPiece(string square)
+    {
+        return m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(square));
     }
 
     /// <summary>
@@ -256,11 +264,6 @@ public class GameHandler
     /// <returns>The list of legal moves</returns>
     public List<string> GetLegalMoves((int, int) coordinate)
     {
-        if (m_game is null)
-        {
-            Console.WriteLine("Error! No game has been found!");
-            return new List<string>();
-        }
         Piece? piece = m_game.m_board.GetPiece(coordinate);
         if (piece is null)
         {
@@ -306,5 +309,14 @@ public class GameHandler
             throw new NullReferenceException("Error! No game is in progress!");
         }
         return m_game.m_gameState;
+    }
+
+    /// <summary>
+    /// Accessor for the board's current player to play
+    /// </summary>
+    /// <returns>The current player to play</returns>
+    public Player GetPlayerToPlay()
+    {
+        return m_board.m_playerToPlay;
     }
 }
