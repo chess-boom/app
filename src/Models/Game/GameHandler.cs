@@ -235,7 +235,7 @@ public class GameHandler
     {
         return m_board.GetPiece(coordinate);
     }
-    
+
     /// <summary>
     /// Retrieves a piece from its square
     /// </summary>
