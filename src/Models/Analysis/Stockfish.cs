@@ -53,7 +53,7 @@ public class Stockfish : IAnalysis
 
     public Stockfish()
     {
-        // Get stockfish engine location based on OS 
+        // Get stockfish engine location based on OS
         string directoryString = "";
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
@@ -223,58 +223,55 @@ public class Stockfish : IAnalysis
     /// <param name="depth">Depth you want the search to go to. Value greater than 0. Default: 10</param>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     /// <returns>List of (string, int) tuples, representing (move, cp value). Ordered from highest cp to lowest cp value moves</returns>
-    public List<(string, int)> GetNBestMoves(int n = 3, int depth = 10)
+    public List<(string, int)>? GetNBestMoves(int n = 3, int depth = 10)
     {
         if (n <= 0 || depth <= 0)
             throw new ArgumentOutOfRangeException(nameof(n));
 
+        // TODO : Use unused variable
         string[] bestMoves = new string[n];
         List<string> outputList = new List<string>();
 
-        if (IsReady())
+        if (!IsReady()) return null;
+        // Get Stockfish to return N best moves
+        WriteCommand($"setoption name MultiPV value {n}");
+
+        // Run analysis to specified depth
+        WriteCommand($"go depth {depth}");
+
+        // Keep reading output until analysis ends
+        string output = ReadOutput();
+        outputList.Add(output);
+        while (!output.Contains("bestmove"))
         {
-            // Get Stockfish to return N best moves
-            WriteCommand($"setoption name MultiPV value {n}");
-
-            // Run analysis to specified depth
-            WriteCommand($"go depth {depth}");
-
-            // Keep reading output until analysis ends
-            string output = ReadOutput();
+            output = ReadOutput();
             outputList.Add(output);
-            while (!output.Contains("bestmove"))
-            {
-                output = ReadOutput();
-                outputList.Add(output);
-            }
-
-            // Last N+1 lines are the N best moves and the bestmove line.
-            List<(string, int)> moves = new List<(string, int)>();
-            for (int i = outputList.Count - (n + 1); i < outputList.Count - 1; i++)
-            {
-                string[] splitOutput = outputList[i].Split();
-                // Find the position of "cp" because the next line is the cp value (cp = centipawn)
-                int cp_index = Array.IndexOf(splitOutput, "cp");
-                // Find the position of "pv" because the next line is the move;
-                int move_index = Array.IndexOf(splitOutput, "pv");
-
-                string move = "";
-                int cp = int.MaxValue;
-                if (cp_index != -1)
-                    cp = int.Parse(splitOutput[cp_index + 1]);
-                if (move_index != -1)
-                    move = splitOutput[move_index + 1];
-
-                moves.Add((move, cp));
-            }
-
-            // Sort in place, descending order
-            moves.Sort((x, y) => (y.Item2).CompareTo(x.Item2));
-
-            return moves;
         }
 
-        return null;
+        // Last N+1 lines are the N best moves and the bestmove line.
+        var moves = new List<(string, int)>();
+        for (int i = outputList.Count - (n + 1); i < outputList.Count - 1; i++)
+        {
+            string[] splitOutput = outputList[i].Split();
+            // Find the position of "cp" because the next line is the cp value (cp = centipawn)
+            int cp_index = Array.IndexOf(splitOutput, "cp");
+            // Find the position of "pv" because the next line is the move;
+            int move_index = Array.IndexOf(splitOutput, "pv");
+
+            string move = "";
+            int cp = int.MaxValue;
+            if (cp_index != -1)
+                cp = int.Parse(splitOutput[cp_index + 1]);
+            if (move_index != -1)
+                move = splitOutput[move_index + 1];
+
+            moves.Add((move, cp));
+        }
+
+        // Sort in place, descending order
+        moves.Sort((x, y) => (y.Item2).CompareTo(x.Item2));
+
+        return moves;
     }
 
     /// <summary>
