@@ -51,16 +51,17 @@ public class Stockfish : IAnalysis
         }
         else
         {
-            throw new NotSupportedException("You are running an unsupported OS, Analysis will not function on your machine");
+            throw new NotSupportedException(
+                "You are running an unsupported OS, Analysis will not function on your machine");
         }
 
         m_engineFilePath = directoryString;
 
         InitializeStockfishProcess();
 
-        if (m_stockfish == null)
+        if (m_stockfish is null)
         {
-            throw new NullReferenceException("m_stockfish is null!");
+            throw new ArgumentNullException(nameof(m_stockfish));
         }
 
         m_stockfish.Start();
@@ -69,8 +70,8 @@ public class Stockfish : IAnalysis
 
         // Start of new game
         NewGame();
-
     }
+
     /// <summary>
     /// Initializes the Stockfish process so we can perform analysis in Chess Boom
     /// </summary>
@@ -91,11 +92,12 @@ public class Stockfish : IAnalysis
     /// Write a command to the stockfish engine
     /// </summary>
     /// <param name="command">Command to be written to engine</param>
+    /// <exception cref="ArgumentNullException"></exception>
     public void WriteCommand(string command)
     {
-        if (m_stockfish.StandardInput == null)
+        if (m_stockfish.StandardInput is null)
         {
-            throw new NullReferenceException();
+            throw new ArgumentNullException(nameof(m_stockfish.StandardInput));
         }
 
         m_stockfish.StandardInput.WriteLine(command);
@@ -109,18 +111,17 @@ public class Stockfish : IAnalysis
     /// Reads a line of output from Stockfish.
     /// </summary>
     /// <returns></returns>
-    /// <exception cref="NullReferenceException">If StandardOutput of our application (m_stockfish) is null, we throw this exception.</exception>
+    /// <exception cref="ArgumentNullException">If StandardOutput of our application (m_stockfish) is null, we throw this exception.</exception>
     public string ReadOutput()
     {
-
-        if (m_stockfish.StandardOutput == null)
+        if (m_stockfish.StandardOutput is null)
         {
-            throw new NullReferenceException("StandardOutput of m_stockfish is null!");
+            throw new ArgumentNullException(nameof(m_stockfish.StandardOutput));
         }
 
-        return m_stockfish.StandardOutput.ReadLine();
-
+        return m_stockfish.StandardOutput.ReadLine()!;
     }
+
     /// <summary>
     /// Get confirmation Stockfish is ready
     /// </summary>
@@ -146,6 +147,7 @@ public class Stockfish : IAnalysis
 
         return isReady;
     }
+
     /// <summary>
     /// Tells Stockfish we are starting a new game.
     /// </summary>
@@ -154,6 +156,7 @@ public class Stockfish : IAnalysis
         WriteCommand("ucinewgame");
         WriteCommand("position startpos");
     }
+
     /// <summary>
     /// Gets the static evaluation of the current position as a float, and which side the value is relative to (White or Black).
     /// </summary>
@@ -181,17 +184,20 @@ public class Stockfish : IAnalysis
                 if (!float.TryParse(splitOutput[2], out evaluation_number))
                     throw new ArgumentException($"Expected a float for evaluation number, got {splitOutput[3]}");
 
-                string side = splitOutput[3].Substring(1); // Normally gives (white or (black so we want to remove the "("
+                string
+                    side = splitOutput[3].Substring(1); // Normally gives (white or (black so we want to remove the "("
 
                 char side_char = side[0];
 
                 return new Evaluation(evaluation_number, side_char);
-
             }
+
             throw new ApplicationException("Stockfish is not ready!");
         }
+
         throw new InvalidOperationException("Cannot get an evaluation with no fen position!");
     }
+
     /// <summary>
     /// Returns the N best moves based on your position.
     /// </summary>
@@ -228,8 +234,11 @@ public class Stockfish : IAnalysis
             for (int i = outputList.Count - (n + 1); i < outputList.Count - 1; i++)
             {
                 string[] splitOutput = outputList[i].Split();
-                int cp_index = Array.IndexOf(splitOutput, "cp"); // Find the position of "cp" because the next line is the cp value (cp = centipawn)
-                int move_index = Array.IndexOf(splitOutput, "pv"); // Find the position of "pv" because the next line is the move;
+                int cp_index =
+                    Array.IndexOf(splitOutput,
+                        "cp"); // Find the position of "cp" because the next line is the cp value (cp = centipawn)
+                int move_index =
+                    Array.IndexOf(splitOutput, "pv"); // Find the position of "pv" because the next line is the move;
 
                 string move = "";
                 int cp = int.MaxValue;
@@ -247,9 +256,8 @@ public class Stockfish : IAnalysis
         }
 
         return null;
-
-
     }
+
     /// <summary>
     /// Close the Stockfish process
     /// </summary>
@@ -257,6 +265,7 @@ public class Stockfish : IAnalysis
     {
         m_stockfish.Close();
     }
+
     /// <summary>
     /// Checks if the stockfish process is running (responding)
     /// </summary>
@@ -275,5 +284,3 @@ public class Stockfish : IAnalysis
         m_stockfish.Start();
     }
 }
-
-
