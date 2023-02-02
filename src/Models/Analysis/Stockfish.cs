@@ -7,6 +7,18 @@ using System.Threading;
 namespace ChessBoom.Models.Analysis;
 
 /// <summary>
+/// The GameplayErrorException class is used for any case in which gameplay rules are broken
+/// </summary>
+public class StockfishReadyException : Exception
+{
+    public StockfishReadyException() { }
+
+    public StockfishReadyException(string message) : base(message) { }
+
+    public StockfishReadyException(string message, Exception inner) : base(message, inner) { }
+}
+
+/// <summary>
 /// Stockfish engine class. Takes inspiration from the archived project https://github.com/Oremiro/Stockfish.NET
 /// </summary>
 public class Stockfish : IAnalysis
@@ -125,6 +137,7 @@ public class Stockfish : IAnalysis
     /// <summary>
     /// Get confirmation Stockfish is ready
     /// </summary>
+    /// <exception cref="StockfishReadyException"></exception>
     /// <returns>Returns if Stockfish is ready for inputs (i.e after we sent 'isready' stockfish responded with 'readyok' within the max retries limit.</returns>
     public bool IsReady()
     {
@@ -142,7 +155,7 @@ public class Stockfish : IAnalysis
 
         if (!isReady)
         {
-            throw new ApplicationException("Stockfish is not ready for input! Is the application running properly?");
+            throw new StockfishReadyException("Stockfish is not ready for input! Is the application running properly?");
         }
 
         return isReady;
@@ -162,7 +175,7 @@ public class Stockfish : IAnalysis
     /// </summary>
     /// <returns>Evaluation Object</returns>
     /// <exception cref="ArgumentException"></exception>
-    /// <exception cref="ApplicationException"></exception>
+    /// <exception cref="StockfishReadyException"></exception>
     /// <exception cref="InvalidOperationException"></exception>
     public Evaluation GetStaticEvaluation()
     {
@@ -192,7 +205,7 @@ public class Stockfish : IAnalysis
                 return new Evaluation(evaluation_number, side_char);
             }
 
-            throw new ApplicationException("Stockfish is not ready!");
+            throw new StockfishReadyException("Stockfish is not ready!");
         }
 
         throw new InvalidOperationException("Cannot get an evaluation with no fen position!");
