@@ -193,16 +193,15 @@ public class Stockfish : IAnalysis
 
                 string[] splitOutput = output.Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
-                float evaluation_number = float.MaxValue;
-                if (!float.TryParse(splitOutput[2], out evaluation_number))
+                if (!float.TryParse(splitOutput[2], out var evaluationNumber))
                     throw new ArgumentException($"Expected a float for evaluation number, got {splitOutput[3]}");
 
                 string
                     side = splitOutput[3].Substring(1); // Normally gives (white or (black so we want to remove the "("
 
-                char side_char = side[0];
+                char sideChar = side[0];
 
-                return new Evaluation(evaluation_number, side_char);
+                return new Evaluation(evaluationNumber, sideChar);
             }
 
             throw new StockfishReadyException("Stockfish is not ready!");
