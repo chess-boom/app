@@ -7,24 +7,6 @@ using System.Threading;
 namespace ChessBoom.Models.Analysis;
 
 /// <summary>
-/// The GameplayErrorException class is used for any case in which gameplay rules are broken
-/// </summary>
-public class StockfishReadyException : Exception
-{
-    public StockfishReadyException()
-    {
-    }
-
-    public StockfishReadyException(string message) : base(message)
-    {
-    }
-
-    public StockfishReadyException(string message, Exception inner) : base(message, inner)
-    {
-    }
-}
-
-/// <summary>
 /// Stockfish engine class. Takes inspiration from the archived project https://github.com/Oremiro/Stockfish.NET
 /// </summary>
 public class Stockfish : IAnalysis
