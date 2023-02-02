@@ -11,11 +11,17 @@ namespace ChessBoom.Models.Analysis;
 /// </summary>
 public class StockfishReadyException : Exception
 {
-    public StockfishReadyException() { }
+    public StockfishReadyException()
+    {
+    }
 
-    public StockfishReadyException(string message) : base(message) { }
+    public StockfishReadyException(string message) : base(message)
+    {
+    }
 
-    public StockfishReadyException(string message, Exception inner) : base(message, inner) { }
+    public StockfishReadyException(string message, Exception inner) : base(message, inner)
+    {
+    }
 }
 
 /// <summary>
@@ -242,16 +248,15 @@ public class Stockfish : IAnalysis
                 outputList.Add(output);
             }
 
-            //Last N+1 lines are the N best moves and the bestmove line.
+            // Last N+1 lines are the N best moves and the bestmove line.
             List<(string, int)> moves = new List<(string, int)>();
             for (int i = outputList.Count - (n + 1); i < outputList.Count - 1; i++)
             {
                 string[] splitOutput = outputList[i].Split();
-                int cp_index =
-                    Array.IndexOf(splitOutput,
-                        "cp"); // Find the position of "cp" because the next line is the cp value (cp = centipawn)
-                int move_index =
-                    Array.IndexOf(splitOutput, "pv"); // Find the position of "pv" because the next line is the move;
+                // Find the position of "cp" because the next line is the cp value (cp = centipawn)
+                int cp_index = Array.IndexOf(splitOutput, "cp");
+                // Find the position of "pv" because the next line is the move;
+                int move_index = Array.IndexOf(splitOutput, "pv");
 
                 string move = "";
                 int cp = int.MaxValue;
@@ -263,7 +268,8 @@ public class Stockfish : IAnalysis
                 moves.Add((move, cp));
             }
 
-            moves.Sort((x, y) => (y.Item2).CompareTo(x.Item2)); // Sort in place, descending order
+            // Sort in place, descending order
+            moves.Sort((x, y) => (y.Item2).CompareTo(x.Item2));
 
             return moves;
         }
