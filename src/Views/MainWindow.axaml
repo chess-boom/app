@@ -35,11 +35,36 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
           </Grid.ColumnDefinitions>
-          <Button Content="Go back" Command="{Binding GoBack}" />
+          <Button Command="{Binding GoBack}">
+              <Button.Styles>
+                  <Style Selector="Grid:pointerover">
+                      <Setter Property="Background" Value="#191919"/>
+                      <Setter Property="Cursor" Value="Hand"/>
+                  </Style>
+                  <Style Selector="Button">
+                      <Setter Property="CornerRadius" Value="30"/>
+                  </Style>
+              </Button.Styles>
+              <Button.Template>
+                  <ControlTemplate>
+                      <Grid>
+                          <Grid.RowDefinitions>
+                              <RowDefinition Height="*"/>
+                          </Grid.RowDefinitions>
+                          <Grid.ColumnDefinitions>
+                              <ColumnDefinition Width="*"/>
+                          </Grid.ColumnDefinitions>
+                          <Image Source="/Assets/Icons/back-arrow.png" Width="30" Height="30" Margin="10,10,10,10"/>
+                          <ContentPresenter />
+                      </Grid>
+                  </ControlTemplate>
+              </Button.Template>
+          </Button>
           <Button Content="HOME" Command="{Binding GoHome}" Grid.Column="1">
               <Button.Styles>
                   <Style Selector="Grid:pointerover">
                       <Setter Property="Background" Value="#191919"/>
+                      <Setter Property="Cursor" Value="Hand"/>
                   </Style>
               </Button.Styles>
               <Button.Template>
@@ -63,20 +88,20 @@
           <Rectangle Stroke="#4287f5" StrokeThickness="1" Width="1" Height="75"/>
         </Border>
         <Menu Background="Black" Grid.Column="3">
-            <MenuItem Header="Game Analysis" FontSize="20" CornerRadius="10">
+            <MenuItem Header="Game Analysis" FontSize="20" CornerRadius="10" Cursor="Hand">
                 <MenuItem Header="Board" Command="{Binding GoBoard}"/>
                 <MenuItem Header="Game List" Command="{Binding GoAnalysis}"/>
                 <MenuItem Header="Analysis Breakdown" Command="{Binding GoTemplate}"/>
                 <MenuItem Header="Template 4" Command="{Binding GoTemplate}"/>
             </MenuItem>
-            <MenuItem Header="Variant Analysis" FontSize="20" CornerRadius="10">
+            <MenuItem Header="Variant Analysis" FontSize="20" CornerRadius="10" Cursor="Hand">
                 <MenuItem Header="Variant 1" Command="{Binding GoVariant}"/>
                 <MenuItem Header="Variant 2" Command="{Binding GoTemplate}"/>
                 <MenuItem Header="Variant 3" Command="{Binding GoTemplate}"/>
                 <MenuItem Header="Variant 4" Command="{Binding GoTemplate}"/>
             </MenuItem>
             <!-- TODO Highlight Navbar when on tutorial page -->
-            <MenuItem Header="Tutorials" FontSize="20" Background="{Binding HomeBackground}" CornerRadius="10">
+            <MenuItem Header="Tutorials" FontSize="20" Background="{Binding HomeBackground}" CornerRadius="10" Cursor="Hand">
                 <MenuItem Header="Beginner" Command="{Binding GoTutorial}"/>
                 <MenuItem Header="Intermediate" Command="{Binding GoTemplate}"/>
                 <MenuItem Header="Expert" Command="{Binding GoTemplate}"/>
@@ -106,9 +131,9 @@
           <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
       </StackPanel.Styles>
-      <Button Content="Go home" Command="{Binding GoHome}" />
+      <!-- <Button Content="Go home" Command="{Binding GoHome}" />
       <Button Content="Go back" Command="{Binding GoBack}" />
-      <TextBlock Text="{Binding Router.NavigationStack.Count}" />
+      <TextBlock Text="{Binding Router.NavigationStack.Count}" /> -->
     </StackPanel>
   </Grid>
   </DockPanel>
