@@ -27,29 +27,62 @@
       <Border DockPanel.Dock="Top"
         BorderBrush="#4287f5"
         BorderThickness="1"
-        Padding="15"
         Background="Black">
-        <Menu Background="Black">
-              <!-- <Image Source="Assets/Icons/favicon.ico"/> -->
-            <MenuItem Header="GAME ANALYSIS" FontSize="25">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <Button Content="Go back" Command="{Binding GoBack}" />
+          <Button Content="HOME" Command="{Binding GoHome}" Grid.Column="1">
+              <Button.Styles>
+                  <Style Selector="Grid:pointerover">
+                      <Setter Property="Background" Value="#191919"/>
+                  </Style>
+              </Button.Styles>
+              <Button.Template>
+                  <ControlTemplate>
+                      <Grid>
+                          <Grid.RowDefinitions>
+                              <RowDefinition Height="*"/>
+                          </Grid.RowDefinitions>
+                          <Grid.ColumnDefinitions>
+                              <ColumnDefinition Width="Auto"/>
+                              <ColumnDefinition Width="*"/>
+                          </Grid.ColumnDefinitions>
+                          <Image Source="/Assets/Icons/favicon.ico" Width="50" Height="50" Margin="0,5,0,5"/>
+                          <TextBlock Text="ChessBoom" FontSize="25" Grid.Column="1" TextAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                          <ContentPresenter />
+                      </Grid>
+                  </ControlTemplate>
+              </Button.Template>
+          </Button>
+        <Border IsHitTestVisible="False" Grid.Column="2" Padding="20,0,20,0">
+          <Rectangle Stroke="#4287f5" StrokeThickness="1" Width="1" Height="75"/>
+        </Border>
+        <Menu Background="Black" Grid.Column="3">
+            <MenuItem Header="Game Analysis" FontSize="20" CornerRadius="10">
                 <MenuItem Header="Board" Command="{Binding GoBoard}"/>
                 <MenuItem Header="Game List" Command="{Binding GoAnalysis}"/>
                 <MenuItem Header="Analysis Breakdown" Command="{Binding GoTemplate}"/>
                 <MenuItem Header="Template 4" Command="{Binding GoTemplate}"/>
             </MenuItem>
-            <MenuItem Header="VARIANT ANALYSIS" FontSize="25">
+            <MenuItem Header="Variant Analysis" FontSize="20" CornerRadius="10">
                 <MenuItem Header="Variant 1" Command="{Binding GoVariant}"/>
                 <MenuItem Header="Variant 2" Command="{Binding GoTemplate}"/>
                 <MenuItem Header="Variant 3" Command="{Binding GoTemplate}"/>
                 <MenuItem Header="Variant 4" Command="{Binding GoTemplate}"/>
             </MenuItem>
             <!-- TODO Highlight Navbar when on tutorial page -->
-            <MenuItem Header="TUTORIALS" FontSize="25" Background="{Binding HomeBackground}">
+            <MenuItem Header="Tutorials" FontSize="20" Background="{Binding HomeBackground}" CornerRadius="10">
                 <MenuItem Header="Beginner" Command="{Binding GoTutorial}"/>
                 <MenuItem Header="Intermediate" Command="{Binding GoTemplate}"/>
                 <MenuItem Header="Expert" Command="{Binding GoTemplate}"/>
             </MenuItem>
         </Menu>
+        </Grid>
       </Border>
   <Grid RowDefinitions="*,Auto">
     <rxui:RoutedViewHost Grid.Row="0" Router="{Binding Path=Router}" PageTransition="{x:Null}">
