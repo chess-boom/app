@@ -28,13 +28,9 @@ public enum Castling
 
 public enum GameState
 {
-    // TODO: Create a game loop
-    Setup,
     InProgress,
     VictoryWhite,
     VictoryBlack,
-
-    // TODO: Implement draw checks
     Draw,
 
     // TODO: Implement game aborting
@@ -185,11 +181,139 @@ public class Game
     }
 
     /// <summary>
-    /// Handle the capture that has occurred on a specific square
+    /// Make a move using PGN notation format
     /// </summary>
-    /// <param name="startingSquare">The piece that initiated the capture</param>
-    /// <param name="destinationSquare">The square on which the capture takes place</param>
+    /// <param name="pgnNotation">The PGN notation representing the move</param>
+    /// <exception cref="ArgumentException">Thrown if the PGN notation does not denote a unique, valid move</exception>
+    public void MakePGNMove(string pgnNotation)
+    {
+        // Castling
+        if (pgnNotation == Move.k_kingsideCastleNotation
+            || pgnNotation == Move.k_queensideCastleNotation)
+        {
+            // TODO: Implement a GetKing() function, as this will break when implementing the Chess960 variant
+            Piece? king = (m_board.m_playerToPlay == Player.White)
+                ? m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("e1"))
+                : m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("e8"));
+
+            if (king is null || king.GetType() != typeof(King))
+            {
+                throw new ArgumentException("King was not found!");
+            }
+
+            MakeMove(king, pgnNotation);
+            return;
+        }
+
+        // Gather extra data
+        List<string> rowInstances = new List<string>();
+        List<string> colInstances = new List<string>();
+        foreach (char c in pgnNotation)
+        {
+            if (GameHelpers.k_boardColumnNames.Contains(c.ToString()))
+            {
+                colInstances.Add(c.ToString());
+                continue;
+            }
+            if (GameHelpers.k_boardRowNames.Contains(c.ToString()))
+            {
+                rowInstances.Add(c.ToString());
+                continue;
+            }
+        }
+
+        bool containsCapture = (pgnNotation.IndexOf('x') != -1);
+        bool containsCheck = (pgnNotation.IndexOf('+') != -1);
+        bool containsCheckmate = (pgnNotation.IndexOf('#') != -1);
+        bool containsPromotion = (pgnNotation.IndexOf('=') != -1);
+
+        // Get the target square
+        Board dummyBoard = new Board();
+        string square = colInstances[colInstances.Count - 1] + rowInstances[rowInstances.Count - 1];
+        (int, int) squareCoordinates = GameHelpers.GetCoordinateFromSquare(square);
+
+        // Get piece type
+        Piece dummyPiece = null!;
+
+        // Consider reimplementing like Board's k_pieceConstructor
+        List<(int, int)> possibleOrigins;
+        switch ((char)pgnNotation[0])
+        {
+            case 'Q':
+                dummyPiece = new Queen(dummyBoard, m_board.m_playerToPlay, squareCoordinates);
+                possibleOrigins = dummyPiece.GetMovementSquares();
+                break;
+            case 'K':
+                dummyPiece = new King(dummyBoard, m_board.m_playerToPlay, squareCoordinates);
+                possibleOrigins = dummyPiece.GetMovementSquares();
+                break;
+            case 'R':
+                dummyPiece = new Rook(dummyBoard, m_board.m_playerToPlay, squareCoordinates);
+                possibleOrigins = dummyPiece.GetMovementSquares();
+                break;
+            case 'N':
+                dummyPiece = new Knight(dummyBoard, m_board.m_playerToPlay, squareCoordinates);
+                possibleOrigins = dummyPiece.GetMovementSquares();
+                break;
+            case 'B':
+                dummyPiece = new Bishop(dummyBoard, m_board.m_playerToPlay, squareCoordinates);
+                possibleOrigins = dummyPiece.GetMovementSquares();
+                break;
+            default:
+                dummyPiece = new Pawn(dummyBoard, m_board.m_playerToPlay, squareCoordinates);
+                possibleOrigins = ((Pawn)dummyPiece).GetPossibleOriginSquares();
+                break;
+        }
+
+        // Get the piece
+        List<Piece> possiblePieces = new List<Piece>();
+        foreach ((int, int) originCoordinate in possibleOrigins)
+        {
+            Piece? candidatePiece = m_board.GetPiece(originCoordinate);
+            if (candidatePiece is not null)
+            {
+                possiblePieces.Add(candidatePiece);
+            }
+        }
+        // Get correct piece
+        Piece correctPiece = null!;
+        foreach (Piece candidatePiece in possiblePieces)
+        {
+            if (candidatePiece.GetType() != dummyPiece.GetType())
+            {
+                continue;
+            }
+            if (!candidatePiece.GetLegalMoves().Contains(square))
+            {
+                continue;
+            }
+            if (rowInstances.Count == 1 && colInstances.Count == 1)
+            {
+                correctPiece = candidatePiece;
+                break;
+            }
+            if (rowInstances.Count != 1 && candidatePiece.GetCoordinates().Item2 != GameHelpers.k_boardRowNames.IndexOf(rowInstances[0]))
+            {
+                continue;
+            }
+            if (colInstances.Count != 1 && candidatePiece.GetCoordinates().Item1 != GameHelpers.k_boardColumnNames.IndexOf(colInstances[0]))
+            {
+                continue;
+            }
+            correctPiece = candidatePiece;
+            break;
+        }
+
+        MakeMove(correctPiece, square);
+    }
+
+    /// <summary>
+    /// Make a move from two specified squares
+    /// </summary>
+    /// <param name="startingSquare">The square from which a piece moves</param>
+    /// <param name="destinationSquare">The square to which a piece moves</param>
     /// <exception cref="ArgumentException">Thrown the piece on the starting square can not be found or be moved, or the square can not be found</exception>
+    /// <exception cref="GameplayErrorException">Thrown if the attempted move is invalid as per gameplay rules</exception>
     public void MakeExplicitMove(string startingSquare, string destinationSquare)
     {
         var piece = m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(startingSquare));
@@ -198,7 +322,18 @@ public class Game
             throw new ArgumentException($"Piece on square {startingSquare} not found!");
         }
 
-        MakeMove(piece, destinationSquare);
+        try
+        {
+            MakeMove(piece, destinationSquare);
+        }
+        catch (ArgumentException)
+        {
+            throw;
+        }
+        catch (GameplayErrorException)
+        {
+            throw;
+        }
     }
 
     /// <summary>
@@ -206,9 +341,10 @@ public class Game
     /// </summary>
     /// <param name="piece">The piece that will attempt to move</param>
     /// <param name="square">The square that the piece should move to</param>
+    /// <param name="promotionPiece">Optional parameter denoting which piece type the piece will promote into</param>
     /// <exception cref="ArgumentException">Thrown the piece can not be found or be moved, or the square can not be found</exception>
     /// <exception cref="GameplayErrorException">Thrown if the wrong player attempts to make a move or if castling is attempted when illegal</exception>
-    public void MakeMove(Piece piece, string square)
+    public void MakeMove(Piece piece, string square, char? promotionPiece = null)
     {
         if (m_gameState != GameState.InProgress)
         {
@@ -232,7 +368,7 @@ public class Game
         }
         else
         {
-            piece.MovePiece(GameHelpers.GetCoordinateFromSquare(square));
+            piece.MovePiece(GameHelpers.GetCoordinateFromSquare(square), promotionPiece);
         }
 
         if (m_board.m_playerToPlay == Player.Black)
@@ -305,9 +441,17 @@ public class Game
     /// </summary>
     /// <param name="game">The game which the resultant Board will correspond to</param>
     /// <param name="fen">The contents of the .FEN file</param>
-    public static Board CreateBoardFromFEN(Game game, string fen)
+    public static Board CreateBoardFromFEN(Game? game, string fen)
     {
-        var board = new Board(game);
+        Board board;
+        if (game is not null)
+        {
+            board = new Board(game);
+        }
+        else
+        {
+            board = new Board();
+        }
         var fenSplit = fen.Split(' ');
 
         board.CreateBoard(fenSplit[0]);

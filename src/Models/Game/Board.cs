@@ -167,6 +167,7 @@ public class Board
                     }
                     catch (ArgumentException)
                     {
+                        Console.WriteLine("Error! Unable to create piece!");
                     }
 
                     col++;
@@ -175,51 +176,30 @@ public class Board
         }
     }
 
-    // TODO: Determine whether this function should be kept or not
-    // Note: This may be useful in the future for when variations are made.
-    //      Depending on the architecture, a game may delegate each variation
-    //      to its own board, which should then make its own moves.
-
     /// <summary>
-    /// Moves a piece from one square to another
+    /// Moves a piece from one square to another. Does NOT check for move legality. Does NOT update game data (player to move, move clocks, etc.)
     /// </summary>
-    /// <param name="start">The name of the square on which the moving piece resides</param>
-    /// <param name="destination">The name of the square to which the piece will move</param>
-    /// <exception cref="ArgumentException">Thrown if the specified starting square is invalid/exception>
-    /// <exception cref="ArgumentException">Thrown if the specified starting square contains no piece</exception>
-    /// <exception cref="ArgumentException">Thrown if the found piece is unable to move to the specified coordinate</exception>
-    /*public void MovePiece(string start, string destination)
+    /// <param name="piece">The piece to move</param>
+    /// <param name="square">The square to which the piece will move</param>
+    /// <exception cref="ArgumentException">Thrown if castling or moving the specific piece is impossible</exception>
+    public void MovePiece(Piece piece, string square)
     {
-        (int, int) startCoordinate;
-        (int, int) destinationCoordinate;
         try
         {
-            startCoordinate = GameHelpers.GetCoordinateFromSquare(start);
-            destinationCoordinate = GameHelpers.GetCoordinateFromSquare(destination);
+            if (square == Move.k_kingsideCastleNotation || square == Move.k_queensideCastleNotation)
+            {
+                GetRuleset().Castle(this, piece.GetPlayer(), (square == Move.k_kingsideCastleNotation) ? Castling.Kingside : Castling.Queenside);
+            }
+            else
+            {
+                piece.MovePiece(GameHelpers.GetCoordinateFromSquare(square));
+            }
         }
-        catch (ArgumentException e)
+        catch (GameplayErrorException)
         {
-            throw e;
+            throw;
         }
-
-        Piece? piece = GetPiece(startCoordinate);
-        if (piece is null)
-        {
-            throw new ArgumentException($"Square {start} has no piece to move");
-        }
-
-        // TODO: Insert additional conditions for moving pieces here
-        // Ex: check, castling through check, etc.
-
-        try
-        {
-            piece.MovePiece(destinationCoordinate);
-        }
-        catch (ArgumentException e)
-        {
-            throw e;
-        }
-    }*/
+    }
 
     /// <summary>
     /// Mutator for the next player to play
@@ -376,14 +356,16 @@ public class Board
     /// Handle a pawn's request to promote
     /// </summary>
     /// <param name="pawn">The pawn that wishes to promote</param>
-    public void RequestPromotion(Pawn pawn)
+    /// <param name="piece">The piece type into which the pawn will promote. May be null</param>
+    public void RequestPromotion(Pawn pawn, char? piece)
     {
         try
         {
             pawn.Destroy();
+            char pieceType = (piece is not null) ? (char)piece : RequestPromotionPiece();
             var promotionPiece = (pawn.GetPlayer() == Player.White)
-                ? Char.ToUpper(RequestPromotionPiece())
-                : Char.ToLower(RequestPromotionPiece());
+                ? Char.ToUpper(pieceType)
+                : Char.ToLower(pieceType);
             CreatePiece(promotionPiece, pawn.GetCoordinates());
         }
         catch (ArgumentException)

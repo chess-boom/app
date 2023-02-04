@@ -3,9 +3,9 @@
         <viewModels:BoardViewModel/>
     </Design.DataContext>
     <StackPanel Name="StackPanel" HorizontalAlignment="Center">
-        <Label Content="Board" FontSize="50" HorizontalAlignment="Center"/>
+        <Label Content="Board" FontSize="50" HorizontalAlignment="Center" />
         <Grid>
-            <Grid Name="ChessBoard"/>
+            <Grid Name="ChessBoard" HorizontalAlignment="Center" PointerPressed="ChessBoard_MouseLeftButtonDown" Focusable="True" />
             <Canvas Name="Arrows">
                 <Path Stretch="Fill" Fill="LimeGreen" Opacity="0.8">
                     <Path.RenderTransform>

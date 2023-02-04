@@ -1,5 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Avalonia.Media;assembly=Avalonia.Media"
              xmlns:viewModels="clr-namespace:ChessBoom.ViewModels"
              x:Class="ChessBoom.Views.DashboardView">
     <Design.DataContext>
@@ -22,28 +23,58 @@
                 Grid.Column="0"
                 Margin="25"
                 Command="{Binding OnClickGameAnalysis}">
+                <Button.Background>
+                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                        <GradientStop Color="#454545" Offset="0.0" />
+                        <GradientStop Color="#555555" Offset="0.1" />
+                        <GradientStop Color="#696969" Offset="0.5" />
+                        <GradientStop Color="#555555" Offset="0.9" />
+                        <GradientStop Color="#454545" Offset="1" />
+                    </LinearGradientBrush>
+                </Button.Background>
                 <StackPanel>
                     <Label Content="Game Analysis" FontSize="50" HorizontalAlignment="Center" />
                     <Image Source="/Assets/Images/Game.png" />
+                    <Label Content="&#x0a;&#x0a;Review your chess games&#x0a;in more detail and learn how to&#x0a;improve your gameplay&#x0a;&#x0a;&#x0a;&#x0a;&#x0a;" FontSize="22" HorizontalAlignment="Center" />
                 </StackPanel>
             </Button>
             <Button
                 Grid.Column="1"
                 Margin="25"
                 Command="{Binding OnClickVariantGameAnalysis}">
+                <Button.Background>
+                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                        <GradientStop Color="#454545" Offset="0.0" />
+                        <GradientStop Color="#555555" Offset="0.1" />
+                        <GradientStop Color="#696969" Offset="0.5" />
+                        <GradientStop Color="#555555" Offset="0.9" />
+                        <GradientStop Color="#454545" Offset="1" />
+                    </LinearGradientBrush>
+                </Button.Background>
                 <StackPanel>
                     <Label Content="Variant Analysis" FontSize="50" HorizontalAlignment="Center" />
                     <Image Source="/Assets/Images/Variant.png" />
+                    <Label Content="&#x0a;&#x0a;Review your variant games&#x0a;of chess using a similar feature&#x0a;of Game Analysis, but specialized&#x0a;for each chess variant&#x0a;&#x0a;&#x0a;&#x0a;" FontSize="22" HorizontalAlignment="Center" />
                 </StackPanel>
             </Button>
             <Button
                 Grid.Column="2"
                 Margin="25"
                 Command="{Binding OnClickTutorial}">
+                <Button.Background>
+                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                        <GradientStop Color="#454545" Offset="0.0" />
+                        <GradientStop Color="#555555" Offset="0.1" />
+                        <GradientStop Color="#696969" Offset="0.5" />
+                        <GradientStop Color="#555555" Offset="0.9" />
+                        <GradientStop Color="#454545" Offset="1" />
+                    </LinearGradientBrush>
+                </Button.Background>
                 <StackPanel>
                     <Label Content="Tutorials" FontSize="50" HorizontalAlignment="Center" />
                     <Image Source="/Assets/Images/Tutorial.png" />
-                </StackPanel>
+                    <Label Content="&#x0a;&#x0a;Dive into basic and advanced chess&#x0a;tactics and learn skills that will&#x0a;give you the upper hand against &#x0a;your opponents&#x0a;&#x0a;&#x0a;&#x0a;" FontSize="22" HorizontalAlignment="Center" />
+                </StackPanel>              
             </Button>
         </Grid>
     </StackPanel>
