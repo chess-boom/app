@@ -19,6 +19,7 @@ public class MainWindowViewModel : ReactiveObject, IScreen
     internal ReactiveCommand<Unit, IRoutableViewModel> GoBoard { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoAnalysis { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoVariant { get; }
+    internal ReactiveCommand<Unit, IRoutableViewModel> GoProfile { get; }
 
     // The command that navigates a user back.
     public ReactiveCommand<Unit, Unit> GoBack => Router.NavigateBack;
@@ -49,6 +50,9 @@ public class MainWindowViewModel : ReactiveObject, IScreen
         );
         GoVariant = ReactiveCommand.CreateFromObservable(
             () => Router.Navigate.Execute(new VariantAnalysisViewModel(this))
+        );
+        GoProfile = ReactiveCommand.CreateFromObservable(
+            () => Router.Navigate.Execute(new TemplateViewModel(this))
         );
     }
 }
