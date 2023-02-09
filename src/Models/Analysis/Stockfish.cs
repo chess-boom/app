@@ -251,7 +251,7 @@ public class Stockfish : IAnalysis
                 {
                     break;
                 }
-                
+
             }
 
             //Last N+1 lines are the N best moves and the bestmove line.
