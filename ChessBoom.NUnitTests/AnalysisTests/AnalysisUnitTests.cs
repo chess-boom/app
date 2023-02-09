@@ -31,9 +31,15 @@ public class AnalysisUnitTests
 
         var staticEval = _engine.GetStaticEvaluation();
 
-        Assert.AreEqual(-0.07f, staticEval.FinalEvaluation);
+        Assert.IsNotNull(staticEval);
 
-        Assert.AreEqual('w', staticEval.Side);
+        if (staticEval is not null) // Technically unecessary, but removes null dereference error
+        {
+            Assert.AreEqual(-0.07f, staticEval.FinalEvaluation);
+
+            Assert.AreEqual('w', staticEval.Side);
+        }
+
     }
     /// <summary>
     /// Test that the analysis engine can return the top N moves, ordered from greatest to lowest CP.
@@ -48,14 +54,19 @@ public class AnalysisUnitTests
 
         var topNMoves = _engine.GetNBestMoves(n);
 
-        Assert.AreEqual(n, topNMoves.Count);
+        Assert.IsNotNull(topNMoves);
 
-        if (topNMoves.Count > 1)
+        if (topNMoves is not null)
         {
-            // Ensure the CP values are ordered greatest --> smallest.
-            for (int i = 0; i < topNMoves.Count - 1; i++)
+            Assert.AreEqual(n, topNMoves.Count);
+
+            if (topNMoves.Count > 1)
             {
-                Assert.GreaterOrEqual(topNMoves[i].Item2, topNMoves[i + 1].Item2);
+                // Ensure the CP values are ordered greatest --> smallest.
+                for (int i = 0; i < topNMoves.Count - 1; i++)
+                {
+                    Assert.GreaterOrEqual(topNMoves[i].Item2, topNMoves[i + 1].Item2);
+                }
             }
         }
     }
