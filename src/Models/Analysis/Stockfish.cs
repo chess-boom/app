@@ -110,7 +110,7 @@ public class Stockfish : IAnalysis
     /// </summary>
     /// <returns></returns>
     /// <exception cref="NullReferenceException">If StandardOutput of our application (m_stockfish) is null, we throw this exception.</exception>
-    public string ReadOutput()
+    public string? ReadOutput()
     {
 
         if (m_stockfish.StandardOutput == null)
@@ -157,11 +157,11 @@ public class Stockfish : IAnalysis
     /// <summary>
     /// Gets the static evaluation of the current position as a float, and which side the value is relative to (White or Black).
     /// </summary>
-    /// <returns>Evaluation Object</returns>
+    /// <returns>Evaluation Object. Null if output does not return an evaluation due to an error.</returns>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ApplicationException"></exception>
     /// <exception cref="InvalidOperationException"></exception>
-    public Evaluation GetStaticEvaluation()
+    public Evaluation? GetStaticEvaluation()
     {
         if (m_fenPosition != null)
         {
@@ -169,23 +169,40 @@ public class Stockfish : IAnalysis
             {
                 WriteCommand("eval");
 
-                string output = ReadOutput();
+                string? output = ReadOutput();
+
+                if (output is null)
+                {
+                    return null;
+                }
+
                 while (!output.Contains("Final evaluation"))
                 {
                     output = ReadOutput();
+
+                    if (output is null)
+                    {
+                        break;
+                    }
                 }
+                if (output is not null)
+                {
+                    string[] splitOutput = output.Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
-                string[] splitOutput = output.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+                    float evaluation_number = float.MaxValue;
+                    if (!float.TryParse(splitOutput[2], out evaluation_number))
+                        throw new ArgumentException($"Expected a float for evaluation number, got {splitOutput[2]}");
 
-                float evaluation_number = float.MaxValue;
-                if (!float.TryParse(splitOutput[2], out evaluation_number))
-                    throw new ArgumentException($"Expected a float for evaluation number, got {splitOutput[3]}");
+                    string side = splitOutput[3].Substring(1); // Normally gives (white or (black so we want to remove the "("
 
-                string side = splitOutput[3].Substring(1); // Normally gives (white or (black so we want to remove the "("
+                    char side_char = side[0];
 
-                char side_char = side[0];
-
-                return new Evaluation(evaluation_number, side_char);
+                    return new Evaluation(evaluation_number, side_char);
+                }
+                else
+                {
+                    return null;
+                }
 
             }
             throw new ApplicationException("Stockfish is not ready!");
@@ -215,12 +232,26 @@ public class Stockfish : IAnalysis
             WriteCommand($"go depth {depth}");
 
             // Keep reading output until analysis ends
-            string output = ReadOutput();
+            string? output = ReadOutput();
+
+            if (output is null)
+            {
+                return new List<(string, int)>();
+            }
+
             outputList.Add(output);
             while (!output.Contains("bestmove"))
             {
                 output = ReadOutput();
-                outputList.Add(output);
+                if (output is not null)
+                {
+                    outputList.Add(output);
+                }
+                else
+                {
+                    break;
+                }
+
             }
 
             //Last N+1 lines are the N best moves and the bestmove line.
@@ -245,8 +276,10 @@ public class Stockfish : IAnalysis
 
             return moves;
         }
-
-        return null;
+        else
+        {
+            return new List<(string, int)>();
+        }
 
 
     }
