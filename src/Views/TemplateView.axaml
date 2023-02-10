@@ -1,12 +1,176 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:viewModels="clr-namespace:ChessBoom.ViewModels"
+             xmlns:shapes="http://avaloniaui.net/controls/shapes"
+             xmlns:viewModels="clr-namespace:ChessBoom.ViewModels"            
              xmlns:views="clr-namespace:ChessBoom.Views"
+             xmlns:c="clr-namespace:Avalonia.Controls;assembly=Avalonia.Controls"
              x:Class="ChessBoom.Views.TemplateView">
     <Design.DataContext>
         <viewModels:TemplateViewModel />
     </Design.DataContext>
     <StackPanel>
-        <Label Content="Template" FontSize="50" HorizontalAlignment="Center" />
+        <Label Content="Your Profile" FontSize="50" HorizontalAlignment="Center" />
+        <Grid HorizontalAlignment="Center" Width="1500">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <!-- Black/White Win Ratio -->
+            <StackPanel Margin="0,75,0,0">
+                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <Label Content="White" FontSize="30"/>
+                    <Rectangle Width="1" Height="50" Fill="White" Margin="25,0,0,0"/>
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center" Orientation="Horizontal" Margin="50,0,0,0">
+                        <Grid>
+                            <Rectangle Width="270" Height="40" Fill="Green"/>
+                            <TextBlock Text="45%" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
+                        </Grid>
+                        <Grid>
+                            <Rectangle Width="300" Height="40" Fill="Red"/>
+                            <TextBlock Text="50%" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
+                        </Grid>
+                        <Rectangle Width="30" Height="40" Fill="Gray"/>
+                    </StackPanel>
+                </StackPanel>
+                <Rectangle Grid.Row="1" Width="800" Height="1" Fill="White"/>
+                <StackPanel Grid.Row="2" Orientation="Horizontal">
+                    <Label Content="Black" FontSize="30"/>
+                    <Rectangle Width="1" Height="50" Fill="White" Margin="30,0,0,0"/>
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center" Orientation="Horizontal" Margin="50,0,0,0">
+                        <Grid>
+                            <Rectangle Width="270" Height="40" Fill="Green"/>
+                            <TextBlock Text="45%" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
+                        </Grid>
+                        <Grid>
+                            <Rectangle Width="300" Height="40" Fill="Red"/>
+                            <TextBlock Text="50%" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
+                        </Grid>
+                        <Rectangle Width="30" Height="40" Fill="Gray"/>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+            <!-- Bar Graph -->
+            <StackPanel Grid.Column="2">
+                <TextBlock HorizontalAlignment="Center"
+                FontWeight="Bold"
+                FontSize="20"
+                Text="Total Games: 20"/>
+                <Canvas Grid.Row="1" Margin="10">
+                    <Grid Canvas.Left="50" Canvas.Top="20">
+                        <Rectangle Width="100" Height="180" Fill="Green" c:ToolTip.Tip="Wins in last 10 Games: 5&#013;Total Wins: 9"/>
+                        <!-- <TextBlock Text="9" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="30" /> -->
+                    </Grid>
+                    <Grid Canvas.Left="200" Canvas.Top="0">
+                        <Rectangle Width="100" Height="200" Fill="Red" c:ToolTip.Tip="Losses in last 10 Games: 4&#013;Total Losses: 10"/>
+                        <!-- <TextBlock Text="10" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="30" /> -->
+                    </Grid>
+                    <Grid Canvas.Left="350" Canvas.Top="190">
+                        <Rectangle Width="100" Height="10" Fill="Gray" c:ToolTip.Tip="Draws in last 10 Games: 1&#013;Total Draws: 1"/> 
+                    </Grid>
+                    <Rectangle Width="1" Height="200" Fill="White" Canvas.Left="20"/>
+                    <Rectangle Width="500" Height="1" Fill="White" Canvas.Left="20" Canvas.Top="200"/>
+                    <TextBlock Text="0" Canvas.Top="200" />
+                    <TextBlock Text="10"/>
+                    <TextBlock Text="Wins" Canvas.Left="50" Canvas.Top="220" />
+                    <TextBlock Text="Losses" Canvas.Left="200" Canvas.Top="220" />
+                    <TextBlock Text="Draw" Canvas.Left="350" Canvas.Top="220" />
+                </Canvas>
+            </StackPanel>
+            <!-- Elo Graph -->
+            <StackPanel Grid.Row="3" Margin="0,100,0,0">
+                <Canvas>
+                    <!-- Graph Horizontal Lines -->
+                    <Rectangle Width="500" Height="1" Fill="Gray" Canvas.Left="50" Canvas.Top="80"/>
+                    <Rectangle Width="500" Height="1" Fill="Gray" Canvas.Left="50" Canvas.Top="130"/>
+                    <Rectangle Width="500" Height="1" Fill="Gray" Canvas.Left="50" Canvas.Top="180"/>
+                    <Rectangle Width="500" Height="1" Fill="Gray" Canvas.Left="50" Canvas.Top="230"/>
+                    <Rectangle Width="500" Height="1" Fill="Gray" Canvas.Left="50" Canvas.Top="280"/>
+                    <Rectangle Width="500" Height="1" Fill="Gray" Canvas.Left="50" Canvas.Top="330"/>
+                    <Rectangle Width="500" Height="1" Fill="Gray" Canvas.Left="50" Canvas.Top="380"/>
+
+                    <Rectangle Width="1" Height="400" Fill="White" Canvas.Left="50" Canvas.Top="30"/>
+                    <TextBlock Text="1600" Canvas.Top="430"/>
+                    <TextBlock Text="1800" Canvas.Top="30"/>
+                    <Polyline Points="50,110 100,110 150,130 200,150 250,140 300,120 350,140 400,130 450,160 500,150" Stroke="#6AC1FF" StrokeThickness="2"/>
+                    <!-- Point Logic -->
+                    <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="45" Canvas.Top="105" c:ToolTip.Tip="Elo: 1720&#013;Score: +22&#013;Date: 2023/1/16"/>
+                    <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="95" Canvas.Top="105" c:ToolTip.Tip="Elo: 1720&#013;Score: +22&#013;Date: 2023/1/16"/>
+                    <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="145" Canvas.Top="125" c:ToolTip.Tip="Elo: 1720&#013;Score: +22&#013;Date: 2023/1/16"/>
+                    <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="195" Canvas.Top="145" c:ToolTip.Tip="Elo: 1720&#013;Score: +22&#013;Date: 2023/1/16"/>
+                    <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="245" Canvas.Top="135" c:ToolTip.Tip="Elo: 1720&#013;Score: +22&#013;Date: 2023/1/16"/>
+                    <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="295" Canvas.Top="115" c:ToolTip.Tip="Elo: 1720&#013;Score: +22&#013;Date: 2023/1/16"/>
+                    <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="345" Canvas.Top="135" c:ToolTip.Tip="Elo: 1720&#013;Score: +22&#013;Date: 2023/1/16"/>
+                    <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="395" Canvas.Top="125" c:ToolTip.Tip="Elo: 1720&#013;Score: +22&#013;Date: 2023/1/16"/>
+                    <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="445" Canvas.Top="155" c:ToolTip.Tip="Elo: 1720&#013;Score: +22&#013;Date: 2023/1/16"/>
+                    <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="495" Canvas.Top="145" c:ToolTip.Tip="Elo: 1720&#013;Score: +22&#013;Date: 2023/1/16"/>
+
+                    <TextBlock Canvas.Left="315" Canvas.Top="30" Text="Elo History" FontWeight="Bold" FontSize="20"/>
+                    <!-- TODO:TrendLine logic and math -->
+                    <Path Stroke="Orange" StrokeThickness="2">
+                        <Path.Data>
+                            <PathGeometry>
+                                <PathFigure StartPoint="50,110">
+                                    <LineSegment Point="500,145" />
+                                </PathFigure>
+                            </PathGeometry>
+                        </Path.Data>
+                    </Path>
+                </Canvas>
+            </StackPanel>
+            <!-- Openings -->
+                <Button
+                    Grid.Row="3" 
+                    Grid.Column="2"
+                    Margin="0,150,0,0">
+                    <Button.Background>
+                        <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                            <GradientStop Color="#454545" Offset="0.0" />
+                            <GradientStop Color="#555555" Offset="0.1" />
+                            <GradientStop Color="#696969" Offset="0.5" />
+                            <GradientStop Color="#555555" Offset="0.9" />
+                            <GradientStop Color="#454545" Offset="1" />
+                        </LinearGradientBrush>
+                    </Button.Background>
+                    <StackPanel>
+                        <Label Content="Most Used Opening:&#013;Dutch Defense" FontSize="20" HorizontalAlignment="Center" />
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Assets/Images/Openings.png" Width="250" Height="250"/>
+                        </StackPanel>
+                    </StackPanel>              
+                </Button>
+                <Button
+                    Grid.Row="3"
+                    Grid.Column="3"
+                    Margin="0,150,0,0">
+                    <Button.Background>
+                        <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                            <GradientStop Color="#454545" Offset="0.0" />
+                            <GradientStop Color="#555555" Offset="0.1" />
+                            <GradientStop Color="#696969" Offset="0.5" />
+                            <GradientStop Color="#555555" Offset="0.9" />
+                            <GradientStop Color="#454545" Offset="1" />
+                        </LinearGradientBrush>
+                    </Button.Background>
+                    <StackPanel>
+                        <Label Content="Best Opening:&#013;Dutch Defense" FontSize="20" HorizontalAlignment="Center" />
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Assets/Images/Openings.png" Width="250" Height="250"/>
+                        </StackPanel>
+                    </StackPanel>              
+                </Button>
+        </Grid>
     </StackPanel>
 </UserControl>

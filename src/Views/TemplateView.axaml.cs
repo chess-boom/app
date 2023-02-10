@@ -1,4 +1,5 @@
 using Avalonia.Markup.Xaml;
+using Avalonia.Controls;
 using Avalonia.ReactiveUI;
 using ChessBoom.ViewModels;
 using ReactiveUI;
@@ -13,5 +14,6 @@ public partial class TemplateView : ReactiveUserControl<TemplateViewModel>
     {
         this.WhenActivated(_ => { });
         AvaloniaXamlLoader.Load(this);
+        ToolTip.SetIsOpen(this, true);
     }
 }
