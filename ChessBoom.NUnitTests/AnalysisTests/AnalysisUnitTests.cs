@@ -41,11 +41,11 @@ public class AnalysisUnitTests
             // The mac version is more recent and uses a different evaluation function, so the values are different.
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                Assert.AreEqual(-0.18f, staticEval.FinalEvaluation);
+                Assert.AreEqual(-0.18f, staticEval.FinalEvaluation, "This value may change if we update Stockfish"); 
             }
             else
             {
-                Assert.AreEqual(-0.07f, staticEval.FinalEvaluation);
+                Assert.AreEqual(-0.07f, staticEval.FinalEvaluation, "This value may change if we update Stockfish");
             }
 
             Assert.AreEqual('w', staticEval.Side);
