@@ -43,7 +43,7 @@ public class Stockfish : IAnalysis
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
-            directoryString = "./AnalysisEngine/MacOS/stockfish-arm64";
+            directoryString = "./AnalysisEngine/MacOS/stockfish";
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {

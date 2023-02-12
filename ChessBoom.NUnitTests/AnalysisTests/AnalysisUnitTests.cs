@@ -1,4 +1,5 @@
-﻿using ChessBoom.Models.Analysis;
+﻿using System.Runtime.InteropServices;
+using ChessBoom.Models.Analysis;
 using NUnit.Framework;
 
 namespace ChessBoom.NUnitTests.AnalysisTests;
@@ -35,7 +36,17 @@ public class AnalysisUnitTests
 
         if (staticEval is not null) // Technically unecessary, but removes null dereference error
         {
-            Assert.AreEqual(-0.07f, staticEval.FinalEvaluation);
+            // If we are on windows or linux, we can expect a static evaluation of -0.07
+            // If we are on mac, we can expect a static evaluation of -0.18
+            // The mac version is more recent and uses a different evaluation function, so the values are different.
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                Assert.AreEqual(-0.18f, staticEval.FinalEvaluation, "This value may change if we update Stockfish");
+            }
+            else
+            {
+                Assert.AreEqual(-0.07f, staticEval.FinalEvaluation, "This value may change if we update Stockfish");
+            }
 
             Assert.AreEqual('w', staticEval.Side);
         }
