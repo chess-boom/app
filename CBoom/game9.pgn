@@ -1,0 +1,18 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/uGNT5hBP"]
+[Date "2023.02.14"]
+[White "fizkiz"]
+[Black "MatteoGisondi"]
+[Result "1-0"]
+[UTCDate "2023.02.14"]
+[UTCTime "14:52:57"]
+[WhiteElo "1497"]
+[BlackElo "1518"]
+[WhiteRatingDiff "+6"]
+[BlackRatingDiff "-8"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "D10"]
+[Termination "Time forfeit"]
+
+1. d4 d5 2. c4 c6 3. e3 c5 4. Nf3 cxd4 5. exd4 e6 6. c5 Nf6 7. b4 g6 8. Bd3 Bg7 9. Bb5+ Nc6 10. Bb2 a6 11. Bd3 Ng4 12. h3 Nxf2 13. Kxf2 Qf6 14. Nd2 Nxb4 15. Bc2 Nxc2 16. Qxc2 b5 17. cxb6 Bb7 18. Rhf1 Rc8 19. Qd3 Bh6 20. Nb3 a5 21. Nc5 Rxc5 22. dxc5 Qxb2+ 23. Qe2 Qxe2+ 24. Kxe2 Bc6 25. Rab1 O-O 26. b7 Rb8 27. g4 Rxb7 28. h4 1-0

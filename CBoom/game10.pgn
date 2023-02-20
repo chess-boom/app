@@ -1,0 +1,18 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/DESvN1Hu"]
+[Date "2023.02.14"]
+[White "KseniyaBoyko"]
+[Black "MatteoGisondi"]
+[Result "0-1"]
+[UTCDate "2023.02.14"]
+[UTCTime "14:49:52"]
+[WhiteElo "1523"]
+[BlackElo "1510"]
+[WhiteRatingDiff "-5"]
+[BlackRatingDiff "+8"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "C40"]
+[Termination "Time forfeit"]
+
+1. e4 e5 2. Nf3 Bc5 3. Bc4 h6 4. O-O Nf6 5. d3 Ng4 6. Qe2 Qf6 7. c3 Nc6 8. Be3 Bxe3 9. fxe3 d6 10. d4 O-O 11. dxe5 Ncxe5 12. Nxe5 Qxe5 13. Nd2 Nf6 14. Nf3 Bg4 15. Nxe5 Bxe2 16. Bxe2 dxe5 17. Bd3 Rad8 18. Bc2 Rd2 19. Bb3 Rfd8 20. Rf5 Ng4 21. h3 Nxe3 22. Rxe5 Rxg2+ 23. Kh1 Rdd2 24. Re8+ Kh7 25. Re1 Rh2+ 0-1
