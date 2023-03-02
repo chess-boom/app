@@ -6,7 +6,7 @@ using ChessBoom.Models.Game.Rulesets;
 
 namespace ChessBoom.Models.Game;
 
-enum Variant
+public enum Variant
 {
     Standard,
     Chess960,
@@ -108,7 +108,7 @@ public class Game
     /// <summary>
     /// The chosen variant for this game
     /// </summary>
-    private readonly Variant m_variant = Variant.Standard;
+    private readonly Variant m_variant;
 
     /// <summary>
     /// The chosen ruleset for this game
@@ -138,20 +138,15 @@ public class Game
     /// <summary>
     /// Default constructor
     /// </summary>
-    public Game()
+    public Game(Variant variant = Variant.Standard)
     {
-        m_board = InitializeBoard(m_variant);
-        m_ruleset = Standard.Instance;
+        m_variant = variant;
+        m_board = InitializeBoard(variant);
+        m_ruleset = Ruleset.k_rulesetUsage[variant];
         m_moveList = new List<Move>();
         m_visitedPositions = new Dictionary<string, int>();
         m_gameState = GameState.InProgress;
     }
-
-    /*public Game(Variant variant)
-    {
-        m_variant = variant;
-        Game();
-    }*/
 
     /// <summary>
     /// The board object is created and initialized

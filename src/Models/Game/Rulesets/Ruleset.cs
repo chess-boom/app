@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using ChessBoom.Models.Game.Pieces;
 
 namespace ChessBoom.Models.Game.Rulesets;
@@ -9,6 +10,22 @@ public abstract class Ruleset
     /// The number of repetitions for threefold repetition to occur
     /// </summary>
     public const int k_threefoldRepetitionCount = 3;
+
+    /// <summary>
+    /// The limiting number of moves that amount to "no progress" before a game ends in a draw
+    /// </summary>
+    public const int k_progressMoveLimit = 50;
+
+    /// <summary>
+    /// Map for piece types and their constructors
+    /// </summary>
+    public static readonly Dictionary<Variant, Ruleset> k_rulesetUsage = new()
+    {
+        { Variant.Standard, Standard.Instance },
+        { Variant.Chess960, Standard.Instance },
+        { Variant.Atomic, Atomic.Instance },
+        { Variant.Horde, Standard.Instance }
+    };
 
     /// <summary>
     /// Handle a capture by a piece on a specific square according to the ruleset
@@ -63,4 +80,9 @@ public abstract class Ruleset
     /// <param name="game">The game, whose state may change</param>
     /// <param name="board">The board to assess</param>
     public abstract void AssessBoardState(Game game, Board board);
+
+    /// <summary>
+    /// TODO
+    /// </summary>
+    public abstract Piece GetKing(Board board, Player player);
 }
