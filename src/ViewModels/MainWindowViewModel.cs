@@ -33,6 +33,9 @@ public class MainWindowViewModel : ReactiveObject, IScreen
         // of a view model, this allows you to pass parameters to 
         // your view models, or to reuse existing view models.
         //
+        Router = new RoutingState();
+        Router.NavigateAndReset.Execute(new DashboardViewModel(this));
+        
         GoHome = ReactiveCommand.CreateFromObservable(
             () => Router.Navigate.Execute(new DashboardViewModel(this))
         );

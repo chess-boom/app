@@ -13,10 +13,11 @@ public class DashboardViewModel : BaseViewModel, IScreen
     internal ReactiveCommand<Unit, IRoutableViewModel> GoVariant { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoTutorial { get; }
 
-    protected static string m_greeting => "Welcome to Chess Boom!";
+    public string m_greeting { get; set; }
 
     public DashboardViewModel(IScreen hostScreen) : base(hostScreen)
     {
+        m_greeting = "Welcome to Chess Boom!";
         GoAnalysis = ReactiveCommand.CreateFromObservable(
             () => hostScreen.Router.Navigate.Execute(new GameAnalysisViewModel(this)));
         GoVariant = ReactiveCommand.CreateFromObservable(
