@@ -102,7 +102,11 @@ public class Atomic : Ruleset
     {
         // TODO
         // Get all allied pieces surrounding the king
-        var king = GetKing(board, player);
+        var king = GetKingOrNull(board, player);
+        if (king is null)
+        {
+            return false;
+        }
         List<Piece> surroundingPieces = GetSurroundingPieces(board, GameHelpers.GetSquareFromCoordinate(king.GetCoordinates()), true, true);
         foreach (Piece piece in surroundingPieces)
         {
@@ -145,21 +149,54 @@ public class Atomic : Ruleset
 
     public override bool IsIllegalBoardState(Board board)
     {
+        if (AreKingsTouching(board))
+        {
+            return true;
+        }
+
+        return Standard.Instance.IsIllegalBoardState(board);
+
+        /*
         // You may explode an opponents king, even while in check
         bool isInCheck = IsInCheck(GameHelpers.GetOpponent(board.m_playerToPlay), board);
+        if (isInCheck)
+        {
+            return true;
+        }
         if (!isInCheck)
         {
             return isInCheck;
         }
 
-        bool canExplodeKing = CanExplodeKing(board.m_playerToPlay, board);
         // TODO: Double-check this logic
-        return (isInCheck && canExplodeKing);
+        return (isInCheck || CanExplodeKing(board.m_playerToPlay, board));*/
     }
 
     public override void AssessBoardState(Game game, Board board)
     {
-        // TODO
+        // Check for exploded kings
+        var whiteKing = GetKingOrNull(board, Player.White);
+        var blackKing = GetKingOrNull(board, Player.Black);
+        if (whiteKing is null || blackKing is null)
+        {
+            if (whiteKing is null && blackKing is null)
+            {
+                Console.WriteLine("Error! Neither king could be found!");
+                game.m_gameState = GameState.Aborted;
+                return;
+            }
+
+            if (whiteKing is null)
+            {
+                game.m_gameState = GameState.VictoryBlack;
+                return;
+            }
+            else
+            {
+                game.m_gameState = GameState.VictoryWhite;
+                return;
+            }
+        }
 
         // 50-move rule
         if (board.m_halfmoveClock >= (2 * k_progressMoveLimit))
@@ -174,11 +211,103 @@ public class Atomic : Ruleset
             game.m_gameState = GameState.Draw;
             return;
         }
-        throw new NotImplementedException();
+
+        var pieces = GameHelpers.GetPlayerPieces(board.m_playerToPlay, board);
+        var legalMoveExists = false;
+
+        foreach (var piece in pieces)
+        {
+            var pieceMoves = piece.GetMovementSquares();
+
+            foreach (var move in pieceMoves)
+            {
+                var testGame = new Game();
+                var testBoard = Game.CreateBoardFromFEN(testGame, Game.CreateFENFromBoard(board));
+
+                try
+                {
+                    var testPiece = testBoard.GetPiece(piece.GetCoordinates());
+                    if (testPiece is not null)
+                    {
+                        testPiece.MovePiece(move);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Error! Test piece from duplicated board not found!");
+                    }
+                }
+                catch (ArgumentException e)
+                {
+                    Console.WriteLine($"Error! {e}");
+                }
+                catch (GameplayErrorException e)
+                {
+                    Console.WriteLine($"Error! {e}");
+                }
+
+                testBoard.m_playerToPlay = GameHelpers.GetOpponent(testBoard.m_playerToPlay);
+                if (!IsIllegalBoardState(testBoard))
+                {
+                    legalMoveExists = true;
+                    break;
+                }
+            }
+
+            if (legalMoveExists)
+            {
+                break;
+            }
+        }
+
+        if (legalMoveExists) return;
+        // Only the next player to play may be in checkmate, else an illegal move must have occurred
+        // If next player is in checkmate or has lost their king, game over.
+        if (IsInCheck(board.m_playerToPlay, board) || GetKingOrNull(board, board.m_playerToPlay) is null)
+        {
+            game.m_gameState = (board.m_playerToPlay == Player.Black) ? GameState.VictoryWhite : GameState.VictoryBlack;
+        }
+        else
+        {
+            game.m_gameState = GameState.Draw;
+        }
     }
 
     public override Piece GetKing(Board board, Player player)
     {
         return Standard.Instance.GetKing(board, player);
+    }
+
+    /// <summary>
+    /// TODO
+    /// </summary>
+    private Piece? GetKingOrNull(Board board, Player player)
+    {
+        try
+        {
+            return GetKing(board, player);
+        }
+        catch (GameplayErrorException)
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// TODO
+    /// </summary>
+    private bool AreKingsTouching(Board board)
+    {
+        var whiteKing = GetKingOrNull(board, Player.White);
+        var blackKing = GetKingOrNull(board, Player.Black);
+        if (whiteKing is null || blackKing is null)
+        {
+            return false;
+        }
+
+        (int, int) whiteCoordinates = whiteKing.GetCoordinates();
+        (int, int) blackCoordinates = blackKing.GetCoordinates();
+
+        (int, int) difference = (whiteCoordinates.Item1 - blackCoordinates.Item1, whiteCoordinates.Item2 - blackCoordinates.Item2);
+        return (Math.Abs(difference.Item1) <= 1 && Math.Abs(difference.Item2) <= 1);
     }
 }
