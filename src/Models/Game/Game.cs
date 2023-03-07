@@ -186,17 +186,7 @@ public class Game
         if (pgnNotation == Move.k_kingsideCastleNotation
             || pgnNotation == Move.k_queensideCastleNotation)
         {
-            // TODO: Implement a GetKing() function, as this will break when implementing the Chess960 variant
-            Piece? king = (m_board.m_playerToPlay == Player.White)
-                ? m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("e1"))
-                : m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("e8"));
-
-            if (king is null || king.GetType() != typeof(King))
-            {
-                throw new ArgumentException("King was not found!");
-            }
-
-            MakeMove(king, pgnNotation);
+            MakeMove(m_ruleset.GetKing(m_board, m_board.m_playerToPlay), pgnNotation);
             return;
         }
 

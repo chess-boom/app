@@ -83,7 +83,11 @@ public abstract class Ruleset
     public abstract void AssessBoardState(Game game, Board board);
 
     /// <summary>
-    /// TODO
+    /// Retrieves a player's king
     /// </summary>
+    /// <param name="board">The board on which the king exists</param>
+    /// <param name="player">The player whose king might explode</param>
+    /// <returns>The player's king</returns>
+    /// <exception cref="GameplayErrorException">Thrown if the king is not found</exception>
     public abstract Piece GetKing(Board board, Player player);
 }

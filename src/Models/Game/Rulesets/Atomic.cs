@@ -28,8 +28,13 @@ public class Atomic : Ruleset
     }
 
     /// <summary>
-    /// TODO
+    /// Retrieves all the pieces surrounding a specified square
     /// </summary>
+    /// <param name="board">The board on which the other pieces exist</param>
+    /// <param name="square">The square that is examined</param>
+    /// <param name="includeOriginPiece">Flag for whether the piece on the specified square should be returned</param>
+    /// <param name="includePawns">Flag for whether pawns should be returned</param>
+    /// <returns>The list of pieces surrounding the square</returns>
     private List<Piece> GetSurroundingPieces(Board board, string square, bool includeOriginPiece = false, bool includePawns = false)
     {
         List<Piece> surroundingPieces = new List<Piece>();
@@ -60,30 +65,15 @@ public class Atomic : Ruleset
     }
 
     /// <summary>
-    /// TODO
+    /// Determines if a capture occurring on a specified square explodes a specific player's king
     /// </summary>
+    /// <param name="player">The player whose king might explode</param>
+    /// <param name="board">The board on which the pieces exist</param>
+    /// <param name="square">The square that is examined</param>
+    /// <returns>Whether or not the player's king explodes from a capture</returns>
     private bool CaptureExplodesKing(Player player, Board board, string square)
     {
-        // Get all surrounding pieces (not pawns) and destroy them as well
-
-        // TODO: Reimplement using GetSurroundingPieces
-        (int col, int row) coordinate = GameHelpers.GetCoordinateFromSquare(square);
-        List<Piece> explodingPieces = new List<Piece>();
-        Piece? capturedPiece = board.GetPiece(GameHelpers.GetCoordinateFromSquare(square));
-        if (capturedPiece is not null) explodingPieces.Add(capturedPiece);
-        for (int xIndex = coordinate.col - 1; xIndex <= coordinate.col + 1; xIndex++)
-        {
-            for (int yIndex = coordinate.row - 1; yIndex <= coordinate.row + 1; yIndex++)
-            {
-                Piece? piece = board.GetPiece((xIndex, yIndex));
-                if (piece is not null)
-                {
-                    explodingPieces.Add(piece);
-                }
-            }
-        }
-
-        foreach (Piece piece in explodingPieces)
+        foreach (Piece piece in GetSurroundingPieces(board, square, true, false))
         {
             if (piece.GetType() == typeof(King)
                 || piece.GetPlayer() == player)
@@ -95,12 +85,13 @@ public class Atomic : Ruleset
     }
 
     /// <summary>
-    /// TODO
+    /// Determines if a player's king can be blown up
     /// </summary>
-    /// <param name="player">The player whose king may be blown up</param>
+    /// <param name="player">The player whose king might explode</param>
+    /// <param name="board">The board on which the pieces exist</param>
+    /// <returns>Whether or not an opponent can blow up the player's king</returns>
     private bool CanExplodeKing(Player player, Board board)
     {
-        // TODO
         // Get all allied pieces surrounding the king
         var king = GetKingOrNull(board, player);
         if (king is null)
@@ -161,21 +152,6 @@ public class Atomic : Ruleset
         }
 
         return Standard.Instance.IsIllegalBoardState(board);
-
-        /*
-        // You may explode an opponents king, even while in check
-        bool isInCheck = IsInCheck(GameHelpers.GetOpponent(board.m_playerToPlay), board);
-        if (isInCheck)
-        {
-            return true;
-        }
-        if (!isInCheck)
-        {
-            return isInCheck;
-        }
-
-        // TODO: Double-check this logic
-        return (isInCheck || CanExplodeKing(board.m_playerToPlay, board));*/
     }
 
     public override void AssessBoardState(Game game, Board board)
@@ -266,7 +242,6 @@ public class Atomic : Ruleset
         }
 
         if (legalMoveExists) return;
-        // Only the next player to play may be in checkmate, else an illegal move must have occurred
         // If next player is in checkmate or has lost their king, game over.
         if (IsInCheck(board.m_playerToPlay, board) || GetKingOrNull(board, board.m_playerToPlay) is null)
         {
@@ -284,8 +259,11 @@ public class Atomic : Ruleset
     }
 
     /// <summary>
-    /// TODO
+    /// Retrieves a player's king. Null if it does not exist
     /// </summary>
+    /// <param name="board">The board on which the king exists</param>
+    /// <param name="player">The player whose king might explode</param>
+    /// <returns>The player's king. Null if not found</returns>
     private Piece? GetKingOrNull(Board board, Player player)
     {
         try
@@ -299,8 +277,10 @@ public class Atomic : Ruleset
     }
 
     /// <summary>
-    /// TODO
+    /// Checks if the black and white kings are adjacent
     /// </summary>
+    /// <param name="board">The board on which the kings exist</param>
+    /// <returns>True if the players' kings are adjacent. False otherwise</returns>
     private bool AreKingsTouching(Board board)
     {
         var whiteKing = GetKingOrNull(board, Player.White);
@@ -312,8 +292,7 @@ public class Atomic : Ruleset
 
         (int, int) whiteCoordinates = whiteKing.GetCoordinates();
         (int, int) blackCoordinates = blackKing.GetCoordinates();
-
-        (int, int) difference = (whiteCoordinates.Item1 - blackCoordinates.Item1, whiteCoordinates.Item2 - blackCoordinates.Item2);
-        return (Math.Abs(difference.Item1) <= 1 && Math.Abs(difference.Item2) <= 1);
+        return (Math.Abs(whiteCoordinates.Item1 - blackCoordinates.Item1) <= 1 &&
+            Math.Abs(whiteCoordinates.Item2 - blackCoordinates.Item2) <= 1);
     }
 }

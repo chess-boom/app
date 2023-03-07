@@ -55,7 +55,7 @@ public class AtomicUnitTests
     }
 
     /// <summary>
-    /// TODO
+    /// Ensure that an exploded king ends the game
     /// </summary>
     [Test]
     public void KingExplosionTest()
