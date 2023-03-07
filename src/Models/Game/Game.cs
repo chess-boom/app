@@ -282,6 +282,10 @@ public class Game
             {
                 continue;
             }
+            if (candidatePiece.GetPlayer() != m_board.m_playerToPlay)
+            {
+                continue;
+            }
             if (rowInstances.Count == 1 && colInstances.Count == 1)
             {
                 correctPiece = candidatePiece;

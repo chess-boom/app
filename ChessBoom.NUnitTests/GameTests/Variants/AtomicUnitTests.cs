@@ -597,27 +597,61 @@ public class AtomicUnitTests
 
         _game.MakeExplicitMove("d3", "d4"); // d4
         _game.MakeExplicitMove("h6", "d2"); // Bd2+
-        // Can capture or move out of check, but not castle
+        // Can move out of check, but not castle or capture
         if (king is not null)
         {
             var movementSquares = king.GetLegalMoves();
-            Assert.AreEqual(3, movementSquares.Count);
-            Assert.Contains("d2", movementSquares);
+            Assert.AreEqual(2, movementSquares.Count);
             Assert.Contains("e2", movementSquares);
             Assert.Contains("f1", movementSquares);
         }
 
-        _game.MakeExplicitMove("e1", "d2"); // Kxc2
-        _game.MakeExplicitMove("d8", "a5"); // Qa5+
+        _game.MakePGNMove("Ke2");
+        _game.MakePGNMove("b6");
+        _game.MakePGNMove("Bd5");
+        _game.MakePGNMove("d6");
+        _game.MakePGNMove("Ng5");
+        _game.MakePGNMove("Ba6+");
 
         // Can move out of check, but not into check, while in check
         if (king is not null)
         {
             var movementSquares = king.GetLegalMoves();
-            Assert.AreEqual(3, movementSquares.Count);
-            Assert.Contains("d3", movementSquares);
-            Assert.Contains("e2", movementSquares);
-            Assert.Contains("e3", movementSquares);
+            Assert.AreEqual(1, movementSquares.Count);
+            Assert.Contains("f3", movementSquares);
+        }
+
+        _game.MakePGNMove("Kf3");
+        _game.MakePGNMove("Kd7");
+        _game.MakePGNMove("Nxf7");
+        _game.MakePGNMove("cxd5");
+        _game.MakePGNMove("Kg4");
+        _game.MakePGNMove("Ke6");
+
+        // Can move adjacent to an opponent's king
+        if (king is not null)
+        {
+            var movementSquares = king.GetLegalMoves();
+            Assert.AreEqual(5, movementSquares.Count);
+            Assert.Contains("f3", movementSquares);
+            Assert.Contains("g3", movementSquares);
+            Assert.Contains("h3", movementSquares);
+            Assert.Contains("h4", movementSquares);
+            Assert.Contains("f5", movementSquares);
+        }
+
+        _game.MakePGNMove("Kf5");
+        _game.MakePGNMove("Kf6");
+
+        // Can stay adjacent to an opponent's king
+        if (king is not null)
+        {
+            var movementSquares = king.GetLegalMoves();
+            Assert.AreEqual(4, movementSquares.Count);
+            Assert.Contains("e5", movementSquares);
+            Assert.Contains("e6", movementSquares);
+            Assert.Contains("g4", movementSquares);
+            Assert.Contains("g5", movementSquares);
         }
     }
 }

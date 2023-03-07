@@ -151,6 +151,12 @@ public class Atomic : Ruleset
     {
         if (AreKingsTouching(board))
         {
+            return false;
+        }
+
+        // Check for exploded kings
+        if (GetKingOrNull(board, GameHelpers.GetOpponent(board.m_playerToPlay)) is null)
+        {
             return true;
         }
 
