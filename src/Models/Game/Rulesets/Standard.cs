@@ -14,11 +14,6 @@ public class Standard : Ruleset
 
     public static Standard Instance => _instance;
 
-    /// <summary>
-    /// The limiting number of moves that amount to "no progress" before a game ends in a draw
-    /// </summary>
-    private const int k_progressMoveLimit = 50;
-
     public override void Capture(Piece attacker, Board board, string square)
     {
         var capturedPiece = board.GetPiece(GameHelpers.GetCoordinateFromSquare(square));
@@ -254,5 +249,18 @@ public class Standard : Ruleset
         {
             game.m_gameState = (board.m_playerToPlay == Player.Black) ? GameState.VictoryWhite : GameState.VictoryBlack;
         }
+    }
+
+    public override Piece GetKing(Board board, Player player)
+    {
+        foreach (var piece in GameHelpers.GetPlayerPieces(player, board))
+        {
+            if (piece.GetType() == typeof(King))
+            {
+                return piece;
+            }
+        }
+
+        throw new GameplayErrorException($"King for player {player} not found!");
     }
 }

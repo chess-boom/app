@@ -26,9 +26,9 @@ public class GameHandler
     /// <summary>
     /// Reinitializes the game. Should always be used at the start of a session
     /// </summary>
-    public void StartGame()
+    public void StartGame(Variant variant = Variant.Standard)
     {
-        m_game = new Game();
+        m_game = new Game(variant);
         m_board = m_game.m_board;
     }
 
