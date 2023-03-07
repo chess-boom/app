@@ -22,7 +22,7 @@
             <Button
                 Grid.Column="0"
                 Margin="25"
-                Command="{Binding OnClickGameAnalysis}">
+                Command="{Binding GoAnalysis}">
                 <Button.Background>
                     <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
                         <GradientStop Color="#454545" Offset="0.0" />
@@ -41,7 +41,7 @@
             <Button
                 Grid.Column="1"
                 Margin="25"
-                Command="{Binding OnClickVariantGameAnalysis}">
+                Command="{Binding GoVariant}">
                 <Button.Background>
                     <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
                         <GradientStop Color="#454545" Offset="0.0" />
@@ -60,7 +60,7 @@
             <Button
                 Grid.Column="2"
                 Margin="25"
-                Command="{Binding OnClickTutorial}">
+                Command="{Binding GoTutorial}">
                 <Button.Background>
                     <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
                         <GradientStop Color="#454545" Offset="0.0" />
