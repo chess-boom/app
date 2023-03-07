@@ -35,7 +35,6 @@ public class MainWindowViewModel : ReactiveObject, IScreen
         //
         Router = new RoutingState();
         Router.NavigateAndReset.Execute(new DashboardViewModel(this));
-        
         GoHome = ReactiveCommand.CreateFromObservable(
             () => Router.Navigate.Execute(new DashboardViewModel(this))
         );
