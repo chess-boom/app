@@ -67,7 +67,7 @@
                 <TextBlock HorizontalAlignment="Center"
                 FontWeight="Bold"
                 FontSize="20"
-                Text="Total Games: 20"/>
+                Text="{Binding Profile.totalGames, StringFormat='Total Games: {0}'}"/>
                 <Canvas Grid.Row="1" Margin="10">
                     <Grid Canvas.Left="50" Canvas.Top="20">
                         <Rectangle Width="100" Height="180" Fill="Green" c:ToolTip.Tip="Wins in last 10 Games: 5&#013;Total Wins: 9"/>

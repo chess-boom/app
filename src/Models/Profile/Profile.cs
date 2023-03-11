@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using ReactiveUI;
 
-namespace ChessBoom.Models;
+namespace ChessBoom.Models.Profile;
 
 public class Profile{
+    public BarGraph barGraph { get; set; }
     public string name { get; set; }
     public List<int> elo { get; set; }
     public double winRateWhite { get; set; }
@@ -12,7 +14,9 @@ public class Profile{
     public double lossRateBlack { get; set; }
     public double drawRateWhite { get; set; }
     public double drawRateBlack { get; set; }
+    public List<int> barGraphData { get; set; }
     public List<Dictionary<string, string>> games { get; set; }
+    public int totalGames { get; set; }
     public Profile(){
         this.name = "Default";
         this.elo = new List<int>();
@@ -22,7 +26,10 @@ public class Profile{
         this.lossRateBlack = 0;
         this.drawRateWhite = 0;
         this.drawRateBlack = 0;
+        this.totalGames = 0;
         this.games = new List<Dictionary<string, string>>();
+        this.barGraphData = new List<int>();
+        this.barGraph = new BarGraph();
     }
     public Profile(string name){
         this.name = name;
@@ -33,14 +40,18 @@ public class Profile{
         this.lossRateBlack = 0;
         this.drawRateWhite = 0;
         this.drawRateBlack = 0;
+        this.totalGames = 110;
         this.games = new List<Dictionary<string, string>>();
+        this.barGraphData = new List<int>();
+        this.barGraph = new BarGraph();
     }
 
     public void addGame(Dictionary<string, string> game){
         games.Add(game);
     }
 
-    public void calculateStats(){
+    public void calculateStats(string variant = ""){
+        int totalGames = 0;
         int whiteWins = 0;
         int whiteLosses = 0;
         int blackWins = 0;
@@ -49,7 +60,15 @@ public class Profile{
         int blackDraws = 0;
         int whiteGames = 0;
         int blackGames = 0;
+        int wins = 0;
+        int losses = 0;
+        int draws = 0;
         foreach (Dictionary<string, string> game in games){
+            //calculate stats only for given variant, if none defined calculate for all games
+            if(variant != ""){
+                if(variant != game["variant"]) continue;
+            }
+            totalGames++;
             if(game["White"] == name){
                 if (game["Result"] == "1-0"){
                     whiteWins++;
@@ -72,12 +91,20 @@ public class Profile{
                 blackGames++;
             }
         }
+        //solves division by 0
+        if(whiteGames == 0) whiteGames = 1;
+        if(blackGames == 0) blackGames = 1;
+
         winRateWhite = Math.Round((double)whiteWins / whiteGames, 2);
         winRateBlack = Math.Round((double)blackWins / blackGames, 2);
         lossRateWhite = Math.Round((double)whiteLosses / whiteGames, 2);
         lossRateBlack = Math.Round((double)blackLosses / blackGames, 2);
         drawRateWhite = Math.Round((double)whiteDraws / whiteGames, 2);
         drawRateBlack = Math.Round((double)blackDraws / blackGames, 2);
+        wins = whiteWins + blackWins;
+        losses = whiteLosses + blackLosses;
+        draws = whiteDraws + blackDraws;
+        this.totalGames = totalGames;
     }
 
     public void addElo(int elo){
