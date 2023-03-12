@@ -49,6 +49,7 @@ public class MainWindowViewModel : ReactiveObject, IScreen
         );
         GoAtomicBoard = ReactiveCommand.CreateFromObservable(
             () => Router.Navigate.Execute(new BoardViewModel(this, Variant.Atomic))
+        );
         GoHordeBoard = ReactiveCommand.CreateFromObservable(
             () => Router.Navigate.Execute(new BoardViewModel(this, Variant.Horde))
         );
