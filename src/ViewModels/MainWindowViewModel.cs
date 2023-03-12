@@ -17,6 +17,7 @@ public class MainWindowViewModel : ReactiveObject, IScreen
     internal ReactiveCommand<Unit, IRoutableViewModel> GoTutorial { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoTemplate { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoBoard { get; }
+    internal ReactiveCommand<Unit, IRoutableViewModel> GoAtomic { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoAnalysis { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoVariant { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoProfile { get; }
@@ -41,6 +42,9 @@ public class MainWindowViewModel : ReactiveObject, IScreen
         );
         GoBoard = ReactiveCommand.CreateFromObservable(
             () => Router.Navigate.Execute(new BoardViewModel(this))
+        );
+        GoAtomic = ReactiveCommand.CreateFromObservable(
+            () => Router.Navigate.Execute(new AtomicViewModel(this))
         );
         GoTemplate = ReactiveCommand.CreateFromObservable(
             () => Router.Navigate.Execute(new TemplateViewModel(this))
