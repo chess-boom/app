@@ -99,7 +99,7 @@
                 <MenuItem Header="Variant 1" Command="{Binding GoVariant}"/>
                 <MenuItem Header="Variant 2" Command="{Binding GoTemplate}"/>
                 <MenuItem Header="Chess 960" Command="{Binding GoChess960Board}"/>
-                <MenuItem Header="Variant 4" Command="{Binding GoTemplate}"/>
+                <MenuItem Header="Horde" Command="{Binding GoHordeBoard}"/>
             </MenuItem>
             <!-- TODO Highlight Navbar when on tutorial page -->
             <MenuItem Header="Tutorials" FontSize="20" Background="{Binding HomeBackground}" CornerRadius="10" Cursor="Hand">

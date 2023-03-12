@@ -19,6 +19,7 @@ public class MainWindowViewModel : ReactiveObject, IScreen
     internal ReactiveCommand<Unit, IRoutableViewModel> GoTemplate { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoChess960Board { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoBoard { get; }
+    internal ReactiveCommand<Unit, IRoutableViewModel> GoHordeBoard { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoAnalysis { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoVariant { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoProfile { get; }
@@ -29,10 +30,10 @@ public class MainWindowViewModel : ReactiveObject, IScreen
     protected internal MainWindowViewModel()
     {
         // Manage the routing state. Use the Router.Navigate.Execute
-        // command to navigate to different view models. 
+        // command to navigate to different view models.
         //
-        // Note, that the Navigate.Execute method accepts an instance 
-        // of a view model, this allows you to pass parameters to 
+        // Note, that the Navigate.Execute method accepts an instance
+        // of a view model, this allows you to pass parameters to
         // your view models, or to reuse existing view models.
         //
         Router = new RoutingState();
@@ -48,6 +49,9 @@ public class MainWindowViewModel : ReactiveObject, IScreen
         );
         GoBoard = ReactiveCommand.CreateFromObservable(
             () => Router.Navigate.Execute(new BoardViewModel(this))
+        );
+        GoHordeBoard = ReactiveCommand.CreateFromObservable(
+            () => Router.Navigate.Execute(new BoardViewModel(this, Variant.Horde))
         );
         GoTemplate = ReactiveCommand.CreateFromObservable(
             () => Router.Navigate.Execute(new TemplateViewModel(this))

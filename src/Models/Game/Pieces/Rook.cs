@@ -63,8 +63,11 @@ public class Rook : Piece
 
     public override void MovePiece((int, int) coordinate, char? promotionPiece = null)
     {
-        base.MovePiece(coordinate, promotionPiece);
-        if (m_hasMoved) return;
+        if (m_hasMoved)
+        {
+            base.MovePiece(coordinate, promotionPiece);
+            return;
+        }
         if (m_board.m_game is null)
         {
             return;
@@ -91,6 +94,7 @@ public class Rook : Piece
         }
 
         m_hasMoved = true;
+        base.MovePiece(coordinate, promotionPiece);
     }
 
     public override string ToString()

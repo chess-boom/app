@@ -135,11 +135,11 @@ public class Pawn : Piece
             }
 
             // Handle 2-square movement (enables en passant)
-            if (coordinate == GameHelpers.AddVector(GetCoordinates(), (0, 2)))
+            if (coordinate == GameHelpers.AddVector(GetCoordinates(), (0, 2)) && GetCoordinates().Item2 == 1)
             {
                 m_board.m_enPassant = GameHelpers.AddVector(GetCoordinates(), (0, 1));
             }
-            else if (coordinate == GameHelpers.AddVector(GetCoordinates(), (0, -2)))
+            else if (coordinate == GameHelpers.AddVector(GetCoordinates(), (0, -2)) && GetCoordinates().Item2 == 6)
             {
                 m_board.m_enPassant = GameHelpers.AddVector(GetCoordinates(), (0, -1));
             }
