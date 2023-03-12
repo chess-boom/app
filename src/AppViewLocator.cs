@@ -16,7 +16,6 @@ public class AppViewLocator : IViewLocator
         VariantAnalysisViewModel context => new VariantAnalysisView { DataContext = context },
         TutorialViewModel context => new TutorialView { DataContext = context },
         BoardViewModel context => new BoardView { DataContext = context },
-        HordeViewModel context => new HordeView { DataContext = context },
         TemplateViewModel context => new TemplateView { DataContext = context },
         _ => throw new ArgumentOutOfRangeException(nameof(viewModel))
     };
