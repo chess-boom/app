@@ -6,7 +6,7 @@ using ChessBoom.Models.Game.Rulesets;
 
 namespace ChessBoom.Models.Game;
 
-enum Variant
+public enum Variant
 {
     Standard,
     Chess960,
@@ -108,7 +108,7 @@ public class Game
     /// <summary>
     /// The chosen variant for this game
     /// </summary>
-    private readonly Variant m_variant = Variant.Standard;
+    private readonly Variant m_variant;
 
     /// <summary>
     /// The chosen ruleset for this game
@@ -138,20 +138,15 @@ public class Game
     /// <summary>
     /// Default constructor
     /// </summary>
-    public Game()
+    public Game(Variant variant = Variant.Standard)
     {
-        m_board = InitializeBoard(m_variant);
-        m_ruleset = Standard.Instance;
+        m_variant = variant;
+        m_board = InitializeBoard(variant);
+        m_ruleset = Ruleset.k_rulesetUsage[variant];
         m_moveList = new List<Move>();
         m_visitedPositions = new Dictionary<string, int>();
         m_gameState = GameState.InProgress;
     }
-
-    /*public Game(Variant variant)
-    {
-        m_variant = variant;
-        Game();
-    }*/
 
     /// <summary>
     /// The board object is created and initialized
@@ -191,17 +186,7 @@ public class Game
         if (pgnNotation == Move.k_kingsideCastleNotation
             || pgnNotation == Move.k_queensideCastleNotation)
         {
-            // TODO: Implement a GetKing() function, as this will break when implementing the Chess960 variant
-            Piece? king = (m_board.m_playerToPlay == Player.White)
-                ? m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("e1"))
-                : m_board.GetPiece(GameHelpers.GetCoordinateFromSquare("e8"));
-
-            if (king is null || king.GetType() != typeof(King))
-            {
-                throw new ArgumentException("King was not found!");
-            }
-
-            MakeMove(king, pgnNotation);
+            MakeMove(m_ruleset.GetKing(m_board, m_board.m_playerToPlay), pgnNotation);
             return;
         }
 
@@ -284,6 +269,10 @@ public class Game
                 continue;
             }
             if (!candidatePiece.GetLegalMoves().Contains(square))
+            {
+                continue;
+            }
+            if (candidatePiece.GetPlayer() != m_board.m_playerToPlay)
             {
                 continue;
             }

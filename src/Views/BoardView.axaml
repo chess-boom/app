@@ -8,7 +8,7 @@
         <viewModels:BoardViewModel />
     </Design.DataContext>
     <StackPanel HorizontalAlignment="Center">
-        <Label Content="Board" FontSize="50" HorizontalAlignment="Center" />
+        <Label Content="{Binding Title}" FontSize="50" HorizontalAlignment="Center" />
         <Grid Name="ChessBoard" HorizontalAlignment="Center" PointerPressed="ChessBoard_MouseLeftButtonDown" Focusable="True"/>
     </StackPanel>
 </UserControl>
