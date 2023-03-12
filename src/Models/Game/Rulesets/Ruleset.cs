@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using ChessBoom.Models.Game.Pieces;
 
 namespace ChessBoom.Models.Game.Rulesets;
@@ -19,14 +20,14 @@ public abstract class Ruleset
     /// <summary>
     /// Map for piece types and their constructors
     /// </summary>
-    public static readonly Dictionary<Variant, Ruleset> k_rulesetUsage = new()
+    public static readonly ImmutableDictionary<Variant, Ruleset> k_rulesetUsage = new Dictionary<Variant, Ruleset>
     {
         // TODO: Update when more rulesets are added
         { Variant.Standard, Standard.Instance },
         { Variant.Chess960, Standard.Instance },
         { Variant.Atomic, Atomic.Instance },
-        { Variant.Horde, Standard.Instance }
-    };
+        { Variant.Horde, Horde.Instance }
+    }.ToImmutableDictionary();
 
     /// <summary>
     /// Handle a capture by a piece on a specific square according to the ruleset
