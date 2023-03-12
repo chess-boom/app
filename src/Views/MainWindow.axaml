@@ -97,7 +97,7 @@
             </MenuItem>
             <MenuItem Header="Variant Analysis" FontSize="20" CornerRadius="10" Cursor="Hand">
                 <MenuItem Header="Variant 1" Command="{Binding GoVariant}"/>
-                <MenuItem Header="Atomic" Command="{Binding GoAtomic}"/>
+                <MenuItem Header="Atomic" Command="{Binding GoAtomicBoard}"/>
                 <MenuItem Header="Variant 3" Command="{Binding GoTemplate}"/>
                 <MenuItem Header="Variant 4" Command="{Binding GoTemplate}"/>
             </MenuItem>
