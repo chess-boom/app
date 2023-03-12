@@ -16,7 +16,7 @@ public class MainWindowViewModel : ReactiveObject, IScreen
     internal ReactiveCommand<Unit, IRoutableViewModel> GoHome { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoTutorial { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoTemplate { get; }
-    internal ReactiveCommand<Unit, IRoutableViewModel> GoChess960 { get; }
+    internal ReactiveCommand<Unit, IRoutableViewModel> GoVariantBoard { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoBoard { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoAnalysis { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoVariant { get; }
@@ -42,8 +42,8 @@ public class MainWindowViewModel : ReactiveObject, IScreen
         GoTutorial = ReactiveCommand.CreateFromObservable(
             () => Router.Navigate.Execute(new TutorialViewModel(this))
         );
-        GoChess960 = ReactiveCommand.CreateFromObservable(
-            () => Router.Navigate.Execute(new Chess960ViewModel(this))
+        GoVariantBoard = ReactiveCommand.CreateFromObservable(
+            () => Router.Navigate.Execute(new VariantBoardViewModel(this))
         );
         GoBoard = ReactiveCommand.CreateFromObservable(
             () => Router.Navigate.Execute(new BoardViewModel(this))

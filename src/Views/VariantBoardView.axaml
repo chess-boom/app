@@ -1,14 +1,14 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:viewModels="clr-namespace:ChessBoom.ViewModels"
-             x:Class="ChessBoom.Views.Chess960View"
-             x:DataType="viewModels:Chess960ViewModel">
+             x:Class="ChessBoom.Views.VariantBoardView"
+             x:DataType="viewModels:VariantBoardViewModel">
     <Design.DataContext>
         <!-- ReSharper disable once Xaml.ConstructorWarning -->
-        <viewModels:Chess960ViewModel />
+        <viewModels:VariantBoardViewModel />
     </Design.DataContext>
     <StackPanel HorizontalAlignment="Center">
         <Label Content="Chess960 Board" FontSize="50" HorizontalAlignment="Center" />
-        <Grid Name="ChessBoard" HorizontalAlignment="Center" PointerPressed="ChessBoard_MouseLeftButtonDown" Focusable="True"/>
+        <Grid Name="ChessBoard" HorizontalAlignment="Center" Focusable="True"/>
     </StackPanel>
 </UserControl>

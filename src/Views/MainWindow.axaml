@@ -98,7 +98,7 @@
             <MenuItem Header="Variant Analysis" FontSize="20" CornerRadius="10" Cursor="Hand">
                 <MenuItem Header="Variant 1" Command="{Binding GoVariant}"/>
                 <MenuItem Header="Variant 2" Command="{Binding GoTemplate}"/>
-                <MenuItem Header="Chess 960" Command="{Binding GoChess960}"/>
+                <MenuItem Header="Chess 960" Command="{Binding GoVariantBoard}"/>
                 <MenuItem Header="Variant 4" Command="{Binding GoTemplate}"/>
             </MenuItem>
             <!-- TODO Highlight Navbar when on tutorial page -->
