@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using Avalonia.Media;
 using Avalonia.Interactivity;
 using Avalonia.Controls;
+using ChessBoom.Models.Game;
 
 namespace ChessBoom.ViewModels;
 
@@ -28,10 +29,10 @@ public class MainWindowViewModel : ReactiveObject, IScreen
     protected internal MainWindowViewModel()
     {
         // Manage the routing state. Use the Router.Navigate.Execute
-        // command to navigate to different view models. 
+        // command to navigate to different view models.
         //
-        // Note, that the Navigate.Execute method accepts an instance 
-        // of a view model, this allows you to pass parameters to 
+        // Note, that the Navigate.Execute method accepts an instance
+        // of a view model, this allows you to pass parameters to
         // your view models, or to reuse existing view models.
         //
         Router = new RoutingState();
