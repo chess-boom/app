@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using Avalonia.Media;
 using Avalonia.Interactivity;
 using Avalonia.Controls;
+using ChessBoom.Models.Game;
 
 namespace ChessBoom.ViewModels;
 
@@ -16,7 +17,7 @@ public class MainWindowViewModel : ReactiveObject, IScreen
     internal ReactiveCommand<Unit, IRoutableViewModel> GoHome { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoTutorial { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoTemplate { get; }
-    internal ReactiveCommand<Unit, IRoutableViewModel> GoVariantBoard { get; }
+    internal ReactiveCommand<Unit, IRoutableViewModel> GoChess960Board { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoBoard { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoAnalysis { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoVariant { get; }
@@ -42,8 +43,8 @@ public class MainWindowViewModel : ReactiveObject, IScreen
         GoTutorial = ReactiveCommand.CreateFromObservable(
             () => Router.Navigate.Execute(new TutorialViewModel(this))
         );
-        GoVariantBoard = ReactiveCommand.CreateFromObservable(
-            () => Router.Navigate.Execute(new VariantBoardViewModel(this))
+        GoChess960Board = ReactiveCommand.CreateFromObservable(
+            () => Router.Navigate.Execute(new BoardViewModel(this, Variant.Chess960))
         );
         GoBoard = ReactiveCommand.CreateFromObservable(
             () => Router.Navigate.Execute(new BoardViewModel(this))
