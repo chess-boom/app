@@ -138,10 +138,10 @@ public class Game
     /// <summary>
     /// Default constructor
     /// </summary>
-    public Game(Variant variant = Variant.Standard)
+    public Game(Variant variant = Variant.Standard, string? fen = null)
     {
         m_variant = variant;
-        m_board = InitializeBoard(variant);
+        m_board = InitializeBoard(variant, fen);
         m_ruleset = Ruleset.k_rulesetUsage[variant];
         m_moveList = new List<Move>();
         m_visitedPositions = new Dictionary<string, int>();
@@ -152,15 +152,18 @@ public class Game
     /// The board object is created and initialized
     /// </summary>
     /// <param name="variant">The chosen variant for the board</param>
-    private Board InitializeBoard(Variant variant)
+    private Board InitializeBoard(Variant variant, string? fen = null)
     {
-        var fen = "";
+        if (fen is not null)
+        {
+            return CreateBoardFromFEN(this, (string) fen);
+        }
 
         // Note: Standard and Atomic use the default board. Chess960 and Horde use different initial configurations
         switch (variant)
         {
             case Variant.Chess960:
-                // TODO: CB-24
+                fen = Chess960.GenerateRandomLegalFen();
                 break;
             case Variant.Horde:
                 fen = File.ReadAllText("Resources/horde.fen");
