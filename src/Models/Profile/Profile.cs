@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using Avalonia;
 
 namespace ChessBoom.Models.Profile;
 
@@ -11,8 +11,8 @@ public class Profile{
     public Queue<string[]> eloQueue { get; set; }
     public int graphMaxElo { get; set; }
     public int graphMinElo { get; set; }
-    //public PointCollection Points {get; set;}
-    public System.Windows.Point graphStartTrend { get; set; }
+    public IList<Point> points {get; set;}
+    public Point graphStartTrend { get; set; }
     public Point graphEndTrend { get; set; }
     double _winRateWhite;
     public int winRateWhite {
@@ -59,7 +59,6 @@ public class Profile{
         this.name = "Default";
         this.elo = new string[this.lastEloGames][];
         this.eloQueue = new Queue<string[]>();
-        //this.Points = new PointCollection();
         this.winRateWhite = 0;
         this.winRateBlack = 0;
         this.lossRateWhite = 0;
@@ -71,12 +70,12 @@ public class Profile{
         this.barGraphData = new int[3];
         this.whiteBars = new int[3];
         this.blackBars = new int[3];
+        this.points = new List<Point>();
     }
     public Profile(string name){
         this.name = name;
         this.elo = new string[this.lastEloGames][];
         this.eloQueue = new Queue<string[]>();
-        //this.Points = new PointCollection();
         this.winRateWhite = 0;
         this.winRateBlack = 0;
         this.lossRateWhite = 0;
@@ -88,6 +87,7 @@ public class Profile{
         this.barGraphData = new int[3];
         this.whiteBars = new int[3];
         this.blackBars = new int[3];
+        this.points = new List<Point>();
     }
 
     public void addGame(Dictionary<string, string> game){
@@ -179,8 +179,6 @@ public class Profile{
         // Elo Graph
         transformQueueToArray();
         calculateTrendLine();
-        Console.WriteLine(this.graphStartTrend);
-        Console.WriteLine(this.graphEndTrend);
     }
 
     public void calculateTrendLine(){
@@ -194,8 +192,8 @@ public class Profile{
         }
 
         Trendline treadline = new Trendline(yAxisValues, xAxisValues);
-        this.graphStartTrend = new Point((50, convertEloToPixels(treadline.Start)));
-        this.graphEndTrend = "500," + convertEloToPixels(treadline.End).ToString();
+        this.graphStartTrend = new Point(50, convertEloToPixels(treadline.Start));
+        this.graphEndTrend = new Point(500, convertEloToPixels(treadline.End));
     }
 
     public void addElo(string elo, string date){
@@ -235,6 +233,7 @@ public class Profile{
         for(int i = 0; i<10; i++){
             pixels = convertEloToPixels(int.Parse(elo[i][0]));
             this.elo[i][2] = pixels.ToString();
+            points.Add(new Point(i*50+50, pixels+5));
         }
     }
 

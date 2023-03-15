@@ -72,11 +72,9 @@
                 <Canvas Grid.Row="1" Margin="10">
                     <Grid Canvas.Left="50" Canvas.Bottom="-200">
                         <Rectangle Width="100" Height="{Binding Profile.barGraphData[0]}" Fill="Green" c:ToolTip.Tip="{Binding Profile.wins, StringFormat='Total Wins: {0}'}"/>
-                        <!-- <TextBlock Text="{Binding Profile.wins}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="30" /> -->
                     </Grid>
                     <Grid Canvas.Left="200" Canvas.Bottom="-200">
                         <Rectangle Width="100" Height="{Binding Profile.barGraphData[1]}" Fill="Red" c:ToolTip.Tip="{Binding Profile.losses, StringFormat='Total Losses: {0}'}"/>
-                        <!-- <TextBlock Text="10" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="30" /> -->
                     </Grid>
                     <Grid Canvas.Left="350" Canvas.Bottom="-200">
                         <Rectangle Width="100" Height="{Binding Profile.barGraphData[2]}" Fill="Gray" c:ToolTip.Tip="{Binding Profile.draws, StringFormat='Total Draws: {0}'}"/> 
@@ -106,9 +104,8 @@
                     <Rectangle Width="1" Height="400" Fill="White" Canvas.Left="50" Canvas.Top="30"/>
                     <TextBlock Text="{Binding Profile.graphMinElo}" Canvas.Top="430"/>
                     <TextBlock Text="{Binding Profile.graphMaxElo}" Canvas.Top="30"/>
-                    <!-- <Polyline Points="{Binding
-                    StringFormat='50,{0} 100,{1} 150,{2} 200,{3} 250,{4} 300,{5} 350,{6} 400,{7} 450,{8} 500,{9}'"
-                    Stroke="#6AC1FF" StrokeThickness="2"/> -->
+                    <Polyline Points="{Binding Profile.points}"
+                    Stroke="#6AC1FF" StrokeThickness="2"/>
 
                     <!-- Point Logic -->
                     <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="45" Canvas.Top="{Binding Profile.elo[0][2]}">
