@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Avalonia;
 
 namespace ChessBoom.Models.Profile;
@@ -15,34 +16,34 @@ public class Profile{
     public Point graphStartTrend { get; set; }
     public Point graphEndTrend { get; set; }
     double _winRateWhite;
-    public int winRateWhite {
-        get{return (int)Math.Ceiling(_winRateWhite*100);} 
-        set{_winRateWhite = value;} 
+    public string winRateWhite {
+        get{return (_winRateWhite>minSize)? ((int)Math.Ceiling(_winRateWhite*100)).ToString() + "%": "";} 
+        set{_winRateWhite = double.Parse(value);} 
     }
     double _winRateBlack;
-    public int winRateBlack { 
-        get{return (int)Math.Ceiling(_winRateBlack*100);} 
-        set{_winRateBlack = value;} 
+    public string winRateBlack { 
+        get{return (_winRateBlack>minSize)? ((int)Math.Ceiling(_winRateBlack*100)).ToString() + "%": "";} 
+        set{_winRateBlack = double.Parse(value);} 
     }
     double _lossRateWhite;
-    public int lossRateWhite { 
-        get{return (int)Math.Ceiling(_lossRateWhite*100);} 
-        set{_lossRateWhite = value;} 
+    public string lossRateWhite { 
+        get{return (_lossRateWhite>minSize)? ((int)Math.Ceiling(_lossRateWhite*100)).ToString() + "%": "";} 
+        set{_lossRateWhite = double.Parse(value);} 
     }
     double _lossRateBlack;
-    public int lossRateBlack { 
-        get{return (int)Math.Ceiling(_lossRateBlack*100);} 
-        set{_lossRateBlack = value;} 
+    public string lossRateBlack { 
+        get{return (_lossRateBlack>minSize)? ((int)Math.Ceiling(_lossRateBlack*100)).ToString() + "%": "";} 
+        set{_lossRateBlack = double.Parse(value);} 
     }
     double _drawRateWhite;
-    public int drawRateWhite { 
-        get{return (int)Math.Ceiling(_drawRateWhite*100);} 
-        set{_drawRateWhite = value;} 
+    public string drawRateWhite { 
+        get{return (_drawRateWhite>minSize)? ((int)Math.Ceiling(_drawRateWhite*100)).ToString() + "%": "";} 
+        set{_drawRateWhite = double.Parse(value);} 
     }
     double _drawRateBlack;
-    public int drawRateBlack { 
-        get{return (int)Math.Ceiling(_drawRateBlack*100);} 
-        set{_drawRateBlack = value;} 
+    public string drawRateBlack { 
+        get{return (_drawRateBlack>minSize)? ((int)Math.Ceiling(_drawRateBlack*100)).ToString() + "%": "";} 
+        set{_drawRateBlack = double.Parse(value);} 
     }
     public int[] barGraphData { get; set; }
     public List<Dictionary<string, string>> games { get; set; }
@@ -52,42 +53,51 @@ public class Profile{
     public int draws { get; set; }
     public int[] whiteBars { get; set; }
     public int[] blackBars { get; set; }
-    public readonly int barWidth = 600;
+    Dictionary<string, int> openings;
+    public string mostUsedOpening
+    { 
+        get{return openings.OrderByDescending(x => x.Value).First().Key;} 
+        set{mostUsedOpening = value;} 
+    }
+    public readonly int barWidth = 500;
     public readonly int barHeight = 200;
     public readonly int eloGraphHeight = 400;
+    public readonly double minSize = 0.15;
     public Profile(){
         this.name = "Default";
         this.elo = new string[this.lastEloGames][];
         this.eloQueue = new Queue<string[]>();
-        this.winRateWhite = 0;
-        this.winRateBlack = 0;
-        this.lossRateWhite = 0;
-        this.lossRateBlack = 0;
-        this.drawRateWhite = 0;
-        this.drawRateBlack = 0;
+        this.winRateWhite = "0";
+        this.winRateBlack = "0";
+        this.lossRateWhite = "0";
+        this.lossRateBlack = "0";
+        this.drawRateWhite = "0";
+        this.drawRateBlack = "0";
         this.totalGames = 0;
         this.games = new List<Dictionary<string, string>>();
         this.barGraphData = new int[3];
         this.whiteBars = new int[3];
         this.blackBars = new int[3];
         this.points = new List<Point>();
+        this.openings = new Dictionary<string, int>();
     }
     public Profile(string name){
         this.name = name;
         this.elo = new string[this.lastEloGames][];
         this.eloQueue = new Queue<string[]>();
-        this.winRateWhite = 0;
-        this.winRateBlack = 0;
-        this.lossRateWhite = 0;
-        this.lossRateBlack = 0;
-        this.drawRateWhite = 0;
-        this.drawRateBlack = 0;
+        this.winRateWhite = "0";
+        this.winRateBlack = "0";
+        this.lossRateWhite = "0";
+        this.lossRateBlack = "0";
+        this.drawRateWhite = "0";
+        this.drawRateBlack = "0";
         this.totalGames = 0;
         this.games = new List<Dictionary<string, string>>();
         this.barGraphData = new int[3];
         this.whiteBars = new int[3];
         this.blackBars = new int[3];
         this.points = new List<Point>();
+        this.openings = new Dictionary<string, int>();
     }
 
     public void addGame(Dictionary<string, string> game){
@@ -111,6 +121,13 @@ public class Profile{
             //calculate stats only for given variant, if none defined calculate for all games
             if(variant != ""){
                 if(variant != game["variant"]) continue;
+            }
+            string opening = game["Opening"];
+            if(openings.ContainsKey(opening)){
+                openings[opening]++;
+            }
+            else{
+                openings.Add(opening, 0);
             }
             totalGames++;
             if(game["White"] == name){
@@ -248,15 +265,15 @@ public class Profile{
 
     public string getEloHistory(){
         string history = "";
-        // foreach (string e in elo){
-        //     history += "[" + e + "] ";
-        // }
+        for(int i=0; i<lastEloGames; i++){
+            history += "[" + elo[i][0] + "] ";
+        }
         return history;
     }
 
     public void displayProfileStats(){
         string stats = "Name: " + name + "\n";
-        //stats += "Elo: " + getEloHistory() + "\n";
+        stats += "Elo: " + getEloHistory() + "\n";
         stats += "Win Rate White: " + winRateWhite + "\n";
         stats += "Win Rate Black: " + winRateBlack + "\n";
         stats += "Loss Rate White: " + lossRateWhite + "\n";

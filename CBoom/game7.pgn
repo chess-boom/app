@@ -13,6 +13,7 @@
 [Variant "Standard"]
 [TimeControl "600+0"]
 [ECO "B06"]
+[Opening "Bishop's Opening"]
 [Termination "Normal"]
 
 1. e4 g6 2. Nf3 Bg7 3. d4 d6 4. Bc4 Nd7 5. Nc3 b6 6. O-O Bb7 7. Re1 Ngf6 8. Bg5 O-O 9. Qd2 Re8 10. Bh6 e5 11. dxe5 Nxe5 12. Nxe5 dxe5 13. Qxd8 Raxd8 14. Bxg7 Kxg7 15. Nb5 Nxe4 16. Re3 Nd2 17. Be2 Rd7 18. Rd1 c6 19. Nc3 f6 20. Ne4 Red8 21. Nxd2 Rxd2 22. Rd3 Rxd1+ 23. Rxd1 Rxd1+ 24. Bxd1 c5 25. c3 Kf7 26. Kf1 Ke6 27. Ke2 Bxg2 28. f3 Bh3 29. Ke3 Bf5 30. Be2 Kd5 31. b3 Bb1 32. c4+ Kc6 33. a3 Ba2 34. b4 cxb4 35. axb4 a5 36. b5+ Kc5 37. f4 exf4+ 38. Kxf4 Bxc4 39. Bxc4 Kxc4 40. Ke4 Kxb5 41. Kd5 Kb4 42. Ke6 f5 43. Kf6 a4 44. Kg7 a3 45. Kxh7 a2 46. Kxg6 a1=Q 47. h4 f4 48. h5 f3 49. h6 f2 50. h7 Qg1+ 51. Kf7 f1=Q+ 52. Ke6 Qg6+ 53. Ke5 Qxh7 0-1

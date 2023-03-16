@@ -13,6 +13,7 @@
 [Variant "Standard"]
 [TimeControl "180+2"]
 [ECO "D06"]
+[Opening "Philidor Defense"]
 [Termination "Normal"]
 
 1. d4 d5 2. c4 c5 3. cxd5 Qxd5 4. e3 cxd4 5. exd4 Nc6 6. Nc3 Qxd4 7. Qxd4 Nxd4 8. Bd3 g6 9. Nge2 Nxe2 10. Bxe2 Bg7 11. O-O Nf6 12. Rd1 O-O 13. Bg5 e6 14. Rd3 b6 15. Rad1 Ba6 16. R3d2 Bxe2 17. Nxe2 Ne4 18. Be7 Rfe8 19. Rd7 Nc5 20. Bxc5 bxc5 21. b3 Rec8 22. Rb7 c4 23. bxc4 Rxc4 24. h3 Rc2 25. Ng3 Rxa2 26. Rdd7 Be5 27. Ne4 a5 28. Rxf7 h5 29. Nf6+ Bxf6 30. Rxf6 a4 31. Rxg6+ Kf8 32. Rf6+ Ke8 33. Rxe6+ Kd8 34. Rh6 Re2 35. Rh8+ Re8 36. Rxh5 a3 37. Rb1 a2 38. Ra1 Re2 39. Rd5+ Kc7 40. Kf1 Rb2 41. Ra5 Rxa5 42. Ke1 Rb1+ 43. Rxb1 axb1=Q+ 44. Ke2 Qb2+ 45. Kf3 Ra3+ 46. Kg4 Qd4+ 47. f4 Qd1+ 48. Kg5 Ra5+ 49. f5 Qd2+ 50. Kf6 Qxg2 51. h4 Qh3 52. Kg5 Qxf5+ 53. Kh6 Qh5+ 54. Kg7 0-1

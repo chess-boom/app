@@ -9,7 +9,7 @@
         <viewModels:TemplateViewModel />
     </Design.DataContext>
     <StackPanel>
-        <Label Content="Your Profile" FontSize="50" HorizontalAlignment="Center" />
+        <Label Content="Your Profile" FontSize="50" HorizontalAlignment="Center" Margin="0,25,0,25"/>
         <Grid HorizontalAlignment="Center" Width="1500">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -29,20 +29,27 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <!-- Black/White Win Ratio -->
-            <StackPanel Margin="0,75,0,0">
-                <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <StackPanel>
+                <TextBlock HorizontalAlignment="Center"
+                FontWeight="Bold"
+                FontSize="20"
+                Text="Win/Loss Ratio"/>
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,50,0,0">
                     <Label Content="White" FontSize="30"/>
                     <Rectangle Width="1" Height="50" Fill="White" Margin="25,0,0,0"/>
                     <StackPanel Grid.Column="0" VerticalAlignment="Center" Orientation="Horizontal" Margin="50,0,0,0">
                         <Grid>
                             <Rectangle Width="{Binding Profile.whiteBars[0]}" Height="40" Fill="Green"/>
-                            <TextBlock Text="{Binding Profile.winRateWhite, StringFormat='\{0\}%'}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
+                            <TextBlock Text="{Binding Profile.winRateWhite}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
                         </Grid>
                         <Grid>
                             <Rectangle Width="{Binding Profile.whiteBars[1]}" Height="40" Fill="Red"/>
-                            <TextBlock Text="{Binding Profile.lossRateWhite, StringFormat='\{0\}%'}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
+                            <TextBlock Text="{Binding Profile.lossRateWhite}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
                         </Grid>
-                        <Rectangle Width="{Binding Profile.whiteBars[2]}" Height="40" Fill="Gray"/>
+                        <Grid>
+                            <Rectangle Width="{Binding Profile.whiteBars[2]}" Height="40" Fill="Gray"/>
+                            <TextBlock Text="{Binding Profile.drawRateWhite}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
+                        </Grid>
                     </StackPanel>
                 </StackPanel>
                 <Rectangle Grid.Row="1" Width="800" Height="1" Fill="White"/>
@@ -52,22 +59,27 @@
                     <StackPanel Grid.Column="0" VerticalAlignment="Center" Orientation="Horizontal" Margin="50,0,0,0">
                         <Grid>
                             <Rectangle Width="{Binding Profile.blackBars[0]}" Height="40" Fill="Green"/>
-                            <TextBlock Text="{Binding Profile.winRateBlack, StringFormat='\{0\}%'}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
+                            <TextBlock Text="{Binding Profile.winRateBlack}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
                         </Grid>
                         <Grid>
                             <Rectangle Width="{Binding Profile.blackBars[1]}" Height="40" Fill="Red"/>
-                            <TextBlock Text="{Binding Profile.lossRateBlack, StringFormat='\{0\}%'}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
+                            <TextBlock Text="{Binding Profile.lossRateBlack}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
                         </Grid>
-                        <Rectangle Width="{Binding Profile.blackBars[2]}" Height="40" Fill="Gray"/>
+                        <Grid>
+                            <Rectangle Width="{Binding Profile.blackBars[2]}" Height="40" Fill="Gray"/>
+                            <TextBlock Text="{Binding Profile.drawRateBlack}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
+                        </Grid>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
 
             <!-- Bar Graph -->
-            <StackPanel Grid.Column="2">
-                <TextBlock HorizontalAlignment="Center"
-                FontWeight="Bold"
+            <StackPanel Grid.Column="2" Margin="100,0,0,0">
+                <TextBlock 
+                FontWeight="Bold"                
                 FontSize="20"
+                Margin="175,0,0,25"
+                HorizontalAlignment="Center"
                 Text="{Binding Profile.totalGames, StringFormat='Total Games: {0}'}"/>
                 <Canvas Grid.Row="1" Margin="10">
                     <Grid Canvas.Left="50" Canvas.Bottom="-200">
@@ -90,7 +102,7 @@
             </StackPanel>
 
             <!-- Elo Graph -->
-            <StackPanel Grid.Row="3" Margin="0,100,0,0">
+            <StackPanel Grid.Row="3" Margin="55,100,0,0">
                 <Canvas>
                     <!-- Graph Horizontal Lines -->
                     <Rectangle Width="500" Height="1" Fill="Gray" Canvas.Left="50" Canvas.Top="80"/>
@@ -199,7 +211,7 @@
                         </c:ToolTip.Tip>
                     </Ellipse>
                     
-                    <TextBlock Canvas.Left="315" Canvas.Top="0" Text="Elo History" FontWeight="Bold" FontSize="20"/>
+                    <TextBlock Canvas.Left="275" Canvas.Top="-25" Text="Elo History" FontWeight="Bold" FontSize="20"/>
                     <!-- TODO:TrendLine logic and math -->
                     <Path Stroke="Orange" StrokeThickness="2">
                         <Path.Data>
@@ -214,10 +226,17 @@
             </StackPanel>
 
             <!-- Openings -->
+                <TextBlock HorizontalAlignment="Center"
+                FontWeight="Bold"
+                Grid.Row="3" 
+                Grid.Column="2"
+                Margin="200,175,0,0"
+                FontSize="20"
+                Text="Most Used Opening"/>
                 <Button
                     Grid.Row="3" 
                     Grid.Column="2"
-                    Margin="0,150,0,0">
+                    Margin="200,230,0,0">
                     <Button.Background>
                         <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
                             <GradientStop Color="#454545" Offset="0.0" />
@@ -228,13 +247,13 @@
                         </LinearGradientBrush>
                     </Button.Background>
                     <StackPanel>
-                        <Label Content="Most Used Opening:&#013;Dutch Defense" FontSize="20" HorizontalAlignment="Center" />
+                        <Label Content="{Binding Profile.mostUsedOpening}" FontSize="20" HorizontalAlignment="Center" />
                         <StackPanel Orientation="Horizontal">
                             <Image Source="/Assets/Images/Openings.png" Width="250" Height="250"/>
                         </StackPanel>
                     </StackPanel>              
                 </Button>
-                <Button
+                <!-- <Button
                     Grid.Row="3"
                     Grid.Column="3"
                     Margin="0,150,0,0">
@@ -253,7 +272,7 @@
                             <Image Source="/Assets/Images/Openings.png" Width="250" Height="250"/>
                         </StackPanel>
                     </StackPanel>              
-                </Button>
+                </Button> -->
         </Grid>
     </StackPanel>
 </UserControl>
