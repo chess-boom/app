@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using ChessBoom.Models.Game.Pieces;
 using ChessBoom.Models.Game.Rulesets;
 
@@ -91,13 +92,18 @@ struct Move
 /// <summary>
 /// The GameplayErrorException class is used for any case in which gameplay rules are broken
 /// </summary>
+[System.SerializableAttribute()] // Used to conform to the ISerializable interface.
 public class GameplayErrorException : Exception
 {
+
     public GameplayErrorException() { }
 
     public GameplayErrorException(string message) : base(message) { }
 
     public GameplayErrorException(string message, Exception inner) : base(message, inner) { }
+    // This constructor is needed for serialization. Used to conform to the ISerializable interface.
+    protected GameplayErrorException(System.Runtime.Serialization.SerializationInfo info,
+        System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
 }
 
 /// <summary>
@@ -105,10 +111,6 @@ public class GameplayErrorException : Exception
 /// </summary>
 public class Game
 {
-    /// <summary>
-    /// The chosen variant for this game
-    /// </summary>
-    private readonly Variant m_variant;
 
     /// <summary>
     /// The chosen ruleset for this game
@@ -140,7 +142,6 @@ public class Game
     /// </summary>
     public Game(Variant variant = Variant.Standard)
     {
-        m_variant = variant;
         m_board = InitializeBoard(variant);
         m_ruleset = Ruleset.k_rulesetUsage[variant];
         m_moveList = new List<Move>();
@@ -222,7 +223,7 @@ public class Game
 
         // Consider reimplementing like Board's k_pieceConstructor
         List<(int, int)> possibleOrigins;
-        switch ((char)pgnNotation[0])
+        switch (pgnNotation[0])
         {
             case 'Q':
                 dummyPiece = new Queen(dummyBoard, m_board.m_playerToPlay, squareCoordinates);
@@ -311,18 +312,7 @@ public class Game
             throw new ArgumentException($"Piece on square {startingSquare} not found!");
         }
 
-        try
-        {
-            MakeMove(piece, destinationSquare);
-        }
-        catch (ArgumentException)
-        {
-            throw;
-        }
-        catch (GameplayErrorException)
-        {
-            throw;
-        }
+        MakeMove(piece, destinationSquare);
     }
 
     /// <summary>
@@ -532,7 +522,7 @@ public class Game
     /// <returns>The board state of the pieces as the contents of a .FEN file</returns>
     private static string GetPiecesFENFromBoard(Board board)
     {
-        var fen = "";
+        StringBuilder fen = new StringBuilder();
 
         for (var row = GameHelpers.k_boardHeight - 1; row >= 0; row--)
         {
@@ -549,27 +539,26 @@ public class Game
                     // Append the number of empty squares and reset the count
                     if (emptySquareCount != 0)
                     {
-                        fen += emptySquareCount.ToString();
+                        fen.Append(emptySquareCount.ToString());
                         emptySquareCount = 0;
                     }
 
-                    fen += piece.ToString();
+                    fen.Append(piece.ToString());
                 }
             }
 
             if (emptySquareCount != 0)
             {
-                fen += emptySquareCount.ToString();
-                emptySquareCount = 0;
+                fen.Append(emptySquareCount.ToString());
             }
 
             if (row != 0)
             {
-                fen += "/";
+                fen.Append("/");
             }
         }
 
-        return fen;
+        return fen.ToString();
     }
 
     /// <summary>
