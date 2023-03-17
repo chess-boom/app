@@ -184,21 +184,16 @@ public class Board
     /// <exception cref="ArgumentException">Thrown if castling or moving the specific piece is impossible</exception>
     public void MovePiece(Piece piece, string square)
     {
-        try
+
+        if (square == Move.k_kingsideCastleNotation || square == Move.k_queensideCastleNotation)
         {
-            if (square == Move.k_kingsideCastleNotation || square == Move.k_queensideCastleNotation)
-            {
-                GetRuleset().Castle(this, piece.GetPlayer(), (square == Move.k_kingsideCastleNotation) ? Castling.Kingside : Castling.Queenside);
-            }
-            else
-            {
-                piece.MovePiece(GameHelpers.GetCoordinateFromSquare(square));
-            }
+            GetRuleset().Castle(this, piece.GetPlayer(), (square == Move.k_kingsideCastleNotation) ? Castling.Kingside : Castling.Queenside);
         }
-        catch (GameplayErrorException)
+        else
         {
-            throw;
+            piece.MovePiece(GameHelpers.GetCoordinateFromSquare(square));
         }
+
     }
 
     /// <summary>
@@ -387,7 +382,7 @@ public class Board
 
     public override string ToString()
     {
-        var output = "";
+        StringBuilder output = new StringBuilder();;
 
         for (var y = GameHelpers.k_boardHeight - 1; y >= 0; y--)
         {
@@ -396,17 +391,17 @@ public class Board
                 var piece = GetPiece((x, y));
                 if (piece is null)
                 {
-                    output += ".";
+                    output.Append(".");
                 }
                 else
                 {
-                    output += piece.ToString();
+                    output.Append(piece.ToString());
                 }
             }
 
-            output += "\n";
+            output.Append("\n");
         }
 
-        return output;
+        return output.ToString();
     }
 }
