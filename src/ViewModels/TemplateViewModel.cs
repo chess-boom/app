@@ -15,17 +15,27 @@ namespace ChessBoom.ViewModels;
 [ExcludeFromCodeCoverage]
 public class TemplateViewModel : BaseViewModel
 {
-    public Profile Profile { get; set; }
-    public string Hi { get; set; }
+    private Profile _profile;
+
+    public Profile Profile
+    {
+        get => _profile;
+        set => this.RaiseAndSetIfChanged(ref _profile, value);
+    }
+
     public ReactiveCommand<Unit, Unit> ParseAtomicGames { get; set; }
+
     public TemplateViewModel(IScreen hostScreen) : base(hostScreen)
     {
-        string username = "MatteoGisondi";
-        Hi = "hello";
-        Profile = new Profile(username);
+        var username = "MatteoGisondi";
+
+        _profile = new Profile(username);
         ParseGames();
         ParseAtomicGames = ReactiveCommand.Create(ParseAtomicGamesCommand);
+        this.WhenAnyValue(x => x.Profile)
+            .Subscribe(_ => this.RaisePropertyChanged(nameof(Profile)));
     }
+
     private void ParseGames()
     {
         DirectoryInfo cboom = new DirectoryInfo("../CBoom");
@@ -46,13 +56,10 @@ public class TemplateViewModel : BaseViewModel
     private void ParseAtomicGamesCommand()
     {
         Profile.calculateStats("Atomic");
-        Hi = "hello1";
     }
 
     private void ParseAllGames()
     {
         Profile.calculateStats();
-        Hi = "hello";
     }
-
 }
