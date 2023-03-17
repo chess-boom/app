@@ -7,8 +7,7 @@ namespace ChessBoom.Models.Profile;
 
 public class Profile{
     public string name { get; set; }
-    public string[][] elo { get; set; } //elo, difference, pixels, date
-    public readonly int lastEloGames = 10;
+    public string[][] elo { get; set; } //elo, difference, pixels, date    
     public Queue<string[]> eloQueue { get; set; }
     public int graphMaxElo { get; set; }
     public int graphMinElo { get; set; }
@@ -63,6 +62,8 @@ public class Profile{
     public readonly int barHeight = 200;
     public readonly int eloGraphHeight = 400;
     public readonly double minSize = 0.15;
+    public readonly int lastEloGames = 10;
+    public int maxGames { get { return Math.Min(lastEloGames, totalGames); } }
     public Profile(){
         this.name = "Default";
         this.elo = new string[this.lastEloGames][];
@@ -120,7 +121,7 @@ public class Profile{
         foreach (Dictionary<string, string> game in games){
             //calculate stats only for given variant, if none defined calculate for all games
             if(variant != ""){
-                if(variant != game["variant"]) continue;
+                if(variant != game["Variant"]) continue;
             }
             string opening = game["Opening"];
             if(openings.ContainsKey(opening)){
@@ -152,13 +153,13 @@ public class Profile{
                 blackGames++;
             }
         }
+        //Total Games
+        this.totalGames = totalGames;
+
         // solves division by 0
-        if(whiteGames == 0) whiteGames = 1;
+        if (whiteGames == 0) whiteGames = 1;
         if(blackGames == 0) blackGames = 1;
         if(totalGames == 0) totalGames = 1;
-
-        // Total Games
-        this.totalGames = totalGames;
 
         // Results %
         _winRateWhite = Math.Round((double)whiteWins / whiteGames, 2);
@@ -231,12 +232,12 @@ public class Profile{
         int min = int.MaxValue;
         int pixels = 0;
 
-        for(int i = 9; i>=0; i--){
+        for(int i = this.maxGames-1; i>=0; i--){
             info = eloQueue.Dequeue();
             currentElo = int.Parse(info[0]);
             if(currentElo > max) max = currentElo;
             if(currentElo < min) min = currentElo;            
-            difference = (i==9) ? 0 : (currentElo - lastElo);
+            difference = (i==(this.maxGames - 1)) ? 0 : (currentElo - lastElo);
             diff = (difference > 0) ? "+" + difference.ToString() : difference.ToString();            
             lastElo = currentElo;
             string[] eloInfo = {info[0], diff, "", info[1]};
@@ -247,7 +248,7 @@ public class Profile{
         if(this.graphMaxElo < 0) this.graphMaxElo = 0;
         if(this.graphMinElo < 0) this.graphMinElo = 0;
 
-        for(int i = 0; i<10; i++){
+        for(int i = 0; i<this.maxGames; i++){
             pixels = convertEloToPixels(int.Parse(elo[i][0]));
             this.elo[i][2] = pixels.ToString();
             points.Add(new Point(i*50+50, pixels+5));
@@ -265,7 +266,7 @@ public class Profile{
 
     public string getEloHistory(){
         string history = "";
-        for(int i=0; i<lastEloGames; i++){
+        for(int i=0; i<this.maxGames; i++){
             history += "[" + elo[i][0] + "] ";
         }
         return history;

@@ -10,7 +10,7 @@
 [BlackElo "1518"]
 [WhiteRatingDiff "+6"]
 [BlackRatingDiff "-8"]
-[Variant "Standard"]
+[Variant "Atomic"]
 [TimeControl "60+0"]
 [ECO "D10"]
 [Opening "Philidor Defense"]

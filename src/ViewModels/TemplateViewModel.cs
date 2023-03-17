@@ -6,6 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ChessBoom.Models.Game;
+using System.Windows.Input;
+using Avalonia.Interactivity;
+using System.Reactive;
 
 namespace ChessBoom.ViewModels;
 
@@ -13,14 +16,16 @@ namespace ChessBoom.ViewModels;
 public class TemplateViewModel : BaseViewModel
 {
     public Profile Profile { get; set; }
+    public string Hi { get; set; }
+    public ReactiveCommand<Unit, Unit> ParseAtomicGames { get; set; }
     public TemplateViewModel(IScreen hostScreen) : base(hostScreen)
     {
         string username = "MatteoGisondi";
+        Hi = "hello";
         Profile = new Profile(username);
         ParseGames();
-        
+        ParseAtomicGames = ReactiveCommand.Create(ParseAtomicGamesCommand);
     }
-
     private void ParseGames()
     {
         DirectoryInfo cboom = new DirectoryInfo("../CBoom");
@@ -37,4 +42,17 @@ public class TemplateViewModel : BaseViewModel
         Profile.calculateStats();
         //Profile.displayProfileStats();
     }
+
+    private void ParseAtomicGamesCommand()
+    {
+        Profile.calculateStats("Atomic");
+        Hi = "hello1";
+    }
+
+    private void ParseAllGames()
+    {
+        Profile.calculateStats();
+        Hi = "hello";
+    }
+
 }

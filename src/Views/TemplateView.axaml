@@ -9,7 +9,59 @@
         <viewModels:TemplateViewModel />
     </Design.DataContext>
     <StackPanel>
+		<TextBlock Text="{Binding Hi, Mode=TwoWay}"/>
         <Label Content="Your Profile" FontSize="50" HorizontalAlignment="Center" Margin="0,25,0,25"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button
+                Content="All">
+                <Button.Background>
+                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                        <GradientStop Color="#454545" Offset="0.0" />
+                        <GradientStop Color="#555555" Offset="0.1" />
+                        <GradientStop Color="#696969" Offset="0.5" />
+                        <GradientStop Color="#555555" Offset="0.9" />
+                        <GradientStop Color="#454545" Offset="1" />
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+            <Button
+                Content="Atomic"
+                Click="ParseAtomicGames">
+                <Button.Background>
+                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                        <GradientStop Color="#454545" Offset="0.0" />
+                        <GradientStop Color="#555555" Offset="0.1" />
+                        <GradientStop Color="#696969" Offset="0.5" />
+                        <GradientStop Color="#555555" Offset="0.9" />
+                        <GradientStop Color="#454545" Offset="1" />
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+            <Button
+                Content="Chess360">
+                <Button.Background>
+                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                        <GradientStop Color="#454545" Offset="0.0" />
+                        <GradientStop Color="#555555" Offset="0.1" />
+                        <GradientStop Color="#696969" Offset="0.5" />
+                        <GradientStop Color="#555555" Offset="0.9" />
+                        <GradientStop Color="#454545" Offset="1" />
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+            <Button
+                Content="Horde">
+                <Button.Background>
+                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                        <GradientStop Color="#454545" Offset="0.0" />
+                        <GradientStop Color="#555555" Offset="0.1" />
+                        <GradientStop Color="#696969" Offset="0.5" />
+                        <GradientStop Color="#555555" Offset="0.9" />
+                        <GradientStop Color="#454545" Offset="1" />
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+        </StackPanel>
         <Grid HorizontalAlignment="Center" Width="1500">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />

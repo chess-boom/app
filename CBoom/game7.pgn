@@ -10,7 +10,7 @@
 [BlackElo "1404"]
 [WhiteRatingDiff "-5"]
 [BlackRatingDiff "+20"]
-[Variant "Standard"]
+[Variant "Atomic"]
 [TimeControl "600+0"]
 [ECO "B06"]
 [Opening "Bishop's Opening"]

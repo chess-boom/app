@@ -10,7 +10,7 @@
 [BlackElo "1414"]
 [WhiteRatingDiff "-1"]
 [BlackRatingDiff "+1"]
-[Variant "Standard"]
+[Variant ""Atomic"]"]
 [TimeControl "180+2"]
 [ECO "D10"]
 [Opening "King's Pawn Game: Napoleon Attack"]
