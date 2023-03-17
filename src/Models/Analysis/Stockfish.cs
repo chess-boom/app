@@ -60,7 +60,7 @@ public class Stockfish : IAnalysis
 
         if (m_stockfish == null)
         {
-            throw new NullReferenceException("m_stockfish is null!");
+            throw new InvalidOperationException("m_stockfish is null!");
         }
 
         m_stockfish.Start();
@@ -95,7 +95,7 @@ public class Stockfish : IAnalysis
     {
         if (m_stockfish.StandardInput == null)
         {
-            throw new NullReferenceException();
+            throw new InvalidOperationException("StandardInput of m_stockfish is null!");
         }
 
         m_stockfish.StandardInput.WriteLine(command);
@@ -109,13 +109,13 @@ public class Stockfish : IAnalysis
     /// Reads a line of output from Stockfish.
     /// </summary>
     /// <returns></returns>
-    /// <exception cref="NullReferenceException">If StandardOutput of our application (m_stockfish) is null, we throw this exception.</exception>
+    /// <exception cref="InvalidOperationException">If StandardOutput of our application (m_stockfish) is null, we throw this exception.</exception>
     public string? ReadOutput()
     {
 
         if (m_stockfish.StandardOutput == null)
         {
-            throw new NullReferenceException("StandardOutput of m_stockfish is null!");
+            throw new InvalidOperationException("StandardOutput of m_stockfish is null!");
         }
 
         return m_stockfish.StandardOutput.ReadLine();
@@ -141,7 +141,7 @@ public class Stockfish : IAnalysis
 
         if (!isReady)
         {
-            throw new ApplicationException("Stockfish is not ready for input! Is the application running properly?");
+            throw new InvalidOperationException("Stockfish is not ready for input! Is the application running properly?");
         }
 
         return isReady;
@@ -158,9 +158,6 @@ public class Stockfish : IAnalysis
     /// Gets the static evaluation of the current position as a float, and which side the value is relative to (White or Black).
     /// </summary>
     /// <returns>Evaluation Object. Null if output does not return an evaluation due to an error.</returns>
-    /// <exception cref="ArgumentException"></exception>
-    /// <exception cref="ApplicationException"></exception>
-    /// <exception cref="InvalidOperationException"></exception>
     public Evaluation? GetStaticEvaluation()
     {
         if (m_fenPosition != null)
@@ -189,7 +186,7 @@ public class Stockfish : IAnalysis
                 {
                     string[] splitOutput = output.Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
-                    float evaluation_number = float.MaxValue;
+                    float evaluation_number;
                     if (!float.TryParse(splitOutput[2], out evaluation_number))
                         throw new ArgumentException($"Expected a float for evaluation number, got {splitOutput[2]}");
 
@@ -205,7 +202,7 @@ public class Stockfish : IAnalysis
                 }
 
             }
-            throw new ApplicationException("Stockfish is not ready!");
+            throw new InvalidOperationException("Stockfish is not ready!");
         }
         throw new InvalidOperationException("Cannot get an evaluation with no fen position!");
     }
@@ -217,10 +214,11 @@ public class Stockfish : IAnalysis
     /// <returns>List of (string, int) tuples, representing (move, cp value). Ordered from highest cp to lowest cp value moves</returns>
     public List<(string, int)> GetNBestMoves(int n = 3, int depth = 10)
     {
-        if (n <= 0 || depth <= 0)
-            throw new ArgumentOutOfRangeException("Depth and n must be greater than 0.");
+        if (n <= 0)
+            throw new ArgumentOutOfRangeException(nameof(n), "n must be > 0");
+        else if (depth <= 0)
+            throw new ArgumentOutOfRangeException(nameof(depth), "depth must be > 0");
 
-        string[] bestMoves = new string[n];
         List<string> outputList = new List<string>();
 
         if (IsReady())
