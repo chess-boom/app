@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ChessBoom.Models.Game.Pieces;
 
 namespace ChessBoom.Models.Game.Rulesets;
@@ -35,7 +36,7 @@ public class Atomic : Ruleset
     /// <param name="includeOriginPiece">Flag for whether the piece on the specified square should be returned</param>
     /// <param name="includePawns">Flag for whether pawns should be returned</param>
     /// <returns>The list of pieces surrounding the square</returns>
-    private List<Piece> GetSurroundingPieces(Board board, string square, bool includeOriginPiece = false, bool includePawns = false)
+    private static List<Piece> GetSurroundingPieces(Board board, string square, bool includeOriginPiece = false, bool includePawns = false)
     {
         List<Piece> surroundingPieces = new List<Piece>();
 
@@ -99,23 +100,10 @@ public class Atomic : Ruleset
             return false;
         }
         List<Piece> surroundingPieces = GetSurroundingPieces(board, GameHelpers.GetSquareFromCoordinate(king.GetCoordinates()), true, true);
-        foreach (Piece piece in surroundingPieces)
-        {
-            if (piece.GetPlayer() != player)
-            {
-                surroundingPieces.Remove(piece);
-            }
-        }
+        surroundingPieces = surroundingPieces.Where(piece => piece.GetPlayer() == player).ToList();
 
         // Query if those squares are visible to enemy pieces
-        foreach (Piece piece in surroundingPieces)
-        {
-            if (GameHelpers.IsSquareVisible(board, GameHelpers.GetOpponent(player), piece.GetCoordinates()))
-            {
-                return true;
-            }
-        }
-        return false;
+        return surroundingPieces.Any(piece => GameHelpers.IsSquareVisible(board, GameHelpers.GetOpponent(player), piece.GetCoordinates()));
     }
 
     public override bool IsInCheck(Player player, Board board)
