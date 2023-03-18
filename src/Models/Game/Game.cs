@@ -539,7 +539,7 @@ public class Game
                     // Append the number of empty squares and reset the count
                     if (emptySquareCount != 0)
                     {
-                        fen.Append(emptySquareCount.ToString());
+                        fen.Append(emptySquareCount);
                         emptySquareCount = 0;
                     }
 
@@ -549,12 +549,12 @@ public class Game
 
             if (emptySquareCount != 0)
             {
-                fen.Append(emptySquareCount.ToString());
+                fen.Append(emptySquareCount);
             }
 
             if (row != 0)
             {
-                fen.Append("/");
+                fen.Append('/');
             }
         }
 

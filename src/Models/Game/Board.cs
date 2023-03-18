@@ -391,7 +391,7 @@ public class Board
                 var piece = GetPiece((x, y));
                 if (piece is null)
                 {
-                    output.Append(".");
+                    output.Append('.');
                 }
                 else
                 {
@@ -399,7 +399,7 @@ public class Board
                 }
             }
 
-            output.Append("\n");
+            output.Append('\n');
         }
 
         return output.ToString();

@@ -72,7 +72,7 @@ public class Atomic : Ruleset
     /// <param name="board">The board on which the pieces exist</param>
     /// <param name="square">The square that is examined</param>
     /// <returns>Whether or not the player's king explodes from a capture</returns>
-    private bool CaptureExplodesKing(Player player, Board board, string square)
+    private static bool CaptureExplodesKing(Player player, Board board, string square)
     {
         foreach (Piece piece in GetSurroundingPieces(board, square, true, false))
         {

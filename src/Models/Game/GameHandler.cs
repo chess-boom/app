@@ -275,7 +275,7 @@ public class GameHandler
     /// </summary>
     /// <param name="piece">The piece</param>
     /// <returns>The list of legal moves</returns>
-    public List<string> GetLegalMoves(Piece piece)
+    public static List<string> GetLegalMoves(Piece piece)
     {
         return piece.GetLegalMoves();
     }
