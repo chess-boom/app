@@ -1,6 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reactive;
-using ChessBoom.Models.Game;
 using ReactiveUI;
 
 namespace ChessBoom.ViewModels;
@@ -13,11 +12,10 @@ public class DashboardViewModel : BaseViewModel, IScreen
     internal ReactiveCommand<Unit, IRoutableViewModel> GoVariant { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoTutorial { get; }
 
-    public string m_greeting { get; set; }
+    public string Greeting { get; set; } = "Welcome to Chess Boom!";
 
     public DashboardViewModel(IScreen hostScreen) : base(hostScreen)
     {
-        m_greeting = "Welcome to Chess Boom!";
         GoAnalysis = ReactiveCommand.CreateFromObservable(
             () => hostScreen.Router.Navigate.Execute(new GameAnalysisViewModel(this)));
         GoVariant = ReactiveCommand.CreateFromObservable(
@@ -25,10 +23,10 @@ public class DashboardViewModel : BaseViewModel, IScreen
         GoTutorial = ReactiveCommand.CreateFromObservable(
             () => hostScreen.Router.Navigate.Execute(new TutorialViewModel(this)));
     }
+
     public static void OnClickGameAnalysis()
     {
         System.Console.WriteLine("Game Analysis clicked");
-        var game = new Game();
         System.Console.WriteLine("Game Analysis done");
     }
 

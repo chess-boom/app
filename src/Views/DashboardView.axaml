@@ -10,12 +10,14 @@
     <StackPanel
         VerticalAlignment="Center"
         Spacing="20">
-        <!-- TODO Icon-->
-
-        <!-- Welcome Message -->
-        <TextBlock Text="{Binding m_greeting}"
-                   FontSize="50"
-                   HorizontalAlignment="Center" />
+        <Grid ColumnDefinitions="Auto,Auto" HorizontalAlignment="Center">
+            <!-- Icon -->
+            <Image Grid.Column="0" Source="/Assets/Icons/favicon.ico" Width="40" Height="40" />
+            <!-- Welcome Message -->
+            <TextBlock Grid.Column="1" Text="{Binding Greeting}"
+                       FontSize="50"
+                       HorizontalAlignment="Center" />
+        </Grid>
         <!--Button Selection-->
         <Grid ColumnDefinitions="Auto, Auto, Auto" HorizontalAlignment="Center">
             <!--TODO Make spacing responsive-->
