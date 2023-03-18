@@ -382,7 +382,7 @@ public class Board
 
     public override string ToString()
     {
-        StringBuilder output = new StringBuilder();;
+        StringBuilder output = new StringBuilder();
 
         for (var y = GameHelpers.k_boardHeight - 1; y >= 0; y--)
         {
