@@ -67,7 +67,7 @@ public class MainWindowViewModel : ReactiveObject, IScreen
             () => Router.Navigate.Execute(new VariantAnalysisViewModel(this))
         );
         GoProfile = ReactiveCommand.CreateFromObservable(
-            () => Router.Navigate.Execute(new TemplateViewModel(this))
+            () => Router.Navigate.Execute(new ProfileViewModel(this))
         );
     }
 }
