@@ -4,16 +4,29 @@
              xmlns:viewModels="clr-namespace:ChessBoom.ViewModels"
              xmlns:views="clr-namespace:ChessBoom.Views"
              xmlns:c="clr-namespace:Avalonia.Controls;assembly=Avalonia.Controls"
-             x:Class="ChessBoom.Views.TemplateView">
+             x:Class="ChessBoom.Views.ProfileView">
     <Design.DataContext>
-        <viewModels:TemplateViewModel />
+        <viewModels:ProfileViewModel />
     </Design.DataContext>
-    <StackPanel>
-        <TextBlock Text="{Binding Hi, Mode=TwoWay}" />
-        <Label Content="Your Profile" FontSize="50" HorizontalAlignment="Center" Margin="0,25,0,25" />
+    <StackPanel>        
+        <Label Content="My Profile" FontSize="50" HorizontalAlignment="Center" Margin="0,25,0,25" />
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <Button
-                Content="All">
+                Content="All"
+                Command="{Binding ParseAllGames}">
+                <Button.Background>
+                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
+                        <GradientStop Color="#454545" Offset="0.0" />
+                        <GradientStop Color="#555555" Offset="0.1" />
+                        <GradientStop Color="#696969" Offset="0.5" />
+                        <GradientStop Color="#555555" Offset="0.9" />
+                        <GradientStop Color="#454545" Offset="1" />
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+            <Button
+                Content="Standard"
+                Command="{Binding ParseStandardGames}">
                 <Button.Background>
                     <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
                         <GradientStop Color="#454545" Offset="0.0" />
@@ -38,7 +51,8 @@
                 </Button.Background>
             </Button>
             <Button
-                Content="Chess360">
+                Content="Chess360"
+                Command="{Binding ParseChess360Games}">
                 <Button.Background>
                     <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
                         <GradientStop Color="#454545" Offset="0.0" />
@@ -50,7 +64,8 @@
                 </Button.Background>
             </Button>
             <Button
-                Content="Horde">
+                Content="Horde"
+                Command="{Binding ParseHordeGames}">
                 <Button.Background>
                     <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
                         <GradientStop Color="#454545" Offset="0.0" />
@@ -91,18 +106,18 @@
                     <Rectangle Width="1" Height="50" Fill="White" Margin="25,0,0,0" />
                     <StackPanel Grid.Column="0" VerticalAlignment="Center" Orientation="Horizontal" Margin="50,0,0,0">
                         <Grid>
-                            <Rectangle Width="{Binding Profile.whiteBars[0], Mode=TwoWay}" Height="40" Fill="Green" />
-                            <TextBlock Text="{Binding Profile.winRateWhite, Mode=TwoWay}" VerticalAlignment="Center"
+                            <Rectangle Width="{Binding Profile.WhiteBars[0], Mode=TwoWay}" Height="40" Fill="Green" />
+                            <TextBlock Text="{Binding Profile.WinRateWhite, Mode=TwoWay}" VerticalAlignment="Center"
                                        HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
                         </Grid>
                         <Grid>
-                            <Rectangle Width="{Binding Profile.whiteBars[1], Mode=TwoWay}" Height="40" Fill="Red" />
-                            <TextBlock Text="{Binding Profile.lossRateWhite, Mode=TwoWay}" VerticalAlignment="Center"
+                            <Rectangle Width="{Binding Profile.WhiteBars[1], Mode=TwoWay}" Height="40" Fill="Red" />
+                            <TextBlock Text="{Binding Profile.LossRateWhite, Mode=TwoWay}" VerticalAlignment="Center"
                                        HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
                         </Grid>
                         <Grid>
-                            <Rectangle Width="{Binding Profile.whiteBars[2], Mode=TwoWay}" Height="40" Fill="Gray" />
-                            <TextBlock Text="{Binding Profile.drawRateWhite, Mode=TwoWay}" VerticalAlignment="Center"
+                            <Rectangle Width="{Binding Profile.WhiteBars[2], Mode=TwoWay}" Height="40" Fill="Gray" />
+                            <TextBlock Text="{Binding Profile.DrawRateWhite, Mode=TwoWay}" VerticalAlignment="Center"
                                        HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
                         </Grid>
                     </StackPanel>
@@ -113,18 +128,18 @@
                     <Rectangle Width="1" Height="50" Fill="White" Margin="30,0,0,0" />
                     <StackPanel Grid.Column="0" VerticalAlignment="Center" Orientation="Horizontal" Margin="50,0,0,0">
                         <Grid>
-                            <Rectangle Width="{Binding Profile.blackBars[0], Mode=TwoWay}" Height="40" Fill="Green" />
-                            <TextBlock Text="{Binding Profile.winRateBlack, Mode=TwoWay}" VerticalAlignment="Center"
+                            <Rectangle Width="{Binding Profile.BlackBars[0], Mode=TwoWay}" Height="40" Fill="Green" />
+                            <TextBlock Text="{Binding Profile.WinRateBlack, Mode=TwoWay}" VerticalAlignment="Center"
                                        HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
                         </Grid>
                         <Grid>
-                            <Rectangle Width="{Binding Profile.blackBars[1], Mode=TwoWay}" Height="40" Fill="Red" />
-                            <TextBlock Text="{Binding Profile.lossRateBlack, Mode=TwoWay}" VerticalAlignment="Center"
+                            <Rectangle Width="{Binding Profile.BlackBars[1], Mode=TwoWay}" Height="40" Fill="Red" />
+                            <TextBlock Text="{Binding Profile.LossRateBlack, Mode=TwoWay}" VerticalAlignment="Center"
                                        HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
                         </Grid>
                         <Grid>
-                            <Rectangle Width="{Binding Profile.blackBars[2], Mode=TwoWay}" Height="40" Fill="Gray" />
-                            <TextBlock Text="{Binding Profile.drawRateBlack, Mode=TwoWay}" VerticalAlignment="Center"
+                            <Rectangle Width="{Binding Profile.BlackBars[2], Mode=TwoWay}" Height="40" Fill="Gray" />
+                            <TextBlock Text="{Binding Profile.DrawRateBlack, Mode=TwoWay}" VerticalAlignment="Center"
                                        HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
                         </Grid>
                     </StackPanel>
@@ -141,16 +156,16 @@
                     Text="{Binding Profile.TotalGames, StringFormat='Total Games: {0}', Mode=TwoWay}" />
                 <Canvas Grid.Row="1" Margin="10">
                     <Grid Canvas.Left="50" Canvas.Bottom="-200">
-                        <Rectangle Width="100" Height="{Binding Profile.barGraphData[0], Mode=TwoWay}" Fill="Green"
-                                   c:ToolTip.Tip="{Binding Profile.wins, StringFormat='Total Wins: {0}', Mode=TwoWay}" />
+                        <Rectangle Width="100" Height="{Binding Profile.BarGraphData[0], Mode=TwoWay}" Fill="Green"
+                                   c:ToolTip.Tip="{Binding Profile.Wins, StringFormat='Total Wins: {0}', Mode=TwoWay}" />
                     </Grid>
                     <Grid Canvas.Left="200" Canvas.Bottom="-200">
-                        <Rectangle Width="100" Height="{Binding Profile.barGraphData[1], Mode=TwoWay}" Fill="Red"
-                                   c:ToolTip.Tip="{Binding Profile.losses, StringFormat='Total Losses: {0}', Mode=TwoWay}" />
+                        <Rectangle Width="100" Height="{Binding Profile.BarGraphData[1], Mode=TwoWay}" Fill="Red"
+                                   c:ToolTip.Tip="{Binding Profile.Losses, StringFormat='Total Losses: {0}', Mode=TwoWay}" />
                     </Grid>
                     <Grid Canvas.Left="350" Canvas.Bottom="-200">
-                        <Rectangle Width="100" Height="{Binding Profile.barGraphData[2], Mode=TwoWay}" Fill="Gray"
-                                   c:ToolTip.Tip="{Binding Profile.draws, StringFormat='Total Draws: {0}', Mode=TwoWay}" />
+                        <Rectangle Width="100" Height="{Binding Profile.BarGraphData[2], Mode=TwoWay}" Fill="Gray"
+                                   c:ToolTip.Tip="{Binding Profile.Draws, StringFormat='Total Draws: {0}', Mode=TwoWay}" />
                     </Grid>
                     <Rectangle Width="1" Height="200" Fill="White" Canvas.Left="20" />
                     <Rectangle Width="500" Height="1" Fill="White" Canvas.Left="20" Canvas.Top="200" />
@@ -175,109 +190,109 @@
                     <Rectangle Width="500" Height="1" Fill="Gray" Canvas.Left="50" Canvas.Top="380" />
 
                     <Rectangle Width="1" Height="400" Fill="White" Canvas.Left="50" Canvas.Top="30" />
-                    <TextBlock Text="{Binding Profile.graphMinElo, Mode=TwoWay}" Canvas.Top="430" />
-                    <TextBlock Text="{Binding Profile.graphMaxElo, Mode=TwoWay}" Canvas.Top="30" />
-                    <Polyline Points="{Binding Profile.points, Mode=TwoWay}"
+                    <TextBlock Text="{Binding Profile.GraphMinElo, Mode=TwoWay}" Canvas.Top="430" />
+                    <TextBlock Text="{Binding Profile.GraphMaxElo, Mode=TwoWay}" Canvas.Top="30" />
+                    <Polyline Points="{Binding Profile.Points, Mode=TwoWay}"
                               Stroke="#6AC1FF" StrokeThickness="2" />
 
                     <!-- Point Logic -->
-                    <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="45"
-                             Canvas.Top="{Binding Profile.elo[0][2], Mode=TwoWay}">
+                    <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="45" 
+                    Canvas.Top="{Binding Profile.Elo[0][2], Mode=TwoWay}">
                         <c:ToolTip.Tip>
                             <MultiBinding StringFormat='Elo: {0}&#013;Score: {1}&#013;Date: {2}'>
-                                <Binding Path="Profile.elo[0][0]" />
-                                <Binding Path="Profile.elo[0][1]" />
-                                <Binding Path="Profile.elo[0][3]" />
+                                <Binding Path="Profile.Elo[0][0]"/>
+                                <Binding Path="Profile.Elo[0][1]"/>
+                                <Binding Path="Profile.Elo[0][3]"/>
                             </MultiBinding>
                         </c:ToolTip.Tip>
                     </Ellipse>
                     <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="95"
-                             Canvas.Top="{Binding Profile.elo[1][2], Mode=TwoWay}">
+                             Canvas.Top="{Binding Profile.Elo[1][2], Mode=TwoWay}">
                         <c:ToolTip.Tip>
                             <MultiBinding StringFormat='Elo: {0}&#013;Score: {1}&#013;Date: {2}'>
-                                <Binding Path="Profile.elo[1][0]" />
-                                <Binding Path="Profile.elo[1][1]" />
-                                <Binding Path="Profile.elo[1][3]" />
+                                <Binding Path="Profile.Elo[1][0]"/>
+                                <Binding Path="Profile.Elo[1][1]"/>
+                                <Binding Path="Profile.Elo[1][3]"/>
                             </MultiBinding>
                         </c:ToolTip.Tip>
                     </Ellipse>
                     <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="145"
-                             Canvas.Top="{Binding Profile.elo[2][2], Mode=TwoWay}">
+                             Canvas.Top="{Binding Profile.Elo[2][2], Mode=TwoWay}">
                         <c:ToolTip.Tip>
                             <MultiBinding StringFormat='Elo: {0}&#013;Score: {1}&#013;Date: {2}'>
-                                <Binding Path="Profile.elo[2][0]" />
-                                <Binding Path="Profile.elo[2][1]" />
-                                <Binding Path="Profile.elo[2][3]" />
+                                <Binding Path="Profile.Elo[2][0]"/>
+                                <Binding Path="Profile.Elo[2][1]"/>
+                                <Binding Path="Profile.Elo[2][3]"/>
                             </MultiBinding>
                         </c:ToolTip.Tip>
                     </Ellipse>
                     <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="195"
-                             Canvas.Top="{Binding Profile.elo[3][2], Mode=TwoWay}">
+                             Canvas.Top="{Binding Profile.Elo[3][2], Mode=TwoWay}">
                         <c:ToolTip.Tip>
                             <MultiBinding StringFormat='Elo: {0}&#013;Score: {1}&#013;Date: {2}'>
-                                <Binding Path="Profile.elo[3][0]" />
-                                <Binding Path="Profile.elo[3][1]" />
-                                <Binding Path="Profile.elo[3][3]" />
+                                <Binding Path="Profile.Elo[3][0]"/>
+                                <Binding Path="Profile.Elo[3][1]"/>
+                                <Binding Path="Profile.Elo[3][3]"/>
                             </MultiBinding>
                         </c:ToolTip.Tip>
                     </Ellipse>
                     <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="245"
-                             Canvas.Top="{Binding Profile.elo[4][2], Mode=TwoWay}">
+                             Canvas.Top="{Binding Profile.Elo[4][2], Mode=TwoWay}">
                         <c:ToolTip.Tip>
                             <MultiBinding StringFormat='Elo: {0}&#013;Score: {1}&#013;Date: {2}'>
-                                <Binding Path="Profile.elo[4][0]" />
-                                <Binding Path="Profile.elo[4][1]" />
-                                <Binding Path="Profile.elo[4][3]" />
+                                <Binding Path="Profile.Elo[4][0]"/>
+                                <Binding Path="Profile.Elo[4][1]"/>
+                                <Binding Path="Profile.Elo[4][3]"/>
                             </MultiBinding>
                         </c:ToolTip.Tip>
                     </Ellipse>
                     <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="295"
-                             Canvas.Top="{Binding Profile.elo[5][2], Mode=TwoWay}">
+                             Canvas.Top="{Binding Profile.Elo[5][2], Mode=TwoWay}">
                         <c:ToolTip.Tip>
                             <MultiBinding StringFormat='Elo: {0}&#013;Score: {1}&#013;Date: {2}'>
-                                <Binding Path="Profile.elo[5][0]" />
-                                <Binding Path="Profile.elo[5][1]" />
-                                <Binding Path="Profile.elo[5][3]" />
+                                <Binding Path="Profile.Elo[5][0]"/>
+                                <Binding Path="Profile.Elo[5][1]"/>
+                                <Binding Path="Profile.Elo[5][3]"/>
                             </MultiBinding>
                         </c:ToolTip.Tip>
                     </Ellipse>
                     <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="345"
-                             Canvas.Top="{Binding Profile.elo[6][2], Mode=TwoWay}">
+                             Canvas.Top="{Binding Profile.Elo[6][2], Mode=TwoWay}">
                         <c:ToolTip.Tip>
                             <MultiBinding StringFormat='Elo: {0}&#013;Score: {1}&#013;Date: {2}'>
-                                <Binding Path="Profile.elo[6][0]" />
-                                <Binding Path="Profile.elo[6][1]" />
-                                <Binding Path="Profile.elo[6][3]" />
+                                <Binding Path="Profile.Elo[6][0]"/>
+                                <Binding Path="Profile.Elo[6][1]"/>
+                                <Binding Path="Profile.Elo[6][3]"/>
                             </MultiBinding>
                         </c:ToolTip.Tip>
                     </Ellipse>
                     <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="395"
-                             Canvas.Top="{Binding Profile.elo[7][2], Mode=TwoWay}">
+                             Canvas.Top="{Binding Profile.Elo[7][2], Mode=TwoWay}">
                         <c:ToolTip.Tip>
                             <MultiBinding StringFormat='Elo: {0}&#013;Score: {1}&#013;Date: {2}'>
-                                <Binding Path="Profile.elo[7][0]" />
-                                <Binding Path="Profile.elo[7][1]" />
-                                <Binding Path="Profile.elo[7][3]" />
+                                <Binding Path="Profile.Elo[7][0]"/>
+                                <Binding Path="Profile.Elo[7][1]"/>
+                                <Binding Path="Profile.Elo[7][3]"/>
                             </MultiBinding>
                         </c:ToolTip.Tip>
                     </Ellipse>
                     <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="445"
-                             Canvas.Top="{Binding Profile.elo[8][2], Mode=TwoWay}">
+                             Canvas.Top="{Binding Profile.Elo[8][2], Mode=TwoWay}">
                         <c:ToolTip.Tip>
                             <MultiBinding StringFormat='Elo: {0}&#013;Score: {1}&#013;Date: {2}'>
-                                <Binding Path="Profile.elo[8][0]" />
-                                <Binding Path="Profile.elo[8][1]" />
-                                <Binding Path="Profile.elo[8][3]" />
+                                <Binding Path="Profile.Elo[8][0]"/>
+                                <Binding Path="Profile.Elo[8][1]"/>
+                                <Binding Path="Profile.Elo[8][3]"/>
                             </MultiBinding>
                         </c:ToolTip.Tip>
                     </Ellipse>
                     <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="495"
-                             Canvas.Top="{Binding Profile.elo[9][2], Mode=TwoWay}">
+                             Canvas.Top="{Binding Profile.Elo[9][2], Mode=TwoWay}">
                         <c:ToolTip.Tip>
                             <MultiBinding StringFormat='Elo: {0}&#013;Score: {1}&#013;Date: {2}'>
-                                <Binding Path="Profile.elo[9][0]" />
-                                <Binding Path="Profile.elo[9][1]" />
-                                <Binding Path="Profile.elo[9][3]" />
+                                <Binding Path="Profile.Elo[9][0]"/>
+                                <Binding Path="Profile.Elo[9][1]"/>
+                                <Binding Path="Profile.Elo[9][3]"/>
                             </MultiBinding>
                         </c:ToolTip.Tip>
                     </Ellipse>
@@ -287,8 +302,8 @@
                     <Path Stroke="Orange" StrokeThickness="2">
                         <Path.Data>
                             <PathGeometry>
-                                <PathFigure StartPoint="{Binding Profile.graphStartTrend, Mode=TwoWay}">
-                                    <LineSegment Point="{Binding Profile.graphEndTrend, Mode=TwoWay}" />
+                                <PathFigure StartPoint="{Binding Profile.GraphStartTrend, Mode=TwoWay}">
+                                    <LineSegment Point="{Binding Profile.GraphEndTrend, Mode=TwoWay}" />
                                 </PathFigure>
                             </PathGeometry>
                         </Path.Data>
@@ -306,7 +321,8 @@
                        Text="Most Used Opening" />
             <Button
                 Grid.Row="3"
-                Grid.Column="2"
+                MaxWidth="268"
+                Grid.Column="2"                
                 Margin="200,230,0,0">
                 <Button.Background>
                     <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
@@ -318,32 +334,12 @@
                     </LinearGradientBrush>
                 </Button.Background>
                 <StackPanel>
-                    <Label Content="{Binding Profile.mostUsedOpening, Mode=TwoWay}" FontSize="20" HorizontalAlignment="Center" />
+                    <TextBlock FontSize="20" TextAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding Profile.MostUsedOpening, Mode=TwoWay}"/>
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Assets/Images/Openings.png" Width="250" Height="250" />
                     </StackPanel>
                 </StackPanel>
             </Button>
-            <!-- <Button
-                    Grid.Row="3"
-                    Grid.Column="3"
-                    Margin="0,150,0,0">
-                    <Button.Background>
-                        <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
-                            <GradientStop Color="#454545" Offset="0.0" />
-                            <GradientStop Color="#555555" Offset="0.1" />
-                            <GradientStop Color="#696969" Offset="0.5" />
-                            <GradientStop Color="#555555" Offset="0.9" />
-                            <GradientStop Color="#454545" Offset="1" />
-                        </LinearGradientBrush>
-                    </Button.Background>
-                    <StackPanel>
-                        <Label Content="Best Opening:&#013;Dutch Defense" FontSize="20" HorizontalAlignment="Center" />
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="/Assets/Images/Openings.png" Width="250" Height="250"/>
-                        </StackPanel>
-                    </StackPanel>              
-                </Button> -->
         </Grid>
     </StackPanel>
 </UserControl>

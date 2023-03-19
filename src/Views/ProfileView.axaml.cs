@@ -8,9 +8,9 @@ using System.Diagnostics.CodeAnalysis;
 namespace ChessBoom.Views;
 
 [ExcludeFromCodeCoverage]
-public partial class TemplateView : ReactiveUserControl<TemplateViewModel>
+public partial class ProfileView : ReactiveUserControl<ProfileViewModel>
 {
-    public TemplateView()
+    public ProfileView()
     {
         this.WhenActivated(_ =>
         {
