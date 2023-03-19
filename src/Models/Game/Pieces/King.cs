@@ -71,7 +71,7 @@ public class King : Piece
 
         foreach ((int, int) square in GetMovementSquares())
         {
-            Board newBoard = Game.CreateBoardFromFEN(null, Game.CreateFENFromBoard(m_board));
+            Board newBoard = Game.CreateBoardFromFEN(m_board.m_game, Game.CreateFENFromBoard(m_board));
             string squareName = GameHelpers.GetSquareFromCoordinate(square);
             try
             {

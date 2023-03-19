@@ -22,13 +22,21 @@ public class GameHandler
         m_board = null!;
         StartGame();
     }
+    public GameHandler(Variant variant)
+    {
+        // Define the game and board as null to appease compiler
+        // Game and board are defined in the StartGame() method
+        m_game = null!;
+        m_board = null!;
+        StartGame(variant);
+    }
 
     /// <summary>
     /// Reinitializes the game. Should always be used at the start of a session
     /// </summary>
-    public void StartGame()
+    public void StartGame(Variant variant = Variant.Standard)
     {
-        m_game = new Game();
+        m_game = new Game(variant);
         m_board = m_game.m_board;
     }
 
