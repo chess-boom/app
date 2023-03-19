@@ -35,7 +35,7 @@
     <None Update="AnalysisEngine\Linux\stockfish-ubuntu-20.04-x86-64">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="AnalysisEngine\MacOS\stockfish-arm64">
+    <None Update="AnalysisEngine\MacOS\stockfish">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="AnalysisEngine\Windows\stockfish-windows-2022-x86-64-avx2.exe">

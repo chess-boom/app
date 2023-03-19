@@ -15,8 +15,8 @@ public interface IAnalysis
     /// <summary>
     /// Gets the static evaluation of the current position as a float, and which side the value is relative to (White or Black).
     /// </summary>
-    /// <returns>Evaluation Object</returns>
-    Evaluation GetStaticEvaluation();
+    /// <returns>Evaluation Object. Null if an evaluation cannot be obtained for some reason.</returns>
+    Evaluation? GetStaticEvaluation();
 
     /// <summary>
     /// Returns the N best moves based on your position.
