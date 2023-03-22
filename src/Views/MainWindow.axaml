@@ -92,7 +92,7 @@
             <MenuItem Header="Game Analysis" FontSize="20" CornerRadius="10" Cursor="Hand">
                 <MenuItem Header="Board" Command="{Binding GoBoard}"/>
                 <MenuItem Header="Game List" Command="{Binding GoAnalysis}"/>
-                <MenuItem Header="Analysis Breakdown" Command="{Binding GoTemplate}"/>
+                <MenuItem Header="Analysis Breakdown" Command="{Binding GoAnalysisBreakdown}"/>
                 <MenuItem Header="Template 4" Command="{Binding GoTemplate}"/>
             </MenuItem>
             <MenuItem Header="Variant Analysis" FontSize="20" CornerRadius="10" Cursor="Hand">
