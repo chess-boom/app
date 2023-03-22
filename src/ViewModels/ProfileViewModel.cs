@@ -21,13 +21,6 @@ public class ProfileViewModel : BaseViewModel
         get => _profile;
         set => this.RaiseAndSetIfChanged(ref _profile, value);
     }
-    private ObservableCollection<int> _hi = new ObservableCollection<int>();
-
-    public ObservableCollection<int> Hi
-    {
-        get => _hi;
-        set => this.RaiseAndSetIfChanged(ref _hi, value);
-    }
 
     public ReactiveCommand<Unit, Unit> ParseAtomicGames { get; set; }
     public ReactiveCommand<Unit, Unit> ParseStandardGames { get; set; }
@@ -38,8 +31,6 @@ public class ProfileViewModel : BaseViewModel
     public ProfileViewModel(IScreen hostScreen) : base(hostScreen)
     {
         var username = "MatteoGisondi";
-        Hi.Add(0);
-        Hi[0] = 0;
         _profile = new Profile(username);
         ParseGames();
         ParseAtomicGames = ReactiveCommand.Create(ParseAtomicGamesCommand);
@@ -62,32 +53,29 @@ public class ProfileViewModel : BaseViewModel
         {
             String file = filePath.FullName;
             Dictionary<string, string> game = GameHandler.ReadPGN(file);
-            Profile.addGame(game);
+            Profile.AddGame(game);
         }
 
-        Profile.calculateStats();
+        Profile.CalculateStats();
     }
     private void ParseAllGamesCommand()
     {
-        Profile.calculateStats();
-        Hi[0] = 0;
+        Profile.CalculateStats();
     }
     private void ParseAtomicGamesCommand()
     {
-        Profile.calculateStats("Atomic");
-        Hi[0] = 1;
+        Profile.CalculateStats("Atomic");
     }
     private void ParseStandardGamesCommand()
     {
-        Profile.calculateStats("Standard");
-        Hi[0] = 2;
+        Profile.CalculateStats("Standard");
     }
     private void ParseHordeGamesCommand()
     {
-        Profile.calculateStats("Horde");
+        Profile.CalculateStats("Horde");
     }
     private void ParseChess360GamesCommand()
     {
-        Profile.calculateStats("Chess360");
+        Profile.CalculateStats("Chess360");
     }
 }

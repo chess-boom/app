@@ -2,22 +2,24 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+namespace ChessBoom.Models.Profile;
+
 public class Trendline
 {
-    private readonly IList<int> xAxisValues;
-    private readonly IList<int> yAxisValues;
-    private int count;
-    private int xAxisValuesSum;
-    private int xxSum;
-    private int xySum;
-    private int yAxisValuesSum;
+    private readonly IList<int> _xAxisValues;
+    private readonly IList<int> _yAxisValues;
+    private int _count;
+    private int _xAxisValuesSum;
+    private int _xxSum;
+    private int _xySum;
+    private int _yAxisValuesSum;
 
     public Trendline(IList<int> yAxisValues, IList<int> xAxisValues)
     {
-        this.yAxisValues = yAxisValues;
-        this.xAxisValues = xAxisValues;
+        _yAxisValues = yAxisValues;
+        _xAxisValues = xAxisValues;
 
-        this.Initialize();
+        Initialize();
     }
 
     public double Slope { get; private set; }
@@ -27,28 +29,30 @@ public class Trendline
 
     private void Initialize()
     {
-        this.count = this.yAxisValues.Count;
-        this.yAxisValuesSum = this.yAxisValues.Sum();
-        this.xAxisValuesSum = this.xAxisValues.Sum();
-        this.xxSum = 0;
-        this.xySum = 0;
+        _count = _yAxisValues.Count;
+        _yAxisValuesSum = _yAxisValues.Sum();
+        _xAxisValuesSum = _xAxisValues.Sum();
+        _xxSum = 0;
+        _xySum = 0;
 
-        for (int i = 0; i < this.count; i++)
+        for (var i = 0; i < _count; i++)
         {
-            this.xySum += (this.xAxisValues[i]*this.yAxisValues[i]);
-            this.xxSum += (this.xAxisValues[i]*this.xAxisValues[i]);
+            _xySum += _xAxisValues[i] * _yAxisValues[i];
+            _xxSum += _xAxisValues[i] * _xAxisValues[i];
         }
-        this.Slope = this.CalculateSlope();
-        this.Intercept = this.CalculateIntercept();
-        this.Start = this.CalculateStart();
-        this.End = this.CalculateEnd();
+
+        Slope = CalculateSlope();
+        Intercept = CalculateIntercept();
+        Start = CalculateStart();
+        End = CalculateEnd();
     }
 
     private double CalculateSlope()
     {
         try
         {
-            return ((double)(this.count*this.xySum) - (this.xAxisValuesSum*this.yAxisValuesSum))/((this.count*this.xxSum) - (this.xAxisValuesSum*this.xAxisValuesSum));
+            return ((double)(_count * _xySum) - _xAxisValuesSum * _yAxisValuesSum) /
+                   (_count * _xxSum - _xAxisValuesSum * _xAxisValuesSum);
         }
         catch (DivideByZeroException)
         {
@@ -58,16 +62,16 @@ public class Trendline
 
     private double CalculateIntercept()
     {
-        return (this.yAxisValuesSum - (this.Slope*this.xAxisValuesSum))/this.count;
+        return (_yAxisValuesSum - Slope * _xAxisValuesSum) / _count;
     }
 
     private int CalculateStart()
     {
-        return (int)((this.Slope*this.xAxisValues.First()) + this.Intercept);
+        return (int)(Slope * _xAxisValues.First() + Intercept);
     }
 
     private int CalculateEnd()
     {
-        return (int)((this.Slope*this.xAxisValues.Last()) + this.Intercept);
+        return (int)(Slope * _xAxisValues.Last() + Intercept);
     }
 }
