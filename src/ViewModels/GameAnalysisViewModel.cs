@@ -7,7 +7,8 @@ namespace ChessBoom.ViewModels;
 [ExcludeFromCodeCoverage]
 public class GameAnalysisViewModel : BaseViewModel
 {
-    public class PlayerData
+    // TODO : migrate to Models
+    public class PlayerModel
     {
         public string? Name { get; set; }
         public string? Opponent { get; set; }
@@ -20,17 +21,17 @@ public class GameAnalysisViewModel : BaseViewModel
 
     }
 
-    private ObservableCollection<PlayerData> _playerDataList = new();
+    private ObservableCollection<PlayerModel> _playerModelCollection = new();
 
-    public ObservableCollection<PlayerData> PlayerDataList
+    public ObservableCollection<PlayerModel> PlayerModelCollection
     {
-        get => _playerDataList;
-        set => this.RaiseAndSetIfChanged(ref _playerDataList, value);
+        get => _playerModelCollection;
+        set => this.RaiseAndSetIfChanged(ref _playerModelCollection, value);
     }
 
     public GameAnalysisViewModel(IScreen hostScreen) : base(hostScreen)
     {
-        PlayerDataList = new ObservableCollection<PlayerData>
+        PlayerModelCollection = new ObservableCollection<PlayerModel>
         {
             new()
             {

@@ -27,6 +27,6 @@ public partial class GameAnalysisView : ReactiveUserControl<GameAnalysisViewMode
         if (DataContext is not GameAnalysisViewModel viewModel) return;
         
         _playerData.DataContext = viewModel;
-        _playerData.Items = viewModel.PlayerDataList;
+        _playerData.Items = viewModel.PlayerModelCollection;
     }
 }
