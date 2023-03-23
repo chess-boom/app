@@ -10,7 +10,7 @@
 [BlackElo "1645"]
 [WhiteRatingDiff "+5"]
 [BlackRatingDiff "-16"]
-[Variant "Chess360"]
+[Variant "Chess960"]
 [TimeControl "900+10"]
 [ECO "D00"]
 [Opening "?"]

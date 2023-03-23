@@ -25,7 +25,7 @@ public class ProfileViewModel : BaseViewModel
     public ReactiveCommand<Unit, Unit> ParseAtomicGames { get; set; }
     public ReactiveCommand<Unit, Unit> ParseStandardGames { get; set; }
     public ReactiveCommand<Unit, Unit> ParseHordeGames { get; set; }
-    public ReactiveCommand<Unit, Unit> ParseChess360Games { get; set; }
+    public ReactiveCommand<Unit, Unit> ParseChess960Games { get; set; }
     public ReactiveCommand<Unit, Unit> ParseAllGames { get; set; }
 
     public ProfileViewModel(IScreen hostScreen) : base(hostScreen)
@@ -36,7 +36,7 @@ public class ProfileViewModel : BaseViewModel
         ParseAtomicGames = ReactiveCommand.Create(ParseAtomicGamesCommand);
         ParseStandardGames = ReactiveCommand.Create(ParseStandardGamesCommand);
         ParseHordeGames = ReactiveCommand.Create(ParseHordeGamesCommand);
-        ParseChess360Games = ReactiveCommand.Create(ParseChess360GamesCommand);
+        ParseChess960Games = ReactiveCommand.Create(ParseChess960GamesCommand);
         ParseAllGames = ReactiveCommand.Create(ParseAllGamesCommand);
         this.WhenAnyValue(x => x.Profile)
             .Subscribe(_ => this.RaisePropertyChanged(nameof(Profile)));
@@ -74,8 +74,8 @@ public class ProfileViewModel : BaseViewModel
     {
         Profile.CalculateStats("Horde");
     }
-    private void ParseChess360GamesCommand()
+    private void ParseChess960GamesCommand()
     {
-        Profile.CalculateStats("Chess360");
+        Profile.CalculateStats("Chess960");
     }
 }

@@ -59,8 +59,8 @@
                 </Button.Background>
             </Button>
             <Button
-                Content="Chess360"
-                Command="{Binding ParseChess360Games}">
+                Content="Chess960"
+                Command="{Binding ParseChess960Games}">
                 <Button.Background>
                     <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
                         <GradientStop Color="#454545" Offset="0.0" />

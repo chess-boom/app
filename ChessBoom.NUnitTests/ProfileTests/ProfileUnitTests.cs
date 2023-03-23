@@ -13,7 +13,7 @@ public class ProfileUnitTests
     {"../CBoom/game1.pgn",  //standard
     "../CBoom/game8.pgn",   //atomic
     "../CBoom/game11.pgn",  //horde
-    "../CBoom/game17.pgn"}; //chess360
+    "../CBoom/game17.pgn"}; //Chess960
 
 
     [SetUp]
