@@ -9,7 +9,7 @@ namespace ChessBoom.NUnitTests.ProfileTests;
 public class ProfileUnitTests
 {
     private Profile profile = null!;
-    string[] files = 
+    string[] files =
     {"../CBoom/game1.pgn",  //standard
     "../CBoom/game8.pgn",   //atomic
     "../CBoom/game11.pgn",  //horde
@@ -17,11 +17,12 @@ public class ProfileUnitTests
 
 
     [SetUp]
-    public void Setup()    
+    public void Setup()
     {
         string username = "MatteoGisondi";
         profile = new Profile(username);
-        foreach(string file in files){
+        foreach (string file in files)
+        {
             Dictionary<string, string> game = GameHandler.ReadPGN(file);
             profile.AddGame(game);
         }

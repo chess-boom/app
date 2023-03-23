@@ -11,10 +11,10 @@ public class TrendlineUnitTests
     [SetUp]
     public void Setup()
     {
-        IList<int> yAxisValues = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
+        IList<int> yAxisValues = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
         IList<int> xAxisValues = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
         trendline = new Trendline(yAxisValues, xAxisValues);
-        IList<int> invalidyAxisValues = new List<int> { 0, 0 }; 
+        IList<int> invalidyAxisValues = new List<int> { 0, 0 };
         IList<int> invalidxAxisValues = new List<int> { 0, 0 };
         invalidTrendline = new Trendline(invalidyAxisValues, invalidxAxisValues);
     }
