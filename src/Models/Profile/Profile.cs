@@ -18,7 +18,6 @@ public class Profile : ReactiveObject
     public ObservableCollection<ObservableCollection<string>> Elo
     {
         get => _elo;
-        set => this.RaiseAndSetIfChanged(ref _elo, value);
     }
 
     public Queue<string[]> EloQueue { get; set; }
@@ -157,7 +156,6 @@ public class Profile : ReactiveObject
     public ObservableCollection<int> WhiteBars
     {
         get => _whiteBars;
-        set => this.RaiseAndSetIfChanged(ref _whiteBars, value);
     }
 
     private ObservableCollection<int> _blackBars;
@@ -165,7 +163,6 @@ public class Profile : ReactiveObject
     public ObservableCollection<int> BlackBars
     {
         get => _blackBars;
-        set => this.RaiseAndSetIfChanged(ref _blackBars, value);
     }
 
     private Dictionary<string, int> Openings { get; set; }

@@ -9,11 +9,11 @@
         <viewModels:ProfileViewModel />
     </Design.DataContext>
     <StackPanel>        
-        <Label Content="My Profile" FontSize="50" HorizontalAlignment="Center" Margin="0,25,0,25" />
+        <Label Content="My Profile" FontSize="50" HorizontalAlignment="Center" Margin="0,10,0,10" />
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <TextBlock
                 FontWeight="Bold"
-                FontSize="40"
+                FontSize="20"
                 HorizontalAlignment="Center"
                 Text="{Binding Profile.TotalGames, StringFormat='Total Games: {0}', Mode=TwoWay}" 
             />
@@ -85,7 +85,7 @@
                 </Button.Background>
             </Button>
         </StackPanel>
-        <Border CornerRadius="10" BorderBrush="Black" BorderThickness="1" Margin="100,25,100,50" Padding="100,25,100,50">
+        <Border CornerRadius="10" BorderBrush="Black" BorderThickness="1" Margin="100,10,100,10" Padding="100,10,100,25">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
                     <GradientStop Color="#242424" Offset="0.0" />
@@ -192,7 +192,7 @@
             </StackPanel>
 
             <!-- Elo Graph -->
-            <StackPanel Grid.Row="4" Margin="55,100,0,0">
+            <StackPanel Grid.Row="4" Margin="55,85,0,0">
                 <Canvas>
                     <!-- Graph Horizontal Lines -->
                     <Rectangle Width="500" Height="1" Fill="Gray" Canvas.Left="50" Canvas.Top="80" />

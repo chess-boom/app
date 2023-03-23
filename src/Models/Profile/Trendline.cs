@@ -49,15 +49,8 @@ public class Trendline
 
     private double CalculateSlope()
     {
-        try
-        {
-            return ((double)(_count * _xySum) - _xAxisValuesSum * _yAxisValuesSum) /
-                   (_count * _xxSum - _xAxisValuesSum * _xAxisValuesSum);
-        }
-        catch (DivideByZeroException)
-        {
-            return 0;
-        }
+        double slope = ((double)(_count * _xySum) - _xAxisValuesSum * _yAxisValuesSum) / (_count * _xxSum - _xAxisValuesSum * _xAxisValuesSum);
+        return (double.IsNaN(slope)) ? 0 : slope;        
     }
 
     private double CalculateIntercept()
