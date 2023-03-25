@@ -4,6 +4,7 @@
              xmlns:views="clr-namespace:ChessBoom.Views"
              x:Class="ChessBoom.Views.GameAnalysisBreakdownView">
     <Design.DataContext>
+        <!-- ReSharper disable once Xaml.ConstructorWarning -->
         <viewModels:GameAnalysisBreakdownViewModel />
     </Design.DataContext>
     <StackPanel>
@@ -52,6 +53,7 @@
             <Border Grid.Column="1">
                 <views:BoardView />
                 <Design.DataContext>
+                    <!-- ReSharper disable once Xaml.ConstructorWarning -->
                     <viewModels:BoardViewModel />
                 </Design.DataContext>
             </Border>
@@ -86,6 +88,26 @@
                                 </Button.Background>
                             </Button>
                         </StackPanel> -->
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+            </Grid>
+            <!-- Bottom section -->
+            <Border Grid.Row="1" Grid.Column="0" Background="LightBlue">
+                <StackPanel>
+                    <!-- DataGrid does not dynamically grow by default -->
+                    <Grid RowDefinitions="*,1000">
+                        <Label Grid.Row="0" Content="Analysis" FontSize="18" HorizontalAlignment="Center"
+                               Background="#6AC1FF" Foreground="Black" />
+                        <DataGrid Grid.Row="1" Name="EvaluationDataGrid"
+                                  VerticalAlignment="Stretch"
+                                  HorizontalAlignment="Stretch"
+                                  AutoGenerateColumns="True"
+                                  CanUserReorderColumns="False"
+                                  CanUserResizeColumns="False"
+                                  CanUserSortColumns="False"
+                                  Items="{Binding EvaluationCollection}" />
                     </Grid>
                 </StackPanel>
             </Border>
