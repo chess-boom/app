@@ -4,9 +4,11 @@ using ReactiveUI;
 namespace ChessBoom.ViewModels;
 
 [ExcludeFromCodeCoverage]
-public class GameAnalysisBreakdownViewModel : BaseViewModel
+public class GameAnalysisBreakdownViewModel : GameAnalysisBaseViewModel
 {
     public GameAnalysisBreakdownViewModel(IScreen hostScreen) : base(hostScreen)
     {
+        Title = "";
+        Player1 = "Daniel";
     }
 }
