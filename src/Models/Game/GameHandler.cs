@@ -14,6 +14,10 @@ public class GameHandler
     Game m_game;
     Board m_board;
 
+    public delegate void MovePlayedDelegate(string startingSquare, string destinationSquare);
+
+    public event MovePlayedDelegate MovePlayed;
+
     public GameHandler()
     {
         // Define the game and board as null to appease compiler
@@ -222,6 +226,10 @@ public class GameHandler
         catch (GameplayErrorException)
         {
             throw;
+        }
+        finally
+        {
+            MovePlayed?.Invoke(startingSquare, destinationSquare);
         }
     }
 
