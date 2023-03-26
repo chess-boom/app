@@ -1,7 +1,9 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using ChessBoom.Models.Analysis;
 using ReactiveUI;
+using System.Text.Json;
 
 namespace ChessBoom.ViewModels;
 
@@ -18,156 +20,12 @@ public class GameAnalysisViewModel : BaseViewModel
 
     public GameAnalysisViewModel(IScreen hostScreen) : base(hostScreen)
     {
-        PlayerCollection = GetDummyPlayerData();
+        PlayerCollection = GetDummyPlayerData("Resources/GameAnalysis_Standard.json");
     }
 
-    private static ObservableCollection<Player> GetDummyPlayerData()
+    protected static ObservableCollection<Player> GetDummyPlayerData(string path)
     {
-        return new ObservableCollection<Player>
-        {
-            new()
-            {
-                Name = "J4N3D03",
-                Opponent = "J0ND03",
-                Variant = "Standard",
-                MatchStatus = "Win!",
-                Moves = 32,
-                Blunders = 2,
-                MissedWins = 0,
-                Improvement = "++"
-            },
-            new()
-            {
-                Name = "J4N3D03",
-                Opponent = "J0ND03",
-                Variant = "Standard",
-                MatchStatus = "Win!",
-                Moves = 32,
-                Blunders = 2,
-                MissedWins = 0,
-                Improvement = "++"
-            },
-            new()
-            {
-                Name = "J4N3D03",
-                Opponent = "J0ND03",
-                Variant = "Standard",
-                MatchStatus = "Loss!",
-                Moves = 32,
-                Blunders = 2,
-                MissedWins = 0,
-                Improvement = "++"
-            },
-            new()
-            {
-                Name = "J4N3D03",
-                Opponent = "J0ND03",
-                Variant = "Standard",
-                MatchStatus = "Draw!",
-                Moves = 32,
-                Blunders = 2,
-                MissedWins = 0,
-                Improvement = "++"
-            },
-            new()
-            {
-                Name = "J4N3D03",
-                Opponent = "J0ND03",
-                Variant = "Standard",
-                MatchStatus = "Loss!",
-                Moves = 32,
-                Blunders = 2,
-                MissedWins = 0,
-                Improvement = "++"
-            },
-            new()
-            {
-                Name = "J4N3D03",
-                Opponent = "J0ND03",
-                Variant = "Standard",
-                MatchStatus = "Win!",
-                Moves = 32,
-                Blunders = 2,
-                MissedWins = 0,
-                Improvement = "++"
-            },
-            new()
-            {
-                Name = "J4N3D03",
-                Opponent = "J0ND03",
-                Variant = "Standard",
-                MatchStatus = "Win!",
-                Moves = 32,
-                Blunders = 2,
-                MissedWins = 0,
-                Improvement = "++"
-            },
-            new()
-            {
-                Name = "J4N3D03",
-                Opponent = "J0ND03",
-                Variant = "Standard",
-                MatchStatus = "Draw!",
-                Moves = 32,
-                Blunders = 2,
-                MissedWins = 0,
-                Improvement = "++"
-            },
-            new()
-            {
-                Name = "J4N3D03",
-                Opponent = "J0ND03",
-                Variant = "Standard",
-                MatchStatus = "Draw!",
-                Moves = 32,
-                Blunders = 2,
-                MissedWins = 0,
-                Improvement = "++"
-            },
-            new()
-            {
-                Name = "J4N3D03",
-                Opponent = "J0ND03",
-                Variant = "Standard",
-                MatchStatus = "Win!",
-                Moves = 32,
-                Blunders = 2,
-                MissedWins = 0,
-                Improvement = "++"
-            },
-            new()
-            {
-                Name = "J4N3D03",
-                Opponent = "J0ND03",
-                Variant = "Standard",
-                MatchStatus = "Win!",
-                Moves = 32,
-                Blunders = 2,
-                MissedWins = 0,
-                Improvement = "++"
-            },
-            new()
-            {
-                Name = "J4N3D03",
-                Opponent = "J0ND03",
-                Variant = "Standard",
-                MatchStatus = "Win!",
-                Moves = 32,
-                Blunders = 2,
-                MissedWins = 0,
-                Improvement = "++"
-            },
-            new()
-            {
-                Name = "J4N3D03",
-                Opponent = "J0ND03",
-                Variant = "Standard",
-                MatchStatus = "Win!",
-                Moves = 32,
-                Blunders = 2,
-                MissedWins = 0,
-                Improvement = "++"
-            }
-        };
+        var jsonString = File.ReadAllText(path);
+        return JsonSerializer.Deserialize<ObservableCollection<Player>>(jsonString)!;
     }
 }
