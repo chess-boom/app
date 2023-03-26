@@ -78,6 +78,7 @@ public class Stockfish : IAnalysis
     {
         ProcessStartInfo processStartInfo = new ProcessStartInfo(m_engineFilePath);
 
+        processStartInfo.CreateNoWindow = true;
         processStartInfo.UseShellExecute = false;
         processStartInfo.RedirectStandardError = true;
         processStartInfo.RedirectStandardInput = true;
