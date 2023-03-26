@@ -1,5 +1,8 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
+using Avalonia.Controls;
+using Avalonia.Input;
+using ChessBoom.Models.Analysis;
 using ReactiveUI;
 
 namespace ChessBoom.ViewModels;
@@ -7,37 +10,155 @@ namespace ChessBoom.ViewModels;
 [ExcludeFromCodeCoverage]
 public class GameAnalysisViewModel : BaseViewModel
 {
-    // TODO : migrate to Models
-    public class PlayerModel
+    private ObservableCollection<Player> _playerCollection = new();
+
+    public ObservableCollection<Player> PlayerCollection
     {
-        public string? Name { get; set; }
-        public string? Opponent { get; set; }
-        public string? Variant { get; set; }
-        public string? MatchStatus { get; set; }
-        public int? Moves { get; set; }
-        public int? Blunders { get; set; }
-        public int? MissedWins { get; set; }
-        public string? Improvement { get; set; }
-
-    }
-
-    private ObservableCollection<PlayerModel> _playerModelCollection = new();
-
-    public ObservableCollection<PlayerModel> PlayerModelCollection
-    {
-        get => _playerModelCollection;
-        set => this.RaiseAndSetIfChanged(ref _playerModelCollection, value);
+        get => _playerCollection;
+        set => this.RaiseAndSetIfChanged(ref _playerCollection, value);
     }
 
     public GameAnalysisViewModel(IScreen hostScreen) : base(hostScreen)
     {
-        PlayerModelCollection = new ObservableCollection<PlayerModel>
+        PlayerCollection = new ObservableCollection<Player>
         {
             new()
             {
                 Name = "J4N3D03",
                 Opponent = "J0ND03",
                 Variant = "Atomic Chess",
+                MatchStatus = "Win!",
+                Moves = 32,
+                Blunders = 2,
+                MissedWins = 0,
+                Improvement = "++"
+            },
+            new()
+            {
+                Name = "J4N3D03",
+                Opponent = "J0ND03",
+                Variant = "Standard",
+                MatchStatus = "Win!",
+                Moves = 32,
+                Blunders = 2,
+                MissedWins = 0,
+                Improvement = "++"
+            },
+            new()
+            {
+                Name = "J4N3D03",
+                Opponent = "J0ND03",
+                Variant = "Standard",
+                MatchStatus = "Loss!",
+                Moves = 32,
+                Blunders = 2,
+                MissedWins = 0,
+                Improvement = "++"
+            },
+            new()
+            {
+                Name = "J4N3D03",
+                Opponent = "J0ND03",
+                Variant = "Standard",
+                MatchStatus = "Draw!",
+                Moves = 32,
+                Blunders = 2,
+                MissedWins = 0,
+                Improvement = "++"
+            },
+            new()
+            {
+                Name = "J4N3D03",
+                Opponent = "J0ND03",
+                Variant = "Standard",
+                MatchStatus = "Loss!",
+                Moves = 32,
+                Blunders = 2,
+                MissedWins = 0,
+                Improvement = "++"
+            },
+            new()
+            {
+                Name = "J4N3D03",
+                Opponent = "J0ND03",
+                Variant = "Standard",
+                MatchStatus = "Win!",
+                Moves = 32,
+                Blunders = 2,
+                MissedWins = 0,
+                Improvement = "++"
+            },
+            new()
+            {
+                Name = "J4N3D03",
+                Opponent = "J0ND03",
+                Variant = "Standard",
+                MatchStatus = "Win!",
+                Moves = 32,
+                Blunders = 2,
+                MissedWins = 0,
+                Improvement = "++"
+            },
+            new()
+            {
+                Name = "J4N3D03",
+                Opponent = "J0ND03",
+                Variant = "Standard",
+                MatchStatus = "Draw!",
+                Moves = 32,
+                Blunders = 2,
+                MissedWins = 0,
+                Improvement = "++"
+            },
+            new()
+            {
+                Name = "J4N3D03",
+                Opponent = "J0ND03",
+                Variant = "Standard",
+                MatchStatus = "Draw!",
+                Moves = 32,
+                Blunders = 2,
+                MissedWins = 0,
+                Improvement = "++"
+            },
+            new()
+            {
+                Name = "J4N3D03",
+                Opponent = "J0ND03",
+                Variant = "Standard",
+                MatchStatus = "Win!",
+                Moves = 32,
+                Blunders = 2,
+                MissedWins = 0,
+                Improvement = "++"
+            },
+            new()
+            {
+                Name = "J4N3D03",
+                Opponent = "J0ND03",
+                Variant = "Standard",
+                MatchStatus = "Win!",
+                Moves = 32,
+                Blunders = 2,
+                MissedWins = 0,
+                Improvement = "++"
+            },
+            new()
+            {
+                Name = "J4N3D03",
+                Opponent = "J0ND03",
+                Variant = "Standard",
+                MatchStatus = "Win!",
+                Moves = 32,
+                Blunders = 2,
+                MissedWins = 0,
+                Improvement = "++"
+            },
+            new()
+            {
+                Name = "J4N3D03",
+                Opponent = "J0ND03",
+                Variant = "Standard",
                 MatchStatus = "Win!",
                 Moves = 32,
                 Blunders = 2,
