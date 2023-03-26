@@ -1,7 +1,5 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
-using Avalonia.Controls;
-using Avalonia.Input;
 using ChessBoom.Models.Analysis;
 using ReactiveUI;
 
@@ -20,13 +18,18 @@ public class GameAnalysisViewModel : BaseViewModel
 
     public GameAnalysisViewModel(IScreen hostScreen) : base(hostScreen)
     {
-        PlayerCollection = new ObservableCollection<Player>
+        PlayerCollection = GetDummyPlayerData();
+    }
+
+    private static ObservableCollection<Player> GetDummyPlayerData()
+    {
+        return new ObservableCollection<Player>
         {
             new()
             {
                 Name = "J4N3D03",
                 Opponent = "J0ND03",
-                Variant = "Atomic Chess",
+                Variant = "Standard",
                 MatchStatus = "Win!",
                 Moves = 32,
                 Blunders = 2,
