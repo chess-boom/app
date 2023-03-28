@@ -184,16 +184,15 @@ public class Board
     /// <exception cref="ArgumentException">Thrown if castling or moving the specific piece is impossible</exception>
     public void MovePiece(Piece piece, string square)
     {
-
         if (square == Move.k_kingsideCastleNotation || square == Move.k_queensideCastleNotation)
         {
-            GetRuleset().Castle(this, piece.GetPlayer(), (square == Move.k_kingsideCastleNotation) ? Castling.Kingside : Castling.Queenside);
+            GetRuleset().Castle(this, piece.GetPlayer(),
+                (square == Move.k_kingsideCastleNotation) ? Castling.Kingside : Castling.Queenside);
         }
         else
         {
             piece.MovePiece(GameHelpers.GetCoordinateFromSquare(square));
         }
-
     }
 
     /// <summary>
@@ -347,20 +346,24 @@ public class Board
         m_halfmoveClock = 0;
     }
 
+    public delegate char RequestPromotionPieceDelegate();
+
     /// <summary>
     /// Handle a pawn's request to promote
     /// </summary>
     /// <param name="pawn">The pawn that wishes to promote</param>
     /// <param name="piece">The piece type into which the pawn will promote. May be null</param>
-    public void RequestPromotion(Pawn pawn, char? piece)
+    /// <param name="requestPromotionPiece">The function to call if piece is null. May be null</param>
+    public void RequestPromotion(Pawn pawn, char? piece, RequestPromotionPieceDelegate? requestPromotionPiece = null)
     {
+        requestPromotionPiece ??= RequestPromotionPiece;
         try
         {
             pawn.Destroy();
-            char pieceType = (piece is not null) ? (char)piece : RequestPromotionPiece();
+            var pieceType = piece ?? requestPromotionPiece();
             var promotionPiece = (pawn.GetPlayer() == Player.White)
-                ? Char.ToUpper(pieceType)
-                : Char.ToLower(pieceType);
+                ? char.ToUpper(pieceType)
+                : char.ToLower(pieceType);
             CreatePiece(promotionPiece, pawn.GetCoordinates());
         }
         catch (ArgumentException)
@@ -374,9 +377,8 @@ public class Board
     /// Request from the user which piece to promote a pawn to
     /// </summary>
     /// <returns>The character corresponding to the piece to which the pawn will promote</returns>
-    public char RequestPromotionPiece()
+    private static char RequestPromotionPiece()
     {
-        // TODO: Ask the user for which piece to promote to
         return 'Q';
     }
 
