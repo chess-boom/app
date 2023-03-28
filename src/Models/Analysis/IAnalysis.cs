@@ -13,6 +13,11 @@ public interface IAnalysis
     string? FenPosition { get; set; }
 
     /// <summary>
+    /// Variant of chess we are analyzing. When setting the variant, sends a command to set the variant in the engine.
+    /// </summary>
+    string? Variant { get; set; }
+
+    /// <summary>
     /// Gets the static evaluation of the current position as a float, and which side the value is relative to (White or Black).
     /// </summary>
     /// <returns>Evaluation Object. Null if an evaluation cannot be obtained for some reason.</returns>
@@ -31,4 +36,9 @@ public interface IAnalysis
     /// </summary>
     /// <returns>Boolean for whether or not engine is running</returns>
     public bool IsRunning();
+
+    /// <summary>
+    /// Close the engine process.
+    /// </summary>
+    public void Close();
 }

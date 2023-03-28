@@ -13,6 +13,12 @@ public class AnalysisUnitTests
     {
         _engine = new Stockfish();
     }
+
+    [TearDown]
+    public void TearDown()
+    {
+        _engine.Close();
+    }
     /// <summary>
     /// Test that the engine can successfully run.
     /// </summary>
@@ -80,6 +86,36 @@ public class AnalysisUnitTests
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// Test that analysis engine can run on all supported variants.
+    /// Does not use the Setup method, as we need to create a new engine for each variant.
+    /// </summary>
+    [Test]
+    [TestCase("Chess960")]
+    [TestCase("Horde")]
+    [TestCase("Atomic")]
+    public void AnalysisEngineCanRunOnAllSupportedVariants(string variant)
+    {
+        var engine = new Stockfish(variant);
+
+        Assert.AreEqual(true, engine.IsRunning());
+
+        engine.Close();
+    }
+
+    /// <summary>
+    /// Test that analysis engine throws an ArgumentException when given an unsupported variant.
+    /// Does not use the Setup method, as we need to create a new engine for each variant.
+    /// </summary>
+    [Test]
+    [TestCase("Crazyhouse")]
+    [TestCase("KingOfTheHill")]
+    [TestCase("ThreeCheck")]
+    public void AnalysisEngineThrowsArgumentExceptionOnUnsupportedVariant(string variant)
+    {
+        Assert.Throws<ArgumentException>(() => new Stockfish(variant));
     }
 
 }
