@@ -2,13 +2,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:viewModels="clr-namespace:ChessBoom.ViewModels"
              xmlns:views="clr-namespace:ChessBoom.Views"
-             x:Class="ChessBoom.Views.GameAnalysisBreakdownView">
+             x:Class="ChessBoom.Views.GameAnalysisVariantView">
     <Design.DataContext>
         <!-- ReSharper disable once Xaml.ConstructorWarning -->
-        <viewModels:GameAnalysisBreakdownViewModel />
+        <viewModels:GameAnalysisVariantViewModel />
     </Design.DataContext>
     <StackPanel>
-        <Label Content="Game Analysis Breakdown" FontSize="50" HorizontalAlignment="Center" />
+        <Label Content="Game Analysis Variant" FontSize="50" HorizontalAlignment="Center" />
         <Grid RowDefinitions="*,*" ColumnDefinitions="*,*,*">
             <!-- First section -->
             <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">

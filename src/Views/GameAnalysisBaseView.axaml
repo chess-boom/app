@@ -7,7 +7,6 @@
         <viewModels:GameAnalysisBaseViewModel />
     </Design.DataContext>
     <StackPanel>
-        <Label Content="Game Analysis Breakdown" FontSize="50" HorizontalAlignment="Center" />
         <Grid>
             <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
