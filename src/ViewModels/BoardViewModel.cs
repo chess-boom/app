@@ -7,8 +7,8 @@ namespace ChessBoom.ViewModels;
 [ExcludeFromCodeCoverage]
 public class BoardViewModel : BaseViewModel
 {
-    public GameHandler GameHandler { get; }
-    public string Title { get; }
+    public GameHandler GameHandler { get; set; }
+    public string Title { get; set; }
 
     public BoardViewModel(IScreen hostScreen, Variant variant = Variant.Standard) : base(hostScreen)
     {

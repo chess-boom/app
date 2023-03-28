@@ -47,16 +47,16 @@ public class MainWindowViewModel : ReactiveObject, IScreen
             () => Router.Navigate.Execute(new TutorialViewModel(this))
         );
         GoChess960Board = ReactiveCommand.CreateFromObservable(
-            () => Router.Navigate.Execute(new BoardViewModel(this, Variant.Chess960))
+            () => Router.Navigate.Execute(new GameAnalysisBaseViewModel(this, Variant.Chess960))
         );
         GoBoard = ReactiveCommand.CreateFromObservable(
             () => Router.Navigate.Execute(new BoardViewModel(this))
         );
         GoAtomicBoard = ReactiveCommand.CreateFromObservable(
-            () => Router.Navigate.Execute(new BoardViewModel(this, Variant.Atomic))
+            () => Router.Navigate.Execute(new GameAnalysisBaseViewModel(this, Variant.Atomic))
         );
         GoHordeBoard = ReactiveCommand.CreateFromObservable(
-            () => Router.Navigate.Execute(new BoardViewModel(this, Variant.Horde))
+            () => Router.Navigate.Execute(new GameAnalysisBaseViewModel(this, Variant.Horde))
         );
         GoTemplate = ReactiveCommand.CreateFromObservable(
             () => Router.Navigate.Execute(new TemplateViewModel(this))

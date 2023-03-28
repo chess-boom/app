@@ -7,7 +7,7 @@ using ReactiveUI;
 namespace ChessBoom.ViewModels;
 
 [ExcludeFromCodeCoverage]
-public class GameAnalysisBreakdownViewModel : BoardViewModel
+public class GameAnalysisBreakdownViewModel : GameAnalysisBaseViewModel
 {
     private ObservableCollection<Evaluation> _evaluationCollection;
 
