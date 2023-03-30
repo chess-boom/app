@@ -11,9 +11,9 @@
         <Label Content="Game Analysis Breakdown" FontSize="50" HorizontalAlignment="Center" />
         <Grid>
             <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <!-- First section -->
             <Border Grid.Column="0" Background="LightBlue">
@@ -29,10 +29,11 @@
                             <ColumnDefinition Width="2*" />
                             <ColumnDefinition Width="2*" />
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Row="0" Content="Move List" FontSize="18" HorizontalAlignment="Center" Background="#6AC1FF" />
-                        <Label Grid.Row="1" Grid.Column="0" Content="Player" FontSize="18" HorizontalAlignment="Center"/>
-                        <Label Grid.Row="1" Grid.Column="1" Content="Piece" FontSize="18" HorizontalAlignment="Center"/>
-                        <Label Grid.Row="1" Grid.Column="2" Content="Move" FontSize="18" HorizontalAlignment="Center"/>
+                        <Label Grid.Row="0" Content="Move List" FontSize="18" HorizontalAlignment="Center"
+                               Background="#6AC1FF" />
+                        <Label Grid.Row="1" Grid.Column="0" Content="Player" FontSize="18" HorizontalAlignment="Center" />
+                        <Label Grid.Row="1" Grid.Column="1" Content="Piece" FontSize="18" HorizontalAlignment="Center" />
+                        <Label Grid.Row="1" Grid.Column="2" Content="Move" FontSize="18" HorizontalAlignment="Center" />
                         <!-- <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Width="1500" Background="#696969">
                             <Button Width="1500">
                                 <Button.Background>
@@ -71,10 +72,11 @@
                             <ColumnDefinition Width="2*" />
                             <ColumnDefinition Width="2*" />
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Row="0" Content="Move List" FontSize="18" HorizontalAlignment="Center" Background="#6AC1FF" />
-                        <Label Grid.Row="1" Grid.Column="0" Content="Player" FontSize="18" HorizontalAlignment="Center"/>
-                        <Label Grid.Row="1" Grid.Column="1" Content="Piece" FontSize="18" HorizontalAlignment="Center"/>
-                        <Label Grid.Row="1" Grid.Column="2" Content="Move" FontSize="18" HorizontalAlignment="Center"/>
+                        <Label Grid.Row="0" Content="Move List" FontSize="18" HorizontalAlignment="Center"
+                               Background="#6AC1FF" />
+                        <Label Grid.Row="1" Grid.Column="0" Content="Player" FontSize="18" HorizontalAlignment="Center" />
+                        <Label Grid.Row="1" Grid.Column="1" Content="Piece" FontSize="18" HorizontalAlignment="Center" />
+                        <Label Grid.Row="1" Grid.Column="2" Content="Move" FontSize="18" HorizontalAlignment="Center" />
                         <!-- <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Width="1500" Background="#696969">
                             <Button Width="1500">
                                 <Button.Background>
@@ -88,29 +90,28 @@
                                 </Button.Background>
                             </Button>
                         </StackPanel> -->
-                        </Grid>
-                    </StackPanel>
-                </Border>
-
-            </Grid>
-            <!-- Bottom section -->
-            <Border Grid.Row="1" Grid.Column="0" Background="LightBlue">
-                <StackPanel>
-                    <!-- DataGrid does not dynamically grow by default -->
-                    <Grid RowDefinitions="*,1000">
-                        <Label Grid.Row="0" Content="Analysis" FontSize="18" HorizontalAlignment="Center"
-                               Background="#6AC1FF" Foreground="Black" />
-                        <DataGrid Grid.Row="1" Name="EvaluationDataGrid"
-                                  VerticalAlignment="Stretch"
-                                  HorizontalAlignment="Stretch"
-                                  AutoGenerateColumns="True"
-                                  CanUserReorderColumns="False"
-                                  CanUserResizeColumns="False"
-                                  CanUserSortColumns="False"
-                                  Items="{Binding EvaluationCollection}" />
                     </Grid>
                 </StackPanel>
             </Border>
+
         </Grid>
+        <!-- Bottom section -->
+        <Border Background="LightBlue">
+            <StackPanel>
+                <!-- DataGrid does not dynamically grow by default -->
+                <Grid RowDefinitions="*,1000">
+                    <Label Grid.Row="0" Content="Analysis" FontSize="18" HorizontalAlignment="Center"
+                           Background="#6AC1FF" Foreground="Black" />
+                    <DataGrid Grid.Row="1" Name="EvaluationDataGrid"
+                              VerticalAlignment="Stretch"
+                              HorizontalAlignment="Stretch"
+                              AutoGenerateColumns="True"
+                              CanUserReorderColumns="False"
+                              CanUserResizeColumns="False"
+                              CanUserSortColumns="False"
+                              Items="{Binding EvaluationCollection}" />
+                </Grid>
+            </StackPanel>
+        </Border>
     </StackPanel>
 </UserControl>
