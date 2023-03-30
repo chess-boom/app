@@ -33,8 +33,6 @@ public enum GameState
     VictoryWhite,
     VictoryBlack,
     Draw,
-
-    // TODO: Implement game aborting
     Aborted
 }
 

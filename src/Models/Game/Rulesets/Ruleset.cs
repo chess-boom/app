@@ -22,7 +22,6 @@ public abstract class Ruleset
     /// </summary>
     public static readonly ImmutableDictionary<Variant, Ruleset> k_rulesetUsage = new Dictionary<Variant, Ruleset>
     {
-        // TODO: Update when more rulesets are added
         { Variant.Standard, Standard.Instance },
         { Variant.Chess960, Standard.Instance },
         { Variant.Atomic, Atomic.Instance },
