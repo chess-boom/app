@@ -12,7 +12,6 @@ namespace ChessBoom.Models.Analysis;
 public class Stockfish : IAnalysis
 {
     protected string? m_fenPosition;
-    protected Game.Variant? m_variant;
     protected string m_engineFilePath;
     protected Process m_stockfish;
     readonly int s_millisecondDelay = 100;
@@ -34,11 +33,7 @@ public class Stockfish : IAnalysis
         }
     }
 
-    public Game.Variant? Variant
-    {
-        get { return m_variant; }
-        set { m_variant = value; }
-    }
+    public Game.Variant? Variant { get; set;}
 
     public Stockfish(Game.Variant variant = Game.Variant.Standard)
     {
@@ -49,7 +44,6 @@ public class Stockfish : IAnalysis
         string directoryString = "";
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            //directoryString = @".\AnalysisEngine\Windows\stockfish-windows-2022-x86-64-avx2.exe";
             // Change directory string if variant isn't Standard, use ternary operator
             directoryString = variant == Game.Variant.Standard ? @".\AnalysisEngine\Windows\stockfish-windows-2022-x86-64-avx2.exe" : @"./AnalysisEngine/Windows/fairy-stockfish-largeboard_x86-64.exe";
 
@@ -172,7 +166,7 @@ public class Stockfish : IAnalysis
     public void NewGame()
     {
         WriteCommand("ucinewgame");
-        if (m_variant != Game.Variant.Standard) // If variant is not standard, set variant in fairy-stockfish
+        if (Variant != Game.Variant.Standard) // If variant is not standard, set variant in fairy-stockfish
         {
             SetVariant();
         }
@@ -184,15 +178,15 @@ public class Stockfish : IAnalysis
     /// </summary>
     private void SetVariant()
     {
-        if (m_variant == Game.Variant.Chess960)
+        if (Variant == Game.Variant.Chess960)
         {
             WriteCommand("setoption name UCI_Variant value chess960");
         }
-        else if (m_variant == Game.Variant.Horde)
+        else if (Variant == Game.Variant.Horde)
         {
             WriteCommand("setoption name UCI_Variant value horde");
         }
-        else if (m_variant == Game.Variant.Atomic)
+        else if (Variant == Game.Variant.Atomic)
         {
             WriteCommand("setoption name UCI_Variant value atomic");
         }
