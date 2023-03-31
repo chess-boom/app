@@ -15,7 +15,7 @@ public interface IAnalysis
     /// <summary>
     /// Variant of chess we are analyzing. When setting the variant, sends a command to set the variant in the engine.
     /// </summary>
-    string? Variant { get; set; }
+    Game.Variant? Variant { get; set; }
 
     /// <summary>
     /// Gets the static evaluation of the current position as a float, and which side the value is relative to (White or Black).

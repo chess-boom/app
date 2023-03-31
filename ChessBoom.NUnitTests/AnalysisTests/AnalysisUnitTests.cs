@@ -93,29 +93,16 @@ public class AnalysisUnitTests
     /// Does not use the Setup method, as we need to create a new engine for each variant.
     /// </summary>
     [Test]
-    [TestCase("Chess960")]
-    [TestCase("Horde")]
-    [TestCase("Atomic")]
-    public void AnalysisEngineCanRunOnAllSupportedVariants(string variant)
+    [TestCase(Models.Game.Variant.Chess960)]
+    [TestCase(Models.Game.Variant.Horde)]
+    [TestCase(Models.Game.Variant.Atomic)]
+    public void AnalysisEngineCanRunOnAllSupportedVariants(Models.Game.Variant variant)
     {
         var engine = new Stockfish(variant);
 
         Assert.AreEqual(true, engine.IsRunning());
 
         engine.Close();
-    }
-
-    /// <summary>
-    /// Test that analysis engine throws an ArgumentException when given an unsupported variant.
-    /// Does not use the Setup method, as we need to create a new engine for each variant.
-    /// </summary>
-    [Test]
-    [TestCase("Crazyhouse")]
-    [TestCase("KingOfTheHill")]
-    [TestCase("ThreeCheck")]
-    public void AnalysisEngineThrowsArgumentExceptionOnUnsupportedVariant(string variant)
-    {
-        Assert.Throws<ArgumentException>(() => new Stockfish(variant));
     }
 
 }

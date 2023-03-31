@@ -12,7 +12,7 @@ namespace ChessBoom.Models.Analysis;
 public class Stockfish : IAnalysis
 {
     protected string? m_fenPosition;
-    protected string? m_variant;
+    protected Game.Variant? m_variant;
     protected string m_engineFilePath;
     protected Process m_stockfish;
     readonly int s_millisecondDelay = 100;
@@ -34,27 +34,16 @@ public class Stockfish : IAnalysis
         }
     }
 
-    public string? Variant
+    public Game.Variant? Variant
     {
         get { return m_variant; }
-        set
-        {
-            if (value != "Standard" && value != "Chess960" && value != "Horde" && value != "Atomic")
-            {
-                throw new ArgumentException("Variant is not supported!");
-            }
-            else
-            {
-                m_variant = value;
-            }
-        }
-
+        set { m_variant = value; }
     }
 
-    public Stockfish(string variant = "Standard")
+    public Stockfish(Game.Variant variant = Game.Variant.Standard)
     {
         // Set variant to Standard if not specified, otherwise set to variant
-        Variant = variant;
+        this.Variant = variant;
 
         // Get stockfish engine location based on OS 
         string directoryString = "";
@@ -62,7 +51,7 @@ public class Stockfish : IAnalysis
         {
             //directoryString = @".\AnalysisEngine\Windows\stockfish-windows-2022-x86-64-avx2.exe";
             // Change directory string if variant isn't Standard, use ternary operator
-            directoryString = variant == "Standard" ? @".\AnalysisEngine\Windows\stockfish-windows-2022-x86-64-avx2.exe" : @"./AnalysisEngine/Windows/fairy-stockfish-largeboard_x86-64.exe";
+            directoryString = variant == Game.Variant.Standard ? @".\AnalysisEngine\Windows\stockfish-windows-2022-x86-64-avx2.exe" : @"./AnalysisEngine/Windows/fairy-stockfish-largeboard_x86-64.exe";
 
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
@@ -73,12 +62,12 @@ public class Stockfish : IAnalysis
             }
             else
             {
-                directoryString = variant == "Standard" ? "./AnalysisEngine/MacOS/stockfish" : "./AnalysisEngine/MacOS/Fairy-Stockfish-14-LargeBoard_Mac_Apple_Silicon";
+                directoryString = variant == Game.Variant.Standard ? "./AnalysisEngine/MacOS/stockfish" : "./AnalysisEngine/MacOS/Fairy-Stockfish-14-LargeBoard_Mac_Apple_Silicon";
             }
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            directoryString = variant == "Standard" ? "./AnalysisEngine/Linux/stockfish-ubuntu-20.04-x86-64" : "./AnalysisEngine/Linux/fairy-stockfish-largeboard_x86-64";
+            directoryString = variant == Game.Variant.Standard ? "./AnalysisEngine/Linux/stockfish-ubuntu-20.04-x86-64" : "./AnalysisEngine/Linux/fairy-stockfish-largeboard_x86-64";
         }
         else
         {
@@ -183,7 +172,7 @@ public class Stockfish : IAnalysis
     public void NewGame()
     {
         WriteCommand("ucinewgame");
-        if (m_variant != "Standard") // If variant is not standard, set variant in fairy-stockfish
+        if (m_variant != Game.Variant.Standard) // If variant is not standard, set variant in fairy-stockfish
         {
             SetVariant();
         }
@@ -195,15 +184,15 @@ public class Stockfish : IAnalysis
     /// </summary>
     private void SetVariant()
     {
-        if (m_variant == "Chess960")
+        if (m_variant == Game.Variant.Chess960)
         {
             WriteCommand("setoption name UCI_Variant value chess960");
         }
-        else if (m_variant == "Horde")
+        else if (m_variant == Game.Variant.Horde)
         {
             WriteCommand("setoption name UCI_Variant value horde");
         }
-        else if (m_variant == "Atomic")
+        else if (m_variant == Game.Variant.Atomic)
         {
             WriteCommand("setoption name UCI_Variant value atomic");
         }
