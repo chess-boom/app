@@ -33,7 +33,7 @@ public class Stockfish : IAnalysis
         }
     }
 
-    public Game.Variant? Variant { get; set;}
+    public Game.Variant? Variant { get; set; }
 
     public Stockfish(Game.Variant variant = Game.Variant.Standard)
     {
