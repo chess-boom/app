@@ -9,6 +9,14 @@
     </Design.DataContext>
     <StackPanel HorizontalAlignment="Center">
         <Label Content="{Binding Title}" FontSize="50" HorizontalAlignment="Center" />
-        <Grid Name="ChessBoard" HorizontalAlignment="Center" PointerPressed="ChessBoard_MouseLeftButtonDown" Focusable="True"/>
+        <Grid RowDefinitions="*,*,*" ColumnDefinitions="*,*,*">
+            <Grid Grid.Row="1" Grid.Column="0" Name="NumberGridLabels" />
+            <Grid Grid.Row="1" Grid.Column="1" Name="ChessBoard"
+                  HorizontalAlignment="Center"
+                  PointerPressed="ChessBoard_MouseLeftButtonDown" Focusable="True" />
+            <Grid Grid.Row="2" Grid.Column="1" Name="LetterGridLabels" />
+            <Grid Grid.Row="1" Grid.Column="2" ShowGridLines="True"
+                  Name="PromotionPieces" />
+        </Grid>
     </StackPanel>
 </UserControl>

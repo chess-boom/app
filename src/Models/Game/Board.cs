@@ -346,21 +346,18 @@ public class Board
         m_halfmoveClock = 0;
     }
 
-    public delegate char RequestPromotionPieceDelegate();
-
     /// <summary>
     /// Handle a pawn's request to promote
     /// </summary>
     /// <param name="pawn">The pawn that wishes to promote</param>
-    /// <param name="piece">The piece type into which the pawn will promote. May be null</param>
     /// <param name="requestPromotionPiece">The function to call if piece is null. May be null</param>
-    public void RequestPromotion(Pawn pawn, char? piece, RequestPromotionPieceDelegate? requestPromotionPiece = null)
+    public void RequestPromotion(Pawn pawn, RequestPromotionPieceDelegate? requestPromotionPiece = null)
     {
         requestPromotionPiece ??= RequestPromotionPiece;
         try
         {
             pawn.Destroy();
-            var pieceType = piece ?? requestPromotionPiece();
+            var pieceType = requestPromotionPiece();
             var promotionPiece = (pawn.GetPlayer() == Player.White)
                 ? char.ToUpper(pieceType)
                 : char.ToLower(pieceType);
@@ -372,9 +369,11 @@ public class Board
             Console.WriteLine("Error! Promotion request failed.");
         }
     }
+    
+    public delegate char RequestPromotionPieceDelegate();
 
     /// <summary>
-    /// Request from the user which piece to promote a pawn to
+    /// Return Q by default, pass delegate to RequestPromotion to override
     /// </summary>
     /// <returns>The character corresponding to the piece to which the pawn will promote</returns>
     private static char RequestPromotionPiece()

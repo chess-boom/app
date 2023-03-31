@@ -29,6 +29,11 @@ public static class GameHelpers
     /// The height of the chess board is here defined
     /// </summary>
     public static readonly int k_boardHeight = 8;
+    
+    /// <summary>
+    /// Possible pieces to promote to
+    /// </summary>
+    public static readonly ImmutableList<char> k_promotionPieces = ImmutableList.Create('Q', 'R', 'B', 'N' );
 
     /// <summary>
     /// The corresponding square is retrieved from its board coordinates

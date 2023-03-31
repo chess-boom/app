@@ -39,6 +39,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         internal static readonly Color k_white = Color.FromRgb(243, 219, 180);
         internal static readonly Color k_black = Color.FromRgb(179, 140, 99);
         internal static readonly Color k_highlight = Color.FromRgb(102, 178, 255);
+        internal static readonly Color k_background = Color.FromRgb(43, 43, 43);
     }
 
     /// <summary>
@@ -72,9 +73,15 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             DrawChessBoard();
             DrawGridLabels();
             DrawPieces();
+            DrawPromotionPieces();
+            PromotionPieces.IsVisible = false;
         });
         AvaloniaXamlLoader.Load(this);
+
         ChessBoard = this.Find<Grid>("ChessBoard");
+        NumberGridLabels = this.Find<Grid>("NumberGridLabels");
+        LetterGridLabels = this.Find<Grid>("LetterGridLabels");
+        PromotionPieces = this.Find<Grid>("PromotionPieces");
     }
 
     /// <summary>
@@ -125,35 +132,62 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     /// </summary>
     private void DrawGridLabels()
     {
-        ChessBoard.RowDefinitions.Add(new RowDefinition { Height = new GridLength(Tile.Height) });
-        ChessBoard.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(Tile.Width) });
-        for (var i = 0; i < GameHelpers.k_boardWidth; i++)
-        {
-            var letter = new TextBlock
-            {
-                Text = ((char)('A' + i)).ToString(),
-                FontWeight = FontWeight.Bold,
-                TextAlignment = TextAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center
-            };
-            ChessBoard.Children.Add(letter);
-            Grid.SetRow(letter, GameHelpers.k_boardHeight);
-            Grid.SetColumn(letter, i);
-        }
-
         for (var i = 0; i < GameHelpers.k_boardHeight; i++)
         {
+            NumberGridLabels.RowDefinitions.Add(new RowDefinition { Height = new GridLength(Tile.Height) });
             var number = new TextBlock
             {
                 Text = (GameHelpers.k_boardWidth - i).ToString(),
                 FontWeight = FontWeight.Bold,
                 TextAlignment = TextAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Center
             };
-            ChessBoard.Children.Add(number);
-            Grid.SetRow(number, i);
-            Grid.SetColumn(number, GameHelpers.k_boardWidth);
+            var container = new ContentControl
+            {
+                VerticalAlignment = VerticalAlignment.Center,
+                Width = Tile.Width,
+                Content = number
+            };
+            NumberGridLabels.Children.Add(container);
+            Grid.SetRow(container, i);
         }
+
+        for (var i = 0; i < GameHelpers.k_boardWidth; i++)
+        {
+            LetterGridLabels.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(Tile.Width) });
+            var letter = new TextBlock
+            {
+                Text = ((char)('A' + i)).ToString(),
+                FontWeight = FontWeight.Bold,
+                TextAlignment = TextAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Center
+            };
+            var container = new ContentControl
+            {
+                VerticalAlignment = VerticalAlignment.Center,
+                Height = Tile.Height,
+                Content = letter
+            };
+            LetterGridLabels.Children.Add(container);
+            Grid.SetColumn(container, i);
+        }
+    }
+
+    private static SKBitmap GeneratePieceBitmap(string piecePath)
+    {
+        using var svg = new SKSvg();
+        var bitmap = new SKBitmap(Tile.Width, Tile.Height);
+        svg.Load(piecePath);
+        if (svg.Picture is null) throw new InvalidOperationException("svg.Picture is null");
+        var canvas = new SKCanvas(bitmap);
+        var matrix = SKMatrix.CreateScale(
+            Tile.Width / svg.Picture.CullRect.Width,
+            Tile.Height / svg.Picture.CullRect.Height
+        );
+        canvas.DrawPicture(svg.Picture, ref matrix);
+        return bitmap;
     }
 
     /// <summary>
@@ -176,16 +210,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
                     _ => throw new InvalidOperationException("Invalid Player")
                 };
 
-                using var svg = new SKSvg();
-                bitmap.Bitmap = new SKBitmap(Tile.Width, Tile.Height);
-                svg.Load(piecePath);
-                if (svg.Picture is null) throw new InvalidOperationException("svg.Picture is null");
-                var canvas = new SKCanvas(bitmap.Bitmap);
-                var matrix = SKMatrix.CreateScale(
-                    Tile.Width / svg.Picture.CullRect.Width,
-                    Tile.Height / svg.Picture.CullRect.Height
-                );
-                canvas.DrawPicture(svg.Picture, ref matrix);
+                bitmap.Bitmap = GeneratePieceBitmap(piecePath);
             }
             else
             {
@@ -209,7 +234,8 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         if (_sourcePieceBitmapControl is null)
         {
             _sourcePieceBitmapControl = e.Source as SKBitmapControl;
-            _sourceTile = ChessBoard.Children.OfType<Rectangle>().FirstOrDefault(x => x.Name == _sourcePieceBitmapControl?.Name);
+            _sourceTile = ChessBoard.Children.OfType<Rectangle>()
+                .FirstOrDefault(x => x.Name == _sourcePieceBitmapControl?.Name);
 
             _sourceColor = _sourceTile?.Fill;
             if (_sourceTile is not null) _sourceTile.Fill = new SolidColorBrush(Tile.k_highlight);
@@ -239,16 +265,16 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             RemoveLegalMoves();
 
             // if the destination tile is the source tile, do nothing
-            if (destinationTile?.Name == _sourceTile.Name) return;
+            if (destinationTile.Name == _sourceTile.Name) return;
 
-            if (_sourceTile?.Name is null || destinationTile?.Name is null) return;
+            if (_sourceTile?.Name is null || destinationTile.Name is null) return;
 
             // if the destination tile is not a legal move, do nothing
             if (!_legalMoves.Contains(destinationTile.Name)) return;
 
             try
             {
-                ViewModel.GameHandler.MakeMove(_sourceTile.Name, destinationTile.Name);
+                ViewModel.GameHandler.MakeMove(_sourceTile.Name, destinationTile.Name, RequestPromotionPiece);
             }
             catch (Exception exception)
             {
@@ -259,6 +285,60 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
                 DrawPieces();
             }
         }
+    }
+
+    private void DrawPromotionPieces()
+    {
+        PromotionPieces.RowDefinitions.Add(new RowDefinition { Height = new GridLength(Tile.Height) });
+        PromotionPieces.RowDefinitions.Add(new RowDefinition { Height = new GridLength(Tile.Height) });
+        for (var row = 0; row < GameHelpers.k_promotionPieces.Count; row++)
+        {
+            PromotionPieces.RowDefinitions.Add(new RowDefinition { Height = new GridLength(Tile.Height) });
+            var background = new Rectangle
+            {
+                Width = Tile.Width,
+                Height = Tile.Height,
+                StrokeThickness = 0,
+                Fill = new SolidColorBrush(Tile.k_background)
+            };
+
+            Grid.SetRow(background, row + 2);
+            PromotionPieces.Children.Add(background);
+
+            var promotionPiece = new SKBitmapControl
+            {
+                Name = GameHelpers.k_promotionPieces[row].ToString(),
+                Width = Tile.Width,
+                Height = Tile.Height,
+                ZIndex = 1,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+            var piecePath = ViewModel?.GameHandler.GetPlayerToPlay() switch
+            {
+                Player.White => string.Format(Piece.k_white, GameHelpers.k_promotionPieces[row]),
+                Player.Black => string.Format(Piece.k_black, GameHelpers.k_promotionPieces[row].ToString().ToLower()),
+                _ => throw new InvalidOperationException("Invalid Player")
+            };
+            promotionPiece.Bitmap = GeneratePieceBitmap(piecePath);
+            PromotionPieces.Children.Add(promotionPiece);
+            Grid.SetRow(promotionPiece, row + 2);
+        }
+    }
+
+    private char RequestPromotionPiece()
+    {
+        PromotionPieces.IsVisible = true;
+        DrawPromotionPieces();
+        char? promotionPiece = null;
+        PromotionPieces.PointerPressed += (_, e) =>
+        {
+            if (e.Source is not SKBitmapControl bitmapControl) return;
+            promotionPiece = bitmapControl.Name![0];
+            PromotionPieces.IsVisible = false;
+        };
+        if (promotionPiece is null) throw new InvalidOperationException("Invalid Promotion Piece");
+        return (char)promotionPiece;
     }
 
     /// <summary>
