@@ -7,6 +7,24 @@
         <viewModels:GameAnalysisBaseViewModel />
     </Design.DataContext>
     <StackPanel>
+        <Button Command="{Binding OpenExplorerCommand}" 
+                HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40,10,10,10" 
+                Background="#4287f5" Padding="10,10,10,10" FontSize="16">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Analyze Game File" FontSize="16" TextAlignment="Center" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <Image Source="/Assets/Icons/file.png" Grid.Column="1" Width="24" Height="24" />
+                    <ContentPresenter />
+                </Grid>
+        </Button>
+        <TextBlock Text="{Binding FileData}"/>
+        <Separator Height="1" Background="#FFFFFF" Margin="20,0,20,0"/>
         <Grid>
             <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -28,8 +46,8 @@
                             <ColumnDefinition Width="2*" />
                             <ColumnDefinition Width="2*" />
                         </Grid.ColumnDefinitions>
-                        <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Background="#049fcf" Margin="0,20,0,0">
-                            <Label Content="Move List" FontSize="24" HorizontalAlignment="Center" Background="#049fcf" />
+                        <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Background="#4287f5" Margin="0,20,0,0">
+                            <Label Content="Move List" FontSize="24" HorizontalAlignment="Center" Background="#4287f5" />
                         </Border>
                         <Border Grid.Row="1" Grid.Column="0" Background="#454545">
                             <Label Content="Player" FontSize="20" HorizontalAlignment="Center"/>
