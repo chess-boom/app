@@ -33,21 +33,35 @@ public class Stockfish : IAnalysis
         }
     }
 
-    public Stockfish()
+    public Game.Variant? Variant { get; set; }
+
+    public Stockfish(Game.Variant variant = Game.Variant.Standard)
     {
+        // Set variant to Standard if not specified, otherwise set to variant
+        this.Variant = variant;
+
         // Get stockfish engine location based on OS 
         string directoryString = "";
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            directoryString = @".\AnalysisEngine\Windows\stockfish-windows-2022-x86-64-avx2.exe";
+            // Change directory string if variant isn't Standard, use ternary operator
+            directoryString = variant == Game.Variant.Standard ? @".\AnalysisEngine\Windows\stockfish-windows-2022-x86-64-avx2.exe" : @"./AnalysisEngine/Windows/fairy-stockfish-largeboard_x86-64.exe";
+
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
-            directoryString = "./AnalysisEngine/MacOS/stockfish";
+            if (RuntimeInformation.ProcessArchitecture == Architecture.X64) // If we are running on x64 architecture and not the new M series chips
+            {
+                directoryString = "./AnalysisEngine/MacOS/Fairy-Stockfish-14-LargeBoard_Mac_x86-64";
+            }
+            else
+            {
+                directoryString = variant == Game.Variant.Standard ? "./AnalysisEngine/MacOS/stockfish" : "./AnalysisEngine/MacOS/Fairy-Stockfish-14-LargeBoard_Mac_Apple_Silicon";
+            }
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            directoryString = "./AnalysisEngine/Linux/stockfish-ubuntu-20.04-x86-64";
+            directoryString = variant == Game.Variant.Standard ? "./AnalysisEngine/Linux/stockfish-ubuntu-20.04-x86-64" : "./AnalysisEngine/Linux/fairy-stockfish-largeboard_x86-64";
         }
         else
         {
@@ -152,7 +166,34 @@ public class Stockfish : IAnalysis
     public void NewGame()
     {
         WriteCommand("ucinewgame");
+        if (Variant != Game.Variant.Standard) // If variant is not standard, set variant in fairy-stockfish
+        {
+            SetVariant();
+        }
         WriteCommand("position startpos");
+    }
+
+    /// <summary>
+    /// Sets the variant of the engine to the variant specified in the constructor.
+    /// </summary>
+    private void SetVariant()
+    {
+        if (Variant == Game.Variant.Chess960)
+        {
+            WriteCommand("setoption name UCI_Variant value chess960");
+        }
+        else if (Variant == Game.Variant.Horde)
+        {
+            WriteCommand("setoption name UCI_Variant value horde");
+        }
+        else if (Variant == Game.Variant.Atomic)
+        {
+            WriteCommand("setoption name UCI_Variant value atomic");
+        }
+        else
+        {
+            throw new ArgumentException("Variant is not supported!");
+        }
     }
     /// <summary>
     /// Gets the static evaluation of the current position as a float, and which side the value is relative to (White or Black).

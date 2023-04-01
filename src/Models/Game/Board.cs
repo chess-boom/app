@@ -347,6 +347,8 @@ public class Board
         m_halfmoveClock = 0;
     }
 
+    public delegate char RequestPromotionPieceDelegate();
+
     /// <summary>
     /// Handle a pawn's request to promote
     /// </summary>
@@ -363,7 +365,6 @@ public class Board
                 pieceType = await requestPromotionPiece();
                 pawn.Destroy();
             }
-
             var promotionPiece = (pawn.GetPlayer() == Player.White)
                 ? char.ToUpper(pieceType)
                 : char.ToLower(pieceType);

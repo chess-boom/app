@@ -252,7 +252,7 @@ public class GameHandler
     /// <exception cref="ArgumentException">Thrown if the square parameter is not on the chess board</exception>
     public List<string> GetLegalMoves(string square)
     {
-        return GetLegalMoves(GameHelpers.GetCoordinateFromSquare(square));
+        return this.GetLegalMoves(GameHelpers.GetCoordinateFromSquare(square));
     }
 
     /// <summary>
