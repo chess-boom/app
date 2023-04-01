@@ -163,12 +163,12 @@ public class Game
                 // TODO: CB-24
                 break;
             case Variant.Horde:
-                fen = File.ReadAllText("Resources/horde.fen");
+                fen = File.ReadAllText(Path.Combine(System.AppContext.BaseDirectory, "Resources/horde.fen"));
                 break;
             case Variant.Standard:
             case Variant.Atomic:
             default:
-                fen = File.ReadAllText("Resources/default.fen");
+                fen = File.ReadAllText(Path.Combine(System.AppContext.BaseDirectory, "Resources/default.fen"));
                 break;
         }
 

@@ -6,10 +6,23 @@
 	<!--Avalonia doesen't support TrimMode=link currently,but we are working on that https://github.com/AvaloniaUI/Avalonia/issues/6892 -->
 	<TrimMode>copyused</TrimMode>
 	<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+	<ApplicationIcon>Assets\Icons\favicon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Models\" />
     <AvaloniaResource Include="Assets\**" />
+    <AvaloniaResource Remove="Assets\Pieces\B.svg" />
+    <AvaloniaResource Remove="Assets\Pieces\b_.svg" />
+    <AvaloniaResource Remove="Assets\Pieces\K.svg" />
+    <AvaloniaResource Remove="Assets\Pieces\k_.svg" />
+    <AvaloniaResource Remove="Assets\Pieces\N.svg" />
+    <AvaloniaResource Remove="Assets\Pieces\n_.svg" />
+    <AvaloniaResource Remove="Assets\Pieces\P.svg" />
+    <AvaloniaResource Remove="Assets\Pieces\p_.svg" />
+    <AvaloniaResource Remove="Assets\Pieces\Q.svg" />
+    <AvaloniaResource Remove="Assets\Pieces\q_.svg" />
+    <AvaloniaResource Remove="Assets\Pieces\R.svg" />
+    <AvaloniaResource Remove="Assets\Pieces\r_.svg" />
     <None Remove=".gitignore" />
   </ItemGroup>
   <ItemGroup>
@@ -28,6 +41,7 @@
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.18" />
     <PackageReference Include="Avalonia.Svg.Skia" Version="0.10.18" />
     <PackageReference Include="Microsoft.CodeAnalysis.Metrics" Version="3.3.3" />
+    <PackageReference Include="System.Reflection" Version="4.3.0" />
 	<PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
   </ItemGroup>
   <ItemGroup>
@@ -53,14 +67,56 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\default.fen">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\horde.fen">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\sample.pgn">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
     <UpToDateCheckInput Remove="Assets\Tiles\black.svg" />
     <UpToDateCheckInput Remove="Assets\Tiles\white.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\Icons\favicon.ico" />
+    <Content Include="Assets\Pieces\B.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Pieces\b_.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Pieces\K.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Pieces\k_.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Pieces\N.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Pieces\n_.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Pieces\P.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Pieces\p_.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Pieces\Q.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Pieces\q_.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Pieces\R.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Pieces\r_.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>
