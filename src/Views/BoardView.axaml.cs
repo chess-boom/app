@@ -24,6 +24,8 @@ namespace ChessBoom.Views;
 [ExcludeFromCodeCoverage]
 public partial class BoardView : ReactiveUserControl<BoardViewModel>
 {
+    private bool _boardLocked;
+
     private SKBitmapControl? _sourcePieceBitmapControl;
     private Rectangle? _sourceTile;
     private IBrush? _sourceColor;
@@ -234,6 +236,8 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     // ReSharper disable once UnusedParameter.Local
     private void ChessBoard_MouseLeftButtonDown(object? sender, PointerPressedEventArgs e)
     {
+        if (_boardLocked) return; // prevent user from interacting with the board while selecting a promotion piece
+
         if (ViewModel is null) return;
         if (!e.GetCurrentPoint(ChessBoard).Properties.IsLeftButtonPressed) return;
 
@@ -343,6 +347,8 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     /// <returns>A Task for the User to select a piece to promote to</returns>
     private async Task<char> RequestPromotionPiece()
     {
+        _boardLocked = true; // disable the Board
+
         DrawPromotionPieces();
 
         var tcs = new TaskCompletionSource<char>();
@@ -355,7 +361,8 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             tcs.SetResult(promotionPiece.Value);
             ClearPromotionPieces();
             DrawPieces();
-            PromotionPieces.PointerPressed -= PointerPressedHandler; // detach event handler
+            PromotionPieces.PointerPressed -= PointerPressedHandler;
+            _boardLocked = false; // re-enable the Board after the User has selected a piece
         }
 
         PromotionPieces.PointerPressed += PointerPressedHandler;
