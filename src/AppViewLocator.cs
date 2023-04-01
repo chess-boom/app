@@ -13,7 +13,6 @@ public class AppViewLocator : IViewLocator
     {
         DashboardViewModel context => new DashboardView { DataContext = context },
         GameAnalysisViewModel context => new GameAnalysisView { DataContext = context },
-        VariantAnalysisViewModel context => new VariantAnalysisView { DataContext = context },
         TutorialViewModel context => new TutorialView { DataContext = context },
         BoardViewModel context => new BoardView { DataContext = context },
         ProfileViewModel context => new ProfileView { DataContext = context },

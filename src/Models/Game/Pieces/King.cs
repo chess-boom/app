@@ -101,6 +101,7 @@ public class King : Piece
         }
         catch (GameplayErrorException)
         {
+            // Do nothing
         }
         castlingBoard = Game.CreateBoardFromFEN(m_board.m_game, Game.CreateFENFromBoard(m_board));
         try
@@ -110,6 +111,7 @@ public class King : Piece
         }
         catch (GameplayErrorException)
         {
+            // Do nothing
         }
 
         return legalSquares;
