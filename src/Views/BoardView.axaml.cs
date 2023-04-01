@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Controls.Shapes;
 using Avalonia.Controls.Skia;
 using Avalonia.Controls;
@@ -27,6 +28,8 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     private Rectangle? _sourceTile;
     private IBrush? _sourceColor;
     private List<string> _legalMoves = new();
+
+    private const int PromotionPiecesOffset = 2;
 
     /// <summary>
     /// Defines attributes related to rendered Tiles
@@ -73,8 +76,6 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             DrawChessBoard();
             DrawGridLabels();
             DrawPieces();
-            DrawPromotionPieces();
-            PromotionPieces.IsVisible = false;
         });
         AvaloniaXamlLoader.Load(this);
 
@@ -289,30 +290,22 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
 
     private void DrawPromotionPieces()
     {
-        PromotionPieces.RowDefinitions.Add(new RowDefinition { Height = new GridLength(Tile.Height) });
-        PromotionPieces.RowDefinitions.Add(new RowDefinition { Height = new GridLength(Tile.Height) });
+        for (var i = 0; i < PromotionPiecesOffset; i++)
+        {
+            PromotionPieces.RowDefinitions.Add(new RowDefinition { Height = new GridLength(Tile.Height) });
+        }
+
         for (var row = 0; row < GameHelpers.k_promotionPieces.Count; row++)
         {
             PromotionPieces.RowDefinitions.Add(new RowDefinition { Height = new GridLength(Tile.Height) });
-            var background = new Rectangle
-            {
-                Width = Tile.Width,
-                Height = Tile.Height,
-                StrokeThickness = 0,
-                Fill = new SolidColorBrush(Tile.k_background)
-            };
 
-            Grid.SetRow(background, row + 2);
-            PromotionPieces.Children.Add(background);
 
             var promotionPiece = new SKBitmapControl
             {
                 Name = GameHelpers.k_promotionPieces[row].ToString(),
                 Width = Tile.Width,
                 Height = Tile.Height,
-                ZIndex = 1,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center
+                ZIndex = 1
             };
             var piecePath = ViewModel?.GameHandler.GetPlayerToPlay() switch
             {
@@ -322,23 +315,33 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             };
             promotionPiece.Bitmap = GeneratePieceBitmap(piecePath);
             PromotionPieces.Children.Add(promotionPiece);
-            Grid.SetRow(promotionPiece, row + 2);
+            Grid.SetRow(promotionPiece, row + PromotionPiecesOffset);
         }
     }
 
-    private char RequestPromotionPiece()
+    private void ClearPromotionPieces()
     {
-        PromotionPieces.IsVisible = true;
+        PromotionPieces.Children.Clear();
+        PromotionPieces.RowDefinitions.Clear();
+    }
+
+    private Task<char> RequestPromotionPiece()
+    {
         DrawPromotionPieces();
-        char? promotionPiece = null;
+
+        var tcs = new TaskCompletionSource<char>();
         PromotionPieces.PointerPressed += (_, e) =>
         {
-            if (e.Source is not SKBitmapControl bitmapControl) return;
-            promotionPiece = bitmapControl.Name![0];
-            PromotionPieces.IsVisible = false;
+            var promotionPieceBitmapControl = e.Source as SKBitmapControl;
+            var promotionPiece = promotionPieceBitmapControl?.Name?[0];
+            if (promotionPiece.HasValue)
+            {
+                tcs.SetResult(promotionPiece.Value);
+                ClearPromotionPieces();
+                DrawPieces();
+            }
         };
-        if (promotionPiece is null) throw new InvalidOperationException("Invalid Promotion Piece");
-        return (char)promotionPiece;
+        return tcs.Task;
     }
 
     /// <summary>

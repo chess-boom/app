@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ChessBoom.Models.Game.Pieces;
 using ChessBoom.Models.Game.Rulesets;
 
@@ -351,13 +352,18 @@ public class Board
     /// </summary>
     /// <param name="pawn">The pawn that wishes to promote</param>
     /// <param name="requestPromotionPiece">The function to call if piece is null. May be null</param>
-    public void RequestPromotion(Pawn pawn, RequestPromotionPieceDelegate? requestPromotionPiece = null)
+    public async void RequestPromotion(Pawn pawn, RequestPromotionPieceDelegate? requestPromotionPiece = null)
     {
         requestPromotionPiece ??= RequestPromotionPiece;
         try
         {
-            pawn.Destroy();
-            var pieceType = requestPromotionPiece();
+            char pieceType = default;
+            while (pieceType == default)
+            {
+                pieceType = await requestPromotionPiece();
+                pawn.Destroy();
+            }
+
             var promotionPiece = (pawn.GetPlayer() == Player.White)
                 ? char.ToUpper(pieceType)
                 : char.ToLower(pieceType);
@@ -369,16 +375,16 @@ public class Board
             Console.WriteLine("Error! Promotion request failed.");
         }
     }
-    
-    public delegate char RequestPromotionPieceDelegate();
+
+    public delegate Task<char> RequestPromotionPieceDelegate();
 
     /// <summary>
     /// Return Q by default, pass delegate to RequestPromotion to override
     /// </summary>
     /// <returns>The character corresponding to the piece to which the pawn will promote</returns>
-    private static char RequestPromotionPiece()
+    private static Task<char> RequestPromotionPiece()
     {
-        return 'Q';
+        return Task.FromResult('Q');
     }
 
     public override string ToString()

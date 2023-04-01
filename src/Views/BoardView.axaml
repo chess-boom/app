@@ -15,8 +15,7 @@
                   HorizontalAlignment="Center"
                   PointerPressed="ChessBoard_MouseLeftButtonDown" Focusable="True" />
             <Grid Grid.Row="2" Grid.Column="1" Name="LetterGridLabels" />
-            <Grid Grid.Row="1" Grid.Column="2" ShowGridLines="True"
-                  Name="PromotionPieces" />
+            <Grid Grid.Row="1" Grid.Column="2" Name="PromotionPieces" />
         </Grid>
     </StackPanel>
 </UserControl>
