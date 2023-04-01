@@ -49,13 +49,13 @@
                             <DataTemplate>
                                 <TextBlock Text="{Binding MatchStatus}">
                                     <TextBlock.Styles>
-                                        <Style Selector="TextBlock[Text=Win!]">
+                                        <Style Selector="TextBlock[Text=Win]">
                                             <Setter Property="Foreground" Value="#00ee00" />
                                         </Style>
-                                        <Style Selector="TextBlock[Text=Loss!]">
+                                        <Style Selector="TextBlock[Text=Loss]">
                                             <Setter Property="Foreground" Value="Red" />
                                         </Style>
-                                        <Style Selector="TextBlock[Text=Draw!]">
+                                        <Style Selector="TextBlock[Text=Draw]">
                                             <Setter Property="Foreground" Value="Yellow" />
                                         </Style>
                                         <Style Selector="TextBlock">
