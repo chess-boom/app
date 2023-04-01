@@ -295,4 +295,9 @@ public class Atomic : Ruleset
         return (Math.Abs(whiteCoordinates.Item1 - blackCoordinates.Item1) <= 1 &&
             Math.Abs(whiteCoordinates.Item2 - blackCoordinates.Item2) <= 1);
     }
+
+    public override Piece? GetCastlingRook(Board board, Player player, Castling side)
+    {
+        return Standard.Instance.GetCastlingRook(board, player, side);
+    }
 }

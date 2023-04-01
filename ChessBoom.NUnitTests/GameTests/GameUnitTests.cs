@@ -292,6 +292,40 @@ public class GameUnitTests
     }
 
     /// <summary>
+    /// Ensure that castling through a player's own pieces is impossible
+    /// </summary>
+    [Test]
+    public void CastlingThroughPiecesTest()
+    {
+        _game.MakePGNMove("d4");
+        _game.MakePGNMove("e5");
+        _game.MakePGNMove("Bg5");
+        _game.MakePGNMove("Bc5");
+        _game.MakePGNMove("Qd3");
+
+        var exception1 = Assert.Throws<GameplayErrorException>(
+            delegate
+            {
+                // Black attempts to castle through their knight
+                _game.MakePGNMove("O-O");
+            });
+
+        _game.MakePGNMove("Nf6");
+
+        var exception2 = Assert.Throws<GameplayErrorException>(
+            delegate
+            {
+                // Black attempts to castle through their knight
+                _game.MakePGNMove("O-O-O");
+            });
+
+        if (exception1 is not null)
+            Assert.AreEqual("Castling is illegal in this situation!", exception1.Message);
+        if (exception2 is not null)
+            Assert.AreEqual("Castling is illegal in this situation!", exception2.Message);
+    }
+
+    /// <summary>
     /// Ensure that checks may be blocked, captured, or moved out of
     /// </summary>
     [Test]
