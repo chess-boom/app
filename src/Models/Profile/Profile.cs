@@ -311,7 +311,10 @@ public class Profile : ReactiveObject
         TotalGames = totalGames;
 
         //Most Used Opening
-        MostUsedOpening = Openings.MaxBy(x => x.Value).Key;
+        if (TotalGames > 0)
+        {
+            MostUsedOpening = Openings.MaxBy(x => x.Value).Key;
+        }
 
         // solves division by 0
         if (whiteGames == 0) whiteGames = 1;
@@ -329,11 +332,11 @@ public class Profile : ReactiveObject
         // Black/White Win Ratio Bars
         WhiteBars.Add((int)Math.Ceiling(_winRateWhite * BarWidth));
         WhiteBars.Add((int)Math.Ceiling(_lossRateWhite * BarWidth));
-        WhiteBars.Add(BarWidth - WhiteBars[0] - WhiteBars[1]);
+        WhiteBars.Add((int)Math.Ceiling(_drawRateWhite * BarWidth));
 
         BlackBars.Add((int)Math.Ceiling(_winRateBlack * BarWidth));
         BlackBars.Add((int)Math.Ceiling(_lossRateBlack * BarWidth));
-        BlackBars.Add(BarWidth - BlackBars[0] - BlackBars[1]);
+        BlackBars.Add((int)Math.Ceiling(_drawRateBlack * BarWidth));
 
         // Results numbers
         Wins = whiteWins + blackWins;
@@ -343,7 +346,7 @@ public class Profile : ReactiveObject
         // BarGraph Bars
         BarGraphData.Add((int)((double)_wins / totalGames * BarHeight));
         BarGraphData.Add((int)((double)_losses / totalGames * BarHeight));
-        BarGraphData.Add(BarHeight - BarGraphData[0] - BarGraphData[1]);
+        BarGraphData.Add((int)((double)_draws / totalGames * BarHeight));
 
         // Elo Graph
         TransformQueueToArray();
@@ -402,6 +405,10 @@ public class Profile : ReactiveObject
 
             // elo, difference, pixels, date
             Elo.Insert(0, new ObservableCollection<string> { info[0], diff, "", info[1] });
+        }
+        if (min == int.MaxValue)
+        {
+            min = 150;
         }
 
         GraphMaxElo = (max + 150) / 100 * 100;
