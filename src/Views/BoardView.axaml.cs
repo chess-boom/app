@@ -324,25 +324,29 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         PromotionPieces.Children.Clear();
         PromotionPieces.RowDefinitions.Clear();
     }
-
-    private Task<char> RequestPromotionPiece()
+    
+    private async Task<char> RequestPromotionPiece()
     {
         DrawPromotionPieces();
 
         var tcs = new TaskCompletionSource<char>();
-        PromotionPieces.PointerPressed += (_, e) =>
+
+        void PointerPressedHandler(object? _, PointerPressedEventArgs e)
         {
             var promotionPieceBitmapControl = e.Source as SKBitmapControl;
             var promotionPiece = promotionPieceBitmapControl?.Name?[0];
-            if (promotionPiece.HasValue)
-            {
-                tcs.SetResult(promotionPiece.Value);
-                ClearPromotionPieces();
-                DrawPieces();
-            }
-        };
-        return tcs.Task;
+            if (!promotionPiece.HasValue) return;
+            tcs.SetResult(promotionPiece.Value);
+            ClearPromotionPieces();
+            DrawPieces();
+            PromotionPieces.PointerPressed -= PointerPressedHandler; // detach event handler
+        }
+
+        PromotionPieces.PointerPressed += PointerPressedHandler;
+
+        return await tcs.Task;
     }
+
 
     /// <summary>
     /// Display the available moves for the selected piece
