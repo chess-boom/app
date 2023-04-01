@@ -202,7 +202,6 @@ public static class GameHelpers
             // Handle board boundaries
             if (!IsOnBoard(position))
             {
-                movementFlag = false;
                 break;
             }
 

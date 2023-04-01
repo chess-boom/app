@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ChessBoom.Models.Game.Pieces;
 
 namespace ChessBoom.Models.Game.Rulesets;
@@ -40,15 +41,7 @@ public class Standard : Ruleset
         }
 
         // Check if any of the opponent's pieces can move to a square occupied by a king
-        foreach (var coordinate in kingSquares)
-        {
-            if (GameHelpers.IsSquareVisible(board, GameHelpers.GetOpponent(player), coordinate))
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return kingSquares.Any(coordinate => GameHelpers.IsSquareVisible(board, GameHelpers.GetOpponent(player), coordinate));
     }
 
     public override bool CanCastle(Board board, Player player, Castling side)

@@ -13,6 +13,12 @@ public class AnalysisUnitTests
     {
         _engine = new Stockfish();
     }
+
+    [TearDown]
+    public void TearDown()
+    {
+        _engine.Close();
+    }
     /// <summary>
     /// Test that the engine can successfully run.
     /// </summary>
@@ -80,6 +86,23 @@ public class AnalysisUnitTests
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// Test that analysis engine can run on all supported variants.
+    /// Does not use the Setup method, as we need to create a new engine for each variant.
+    /// </summary>
+    [Test]
+    [TestCase(Models.Game.Variant.Chess960)]
+    [TestCase(Models.Game.Variant.Horde)]
+    [TestCase(Models.Game.Variant.Atomic)]
+    public void AnalysisEngineCanRunOnAllSupportedVariants(Models.Game.Variant variant)
+    {
+        var engine = new Stockfish(variant);
+
+        Assert.AreEqual(true, engine.IsRunning());
+
+        engine.Close();
     }
 
 }

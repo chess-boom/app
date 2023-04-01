@@ -33,21 +33,35 @@ public class Stockfish : IAnalysis
         }
     }
 
-    public Stockfish()
+    public Game.Variant? Variant { get; set; }
+
+    public Stockfish(Game.Variant variant = Game.Variant.Standard)
     {
+        // Set variant to Standard if not specified, otherwise set to variant
+        this.Variant = variant;
+
         // Get stockfish engine location based on OS 
         string directoryString = "";
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            directoryString = @".\AnalysisEngine\Windows\stockfish-windows-2022-x86-64-avx2.exe";
+            // Change directory string if variant isn't Standard, use ternary operator
+            directoryString = variant == Game.Variant.Standard ? @".\AnalysisEngine\Windows\stockfish-windows-2022-x86-64-avx2.exe" : @"./AnalysisEngine/Windows/fairy-stockfish-largeboard_x86-64.exe";
+
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
-            directoryString = "./AnalysisEngine/MacOS/stockfish";
+            if (RuntimeInformation.ProcessArchitecture == Architecture.X64) // If we are running on x64 architecture and not the new M series chips
+            {
+                directoryString = "./AnalysisEngine/MacOS/Fairy-Stockfish-14-LargeBoard_Mac_x86-64";
+            }
+            else
+            {
+                directoryString = variant == Game.Variant.Standard ? "./AnalysisEngine/MacOS/stockfish" : "./AnalysisEngine/MacOS/Fairy-Stockfish-14-LargeBoard_Mac_Apple_Silicon";
+            }
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            directoryString = "./AnalysisEngine/Linux/stockfish-ubuntu-20.04-x86-64";
+            directoryString = variant == Game.Variant.Standard ? "./AnalysisEngine/Linux/stockfish-ubuntu-20.04-x86-64" : "./AnalysisEngine/Linux/fairy-stockfish-largeboard_x86-64";
         }
         else
         {
@@ -60,7 +74,7 @@ public class Stockfish : IAnalysis
 
         if (m_stockfish == null)
         {
-            throw new NullReferenceException("m_stockfish is null!");
+            throw new InvalidOperationException("m_stockfish is null!");
         }
 
         m_stockfish.Start();
@@ -95,7 +109,7 @@ public class Stockfish : IAnalysis
     {
         if (m_stockfish.StandardInput == null)
         {
-            throw new NullReferenceException();
+            throw new InvalidOperationException("StandardInput of m_stockfish is null!");
         }
 
         m_stockfish.StandardInput.WriteLine(command);
@@ -109,13 +123,13 @@ public class Stockfish : IAnalysis
     /// Reads a line of output from Stockfish.
     /// </summary>
     /// <returns></returns>
-    /// <exception cref="NullReferenceException">If StandardOutput of our application (m_stockfish) is null, we throw this exception.</exception>
+    /// <exception cref="InvalidOperationException">If StandardOutput of our application (m_stockfish) is null, we throw this exception.</exception>
     public string? ReadOutput()
     {
 
         if (m_stockfish.StandardOutput == null)
         {
-            throw new NullReferenceException("StandardOutput of m_stockfish is null!");
+            throw new InvalidOperationException("StandardOutput of m_stockfish is null!");
         }
 
         return m_stockfish.StandardOutput.ReadLine();
@@ -141,7 +155,7 @@ public class Stockfish : IAnalysis
 
         if (!isReady)
         {
-            throw new ApplicationException("Stockfish is not ready for input! Is the application running properly?");
+            throw new InvalidOperationException("Stockfish is not ready for input! Is the application running properly?");
         }
 
         return isReady;
@@ -152,15 +166,39 @@ public class Stockfish : IAnalysis
     public void NewGame()
     {
         WriteCommand("ucinewgame");
+        if (Variant != Game.Variant.Standard) // If variant is not standard, set variant in fairy-stockfish
+        {
+            SetVariant();
+        }
         WriteCommand("position startpos");
+    }
+
+    /// <summary>
+    /// Sets the variant of the engine to the variant specified in the constructor.
+    /// </summary>
+    private void SetVariant()
+    {
+        if (Variant == Game.Variant.Chess960)
+        {
+            WriteCommand("setoption name UCI_Variant value chess960");
+        }
+        else if (Variant == Game.Variant.Horde)
+        {
+            WriteCommand("setoption name UCI_Variant value horde");
+        }
+        else if (Variant == Game.Variant.Atomic)
+        {
+            WriteCommand("setoption name UCI_Variant value atomic");
+        }
+        else
+        {
+            throw new ArgumentException("Variant is not supported!");
+        }
     }
     /// <summary>
     /// Gets the static evaluation of the current position as a float, and which side the value is relative to (White or Black).
     /// </summary>
     /// <returns>Evaluation Object. Null if output does not return an evaluation due to an error.</returns>
-    /// <exception cref="ArgumentException"></exception>
-    /// <exception cref="ApplicationException"></exception>
-    /// <exception cref="InvalidOperationException"></exception>
     public Evaluation? GetStaticEvaluation()
     {
         if (m_fenPosition != null)
@@ -189,7 +227,7 @@ public class Stockfish : IAnalysis
                 {
                     string[] splitOutput = output.Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
-                    float evaluation_number = float.MaxValue;
+                    float evaluation_number;
                     if (!float.TryParse(splitOutput[2], out evaluation_number))
                         throw new ArgumentException($"Expected a float for evaluation number, got {splitOutput[2]}");
 
@@ -205,7 +243,7 @@ public class Stockfish : IAnalysis
                 }
 
             }
-            throw new ApplicationException("Stockfish is not ready!");
+            throw new InvalidOperationException("Stockfish is not ready!");
         }
         throw new InvalidOperationException("Cannot get an evaluation with no fen position!");
     }
@@ -217,10 +255,11 @@ public class Stockfish : IAnalysis
     /// <returns>List of (string, int) tuples, representing (move, cp value). Ordered from highest cp to lowest cp value moves</returns>
     public List<(string, int)> GetNBestMoves(int n = 3, int depth = 10)
     {
-        if (n <= 0 || depth <= 0)
-            throw new ArgumentOutOfRangeException("Depth and n must be greater than 0.");
+        if (n <= 0)
+            throw new ArgumentOutOfRangeException(nameof(n), "n must be > 0");
+        else if (depth <= 0)
+            throw new ArgumentOutOfRangeException(nameof(depth), "depth must be > 0");
 
-        string[] bestMoves = new string[n];
         List<string> outputList = new List<string>();
 
         if (IsReady())
