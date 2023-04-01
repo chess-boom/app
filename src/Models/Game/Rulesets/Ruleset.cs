@@ -86,8 +86,18 @@ public abstract class Ruleset
     /// Retrieves a player's king
     /// </summary>
     /// <param name="board">The board on which the king exists</param>
-    /// <param name="player">The player whose king might explode</param>
+    /// <param name="player">The player whose king is sought</param>
     /// <returns>The player's king</returns>
     /// <exception cref="GameplayErrorException">Thrown if the king is not found</exception>
     public abstract Piece GetKing(Board board, Player player);
+
+    /// <summary>
+    /// Retrieves the rook for castling
+    /// </summary>
+    /// <param name="board">The board on which the king exists</param>
+    /// <param name="player">The player whose rook is sought</param>
+    /// <param name="side">The side of the king where the rook is sought</param>
+    /// <returns>The player's rook, if the rook is on its home square</returns>
+    /// <exception cref="GameplayErrorException">Thrown if the rook is not found</exception>
+    public abstract Piece? GetCastlingRook(Board board, Player player, Castling side);
 }

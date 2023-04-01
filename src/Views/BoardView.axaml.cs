@@ -376,11 +376,18 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     /// </summary>
     private void DisplayLegalMoves(List<string> availableMoves)
     {
-        foreach (var square in availableMoves)
+        foreach (var move in availableMoves)
         {
+            // check if the move is a castling move
+            if (move is "O-O" or "O-O-O")
+            {
+                DisplayCastling(move);
+                continue;
+            }
+
             Ellipse dot;
 
-            var attackedPiece = ViewModel?.GameHandler.GetPiece(GameHelpers.GetCoordinateFromSquare(square));
+            var attackedPiece = ViewModel?.GameHandler.GetPiece(GameHelpers.GetCoordinateFromSquare(move));
 
             if (attackedPiece is not null)
             {
@@ -389,7 +396,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
                     Width = Tile.Width,
                     Height = Tile.Height,
                     ZIndex = 2,
-                    Name = square,
+                    Name = move,
                     Stroke = new SolidColorBrush(Dot.k_red),
                     StrokeThickness = 3
                 };
@@ -402,15 +409,50 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
                     Height = Dot.Height,
                     Fill = new SolidColorBrush(Dot.k_green),
                     ZIndex = 2,
-                    Name = square
+                    Name = move
                 };
             }
 
-            (int col, int row) coordinates = GameHelpers.GetCoordinateFromSquare(square);
+            (int col, int row) coordinates = GameHelpers.GetCoordinateFromSquare(move);
             Grid.SetRow(dot, GameHelpers.k_boardWidth - 1 - coordinates.row);
             Grid.SetColumn(dot, coordinates.col);
             ChessBoard.Children.Add(dot);
         }
+    }
+
+    private void DisplayCastling(string move)
+    {
+        var castle = new Ellipse
+        {
+            Width = Dot.Width,
+            Height = Dot.Height,
+            Fill = new SolidColorBrush(Dot.k_green),
+            ZIndex = 2,
+            Name = move
+        };
+        (int col, int row) coordinates;
+        if (ViewModel?.GameHandler.GetPlayerToPlay() == Player.Black)
+        {
+            coordinates = move switch
+            {
+                "O-O" => (6, 7),
+                "O-O-O" => (2, 7),
+                _ => throw new ArgumentOutOfRangeException()
+            };
+        }
+        else
+        {
+            coordinates = move switch
+            {
+                "O-O" => (6, 0),
+                "O-O-O" => (2, 0),
+                _ => throw new ArgumentOutOfRangeException()
+            };
+        }
+
+        Grid.SetRow(castle, GameHelpers.k_boardWidth - 1 - coordinates.row);
+        Grid.SetColumn(castle, coordinates.col);
+        ChessBoard.Children.Add(castle);
     }
 
     /// <summary>
