@@ -61,10 +61,10 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     /// <summary>
     /// Defines attributes related to rendered Pieces
     /// </summary>
-    private abstract class Piece
+    private static class Piece
     {
-        internal const string k_white = "Assets/Pieces/{0}.svg";
-        internal const string k_black = "Assets/Pieces/{0}_.svg";
+        internal static readonly string k_white = System.IO.Path.Combine(System.AppContext.BaseDirectory, "Assets/Pieces/{0}.svg");
+        internal static readonly string k_black = System.IO.Path.Combine(System.AppContext.BaseDirectory, "Assets/Pieces/{0}_.svg");
     }
 
     /// <summary>
