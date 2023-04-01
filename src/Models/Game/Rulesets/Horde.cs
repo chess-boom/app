@@ -160,4 +160,9 @@ public class Horde : Ruleset
             return null;
         }
     }
+
+    public override Piece? GetCastlingRook(Board board, Player player, Castling side)
+    {
+        return (player == Player.Black) ? Standard.Instance.GetCastlingRook(board, player, side) : null;
+    }
 }
