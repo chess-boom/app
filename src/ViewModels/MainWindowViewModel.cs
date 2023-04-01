@@ -59,7 +59,7 @@ public class MainWindowViewModel : ReactiveObject, IScreen
             () => Router.Navigate.Execute(new GameAnalysisVariantViewModel(this, Variant.Horde))
         );
         GoTemplate = ReactiveCommand.CreateFromObservable(
-            () => Router.Navigate.Execute(new TemplateViewModel(this))
+            () => Router.Navigate.Execute(new ProfileViewModel(this))
         );
         GoAnalysis = ReactiveCommand.CreateFromObservable(
             () => Router.Navigate.Execute(new GameAnalysisViewModel(this))
@@ -71,7 +71,7 @@ public class MainWindowViewModel : ReactiveObject, IScreen
             () => Router.Navigate.Execute(new VariantAnalysisViewModel(this))
         );
         GoProfile = ReactiveCommand.CreateFromObservable(
-            () => Router.Navigate.Execute(new TemplateViewModel(this))
+            () => Router.Navigate.Execute(new ProfileViewModel(this))
         );
     }
 }
