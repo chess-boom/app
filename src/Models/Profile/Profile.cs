@@ -12,7 +12,7 @@ public class Profile : ReactiveObject
 {
     public string Name { get; }
 
-    private ObservableCollection<ObservableCollection<string>> _elo;
+    private readonly ObservableCollection<ObservableCollection<string>> _elo;
 
     // elo, difference, pixels, date 
     public ObservableCollection<ObservableCollection<string>> Elo
@@ -151,14 +151,14 @@ public class Profile : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref _draws, value);
     }
 
-    private ObservableCollection<int> _whiteBars;
+    private readonly ObservableCollection<int> _whiteBars;
 
     public ObservableCollection<int> WhiteBars
     {
         get => _whiteBars;
     }
 
-    private ObservableCollection<int> _blackBars;
+    private readonly ObservableCollection<int> _blackBars;
 
     public ObservableCollection<int> BlackBars
     {
@@ -253,9 +253,9 @@ public class Profile : ReactiveObject
         foreach (var game in Games)
         {
             // calculate stats only for given variant, if none defined calculate for all games
-            if (variant != "")
+            if (variant != "" && variant != game["Variant"])
             {
-                if (variant != game["Variant"]) continue;
+                continue;
             }
 
             var opening = game["Opening"];
