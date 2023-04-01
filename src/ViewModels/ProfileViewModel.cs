@@ -44,7 +44,7 @@ public class ProfileViewModel : BaseViewModel
 
     private void ParseGames()
     {
-        DirectoryInfo cboom = new DirectoryInfo("./CBoom");
+        DirectoryInfo cboom = new DirectoryInfo(Path.Combine(System.AppContext.BaseDirectory, "CBoom"));
         if (!cboom.Exists)
         {
             cboom.Create();
