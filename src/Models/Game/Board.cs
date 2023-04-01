@@ -347,8 +347,6 @@ public class Board
         m_halfmoveClock = 0;
     }
 
-    public delegate char RequestPromotionPieceDelegate();
-
     /// <summary>
     /// Handle a pawn's request to promote
     /// </summary>
