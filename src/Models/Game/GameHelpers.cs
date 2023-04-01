@@ -31,6 +31,11 @@ public static class GameHelpers
     public static readonly int k_boardHeight = 8;
 
     /// <summary>
+    /// Possible pieces to promote to
+    /// </summary>
+    public static readonly ImmutableList<char> k_promotionPieces = ImmutableList.Create('Q', 'R', 'B', 'N');
+
+    /// <summary>
     /// The corresponding square is retrieved from its board coordinates
     /// </summary>
     /// <param name="coordinate">The 2-tuple containing the row and column coordinates (0-7, 0-7)</param>

@@ -102,9 +102,9 @@ public class Pawn : Piece
     /// Attempt to move the piece to a new square. Initiates a capture if required
     /// </summary>
     /// <param name="coordinate">The coordinate to which the piece will try to move</param>
-    /// <param name="promotionPiece">Optional parameter denoting which piece type the pawn will promote into</param>
+    /// <param name="requestPromotionPiece">Optional parameter denoting the function to call to determine promotion piece</param>
     /// <exception cref="ArgumentException">Thrown the piece is unable to move to the specified coordinate</exception>
-    public override void MovePiece((int, int) coordinate, char? promotionPiece = null)
+    public override void MovePiece((int, int) coordinate, Board.RequestPromotionPieceDelegate? requestPromotionPiece = null)
     {
         if (GetMovementSquares().Contains(coordinate))
         {
@@ -157,7 +157,7 @@ public class Pawn : Piece
             if ((m_row == GameHelpers.k_boardHeight - 1 && m_owner == Player.White)
                 || (m_row == 0 && m_owner == Player.Black))
             {
-                m_board.RequestPromotion(this, promotionPiece);
+                m_board.RequestPromotion(this, requestPromotionPiece);
             }
         }
         else

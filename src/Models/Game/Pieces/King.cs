@@ -49,9 +49,9 @@ public class King : Piece
         return movementSquares;
     }
 
-    public override void MovePiece((int, int) coordinate, char? promotionPiece = null)
+    public override void MovePiece((int, int) coordinate, Board.RequestPromotionPieceDelegate? requestPromotionPiece = null)
     {
-        base.MovePiece(coordinate, promotionPiece);
+        base.MovePiece(coordinate, requestPromotionPiece);
         if (!m_hasMoved)
         {
             m_board.RemoveCastling(m_owner, Castling.Kingside);

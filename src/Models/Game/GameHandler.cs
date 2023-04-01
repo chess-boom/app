@@ -207,11 +207,12 @@ public class GameHandler
     /// </summary>
     /// <param name="startingSquare">The square from which a piece moves</param>
     /// <param name="destinationSquare">The square to which a piece moves</param>
+    /// <param name="requestPromotionPiece">Optional parameter denoting the function to call to determine promotion piece</param>
     /// <exception cref="ArgumentException">Thrown the piece on the starting square can not be found or be moved, or the square can not be found</exception>
     /// <exception cref="GameplayErrorException">Thrown if the attempted move is invalid as per gameplay rules</exception>
-    public void MakeMove(string startingSquare, string destinationSquare)
+    public void MakeMove(string startingSquare, string destinationSquare, Board.RequestPromotionPieceDelegate? requestPromotionPiece = null)
     {
-        m_game.MakeExplicitMove(startingSquare, destinationSquare);
+        m_game.MakeExplicitMove(startingSquare, destinationSquare, requestPromotionPiece);
     }
 
     /// <summary>
