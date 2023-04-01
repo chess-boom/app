@@ -42,7 +42,6 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         internal static readonly Color k_white = Color.FromRgb(243, 219, 180);
         internal static readonly Color k_black = Color.FromRgb(179, 140, 99);
         internal static readonly Color k_highlight = Color.FromRgb(102, 178, 255);
-        internal static readonly Color k_background = Color.FromRgb(43, 43, 43);
     }
 
     /// <summary>
@@ -176,6 +175,12 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         }
     }
 
+    /// <summary>
+    /// Generate a Bitmap from a Piece's SVG
+    /// </summary>
+    /// <param name="piecePath"></param>
+    /// <returns>Bitmap of the requested piece</returns>
+    /// <exception cref="InvalidOperationException"></exception>
     private static SKBitmap GeneratePieceBitmap(string piecePath)
     {
         using var svg = new SKSvg();
@@ -288,6 +293,10 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         }
     }
 
+    /// <summary>
+    /// Draw the possible pieces to promote to on the PromotionPieces Grid Control
+    /// </summary>
+    /// <exception cref="InvalidOperationException"></exception>
     private void DrawPromotionPieces()
     {
         for (var i = 0; i < PromotionPiecesOffset; i++)
@@ -319,12 +328,19 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         }
     }
 
+    /// <summary>
+    /// Clear the PromotionPieces Grid Control from the screen
+    /// </summary>
     private void ClearPromotionPieces()
     {
         PromotionPieces.Children.Clear();
         PromotionPieces.RowDefinitions.Clear();
     }
-    
+
+    /// <summary>
+    /// Display a Grid to the User to select a piece to promote to on reaching the last rank
+    /// </summary>
+    /// <returns>A Task for the User to select a piece to promote to</returns>
     private async Task<char> RequestPromotionPiece()
     {
         DrawPromotionPieces();
