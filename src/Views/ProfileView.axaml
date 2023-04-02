@@ -10,6 +10,11 @@
     </Design.DataContext>
     <StackPanel>        
         <Label Content="My Profile" FontSize="50" HorizontalAlignment="Center" Margin="0,10,0,10" />
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,20">
+            <Label Content="Username:" FontSize="20" />
+            <TextBox x:Name="UsernameInput" Text="{Binding Username}" Width="200" Margin="20,0,20,0"/>
+            <Button x:Name="LoadGamesButton" Content="Load Games" Command="{Binding InitializeProfile}" />
+        </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <TextBlock
                 FontWeight="Bold"
