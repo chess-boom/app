@@ -28,8 +28,8 @@ public interface IAnalysis
     /// </summary>
     /// <param name="n">Number of moves you want to return. Value greater than 0. Ordered by descending cp value). Default: 3</param>
     /// <param name="depth">Depth you want the search to go to. Value greater than 0. Default: 10</param>
-    /// <returns>List of (string, int) tuples, representing (move, cp value). Ordered from highest cp to lowest cp value moves</returns>
-    public List<(string, int)> GetNBestMoves(int n = 3, int depth = 10);
+    /// <returns>List of MoveEvaluations, representing (move, cp value). Ordered from highest cp to lowest cp value moves</returns>
+    public List<MoveEvaluation> GetNBestMoves(int n = 3, int depth = 10);
 
     /// <summary>
     /// Checks if the engine process is running (responding)

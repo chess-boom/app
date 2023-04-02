@@ -73,18 +73,14 @@ public class AnalysisUnitTests
 
         Assert.IsNotNull(topNMoves);
 
-        if (topNMoves is not null)
-        {
-            Assert.AreEqual(n, topNMoves.Count);
+        Assert.AreEqual(n, topNMoves.Count);
 
-            if (topNMoves.Count > 1)
-            {
-                // Ensure the CP values are ordered greatest --> smallest.
-                for (int i = 0; i < topNMoves.Count - 1; i++)
-                {
-                    Assert.GreaterOrEqual(topNMoves[i].Item2, topNMoves[i + 1].Item2);
-                }
-            }
+        if (topNMoves.Count <= 1) return;
+        
+        // Ensure the CP values are ordered greatest --> smallest.
+        for (var i = 0; i < topNMoves.Count - 1; i++)
+        {
+            Assert.GreaterOrEqual(topNMoves[i].Evaluation, topNMoves[i + 1].Evaluation);
         }
     }
 

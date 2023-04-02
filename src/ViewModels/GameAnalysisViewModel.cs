@@ -13,9 +13,9 @@ namespace ChessBoom.ViewModels;
 [ExcludeFromCodeCoverage]
 public class GameAnalysisViewModel : BoardViewModel
 {
-    private ObservableCollection<(string, int)> _bestMovesCollection;
+    private ObservableCollection<MoveEvaluation> _bestMovesCollection;
 
-    public ObservableCollection<(string, int)> BestMoveCollection
+    public ObservableCollection<MoveEvaluation> BestMovesCollection
     {
         get => _bestMovesCollection;
         set => this.RaiseAndSetIfChanged(ref _bestMovesCollection, value);
@@ -29,9 +29,9 @@ public class GameAnalysisViewModel : BoardViewModel
         set => this.RaiseAndSetIfChanged(ref _evaluationCollection, value);
     }
 
-    private SimpleReport _analysisReport;
+    private SimpleReport? _analysisReport;
 
-    public SimpleReport AnalysisReport
+    public SimpleReport? AnalysisReport
     {
         get => _analysisReport;
         set => this.RaiseAndSetIfChanged(ref _analysisReport, value);
@@ -39,7 +39,7 @@ public class GameAnalysisViewModel : BoardViewModel
 
     private Stockfish _engine;
 
-    private Evaluation _currentEvaluation;
+    private Evaluation? _currentEvaluation;
 
     private Evaluation? _previousEvaluation;
 
@@ -50,7 +50,7 @@ public class GameAnalysisViewModel : BoardViewModel
     {
         Title = "";
 
-        _bestMovesCollection = new ObservableCollection<(string, int)>();
+        _bestMovesCollection = new ObservableCollection<MoveEvaluation>();
 
         _engine = new Stockfish
         {
@@ -58,10 +58,7 @@ public class GameAnalysisViewModel : BoardViewModel
             FenPosition = GameHandler.GetCurrentFENPosition()
         };
 
-        _evaluationCollection = new ObservableCollection<Evaluation>
-        {
-            _engine.GetStaticEvaluation()!
-        };
+        _evaluationCollection = new ObservableCollection<Evaluation>();
 
         GameHandler = new GameHandler(variant);
 
@@ -75,13 +72,15 @@ public class GameAnalysisViewModel : BoardViewModel
     private void UpdateEngine(string startingSquare, string destinationSquare)
     {
         _engine.FenPosition = GameHandler.GetCurrentFENPosition();
+        if (_currentEvaluation is not null)
+            _previousEvaluation = _currentEvaluation;
         _currentEvaluation = _engine.GetStaticEvaluation() ?? throw new InvalidOperationException();
         _evaluationCollection.Add(_currentEvaluation);
     }
 
-    private void UpdateGameData(string startingsquare, string destinationsquare)
+    private void UpdateGameData(string _, string destinationsquare)
     {
-        _bestMovesCollection = new ObservableCollection<(string, int)>(_engine.GetNBestMoves(10));
+        BestMovesCollection = new ObservableCollection<MoveEvaluation>(_engine.GetNBestMoves(10));
     }
 
     private void UpdateAnalysisData(string startingsquare, string destinationsquare)
