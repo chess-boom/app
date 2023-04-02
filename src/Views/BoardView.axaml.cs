@@ -312,7 +312,6 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         {
             PromotionPieces.RowDefinitions.Add(new RowDefinition { Height = new GridLength(Tile.Height) });
 
-
             var promotionPiece = new SKBitmapControl
             {
                 Name = GameHelpers.k_promotionPieces[row].ToString(),

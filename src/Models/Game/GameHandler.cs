@@ -218,19 +218,11 @@ public class GameHandler
     {
         try
         {
-            m_game.MakeExplicitMove(startingSquare, destinationSquare);
-        }
-        catch (ArgumentException)
-        {
-            throw;
-        }
-        catch (GameplayErrorException)
-        {
-            throw;
+            m_game.MakeExplicitMove(startingSquare, destinationSquare, requestPromotionPiece);
         }
         finally
         {
-            MovePlayed?.Invoke(startingSquare, destinationSquare);
+            MovePlayed.Invoke(startingSquare, destinationSquare);
         }
     }
 
