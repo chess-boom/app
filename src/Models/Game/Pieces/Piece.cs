@@ -33,7 +33,6 @@ public abstract class Piece
 
     /// <summary>
     /// Get the list of squares that this piece can move to
-    /// TODO: Convert to HashSet to improve performance
     /// </summary>
     /// <returns>The list of square coordinates that the piece can move to</returns>
     public abstract List<(int, int)> GetMovementSquares();
@@ -87,9 +86,9 @@ public abstract class Piece
     /// Attempt to move the piece to a new square. Initiates a capture if required
     /// </summary>
     /// <param name="coordinate">The coordinate to which the piece will try to move</param>
-    /// <param name="promotionPiece">Optional parameter denoting which piece type the piece will promote into. Typically only used for pawns</param>
+    /// <param name="requestPromotionPiece">Optional parameter denoting the function to call to determine promotion piece. Typically only used for pawns</param>
     /// <exception cref="ArgumentException">Thrown the piece is unable to move to the specified coordinate</exception>
-    public virtual void MovePiece((int, int) coordinate, char? promotionPiece = null)
+    public virtual void MovePiece((int, int) coordinate, Board.RequestPromotionPieceDelegate? requestPromotionPiece = null)
     {
         if (GetMovementSquares().Contains(coordinate))
         {

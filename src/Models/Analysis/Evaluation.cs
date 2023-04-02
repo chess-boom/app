@@ -5,28 +5,14 @@
 /// </summary>
 public class Evaluation
 {
-
-    protected float m_finalEvaluation;
-    /// <summary>
-    /// Which side the evaluation is for (w for white, b for black)
-    /// </summary>
-    protected char m_side;
     /// <summary>
     /// Final evaluation value for the position
     /// </summary>
-    public float FinalEvaluation
-    {
-        get { return m_finalEvaluation; }
-        set { m_finalEvaluation = value; }
-    }
+    public float FinalEvaluation { get; set; }
     /// <summary>
     /// Side of evaluation (w for white, b for black)
     /// </summary>
-    public char Side
-    {
-        get { return m_side; }
-        set { m_side = value; }
-    }
+    public char Side { get; set; }
     /// <summary>
     /// Collection of evaluation information for the position.
     /// </summary>
@@ -39,8 +25,8 @@ public class Evaluation
     }
     public override string ToString()
     {
-        string side_string = (m_side) == 'w' ? "White" : "Black";
-        return $"Final Evaluation: {m_finalEvaluation} for {side_string}";
+        string side_string = (Side) == 'w' ? "White" : "Black";
+        return $"Final Evaluation: {FinalEvaluation} for {side_string}";
     }
 
 }

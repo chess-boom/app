@@ -85,7 +85,7 @@
                 </Button.Background>
             </Button>
         </StackPanel>
-        <Border CornerRadius="10" BorderBrush="Black" BorderThickness="1" Margin="100,10,100,10" Padding="100,10,100,25">
+        <Border CornerRadius="10" BorderBrush="Black" BorderThickness="1" Margin="100,10,100,10" Padding="100,10,100,50">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
                     <GradientStop Color="#242424" Offset="0.0" />

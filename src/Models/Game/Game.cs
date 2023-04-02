@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using ChessBoom.Models.Game.Pieces;
 using ChessBoom.Models.Game.Rulesets;
 
@@ -32,8 +33,6 @@ public enum GameState
     VictoryWhite,
     VictoryBlack,
     Draw,
-
-    // TODO: Implement game aborting
     Aborted
 }
 
@@ -91,13 +90,18 @@ struct Move
 /// <summary>
 /// The GameplayErrorException class is used for any case in which gameplay rules are broken
 /// </summary>
+[System.SerializableAttribute()] // Used to conform to the ISerializable interface.
 public class GameplayErrorException : Exception
 {
+
     public GameplayErrorException() { }
 
     public GameplayErrorException(string message) : base(message) { }
 
     public GameplayErrorException(string message, Exception inner) : base(message, inner) { }
+    // This constructor is needed for serialization. Used to conform to the ISerializable interface.
+    protected GameplayErrorException(System.Runtime.Serialization.SerializationInfo info,
+        System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
 }
 
 /// <summary>
@@ -105,10 +109,6 @@ public class GameplayErrorException : Exception
 /// </summary>
 public class Game
 {
-    /// <summary>
-    /// The chosen variant for this game
-    /// </summary>
-    private readonly Variant m_variant;
 
     /// <summary>
     /// The chosen ruleset for this game
@@ -140,7 +140,6 @@ public class Game
     /// </summary>
     public Game(Variant variant = Variant.Standard)
     {
-        m_variant = variant;
         m_board = InitializeBoard(variant);
         m_ruleset = Ruleset.k_rulesetUsage[variant];
         m_moveList = new List<Move>();
@@ -163,12 +162,12 @@ public class Game
                 // TODO: CB-24
                 break;
             case Variant.Horde:
-                fen = File.ReadAllText("Resources/horde.fen");
+                fen = File.ReadAllText(Path.Combine(System.AppContext.BaseDirectory, "Resources/horde.fen"));
                 break;
             case Variant.Standard:
             case Variant.Atomic:
             default:
-                fen = File.ReadAllText("Resources/default.fen");
+                fen = File.ReadAllText(Path.Combine(System.AppContext.BaseDirectory, "Resources/default.fen"));
                 break;
         }
 
@@ -222,7 +221,7 @@ public class Game
 
         // Consider reimplementing like Board's k_pieceConstructor
         List<(int, int)> possibleOrigins;
-        switch ((char)pgnNotation[0])
+        switch (pgnNotation[0])
         {
             case 'Q':
                 dummyPiece = new Queen(dummyBoard, m_board.m_playerToPlay, squareCoordinates);
@@ -301,9 +300,10 @@ public class Game
     /// </summary>
     /// <param name="startingSquare">The square from which a piece moves</param>
     /// <param name="destinationSquare">The square to which a piece moves</param>
+    /// <param name="requestPromotionPiece">Optional parameter denoting the function to call to determine promotion piece</param>
     /// <exception cref="ArgumentException">Thrown the piece on the starting square can not be found or be moved, or the square can not be found</exception>
     /// <exception cref="GameplayErrorException">Thrown if the attempted move is invalid as per gameplay rules</exception>
-    public void MakeExplicitMove(string startingSquare, string destinationSquare)
+    public void MakeExplicitMove(string startingSquare, string destinationSquare, Board.RequestPromotionPieceDelegate? requestPromotionPiece = null)
     {
         var piece = m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(startingSquare));
         if (piece is null)
@@ -311,18 +311,7 @@ public class Game
             throw new ArgumentException($"Piece on square {startingSquare} not found!");
         }
 
-        try
-        {
-            MakeMove(piece, destinationSquare);
-        }
-        catch (ArgumentException)
-        {
-            throw;
-        }
-        catch (GameplayErrorException)
-        {
-            throw;
-        }
+        MakeMove(piece, destinationSquare, requestPromotionPiece);
     }
 
     /// <summary>
@@ -330,10 +319,10 @@ public class Game
     /// </summary>
     /// <param name="piece">The piece that will attempt to move</param>
     /// <param name="square">The square that the piece should move to</param>
-    /// <param name="promotionPiece">Optional parameter denoting which piece type the piece will promote into</param>
+    /// <param name="requestPromotionPiece">Optional parameter denoting the function to call to determine promotion piece</param>
     /// <exception cref="ArgumentException">Thrown the piece can not be found or be moved, or the square can not be found</exception>
     /// <exception cref="GameplayErrorException">Thrown if the wrong player attempts to make a move or if castling is attempted when illegal</exception>
-    public void MakeMove(Piece piece, string square, char? promotionPiece = null)
+    public void MakeMove(Piece piece, string square, Board.RequestPromotionPieceDelegate? requestPromotionPiece = null)
     {
         if (m_gameState != GameState.InProgress)
         {
@@ -357,7 +346,7 @@ public class Game
         }
         else
         {
-            piece.MovePiece(GameHelpers.GetCoordinateFromSquare(square), promotionPiece);
+            piece.MovePiece(GameHelpers.GetCoordinateFromSquare(square), requestPromotionPiece);
         }
 
         if (m_board.m_playerToPlay == Player.Black)
@@ -532,7 +521,7 @@ public class Game
     /// <returns>The board state of the pieces as the contents of a .FEN file</returns>
     private static string GetPiecesFENFromBoard(Board board)
     {
-        var fen = "";
+        StringBuilder fen = new StringBuilder();
 
         for (var row = GameHelpers.k_boardHeight - 1; row >= 0; row--)
         {
@@ -549,27 +538,26 @@ public class Game
                     // Append the number of empty squares and reset the count
                     if (emptySquareCount != 0)
                     {
-                        fen += emptySquareCount.ToString();
+                        fen.Append(emptySquareCount);
                         emptySquareCount = 0;
                     }
 
-                    fen += piece.ToString();
+                    fen.Append(piece.ToString());
                 }
             }
 
             if (emptySquareCount != 0)
             {
-                fen += emptySquareCount.ToString();
-                emptySquareCount = 0;
+                fen.Append(emptySquareCount);
             }
 
             if (row != 0)
             {
-                fen += "/";
+                fen.Append('/');
             }
         }
 
-        return fen;
+        return fen.ToString();
     }
 
     /// <summary>

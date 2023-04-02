@@ -31,6 +31,11 @@ public static class GameHelpers
     public static readonly int k_boardHeight = 8;
 
     /// <summary>
+    /// Possible pieces to promote to
+    /// </summary>
+    public static readonly ImmutableList<char> k_promotionPieces = ImmutableList.Create('Q', 'R', 'B', 'N');
+
+    /// <summary>
     /// The corresponding square is retrieved from its board coordinates
     /// </summary>
     /// <param name="coordinate">The 2-tuple containing the row and column coordinates (0-7, 0-7)</param>
@@ -202,7 +207,6 @@ public static class GameHelpers
             // Handle board boundaries
             if (!IsOnBoard(position))
             {
-                movementFlag = false;
                 break;
             }
 
@@ -220,5 +224,33 @@ public static class GameHelpers
 
             movementSquares.Add((position.Item1, position.Item2));
         } while (movementFlag);
+    }
+
+    /// <summary>
+    /// Find all intermediate squares between two positions by repeatedly adding a movement vector, stored in a List
+    /// </summary>
+    /// <param name="intermediateSquares">The reference of the list of squares that is added to. Squares added in order from closest to furthest from origin</param>
+    /// <param name="startingPosition">The position (not counted) at which the movement begins</param>
+    /// <param name="movementVector">The vector that is repeatedly added to the starting position</param>
+    /// <param name="endingPosition">The position (not counted) at which the movement ends</param>
+    public static void GetIntermediateSquares(ref List<(int, int)> intermediateSquares,
+        (int, int) startingPosition, (int, int) movementVector, (int, int) endingPosition)
+    {
+        if (!IsOnBoard(startingPosition))
+        {
+            return;
+        }
+
+        var position = startingPosition;
+        for (int index = 0; index < k_boardWidth; index++)
+        {
+            position = AddVector(position, movementVector);
+            if (position == endingPosition)
+            {
+                return;
+            }
+
+            intermediateSquares.Add((position.Item1, position.Item2));
+        }
     }
 }

@@ -9,160 +9,130 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="ChessBoom.Views.MainWindow"
         Title="ChessBoom">
-  <Design.DataContext>
-    <viewModels:MainWindowViewModel />
-  </Design.DataContext>
-  <!-- TODO : fix icon relative path -->
-  <Window.Background>
-    <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%%,0%">
-      <GradientStop Color="Black" Offset="0.0"/>
-      <GradientStop Color="#131313" Offset="0.1"/>
-      <GradientStop Color="#272727" Offset="0.5"/>
-      <GradientStop Color="#131313" Offset="0.9"/>
-      <GradientStop Color="Black" Offset="1"/>
-    </LinearGradientBrush>
-  </Window.Background>
-  <DockPanel>
-  <!-- App Navigation Bar -->
-      <Border DockPanel.Dock="Top"
-        BorderBrush="#4287f5"
-        BorderThickness="1"
-        Background="Black">
-        <Grid>
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-          </Grid.ColumnDefinitions>
-          <Button Command="{Binding GoBack}">
-              <Button.Styles>
-                  <Style Selector="Grid:pointerover">
-                      <Setter Property="Background" Value="#191919"/>
-                      <Setter Property="Cursor" Value="Hand"/>
-                  </Style>
-                  <Style Selector="Button">
-                      <Setter Property="CornerRadius" Value="30"/>
-                  </Style>
-              </Button.Styles>
-              <Button.Template>
-                  <ControlTemplate>
-                      <Grid>
-                          <Grid.RowDefinitions>
-                              <RowDefinition Height="*"/>
-                          </Grid.RowDefinitions>
-                          <Grid.ColumnDefinitions>
-                              <ColumnDefinition Width="*"/>
-                          </Grid.ColumnDefinitions>
-                          <Image Source="/Assets/Icons/back-arrow.png" Width="30" Height="30" Margin="10,10,10,10"/>
-                          <ContentPresenter />
-                      </Grid>
-                  </ControlTemplate>
-              </Button.Template>
-          </Button>
-          <Button Content="HOME" Command="{Binding GoHome}" Grid.Column="1">
-              <Button.Styles>
-                  <Style Selector="Grid:pointerover">
-                      <Setter Property="Background" Value="#191919"/>
-                      <Setter Property="Cursor" Value="Hand"/>
-                  </Style>
-              </Button.Styles>
-              <Button.Template>
-                  <ControlTemplate>
-                      <Grid>
-                          <Grid.RowDefinitions>
-                              <RowDefinition Height="*"/>
-                          </Grid.RowDefinitions>
-                          <Grid.ColumnDefinitions>
-                              <ColumnDefinition Width="Auto"/>
-                              <ColumnDefinition Width="*"/>
-                          </Grid.ColumnDefinitions>
-                          <Image Source="/Assets/Icons/favicon.ico" Width="50" Height="50" Margin="0,5,0,5"/>
-                          <TextBlock Text="ChessBoom" FontSize="25" Grid.Column="1" TextAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                          <ContentPresenter />
-                      </Grid>
-                  </ControlTemplate>
-              </Button.Template>
-          </Button>
-        <Border IsHitTestVisible="False" Grid.Column="2" Padding="20,0,20,0">
-          <Rectangle Stroke="#4287f5" StrokeThickness="1" Width="1" Height="75"/>
+    <Design.DataContext>
+        <viewModels:MainWindowViewModel />
+    </Design.DataContext>
+    <Window.Background>
+        <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+            <GradientStop Color="Black" Offset="0.0" />
+            <GradientStop Color="#131313" Offset="0.1" />
+            <GradientStop Color="#272727" Offset="0.5" />
+            <GradientStop Color="#131313" Offset="0.9" />
+            <GradientStop Color="Black" Offset="1" />
+        </LinearGradientBrush>
+    </Window.Background>
+    <DockPanel>
+        <!-- App Navigation Bar -->
+        <Border DockPanel.Dock="Top"
+                BorderBrush="#4287f5"
+                BorderThickness="1"
+                Background="Black">
+            <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,*">
+                <Button Command="{Binding GoBack}">
+                    <Button.Styles>
+                        <Style Selector="Grid:pointerover">
+                            <Setter Property="Background" Value="#191919" />
+                            <Setter Property="Cursor" Value="Hand" />
+                        </Style>
+                        <Style Selector="Button">
+                            <Setter Property="CornerRadius" Value="30" />
+                        </Style>
+                    </Button.Styles>
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Grid RowDefinitions="*" ColumnDefinitions="*">
+                                <Image Source="/Assets/Icons/back-arrow.png" Width="30" Height="30"
+                                       Margin="10,10,10,10" />
+                                <ContentPresenter />
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Content="HOME" Command="{Binding GoHome}" Grid.Column="1">
+                    <Button.Styles>
+                        <Style Selector="Grid:pointerover">
+                            <Setter Property="Background" Value="#191919" />
+                            <Setter Property="Cursor" Value="Hand" />
+                        </Style>
+                    </Button.Styles>
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Grid RowDefinitions="*" ColumnDefinitions="Auto,*">
+                                <Image Source="/Assets/Icons/favicon.ico" Width="50" Height="50" Margin="0,5,0,5" />
+                                <TextBlock Text="ChessBoom" FontSize="25" Grid.Column="1" TextAlignment="Center"
+                                           VerticalAlignment="Center" Margin="0,0,10,0" />
+                                <ContentPresenter Grid.Column="0" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Border IsHitTestVisible="False" Grid.Column="2" Padding="20,0,20,0">
+                    <Rectangle Stroke="#4287f5" StrokeThickness="1" Width="1" Height="75" />
+                </Border>
+                <Menu Background="Black" Grid.Column="3">
+                    <MenuItem Header="Game Analysis" FontSize="20" CornerRadius="10" Cursor="Hand">
+                        <MenuItem Header="Board" Command="{Binding GoBoard}" />
+                        <MenuItem Header="Game List" Command="{Binding GoAnalysis}" />
+                        <MenuItem Header="Analysis Breakdown" Command="{Binding GoTemplate}" />
+                        <MenuItem Header="Template 4" Command="{Binding GoTemplate}" />
+                    </MenuItem>
+                    <MenuItem Header="Variant Analysis" FontSize="20" CornerRadius="10" Cursor="Hand">
+                        <MenuItem Header="Variant 1" Command="{Binding GoVariant}" />
+                        <MenuItem Header="Chess 960" Command="{Binding GoChess960Board}" />
+                        <MenuItem Header="Atomic" Command="{Binding GoAtomicBoard}" />
+                        <MenuItem Header="Horde" Command="{Binding GoHordeBoard}" />
+                    </MenuItem>
+                    <MenuItem Header="Tutorials" FontSize="20" CornerRadius="10" Cursor="Hand">
+                        <MenuItem Header="Beginner" Command="{Binding GoTutorial}" />
+                        <MenuItem Header="Intermediate" Command="{Binding GoTemplate}" />
+                        <MenuItem Header="Expert" Command="{Binding GoTemplate}" />
+                    </MenuItem>
+
+                </Menu>
+                <Button Command="{Binding GoProfile}" Grid.Column="4" HorizontalAlignment="Right">
+                    <Button.Styles>
+                        <Style Selector="Grid:pointerover">
+                            <Setter Property="Background" Value="#191919" />
+                            <Setter Property="Cursor" Value="Hand" />
+                        </Style>
+                        <Style Selector="Button">
+                            <Setter Property="CornerRadius" Value="30" />
+                        </Style>
+                    </Button.Styles>
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Grid RowDefinitions="*" ColumnDefinitions="Auto,*">
+                                <TextBlock Text="My Profile" FontSize="20" TextAlignment="Center"
+                                           VerticalAlignment="Center" Margin="10,0,0,0" />
+                                <Image Source="/Assets/Icons/user-profile.png" Grid.Column="1" Width="40" Height="40"
+                                       Margin="7,7,7,7" />
+                                <ContentPresenter Grid.Column="0" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
         </Border>
-        <Menu Background="Black" Grid.Column="3">
-            <MenuItem Header="Game Analysis" FontSize="20" CornerRadius="10" Cursor="Hand">
-                <MenuItem Header="Board" Command="{Binding GoBoard}"/>
-                <MenuItem Header="Game List" Command="{Binding GoAnalysis}"/>
-                <MenuItem Header="Analysis Breakdown" Command="{Binding GoAnalysisBreakdown}"/>
-                <MenuItem Header="Template 4" Command="{Binding GoTemplate}"/>
-            </MenuItem>
-            <MenuItem Header="Variant Analysis" FontSize="20" CornerRadius="10" Cursor="Hand">
-                <MenuItem Header="Variant 1" Command="{Binding GoVariant}"/>
-                <MenuItem Header="Chess 960" Command="{Binding GoChess960Board}"/>
-                <MenuItem Header="Atomic" Command="{Binding GoAtomicBoard}"/>
-                <MenuItem Header="Horde" Command="{Binding GoHordeBoard}"/>
-            </MenuItem>
-            <!-- TODO Highlight Navbar when on tutorial page -->
-            <MenuItem Header="Tutorials" FontSize="20" Background="{Binding HomeBackground}" CornerRadius="10" Cursor="Hand">
-                <MenuItem Header="Beginner" Command="{Binding GoTutorial}"/>
-                <MenuItem Header="Intermediate" Command="{Binding GoTemplate}"/>
-                <MenuItem Header="Expert" Command="{Binding GoTemplate}"/>
-            </MenuItem>
-        </Menu>
-        <Button Command="{Binding GoProfile}" Grid.Column="4" HorizontalAlignment="Right">
-              <Button.Styles>
-                  <Style Selector="Grid:pointerover">
-                      <Setter Property="Background" Value="#191919"/>
-                      <Setter Property="Cursor" Value="Hand"/>
-                  </Style>
-                  <Style Selector="Button">
-                      <Setter Property="CornerRadius" Value="30"/>
-                  </Style>
-              </Button.Styles>
-              <Button.Template>
-                  <ControlTemplate>
-                      <Grid>
-                          <Grid.RowDefinitions>
-                              <RowDefinition Height="*"/>
-                          </Grid.RowDefinitions>
-                          <Grid.ColumnDefinitions>
-                              <ColumnDefinition Width="Auto"/>
-                              <ColumnDefinition Width="*"/>
-                          </Grid.ColumnDefinitions>
-                          <TextBlock Text="My Profile" FontSize="20" TextAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                          <Image Source="/Assets/Icons/user-profile.png" Grid.Column="1" Width="40" Height="40" Margin="7,7,7,7"/>
-                          <ContentPresenter />
-                      </Grid>
-                  </ControlTemplate>
-              </Button.Template>
-          </Button>
+        <Grid RowDefinitions="*,Auto">
+            <rxui:RoutedViewHost Grid.Row="0" Router="{Binding Path=Router}" PageTransition="{x:Null}">
+                <rxui:RoutedViewHost.DefaultContent>
+                    <views:DashboardView />
+                </rxui:RoutedViewHost.DefaultContent>
+                <rxui:RoutedViewHost.ViewLocator>
+                    <!-- See AppViewLocator.cs section below -->
+                    <app:AppViewLocator />
+                </rxui:RoutedViewHost.ViewLocator>
+            </rxui:RoutedViewHost>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="15">
+                <StackPanel.Styles>
+                    <Style Selector="StackPanel > :is(Control)">
+                        <Setter Property="Margin" Value="2" />
+                    </Style>
+                    <Style Selector="StackPanel > TextBlock">
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                    </Style>
+                </StackPanel.Styles>
+            </StackPanel>
         </Grid>
-      </Border>
-  <Grid RowDefinitions="*,Auto">
-    <rxui:RoutedViewHost Grid.Row="0" Router="{Binding Path=Router}" PageTransition="{x:Null}">
-      <rxui:RoutedViewHost.DefaultContent>
-        <views:DashboardView/>
-        <!-- <TextBlock Text="Default content" -->
-        <!--            HorizontalAlignment="Center" -->
-        <!--            VerticalAlignment="Center" /> -->
-      </rxui:RoutedViewHost.DefaultContent>
-      <rxui:RoutedViewHost.ViewLocator>
-        <!-- See AppViewLocator.cs section below -->
-        <app:AppViewLocator />
-      </rxui:RoutedViewHost.ViewLocator>
-    </rxui:RoutedViewHost>
-    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="15">
-      <StackPanel.Styles>
-        <Style Selector="StackPanel > :is(Control)">
-          <Setter Property="Margin" Value="2"/>
-        </Style>
-        <Style Selector="StackPanel > TextBlock">
-          <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
-      </StackPanel.Styles>
-      <!-- <Button Content="Go home" Command="{Binding GoHome}" />
-      <Button Content="Go back" Command="{Binding GoBack}" />
-      <TextBlock Text="{Binding Router.NavigationStack.Count}" /> -->
-    </StackPanel>
-  </Grid>
-  </DockPanel>
+    </DockPanel>
 </Window>

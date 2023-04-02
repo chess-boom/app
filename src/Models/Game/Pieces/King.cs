@@ -49,9 +49,9 @@ public class King : Piece
         return movementSquares;
     }
 
-    public override void MovePiece((int, int) coordinate, char? promotionPiece = null)
+    public override void MovePiece((int, int) coordinate, Board.RequestPromotionPieceDelegate? requestPromotionPiece = null)
     {
-        base.MovePiece(coordinate, promotionPiece);
+        base.MovePiece(coordinate, requestPromotionPiece);
         if (!m_hasMoved)
         {
             m_board.RemoveCastling(m_owner, Castling.Kingside);
@@ -101,6 +101,7 @@ public class King : Piece
         }
         catch (GameplayErrorException)
         {
+            // Do nothing
         }
         castlingBoard = Game.CreateBoardFromFEN(m_board.m_game, Game.CreateFENFromBoard(m_board));
         try
@@ -110,6 +111,7 @@ public class King : Piece
         }
         catch (GameplayErrorException)
         {
+            // Do nothing
         }
 
         return legalSquares;
