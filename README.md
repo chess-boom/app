@@ -6,7 +6,7 @@ The Application for our Chess Boom project. The application is where the downloa
 
 The Application supports Standard chess, along with several variants (Atomic, Horde, Chess960).
 
-To use the User Profiles to see overall results of your downloaded chess games played on lichess.org, it is required that you put the .pgn files in the CBoom directory in the applcation directory, and `is recommended you have a lichess account to get data for your wins and losses` for this feature. A lichess account is not required for live analysis, just overall summaries with the user profile feature.
+To use the User Profiles to see overall results of your downloaded chess games played on lichess.org, it is required that you put the .pgn files in the CBoom directory in the application directory, and `is recommended you have a lichess account to get data for your wins and losses` for this feature. A lichess account is not required for live analysis, just overall summaries with the user profile feature.
 
 ## Design Infrastructure
 
