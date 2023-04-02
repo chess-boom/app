@@ -1,6 +1,6 @@
 namespace ChessBoom.Models.Analysis;
 
-public class Player
+public class MatchData
 {
     public string? Name { get; set; }
     public string? Opponent { get; set; }

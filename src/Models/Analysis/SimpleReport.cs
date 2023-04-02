@@ -1,4 +1,3 @@
-using System;
 using ChessBoom.Models.Game;
 
 namespace ChessBoom.Models.Analysis;
