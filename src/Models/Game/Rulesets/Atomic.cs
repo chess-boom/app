@@ -15,17 +15,29 @@ public class Atomic : Ruleset
 
     public static Atomic Instance => _instance;
 
-    public override void Capture(Piece attacker, Board board, string square)
+    public override List<Piece> Capture(Piece attacker, Board board, string square)
     {
+        var capturedPieces = new List<Piece>();
+        
         var capturedPiece = board.GetPiece(GameHelpers.GetCoordinateFromSquare(square));
-        capturedPiece?.Destroy();
+        if (capturedPiece is null)
+        {
+            throw new ArgumentException("No piece to capture on the specified square");
+        }
+        
+        capturedPieces.Add(capturedPiece);
+        capturedPiece.Destroy();
+        capturedPieces.Add(attacker);
         attacker.Destroy();
 
         // Get all surrounding pieces (not pawns) and destroy them as well
-        foreach (Piece piece in GetSurroundingPieces(board, square, true, false))
+        foreach (var piece in GetSurroundingPieces(board, square, true))
         {
             piece.Destroy();
+            capturedPieces.Add(piece);
         }
+
+        return capturedPieces;
     }
 
     /// <summary>

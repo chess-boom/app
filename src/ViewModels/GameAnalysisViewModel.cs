@@ -62,8 +62,6 @@ public class GameAnalysisViewModel : BoardViewModel
 
         GameHandler = new GameHandler(variant);
         
-        GameHandler.PieceCaptured += UpdateCapturedPieces;
-
         GameHandler.MovePlayed += UpdateEngine;
         GameHandler.MovePlayed += UpdateGameData;
         GameHandler.MovePlayed += UpdateAnalysisData;

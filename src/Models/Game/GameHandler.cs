@@ -328,4 +328,9 @@ public class GameHandler
     {
         return m_board.m_playerToPlay;
     }
+
+    public List<Piece> GetCapturedPieces()
+    {
+        return m_board.m_capturedPieces;
+    }
 }

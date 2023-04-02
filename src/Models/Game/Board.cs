@@ -78,6 +78,11 @@ public class Board
     /// The game that contains this board
     /// </summary>
     public Game? m_game { get; set; }
+    
+    /// <summary>
+    /// A list of captured pieces
+    /// </summary>
+    protected internal List<Piece> m_capturedPieces { get; } = new();
 
     /// <summary>
     /// The default constructor
@@ -342,7 +347,8 @@ public class Board
     /// <param name="coordinate">The square on which the capture takes place</param>
     public void Capture(Piece attacker, (int, int) coordinate)
     {
-        GetRuleset().Capture(attacker, this, GameHelpers.GetSquareFromCoordinate(coordinate));
+        var captured = GetRuleset().Capture(attacker, this, GameHelpers.GetSquareFromCoordinate(coordinate));
+        m_capturedPieces.AddRange(captured);
         m_game?.ClearVisitedPositions();
         m_halfmoveClock = 0;
     }

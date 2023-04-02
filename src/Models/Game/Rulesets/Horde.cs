@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using ChessBoom.Models.Game.Pieces;
 
 namespace ChessBoom.Models.Game.Rulesets;
@@ -13,9 +14,9 @@ public class Horde : Ruleset
 
     public static Horde Instance => _instance;
 
-    public override void Capture(Piece attacker, Board board, string square)
+    public override List<Piece> Capture(Piece attacker, Board board, string square)
     {
-        Standard.Instance.Capture(attacker, board, square);
+        return Standard.Instance.Capture(attacker, board, square);
     }
 
     public override bool IsInCheck(Player player, Board board)
