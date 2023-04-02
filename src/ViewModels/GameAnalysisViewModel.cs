@@ -85,9 +85,10 @@ public class GameAnalysisViewModel : BoardViewModel
 
     private void UpdateAnalysisData(string startingSquare, string destinationSquare)
     {
-        AnalysisReport = SimpleReport.GetSimpleReport(_currentEvaluation,
-            _previousEvaluation,
-            GameHandler.GetPlayerToPlay());
+        if (_currentEvaluation is not null)
+            AnalysisReport = SimpleReport.GetSimpleReport(_currentEvaluation,
+                _previousEvaluation,
+                GameHandler.GetPlayerToPlay());
     }
 
     private static ReactiveCommand<Unit, Unit> HandleFileExplorer()

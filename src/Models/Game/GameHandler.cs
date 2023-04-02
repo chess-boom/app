@@ -16,7 +16,7 @@ public class GameHandler
 
     public delegate void MovePlayedDelegate(string startingSquare, string destinationSquare);
 
-    public event MovePlayedDelegate MovePlayed;
+    public event MovePlayedDelegate? MovePlayed;
 
     public GameHandler()
     {
@@ -222,7 +222,7 @@ public class GameHandler
         }
         finally
         {
-            MovePlayed.Invoke(startingSquare, destinationSquare);
+            MovePlayed?.Invoke(startingSquare, destinationSquare);
         }
     }
 

@@ -104,7 +104,7 @@ public class Pawn : Piece
     /// <param name="coordinate">The coordinate to which the piece will try to move</param>
     /// <param name="requestPromotionPiece">Optional parameter denoting the function to call to determine promotion piece</param>
     /// <exception cref="ArgumentException">Thrown the piece is unable to move to the specified coordinate</exception>
-    public override void MovePiece((int, int) coordinate, Board.RequestPromotionPieceDelegate? requestPromotionPiece = null)
+    public override async void MovePiece((int, int) coordinate, Board.RequestPromotionPieceDelegate? requestPromotionPiece = null)
     {
         if (GetMovementSquares().Contains(coordinate))
         {
@@ -157,7 +157,7 @@ public class Pawn : Piece
             if ((m_row == GameHelpers.k_boardHeight - 1 && m_owner == Player.White)
                 || (m_row == 0 && m_owner == Player.Black))
             {
-                m_board.RequestPromotion(this, requestPromotionPiece);
+                await m_board.RequestPromotion(this, requestPromotionPiece);
             }
         }
         else
