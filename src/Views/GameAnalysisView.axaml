@@ -31,7 +31,7 @@
                     <Border Margin="20,20,20,0">
                         <StackPanel>
                             <Border CornerRadius="25" Background="LightGray">
-                                <DataGrid AutoGenerateColumns="False" Items="{Binding BestMovesCollection}" />
+                                <DataGrid AutoGenerateColumns="True" Items="{Binding BestMovesCollection}" />
                             </Border>
                         </StackPanel>
                     </Border>
