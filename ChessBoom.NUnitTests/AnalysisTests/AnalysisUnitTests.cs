@@ -101,4 +101,24 @@ public class AnalysisUnitTests
         engine.Close();
     }
 
+    [Test]
+    /// <summary>
+    /// Test that the analysis engine returns a valid static evaluation for a given FEN for the Atomic Variant.
+    /// </summary>
+    public void AnalysisEngineHasAccurateAtomicEvaluation()
+    {
+        var engine = new Stockfish(Models.Game.Variant.Atomic);
+        engine.FenPosition = "r1b1kbnr/ppp2ppp/2n1p3/3q4/8/2P2N2/PP1PPPPP/RNBQKB1R b KQkq - 0 1";
+
+        var staticEval = engine.GetStaticEvaluation();
+
+        Assert.IsNotNull(staticEval);
+
+        if (staticEval is not null) // Technically unecessary, but removes null dereference error
+        {
+            Assert.AreEqual(-36.15f, staticEval.FinalEvaluation, "This value may change if we update Stockfish");
+            Assert.AreEqual('w', staticEval.Side);
+        }
+    }
+
 }
