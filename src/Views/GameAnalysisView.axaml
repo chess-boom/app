@@ -26,14 +26,17 @@
         <Separator Height="1" Background="#FFFFFF" Margin="20,0,20,0" />
         <Grid RowDefinitions="*,*,*" ColumnDefinitions="*,Auto,*">
             <!-- First section -->
-            <Border Grid.Row="0" Grid.Column="0" Margin="20,20,20,0">
-                <StackPanel>
-                    <Border CornerRadius="25" Background="LightGray">
-                        <DataGrid AutoGenerateColumns="True"
-                                  Items="{Binding BestMoveCollection}" />
+            <StackPanel>
+                <Border CornerRadius="25" Background="LightGray">
+                    <Border Margin="20,20,20,0">
+                        <StackPanel>
+                            <Border CornerRadius="25" Background="LightGray">
+                                <DataGrid AutoGenerateColumns="False" Items="{Binding BestMovesCollection}" />
+                            </Border>
+                        </StackPanel>
                     </Border>
-                </StackPanel>
-            </Border>
+                </Border>
+            </StackPanel>
             <!-- Second section -->
             <Border Grid.Row="0" Grid.Column="1" Margin="10,0,10,0">
                 <views:BoardView />
@@ -45,28 +48,32 @@
             <!-- Third section -->
             <Border Grid.Row="0" Grid.Column="2" Margin="0,20,20,0">
                 <StackPanel>
-                    <Border Grid.Column="2" Margin="0,20,20,0">
+                    <Border Margin="0,20,20,0">
                         <StackPanel>
                             <Border CornerRadius="25" Background="LightGray">
                                 <Grid RowDefinitions="*,*,*,*,*,*" ColumnDefinitions="*">
                                     <Border Grid.Row="0" Background="#454545" Margin="0,20,0,0" BorderBrush="#454545"
                                             BorderThickness="0,20,0,20">
-                                        <Label Content="{Binding AnalysisReport.Accuracy}" FontSize="18" Background="#0f8c14"
+                                        <Label Content="{Binding AnalysisReport.Accuracy}" FontSize="18"
+                                               Background="#0f8c14"
                                                HorizontalAlignment="Stretch" />
                                     </Border>
                                     <Border Grid.Row="1" Background="#454545" BorderBrush="#454545"
                                             BorderThickness="0,20,0,20">
-                                        <Label Content="{Binding AnalysisReport.Blunders}" FontSize="18" Background="#0f8c14"
+                                        <Label Content="{Binding AnalysisReport.Blunders}" FontSize="18"
+                                               Background="#0f8c14"
                                                HorizontalAlignment="Stretch" />
                                     </Border>
                                     <Border Grid.Row="2" Background="#454545" BorderBrush="#454545"
                                             BorderThickness="0,20,0,20">
-                                        <Label Content="{Binding AnalysisReport.Risk}" FontSize="18" Background="#0f8c14"
+                                        <Label Content="{Binding AnalysisReport.Risk}" FontSize="18"
+                                               Background="#0f8c14"
                                                HorizontalAlignment="Stretch" />
                                     </Border>
                                     <Border Grid.Row="5" Background="#454545" Margin="0,0,0,20" BorderBrush="#454545"
                                             BorderThickness="0,20,0,20">
-                                        <Label Content="{Binding AnalysisReport.MissedWins}" FontSize="18" Background="#0f8c14"
+                                        <Label Content="{Binding AnalysisReport.MissedWins}" FontSize="18"
+                                               Background="#0f8c14"
                                                HorizontalAlignment="Stretch" />
                                     </Border>
                                 </Grid>
