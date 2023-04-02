@@ -1,6 +1,13 @@
 # App
 [![.NET Build & Test](https://github.com/chess-boom/app/actions/workflows/dotnet.yml/badge.svg)](https://github.com/chess-boom/app/actions/workflows/dotnet.yml)
 [![Lint Code Base](https://github.com/chess-boom/app/actions/workflows/super-linter.yml/badge.svg)](https://github.com/chess-boom/app/actions/workflows/super-linter.yml)
+
+The Application for our Chess Boom project. The application is where the downloaded games from the extension are imported into and is what provides the analysis (courtesy of [Stockfish](https://stockfishchess.org/) and [Fairy-Stockfish](https://fairy-stockfish.github.io/)).
+
+The Application supports Standard chess, along with several variants (Atomic, Horde, Chess960).
+
+To use the User Profiles to see overall results of your downloaded chess games played on lichess.org, it is required that you put the .pgn files in the CBoom directory in the applcation directory, and `is recommended you have a lichess account to get data for your wins and losses` for this feature. A lichess account is not required for live analysis, just overall summaries with the user profile feature.
+
 ## Design Infrastructure
 
 See [Confluence Page](https://chessboom.atlassian.net/l/cp/hDGAeeMt)
