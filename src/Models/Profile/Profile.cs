@@ -10,7 +10,7 @@ namespace ChessBoom.Models.Profile;
 
 public class Profile : ReactiveObject
 {
-    public string Name { get; set;}
+    public string Name { get; set; }
 
     private readonly ObservableCollection<ObservableCollection<string>> _elo;
 
@@ -188,9 +188,9 @@ public class Profile : ReactiveObject
         Name = name;
         Games = new List<Dictionary<string, string>>();
         _elo = new ObservableCollection<ObservableCollection<string>>();
-        for(int i = 0; i < 10; i++)
+        for (int i = 0; i < 10; i++)
         {
-            _elo.Add(new ObservableCollection<string> {"0","0","1000","0"});
+            _elo.Add(new ObservableCollection<string> { "0", "0", "1000", "0" });
         }
         EloQueue = new Queue<string[]>();
         _winRateWhite = 0;
