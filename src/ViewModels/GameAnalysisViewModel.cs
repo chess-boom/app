@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Reactive;
 using Avalonia.Controls;
@@ -54,9 +55,13 @@ public class GameAnalysisViewModel : BoardViewModel
     public ReactiveCommand<Unit, Unit> OpenExplorerCommand { get; }
     public string? FileData { get; set; }
 
+    private Variant _variant;
+
     public GameAnalysisViewModel(IScreen hostScreen, Variant variant = Variant.Standard) : base(hostScreen)
     {
         Title = "";
+
+        _variant = variant;
 
         _bestMovesCollection = new ObservableCollection<MoveEvaluation>();
 
@@ -109,7 +114,7 @@ public class GameAnalysisViewModel : BoardViewModel
         CurrentOpening = $"Opening: {opening.Name}";
     }
 
-    private static ReactiveCommand<Unit, Unit> HandleFileExplorer()
+    private ReactiveCommand<Unit, Unit> HandleFileExplorer()
     {
         return ReactiveCommand.CreateFromTask(async () =>
         {
@@ -117,26 +122,33 @@ public class GameAnalysisViewModel : BoardViewModel
             var dialog = new OpenFileDialog
             {
                 Title = "Select a file",
-                Directory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Downloads"
+                Directory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "/Downloads"
             };
             dialog.Filters?.Add(new FileDialogFilter { Name = "PGN Files", Extensions = { "pgn" } });
             var result = await dialog.ShowAsync(parentWindow);
             if (result != null)
             {
-                var selectedFilePath = dialog.InitialFileName;
-                //FileData = selectedFilePath;
-                var file = result.FirstOrDefault();
-                if (file != null)
-                {
-                    // Read the file data
-                    //FileData = selectedFilePath;//await System.IO.File.ReadAllTextAsync(selectedFilePath);
-                }
-            }
-            else
-            {
-                // User clicked "Cancel" or closed the dialog
-                //FileData = "Canceled";
+                var selectedFilePath = result[0];
+                HandleGameFileLoading(selectedFilePath);
             }
         });
+    }
+
+    private void HandleGameFileLoading(string filePath)
+    {
+        if (filePath != null)
+        {
+            var _newGameHandler = new GameHandler(_variant);
+            _newGameHandler.LoadGame(filePath);
+            GameHandler = _newGameHandler;
+            UpdateEngine();
+            UpdateGameData();
+            UpdateAnalysisData();
+            UpdateCurrentOpening();
+        }
+        else
+        {
+            throw new FileNotFoundException("Error! PGN file not found!");
+        }
     }
 }
