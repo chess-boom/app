@@ -7,14 +7,30 @@
              x:Class="ChessBoom.Views.ProfileView">
     <Design.DataContext>
         <viewModels:ProfileViewModel />
-    </Design.DataContext>
-    <StackPanel>        
-        <Label Content="My Profile" FontSize="50" HorizontalAlignment="Center" Margin="0,10,0,10" />
+    </Design.DataContext>    
+    <StackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Content="My Profile" Grid.Column="1" FontSize="50" HorizontalAlignment="Center" Margin="0,10,0,10" />
+            <TextBlock
+                Grid.Column="2"
+                FontSize="18"
+                HorizontalAlignment="Right"
+                Text="*Please put your game files (.pgn extension) in the CBoom directory located in the directory of the application"
+                TextWrapping="Wrap"
+                Width="400"
+                Margin="0,20,130,0"
+            /> 
+        </Grid>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,20">
             <Label Content="Username:" FontSize="20" />
             <TextBox x:Name="UsernameInput" Text="{Binding Username}" Width="200" Margin="20,0,20,0"/>
             <Button x:Name="LoadGamesButton" Content="Load Games" Command="{Binding InitializeProfile}" />
-        </StackPanel>
+        </StackPanel>          
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <TextBlock
                 FontWeight="Bold"
