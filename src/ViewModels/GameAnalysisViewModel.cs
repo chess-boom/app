@@ -73,7 +73,6 @@ public class GameAnalysisViewModel : BoardViewModel
 
         _evaluationCollection = new ObservableCollection<Evaluation>();
 
-
         GameHandler = new GameHandler(variant);
 
         GameHandler.MovePlayed += (_, _) =>
