@@ -55,7 +55,7 @@ public class GameAnalysisViewModel : BoardViewModel
     public ReactiveCommand<Unit, Unit> OpenExplorerCommand { get; }
     public string? FileData { get; set; }
 
-    private Variant _variant;
+    private readonly Variant _variant;
 
     public GameAnalysisViewModel(IScreen hostScreen, Variant variant = Variant.Standard) : base(hostScreen)
     {
