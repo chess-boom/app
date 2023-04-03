@@ -60,11 +60,25 @@ public class Trendline
 
     private int CalculateStart()
     {
-        return (int)(Slope * _xAxisValues.First() + Intercept);
+        try
+        {
+            return (int)(Slope * _xAxisValues.First() + Intercept);
+        }
+        catch (Exception)
+        {
+            return (int)Intercept;
+        }
     }
 
     private int CalculateEnd()
     {
-        return (int)(Slope * _xAxisValues.Last() + Intercept);
+        try
+        {
+            return (int)(Slope * _xAxisValues.Last() + Intercept);
+        }
+        catch (Exception)
+        {
+            return (int)Intercept;
+        }
     }
 }

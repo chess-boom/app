@@ -51,18 +51,13 @@ public class Standard : Ruleset
             return false;
         }
 
-        var playerRow = (player == Player.White) ? "1" : "8";
-        var rookCol = (side == Castling.Kingside) ? "h" : "a";
         Piece? king;
         Piece? rook;
 
-        (int, int) kingCoordinate;
-
         try
         {
-            kingCoordinate = GameHelpers.GetCoordinateFromSquare("e" + playerRow);
-            king = board.GetPiece(kingCoordinate);
-            rook = board.GetPiece(GameHelpers.GetCoordinateFromSquare(rookCol + playerRow));
+            king = GetKing(board, player);
+            rook = GetCastlingRook(board, player, side);
         }
         catch (ArgumentException)
         {
@@ -87,12 +82,11 @@ public class Standard : Ruleset
 
         var castlingVector = (side == Castling.Kingside) ? (1, 0) : (-1, 0);
         var intermediateSquares = new List<(int, int)>();
-        GameHelpers.GetVectorMovementSquares(
+        GameHelpers.GetIntermediateSquares(
             ref intermediateSquares,
-            board,
-            player,
-            kingCoordinate,
-            castlingVector);
+            king.GetCoordinates(),
+            castlingVector,
+            rook.GetCoordinates());
 
         if (intermediateSquares.Count == 0)
         {
@@ -125,7 +119,6 @@ public class Standard : Ruleset
         }
 
         var playerRow = (player == Player.White) ? "1" : "8";
-        var rookCol = (side == Castling.Kingside) ? "h" : "a";
         var newKingCol = (side == Castling.Kingside) ? "g" : "c";
         var newRookCol = (side == Castling.Kingside) ? "f" : "d";
         Piece? king;
@@ -133,9 +126,8 @@ public class Standard : Ruleset
 
         try
         {
-            var kingCoordinate = GameHelpers.GetCoordinateFromSquare("e" + playerRow);
-            king = board.GetPiece(kingCoordinate);
-            rook = board.GetPiece(GameHelpers.GetCoordinateFromSquare(rookCol + playerRow));
+            king = GetKing(board, player);
+            rook = GetCastlingRook(board, player, side);
         }
         catch (ArgumentException)
         {
@@ -255,5 +247,16 @@ public class Standard : Ruleset
         }
 
         throw new GameplayErrorException($"King for player {player} not found!");
+    }
+
+    public override Piece? GetCastlingRook(Board board, Player player, Castling side)
+    {
+        var playerRow = (player == Player.White) ? "1" : "8";
+        var rookCol = (side == Castling.Kingside) ? "h" : "a";
+
+        Piece? rook = board.GetPiece(GameHelpers.GetCoordinateFromSquare(rookCol + playerRow));
+        bool isCastlingRook = rook is not null && rook.GetType() == typeof(Rook) && rook.GetPlayer() == player;
+
+        return (isCastlingRook) ? rook : null;
     }
 }

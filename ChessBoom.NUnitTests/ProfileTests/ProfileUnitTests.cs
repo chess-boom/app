@@ -10,10 +10,10 @@ public class ProfileUnitTests
 {
     private Profile profile = null!;
     string[] files =
-    {"../CBoom/game1.pgn",  //standard
-    "../CBoom/game8.pgn",   //atomic
-    "../CBoom/game11.pgn",  //horde
-    "../CBoom/game17.pgn"}; //Chess960
+    {"../src/Resources/game1.pgn",  //standard
+    "../src/Resources/game8.pgn",   //atomic
+    "../src/Resources/game11.pgn",  //horde
+    "../src/Resources/game17.pgn"}; //Chess960
 
 
     [SetUp]

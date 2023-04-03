@@ -44,14 +44,16 @@ public class ProfileViewModel : BaseViewModel
 
     private void ParseGames()
     {
-        DirectoryInfo cboom = new DirectoryInfo("../CBoom");
-
+        DirectoryInfo cboom = new DirectoryInfo(Path.Combine(System.AppContext.BaseDirectory, "CBoom"));
+        if (!cboom.Exists)
+        {
+            cboom.Create();
+        }
         //sorting files by creation time to get most recent games first
         FileInfo[] files = cboom.GetFiles("*.pgn").OrderByDescending(p => p.CreationTime).ToArray();
 
-        foreach (FileInfo filePath in files)
+        foreach (String file in files.Select(filePath => filePath.FullName))
         {
-            String file = filePath.FullName;
             Dictionary<string, string> game = GameHandler.ReadPGN(file);
             Profile.AddGame(game);
         }

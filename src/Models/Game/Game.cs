@@ -162,12 +162,12 @@ public class Game
                 // TODO: CB-24
                 break;
             case Variant.Horde:
-                fen = File.ReadAllText("Resources/horde.fen");
+                fen = File.ReadAllText(Path.Combine(System.AppContext.BaseDirectory, "Resources/horde.fen"));
                 break;
             case Variant.Standard:
             case Variant.Atomic:
             default:
-                fen = File.ReadAllText("Resources/default.fen");
+                fen = File.ReadAllText(Path.Combine(System.AppContext.BaseDirectory, "Resources/default.fen"));
                 break;
         }
 
@@ -295,9 +295,10 @@ public class Game
     /// </summary>
     /// <param name="startingSquare">The square from which a piece moves</param>
     /// <param name="destinationSquare">The square to which a piece moves</param>
+    /// <param name="requestPromotionPiece">Optional parameter denoting the function to call to determine promotion piece</param>
     /// <exception cref="ArgumentException">Thrown the piece on the starting square can not be found or be moved, or the square can not be found</exception>
     /// <exception cref="GameplayErrorException">Thrown if the attempted move is invalid as per gameplay rules</exception>
-    public void MakeExplicitMove(string startingSquare, string destinationSquare)
+    public void MakeExplicitMove(string startingSquare, string destinationSquare, Board.RequestPromotionPieceDelegate? requestPromotionPiece = null)
     {
         var piece = m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(startingSquare));
         if (piece is null)
@@ -305,7 +306,7 @@ public class Game
             throw new ArgumentException($"Piece on square {startingSquare} not found!");
         }
 
-        MakeMove(piece, destinationSquare);
+        MakeMove(piece, destinationSquare, requestPromotionPiece);
     }
 
     /// <summary>
@@ -313,10 +314,10 @@ public class Game
     /// </summary>
     /// <param name="piece">The piece that will attempt to move</param>
     /// <param name="square">The square that the piece should move to</param>
-    /// <param name="promotionPiece">Optional parameter denoting which piece type the piece will promote into</param>
+    /// <param name="requestPromotionPiece">Optional parameter denoting the function to call to determine promotion piece</param>
     /// <exception cref="ArgumentException">Thrown the piece can not be found or be moved, or the square can not be found</exception>
     /// <exception cref="GameplayErrorException">Thrown if the wrong player attempts to make a move or if castling is attempted when illegal</exception>
-    public void MakeMove(Piece piece, string square, char? promotionPiece = null)
+    public void MakeMove(Piece piece, string square, Board.RequestPromotionPieceDelegate? requestPromotionPiece = null)
     {
         if (m_gameState != GameState.InProgress)
         {
@@ -340,7 +341,7 @@ public class Game
         }
         else
         {
-            piece.MovePiece(GameHelpers.GetCoordinateFromSquare(square), promotionPiece);
+            piece.MovePiece(GameHelpers.GetCoordinateFromSquare(square), requestPromotionPiece);
         }
 
         if (m_board.m_playerToPlay == Player.Black)

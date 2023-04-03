@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ChessBoom.Models.Game.Pieces;
 using ChessBoom.Models.Game.Rulesets;
 
@@ -346,21 +347,22 @@ public class Board
         m_halfmoveClock = 0;
     }
 
-    public delegate char RequestPromotionPieceDelegate();
-
     /// <summary>
     /// Handle a pawn's request to promote
     /// </summary>
     /// <param name="pawn">The pawn that wishes to promote</param>
-    /// <param name="piece">The piece type into which the pawn will promote. May be null</param>
     /// <param name="requestPromotionPiece">The function to call if piece is null. May be null</param>
-    public void RequestPromotion(Pawn pawn, char? piece, RequestPromotionPieceDelegate? requestPromotionPiece = null)
+    public async void RequestPromotion(Pawn pawn, RequestPromotionPieceDelegate? requestPromotionPiece = null)
     {
         requestPromotionPiece ??= RequestPromotionPiece;
         try
         {
-            pawn.Destroy();
-            var pieceType = piece ?? requestPromotionPiece();
+            char pieceType = default;
+            while (pieceType == default)
+            {
+                pieceType = await requestPromotionPiece();
+                pawn.Destroy();
+            }
             var promotionPiece = (pawn.GetPlayer() == Player.White)
                 ? char.ToUpper(pieceType)
                 : char.ToLower(pieceType);
@@ -373,13 +375,15 @@ public class Board
         }
     }
 
+    public delegate Task<char> RequestPromotionPieceDelegate();
+
     /// <summary>
-    /// Request from the user which piece to promote a pawn to
+    /// Return Q by default, pass delegate to RequestPromotion to override
     /// </summary>
     /// <returns>The character corresponding to the piece to which the pawn will promote</returns>
-    private static char RequestPromotionPiece()
+    private static Task<char> RequestPromotionPiece()
     {
-        return 'Q';
+        return Task.FromResult('Q');
     }
 
     public override string ToString()
