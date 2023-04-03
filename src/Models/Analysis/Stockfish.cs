@@ -123,7 +123,7 @@ public class Stockfish : IAnalysis
 
         m_stockfish.StandardInput.WriteLine(command);
         m_stockfish.StandardInput.Flush();
-        
+
         m_stockfish.WaitForExit(s_millisecondDelay);
     }
 
@@ -158,6 +158,7 @@ public class Stockfish : IAnalysis
                 isReady = true;
                 break;
             }
+
             tries++;
         }
 
@@ -252,7 +253,6 @@ public class Stockfish : IAnalysis
         {
             return null;
         }
-
     }
 
     /// <summary>

@@ -29,7 +29,7 @@ public partial class GameAnalysisView : ReactiveUserControl<GameAnalysisViewMode
         EvaluationDataGrid = this.FindControl<DataGrid>("EvaluationDataGrid");
 
         if (ViewModel is null) return;
-        
+
         ViewModel.GameHandler.MovePlayed += (_, _) => { DrawCapturedPieces(); };
         ViewModel.EvaluationCollection.CollectionChanged += (_, _) =>
         {

@@ -14,7 +14,7 @@ public class BoardViewModel : BaseViewModel
     public string Title { get; set; }
 
     private ObservableCollection<Piece> _capturedPieces = new();
-    
+
     public ObservableCollection<Piece> CapturedPieces
     {
         get => _capturedPieces;
