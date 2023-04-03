@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using ChessBoom.Models.Game.Pieces;
 
 namespace ChessBoom.Models.Game.Rulesets;
@@ -69,10 +71,22 @@ public class Chess960 : Ruleset
             random = new Random((int) seed);
         }
 
+        List<int> remainingColumns = new List<int>() {0, 1, 2, 3, 4, 5, 6, 7};
+
         // King must be within columns b-g, in between the rooks
         int kingCol = random.Next(1, 7);
         int leftRookCol = random.Next(0, kingCol);
         int rightRookCol = random.Next(kingCol + 1, 8);
+        remainingColumns.Remove(kingCol);
+        remainingColumns.Remove(leftRookCol);
+        remainingColumns.Remove(rightRookCol);
+
+        // Bishops must be on opposite colours
+        List<int> halfColumns = new List<int>();
+        List<int> evenRemainingColumns = remainingColumns.Where(col => col % 2 == 0).ToList();
+        List<int> oddRemainingColumns = remainingColumns.Where(col => col % 2 == 1).ToList();
+        int evenBishopCol = random.Next(0, evenRemainingColumns.Count()); // get index from ienumerable list
+        int oddBishopCol = random.Next(kingCol + 1, 8);
         return "";
     }
 
