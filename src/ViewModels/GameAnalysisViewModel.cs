@@ -46,7 +46,7 @@ public class GameAnalysisViewModel : BoardViewModel
         set => this.RaiseAndSetIfChanged(ref _currentOpening, value);
     }
 
-    private Stockfish _engine;
+    private readonly Stockfish _engine;
 
     private Evaluation? _currentEvaluation;
 
@@ -55,7 +55,7 @@ public class GameAnalysisViewModel : BoardViewModel
     public ReactiveCommand<Unit, Unit> OpenExplorerCommand { get; }
     public string? FileData { get; set; }
 
-    private Variant _variant;
+    private readonly Variant _variant;
 
     public GameAnalysisViewModel(IScreen hostScreen, Variant variant = Variant.Standard) : base(hostScreen)
     {
@@ -128,8 +128,7 @@ public class GameAnalysisViewModel : BoardViewModel
             var result = await dialog.ShowAsync(parentWindow);
             if (result != null)
             {
-                var selectedFilePath = result[0];
-                HandleGameFileLoading(selectedFilePath);
+                HandleGameFileLoading(result[0]);
             }
         });
     }

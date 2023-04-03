@@ -31,6 +31,6 @@ public class BoardViewModel : BaseViewModel
     public BoardViewModel(IScreen hostScreen, Variant variant = Variant.Standard) : base(hostScreen)
     {
         Title = variant == Variant.Standard ? "Board" : $"Board: {variant}";
-        GameHandler = new GameHandler(variant);
+        _gameHandler = new GameHandler(variant);
     }
 }
