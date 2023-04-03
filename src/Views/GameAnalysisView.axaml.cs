@@ -5,10 +5,8 @@ using ChessBoom.ViewModels;
 using ReactiveUI;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Skia;
-using ChessBoom.Models.Analysis;
 using ChessBoom.Models.Game;
 
 namespace ChessBoom.Views;

@@ -8,7 +8,7 @@ public class SimpleReport
     public string? Blunders { get; set; }
     public string? Risk { get; set; }
     public string? MissedWins { get; set; }
-    
+
     public SimpleReport()
     {
         Accuracy = "Accuracy:";

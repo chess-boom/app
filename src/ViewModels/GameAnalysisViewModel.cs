@@ -34,7 +34,15 @@ public class GameAnalysisViewModel : BoardViewModel
     public SimpleReport? AnalysisReport
     {
         get => _analysisReport;
-        set => this.RaiseAndSetIfChanged(ref _analysisReport, value);
+        private set => this.RaiseAndSetIfChanged(ref _analysisReport, value);
+    }
+
+    private string? _currentOpening = "Opening: ";
+
+    public string? CurrentOpening
+    {
+        get => _currentOpening;
+        set => this.RaiseAndSetIfChanged(ref _currentOpening, value);
     }
 
     private Stockfish _engine;
@@ -60,16 +68,21 @@ public class GameAnalysisViewModel : BoardViewModel
 
         _evaluationCollection = new ObservableCollection<Evaluation>();
 
+
         GameHandler = new GameHandler(variant);
-        
-        GameHandler.MovePlayed += UpdateEngine;
-        GameHandler.MovePlayed += UpdateGameData;
-        GameHandler.MovePlayed += UpdateAnalysisData;
+
+        GameHandler.MovePlayed += (_, _) =>
+        {
+            UpdateEngine();
+            UpdateGameData();
+            UpdateAnalysisData();
+            UpdateCurrentOpening();
+        };
 
         OpenExplorerCommand = HandleFileExplorer();
     }
 
-    private void UpdateEngine(string startingSquare, string destinationSquare)
+    private void UpdateEngine()
     {
         _engine.FenPosition = GameHandler.GetCurrentFENPosition();
         if (_currentEvaluation is not null)
@@ -78,17 +91,23 @@ public class GameAnalysisViewModel : BoardViewModel
         _evaluationCollection.Add(_currentEvaluation);
     }
 
-    private void UpdateGameData(string startingSquare, string destinationSquare)
+    private void UpdateGameData()
     {
         BestMovesCollection = new ObservableCollection<MoveEvaluation>(_engine.GetNBestMoves(10));
     }
 
-    private void UpdateAnalysisData(string startingSquare, string destinationSquare)
+    private void UpdateAnalysisData()
     {
         if (_currentEvaluation is not null)
             AnalysisReport = SimpleReport.GetSimpleReport(_currentEvaluation,
                 _previousEvaluation,
                 GameHandler.GetPlayerToPlay());
+    }
+
+    private void UpdateCurrentOpening()
+    {
+        var opening = OpeningFactory.GetOpening(GameHandler.GetCurrentFENPosition());
+        CurrentOpening = $"Opening: {opening.Name}";
     }
 
     private static ReactiveCommand<Unit, Unit> HandleFileExplorer()
