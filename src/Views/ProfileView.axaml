@@ -1,12 +1,11 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:viewModels="clr-namespace:ChessBoom.ViewModels"
-             xmlns:c="clr-namespace:Avalonia.Controls;assembly=Avalonia.Controls"
-             x:Class="ChessBoom.Views.ProfileView">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:viewModels="clr-namespace:ChessBoom.ViewModels"
+    xmlns:c="clr-namespace:Avalonia.Controls;assembly=Avalonia.Controls" x:Class="ChessBoom.Views.ProfileView">
     <Design.DataContext>
         <!-- ReSharper disable once Xaml.ConstructorWarning -->
         <viewModels:ProfileViewModel />
-    </Design.DataContext>    
+    </Design.DataContext>
     <StackPanel>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -15,33 +14,18 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Label Content="My Profile" Grid.Column="1" FontSize="50" HorizontalAlignment="Center" Margin="0,10,0,10" />
-            <TextBlock
-                Grid.Column="2"
-                FontSize="18"
-                HorizontalAlignment="Right"
-                Text="*Please put your game files (.pgn extension) in the CBoom directory located in the directory of the application"
-                TextWrapping="Wrap"
-                Width="400"
-                Margin="0,20,130,0"
-            /> 
+            <TextBlock Grid.Column="2" FontSize="18" HorizontalAlignment="Right" Text="*Please put your game files (.pgn extension) in the CBoom directory located in the directory of the application" TextWrapping="Wrap" Width="400" Margin="0,20,130,0" />
         </Grid>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,20">
             <Label Content="Username:" FontSize="20" />
             <TextBox x:Name="UsernameInput" Text="{Binding Username}" Width="200" Margin="20,0,20,0"/>
             <Button x:Name="LoadGamesButton" Content="Load Games" Command="{Binding InitializeProfile}" />
-        </StackPanel>          
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <TextBlock
-                FontWeight="Bold"
-                FontSize="20"
-                HorizontalAlignment="Center"
-                Text="{Binding Profile.TotalGames, StringFormat='Total Games: {0}', Mode=TwoWay}" 
-            />
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button
-                Content="All"
-                Command="{Binding ParseAllGames}">
+            <TextBlock FontWeight="Bold" FontSize="20" HorizontalAlignment="Center" Text="{Binding Profile.TotalGames, StringFormat='Total Games: {0}', Mode=TwoWay}" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="All" Command="{Binding ParseAllGames}">
                 <Button.Background>
                     <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
                         <GradientStop Color="#454545" Offset="0.0" />
@@ -52,9 +36,7 @@
                     </LinearGradientBrush>
                 </Button.Background>
             </Button>
-            <Button
-                Content="Standard"
-                Command="{Binding ParseStandardGames}">
+            <Button Content="Standard" Command="{Binding ParseStandardGames}">
                 <Button.Background>
                     <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
                         <GradientStop Color="#454545" Offset="0.0" />
@@ -65,9 +47,7 @@
                     </LinearGradientBrush>
                 </Button.Background>
             </Button>
-            <Button
-                Content="Atomic"
-                Command="{Binding ParseAtomicGames}">
+            <Button Content="Atomic" Command="{Binding ParseAtomicGames}">
                 <Button.Background>
                     <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
                         <GradientStop Color="#454545" Offset="0.0" />
@@ -78,9 +58,7 @@
                     </LinearGradientBrush>
                 </Button.Background>
             </Button>
-            <Button
-                Content="Chess960"
-                Command="{Binding ParseChess960Games}">
+            <Button Content="Chess960" Command="{Binding ParseChess960Games}">
                 <Button.Background>
                     <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
                         <GradientStop Color="#454545" Offset="0.0" />
@@ -91,9 +69,7 @@
                     </LinearGradientBrush>
                 </Button.Background>
             </Button>
-            <Button
-                Content="Horde"
-                Command="{Binding ParseHordeGames}">
+            <Button Content="Horde" Command="{Binding ParseHordeGames}">
                 <Button.Background>
                     <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
                         <GradientStop Color="#454545" Offset="0.0" />
@@ -105,8 +81,7 @@
                 </Button.Background>
             </Button>
         </StackPanel>
-        <Border CornerRadius="10" BorderBrush="Black" BorderThickness="1" Margin="100,10,100,10"
-                Padding="100,10,100,50">
+        <Border CornerRadius="10" BorderBrush="Black" BorderThickness="1" Margin="100,10,100,10" Padding="100,10,100,50">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
                     <GradientStop Color="#242424" Offset="0.0" />
@@ -114,38 +89,26 @@
                     <GradientStop Color="#242424" Offset="1" />
                 </LinearGradientBrush>
             </Border.Background>
-            <Grid HorizontalAlignment="Center" Width="1500"
-                  RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
-                  ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+            <Grid HorizontalAlignment="Center" Width="1500" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
 
                 <!-- Black/White Win Ratio -->
                 <StackPanel Grid.Row="0" Grid.Column="0">
-                    <TextBlock HorizontalAlignment="Center"
-                               FontWeight="Bold"
-                               FontSize="20"
-                               Text="Win/Loss Ratio" />
+                    <TextBlock HorizontalAlignment="Center" FontWeight="Bold" FontSize="20" Text="Win/Loss Ratio" />
                     <StackPanel Orientation="Horizontal" Margin="0,50,0,0">
                         <Label Content="White" FontSize="30" />
                         <Rectangle Width="1" Height="50" Fill="White" Margin="25,0,0,0" />
-                        <StackPanel VerticalAlignment="Center" Orientation="Horizontal"
-                                    Margin="50,0,0,0">
+                        <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="50,0,0,0">
                             <Grid>
                                 <Rectangle Width="{Binding Profile.WhiteBars[0]}" Height="40" Fill="Green" />
-                                <TextBlock Text="{Binding Profile.WinRateWhite}"
-                                           VerticalAlignment="Center"
-                                           HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
+                                <TextBlock Text="{Binding Profile.WinRateWhite}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
                             </Grid>
                             <Grid>
                                 <Rectangle Width="{Binding Profile.WhiteBars[1]}" Height="40" Fill="Red" />
-                                <TextBlock Text="{Binding Profile.LossRateWhite}"
-                                           VerticalAlignment="Center"
-                                           HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
+                                <TextBlock Text="{Binding Profile.LossRateWhite}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
                             </Grid>
                             <Grid>
                                 <Rectangle Width="{Binding Profile.WhiteBars[2]}" Height="40" Fill="Gray" />
-                                <TextBlock Text="{Binding Profile.DrawRateWhite}"
-                                           VerticalAlignment="Center"
-                                           HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
+                                <TextBlock Text="{Binding Profile.DrawRateWhite}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
                             </Grid>
                         </StackPanel>
                     </StackPanel>
@@ -153,25 +116,18 @@
                     <StackPanel Orientation="Horizontal">
                         <Label Content="Black" FontSize="30" />
                         <Rectangle Width="1" Height="50" Fill="White" Margin="30,0,0,0" />
-                        <StackPanel VerticalAlignment="Center" Orientation="Horizontal"
-                                    Margin="50,0,0,0">
+                        <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="50,0,0,0">
                             <Grid>
                                 <Rectangle Width="{Binding Profile.BlackBars[0]}" Height="40" Fill="Green" />
-                                <TextBlock Text="{Binding Profile.WinRateBlack}"
-                                           VerticalAlignment="Center"
-                                           HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
+                                <TextBlock Text="{Binding Profile.WinRateBlack}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
                             </Grid>
                             <Grid>
                                 <Rectangle Width="{Binding Profile.BlackBars[1]}" Height="40" Fill="Red" />
-                                <TextBlock Text="{Binding Profile.LossRateBlack}"
-                                           VerticalAlignment="Center"
-                                           HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
+                                <TextBlock Text="{Binding Profile.LossRateBlack}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
                             </Grid>
                             <Grid>
                                 <Rectangle Width="{Binding Profile.BlackBars[2]}" Height="40" Fill="Gray" />
-                                <TextBlock Text="{Binding Profile.DrawRateBlack}"
-                                           VerticalAlignment="Center"
-                                           HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
+                                <TextBlock Text="{Binding Profile.DrawRateBlack}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="30" />
                             </Grid>
                         </StackPanel>
                     </StackPanel>
@@ -179,22 +135,16 @@
 
                 <!-- Bar Graph -->
                 <StackPanel Grid.Row="0" Grid.Column="2" Margin="100,0,0,0">
-                    <TextBlock HorizontalAlignment="Center"
-                               FontWeight="Bold"
-                               FontSize="20"
-                               Text="Win/Loss Chart" />
+                    <TextBlock HorizontalAlignment="Center" FontWeight="Bold" FontSize="20" Text="Win/Loss Chart" />
                     <Canvas Margin="10">
                         <Grid Canvas.Left="50" Canvas.Bottom="-200">
-                            <Rectangle Width="100" Height="{Binding Profile.BarGraphData[0]}" Fill="Green"
-                                       c:ToolTip.Tip="{Binding Profile.Wins, StringFormat='Total Wins: {0}'}" />
+                            <Rectangle Width="100" Height="{Binding Profile.BarGraphData[0]}" Fill="Green" c:ToolTip.Tip="{Binding Profile.Wins, StringFormat='Total Wins: {0}'}" />
                         </Grid>
                         <Grid Canvas.Left="200" Canvas.Bottom="-200">
-                            <Rectangle Width="100" Height="{Binding Profile.BarGraphData[1]}" Fill="Red"
-                                       c:ToolTip.Tip="{Binding Profile.Losses, StringFormat='Total Losses: {0}'}" />
+                            <Rectangle Width="100" Height="{Binding Profile.BarGraphData[1]}" Fill="Red" c:ToolTip.Tip="{Binding Profile.Losses, StringFormat='Total Losses: {0}'}" />
                         </Grid>
                         <Grid Canvas.Left="350" Canvas.Bottom="-200">
-                            <Rectangle Width="100" Height="{Binding Profile.BarGraphData[2]}" Fill="Gray"
-                                       c:ToolTip.Tip="{Binding Profile.Draws, StringFormat='Total Draws: {0}'}" />
+                            <Rectangle Width="100" Height="{Binding Profile.BarGraphData[2]}" Fill="Gray" c:ToolTip.Tip="{Binding Profile.Draws, StringFormat='Total Draws: {0}'}" />
                         </Grid>
                         <Rectangle Width="1" Height="200" Fill="White" Canvas.Left="20" />
                         <Rectangle Width="500" Height="1" Fill="White" Canvas.Left="20" Canvas.Top="200" />
@@ -221,12 +171,10 @@
                         <Rectangle Width="1" Height="400" Fill="White" Canvas.Left="50" Canvas.Top="30" />
                         <TextBlock Text="{Binding Profile.GraphMinElo}" Canvas.Top="430" />
                         <TextBlock Text="{Binding Profile.GraphMaxElo}" Canvas.Top="30" />
-                        <Polyline Points="{Binding Profile.Points}"
-                                  Stroke="#6AC1FF" StrokeThickness="2" />
+                        <Polyline Points="{Binding Profile.Points}" Stroke="#6AC1FF" StrokeThickness="2" />
 
                         <!-- Point Logic -->
-                        <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="45"
-                                 Canvas.Top="{Binding Profile.Elo[0][2]}">
+                        <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="45" Canvas.Top="{Binding Profile.Elo[0][2]}">
                             <c:ToolTip.Tip>
                                 <MultiBinding StringFormat='Elo: {0}&#013;Score: {1}&#013;Date: {2}'>
                                     <Binding Path="Profile.Elo[0][0]" />
@@ -235,8 +183,7 @@
                                 </MultiBinding>
                             </c:ToolTip.Tip>
                         </Ellipse>
-                        <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="95"
-                                 Canvas.Top="{Binding Profile.Elo[1][2]}">
+                        <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="95" Canvas.Top="{Binding Profile.Elo[1][2]}">
                             <c:ToolTip.Tip>
                                 <MultiBinding StringFormat='Elo: {0}&#013;Score: {1}&#013;Date: {2}'>
                                     <Binding Path="Profile.Elo[1][0]" />
@@ -245,8 +192,7 @@
                                 </MultiBinding>
                             </c:ToolTip.Tip>
                         </Ellipse>
-                        <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="145"
-                                 Canvas.Top="{Binding Profile.Elo[2][2]}">
+                        <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="145" Canvas.Top="{Binding Profile.Elo[2][2]}">
                             <c:ToolTip.Tip>
                                 <MultiBinding StringFormat='Elo: {0}&#013;Score: {1}&#013;Date: {2}'>
                                     <Binding Path="Profile.Elo[2][0]" />
@@ -255,8 +201,7 @@
                                 </MultiBinding>
                             </c:ToolTip.Tip>
                         </Ellipse>
-                        <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="195"
-                                 Canvas.Top="{Binding Profile.Elo[3][2]}">
+                        <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="195" Canvas.Top="{Binding Profile.Elo[3][2]}">
                             <c:ToolTip.Tip>
                                 <MultiBinding StringFormat='Elo: {0}&#013;Score: {1}&#013;Date: {2}'>
                                     <Binding Path="Profile.Elo[3][0]" />
@@ -265,8 +210,7 @@
                                 </MultiBinding>
                             </c:ToolTip.Tip>
                         </Ellipse>
-                        <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="245"
-                                 Canvas.Top="{Binding Profile.Elo[4][2]}">
+                        <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="245" Canvas.Top="{Binding Profile.Elo[4][2]}">
                             <c:ToolTip.Tip>
                                 <MultiBinding StringFormat='Elo: {0}&#013;Score: {1}&#013;Date: {2}'>
                                     <Binding Path="Profile.Elo[4][0]" />
@@ -275,8 +219,7 @@
                                 </MultiBinding>
                             </c:ToolTip.Tip>
                         </Ellipse>
-                        <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="295"
-                                 Canvas.Top="{Binding Profile.Elo[5][2]}">
+                        <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="295" Canvas.Top="{Binding Profile.Elo[5][2]}">
                             <c:ToolTip.Tip>
                                 <MultiBinding StringFormat='Elo: {0}&#013;Score: {1}&#013;Date: {2}'>
                                     <Binding Path="Profile.Elo[5][0]" />
@@ -285,8 +228,7 @@
                                 </MultiBinding>
                             </c:ToolTip.Tip>
                         </Ellipse>
-                        <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="345"
-                                 Canvas.Top="{Binding Profile.Elo[6][2]}">
+                        <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="345" Canvas.Top="{Binding Profile.Elo[6][2]}">
                             <c:ToolTip.Tip>
                                 <MultiBinding StringFormat='Elo: {0}&#013;Score: {1}&#013;Date: {2}'>
                                     <Binding Path="Profile.Elo[6][0]" />
@@ -295,8 +237,7 @@
                                 </MultiBinding>
                             </c:ToolTip.Tip>
                         </Ellipse>
-                        <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="395"
-                                 Canvas.Top="{Binding Profile.Elo[7][2]}">
+                        <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="395" Canvas.Top="{Binding Profile.Elo[7][2]}">
                             <c:ToolTip.Tip>
                                 <MultiBinding StringFormat='Elo: {0}&#013;Score: {1}&#013;Date: {2}'>
                                     <Binding Path="Profile.Elo[7][0]" />
@@ -305,8 +246,7 @@
                                 </MultiBinding>
                             </c:ToolTip.Tip>
                         </Ellipse>
-                        <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="445"
-                                 Canvas.Top="{Binding Profile.Elo[8][2]}">
+                        <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="445" Canvas.Top="{Binding Profile.Elo[8][2]}">
                             <c:ToolTip.Tip>
                                 <MultiBinding StringFormat='Elo: {0}&#013;Score: {1}&#013;Date: {2}'>
                                     <Binding Path="Profile.Elo[8][0]" />
@@ -315,8 +255,7 @@
                                 </MultiBinding>
                             </c:ToolTip.Tip>
                         </Ellipse>
-                        <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="495"
-                                 Canvas.Top="{Binding Profile.Elo[9][2]}">
+                        <Ellipse Fill="#6AC1FF" Width="10" Height="10" Canvas.Left="495" Canvas.Top="{Binding Profile.Elo[9][2]}">
                             <c:ToolTip.Tip>
                                 <MultiBinding StringFormat='Elo: {0}&#013;Score: {1}&#013;Date: {2}'>
                                     <Binding Path="Profile.Elo[9][0]" />
@@ -326,8 +265,7 @@
                             </c:ToolTip.Tip>
                         </Ellipse>
 
-                        <TextBlock Canvas.Left="275" Canvas.Top="-25" Text="Elo History" FontWeight="Bold"
-                                   FontSize="20" />
+                        <TextBlock Canvas.Left="275" Canvas.Top="-25" Text="Elo History" FontWeight="Bold" FontSize="20" />
                         <Path Stroke="Orange" StrokeThickness="2">
                             <Path.Data>
                                 <PathGeometry>
@@ -341,18 +279,8 @@
                 </StackPanel>
 
                 <!-- Openings -->
-                <TextBlock HorizontalAlignment="Center"
-                           FontWeight="Bold"
-                           Grid.Row="4"
-                           Grid.Column="2"
-                           Margin="200,175,0,0"
-                           FontSize="20"
-                           Text="Most Used Opening" />
-                <Button
-                    Grid.Row="4"
-                    MaxWidth="268"
-                    Grid.Column="2"
-                    Margin="200,230,0,0">
+                <TextBlock HorizontalAlignment="Center" FontWeight="Bold" Grid.Row="4" Grid.Column="2" Margin="200,175,0,0" FontSize="20" Text="Most Used Opening" />
+                <Button Grid.Row="4" MaxWidth="268" Grid.Column="2" Margin="200,230,0,0">
                     <Button.Background>
                         <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%%">
                             <GradientStop Color="#454545" Offset="0.0" />
@@ -363,8 +291,7 @@
                         </LinearGradientBrush>
                     </Button.Background>
                     <StackPanel>
-                        <TextBlock FontSize="20" TextAlignment="Center" HorizontalAlignment="Center"
-                                   TextWrapping="Wrap" Text="{Binding Profile.MostUsedOpening}" />
+                        <TextBlock FontSize="20" TextAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding Profile.MostUsedOpening}" />
                         <StackPanel Orientation="Horizontal">
                             <Image Source="/Assets/Images/Openings.png" Width="250" Height="250" />
                         </StackPanel>
