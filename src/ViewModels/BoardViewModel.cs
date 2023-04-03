@@ -11,7 +11,7 @@ namespace ChessBoom.ViewModels;
 public class BoardViewModel : BaseViewModel
 {
     private GameHandler _gameHandler;
-    
+
     public GameHandler GameHandler
     {
         get => _gameHandler;
