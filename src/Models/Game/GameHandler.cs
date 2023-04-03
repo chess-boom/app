@@ -19,6 +19,10 @@ public class GameHandler
 
     public event MovePlayedDelegate? MovePlayed;
 
+    public delegate void MovePlayedDelegate(string startingSquare, string destinationSquare);
+
+    public event MovePlayedDelegate? MovePlayed;
+
     public GameHandler()
     {
         // Define the game and board as null to appease compiler

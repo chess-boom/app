@@ -17,6 +17,7 @@ public class BoardViewModel : BaseViewModel
         get => _gameHandler;
         set => this.RaiseAndSetIfChanged(ref _gameHandler, value);
     }
+
     public string Title { get; set; }
 
     private ObservableCollection<Piece> _capturedPieces = new();
