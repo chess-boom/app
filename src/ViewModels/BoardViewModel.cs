@@ -10,7 +10,13 @@ namespace ChessBoom.ViewModels;
 [ExcludeFromCodeCoverage]
 public class BoardViewModel : BaseViewModel
 {
-    public GameHandler GameHandler { get; set; }
+    private GameHandler _gameHandler;
+    
+    public GameHandler GameHandler
+    {
+        get => _gameHandler;
+        set => this.RaiseAndSetIfChanged(ref _gameHandler, value);
+    }
     public string Title { get; set; }
 
     private ObservableCollection<Piece> _capturedPieces = new();

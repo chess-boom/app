@@ -13,6 +13,7 @@ public class GameHandler
 {
     Game m_game;
     Board m_board;
+    List<string> m_fenList;
 
     public delegate void MovePlayedDelegate(string startingSquare, string destinationSquare);
 
@@ -24,6 +25,7 @@ public class GameHandler
         // Game and board are defined in the StartGame() method
         m_game = null!;
         m_board = null!;
+        m_fenList = null!;
         StartGame();
     }
     public GameHandler(Variant variant)
@@ -32,6 +34,7 @@ public class GameHandler
         // Game and board are defined in the StartGame() method
         m_game = null!;
         m_board = null!;
+        m_fenList = null!;
         StartGame(variant);
     }
 
@@ -42,6 +45,7 @@ public class GameHandler
     {
         m_game = new Game(variant);
         m_board = m_game.m_board;
+        m_fenList = new List<string>();
     }
 
     /// <summary>
@@ -78,6 +82,7 @@ public class GameHandler
             foreach (string move in ExtractMovesFromPGN(pgn["Moves"]))
             {
                 m_game.MakePGNMove(move);
+                m_fenList.Add(Game.CreateFENFromBoard(m_board));
             }
         }
         catch (ArgumentException)

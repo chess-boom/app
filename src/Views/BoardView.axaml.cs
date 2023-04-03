@@ -77,6 +77,8 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             DrawChessBoard();
             DrawGridLabels();
             DrawPieces();
+            ViewModel.WhenAnyValue(x => x.GameHandler)
+            .Subscribe(_ => DrawPieces());
         });
         AvaloniaXamlLoader.Load(this);
 

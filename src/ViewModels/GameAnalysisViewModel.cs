@@ -123,15 +123,14 @@ public class GameAnalysisViewModel : BoardViewModel
             var dialog = new OpenFileDialog
             {
                 Title = "Select a file",
-                Directory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Downloads"
+                Directory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "/Downloads"
             };
             dialog.Filters?.Add(new FileDialogFilter { Name = "PGN Files", Extensions = { "pgn" } });
             var result = await dialog.ShowAsync(parentWindow);
             if (result != null)
             {
-                var selectedFilePath = System.IO.Path.GetDirectoryName(dialog.InitialFileName) + "\\"+ dialog.InitialFileName;
+                var selectedFilePath = result[0];
                 HandleGameFileLoading(selectedFilePath);
-                //var file = result.FirstOrDefault();
             }
         });
     }
@@ -140,14 +139,13 @@ public class GameAnalysisViewModel : BoardViewModel
     {
         if(filePath != null)
         {
-            GameHandler = new GameHandler(_variant);
-            GameHandler.LoadGame(filePath);
-            var engine = new Stockfish
-                    {
-                        Variant = _variant,
-                        FenPosition = GameHandler.GetCurrentFENPosition()
-                    };
-            engine.GetStaticEvaluation();
+            var _newGameHandler = new GameHandler(_variant);
+            _newGameHandler.LoadGame(filePath);
+            GameHandler = _newGameHandler;
+            UpdateEngine();
+            UpdateGameData();
+            UpdateAnalysisData();
+            UpdateCurrentOpening();
         }
         else
         {
