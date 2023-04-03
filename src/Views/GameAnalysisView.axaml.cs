@@ -5,10 +5,8 @@ using ChessBoom.ViewModels;
 using ReactiveUI;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Skia;
-using ChessBoom.Models.Analysis;
 using ChessBoom.Models.Game;
 
 namespace ChessBoom.Views;
@@ -31,7 +29,7 @@ public partial class GameAnalysisView : ReactiveUserControl<GameAnalysisViewMode
         EvaluationDataGrid = this.FindControl<DataGrid>("EvaluationDataGrid");
 
         if (ViewModel is null) return;
-        
+
         ViewModel.GameHandler.MovePlayed += (_, _) => { DrawCapturedPieces(); };
         ViewModel.EvaluationCollection.CollectionChanged += (_, _) =>
         {

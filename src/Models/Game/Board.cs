@@ -78,7 +78,7 @@ public class Board
     /// The game that contains this board
     /// </summary>
     public Game? m_game { get; set; }
-    
+
     /// <summary>
     /// A list of captured pieces
     /// </summary>
@@ -369,6 +369,7 @@ public class Board
                 pieceType = await requestPromotionPiece();
                 pawn.Destroy();
             }
+
             var promotionPiece = (pawn.GetPlayer() == Player.White)
                 ? char.ToUpper(pieceType)
                 : char.ToLower(pieceType);
