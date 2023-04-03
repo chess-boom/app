@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace ChessBoom.Views;
 
 [ExcludeFromCodeCoverage]
-public partial class VariantAnalysisView : ReactiveUserControl<VariantAnalysisViewModel>
+public partial class VariantAnalysisView : ReactiveUserControl<VariantMatchHistoryViewModel>
 {
     public VariantAnalysisView()
     {

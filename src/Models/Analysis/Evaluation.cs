@@ -8,11 +8,13 @@ public class Evaluation
     /// <summary>
     /// Final evaluation value for the position
     /// </summary>
-    public float FinalEvaluation { get; set; }
+    public float FinalEvaluation { get; }
+
     /// <summary>
     /// Side of evaluation (w for white, b for black)
     /// </summary>
-    public char Side { get; set; }
+    public char Side { get; }
+
     /// <summary>
     /// Collection of evaluation information for the position.
     /// </summary>
@@ -26,7 +28,7 @@ public class Evaluation
 
     public override string ToString()
     {
-        string side_string = (Side) == 'w' ? "White" : "Black";
-        return $"Final Evaluation: {FinalEvaluation} for {side_string}";
+        var sideString = Side == 'w' ? "White" : "Black";
+        return $"Final Evaluation: {FinalEvaluation} for {sideString}";
     }
 }

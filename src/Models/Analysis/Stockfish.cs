@@ -11,24 +11,24 @@ namespace ChessBoom.Models.Analysis;
 /// </summary>
 public class Stockfish : IAnalysis
 {
-    protected string? m_fenPosition;
-    protected string m_engineFilePath;
-    protected Process m_stockfish;
-    readonly int s_millisecondDelay = 100;
-    readonly int s_maxRetries = 15;
+    private string? m_FENPosition;
+    private readonly string m_engineFilePath;
+    private Process m_stockfish;
+    private const int s_millisecondDelay = 100;
+    private const int s_maxRetries = 15;
 
     /// <summary>
     /// FEN position we wish to analyze. When setting the fen position, sends a command to Stockfish to set the position in the engine.
     /// </summary>
     public string? FenPosition
     {
-        get { return m_fenPosition; }
+        get => m_FENPosition;
         set
         {
-            m_fenPosition = value;
+            m_FENPosition = value;
             if (IsReady())
             {
-                WriteCommand($"position fen {m_fenPosition}");
+                WriteCommand($"position fen {m_FENPosition}");
             }
         }
     }
@@ -38,34 +38,41 @@ public class Stockfish : IAnalysis
     public Stockfish(Game.Variant variant = Game.Variant.Standard)
     {
         // Set variant to Standard if not specified, otherwise set to variant
-        this.Variant = variant;
+        Variant = variant;
 
         // Get stockfish engine location based on OS 
-        string directoryString = "";
+        string directoryString;
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             // Change directory string if variant isn't Standard, use ternary operator
-            directoryString = variant == Game.Variant.Standard ? @".\AnalysisEngine\Windows\stockfish-windows-2022-x86-64-avx2.exe" : @"./AnalysisEngine/Windows/fairy-stockfish-largeboard_x86-64.exe";
-
+            directoryString = variant == Game.Variant.Standard
+                ? @".\AnalysisEngine\Windows\stockfish-windows-2022-x86-64-avx2.exe"
+                : @"./AnalysisEngine/Windows/fairy-stockfish-largeboard_x86-64.exe";
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
-            if (RuntimeInformation.ProcessArchitecture == Architecture.X64) // If we are running on x64 architecture and not the new M series chips
+            if (RuntimeInformation.ProcessArchitecture ==
+                Architecture.X64) // If we are running on x64 architecture and not the new M series chips
             {
                 directoryString = "./AnalysisEngine/MacOS/Fairy-Stockfish-14-LargeBoard_Mac_x86-64";
             }
             else
             {
-                directoryString = variant == Game.Variant.Standard ? "./AnalysisEngine/MacOS/stockfish" : "./AnalysisEngine/MacOS/Fairy-Stockfish-14-LargeBoard_Mac_Apple_Silicon";
+                directoryString = variant == Game.Variant.Standard
+                    ? "./AnalysisEngine/MacOS/stockfish"
+                    : "./AnalysisEngine/MacOS/Fairy-Stockfish-14-LargeBoard_Mac_Apple_Silicon";
             }
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            directoryString = variant == Game.Variant.Standard ? "./AnalysisEngine/Linux/stockfish-ubuntu-20.04-x86-64" : "./AnalysisEngine/Linux/fairy-stockfish-largeboard_x86-64";
+            directoryString = variant == Game.Variant.Standard
+                ? "./AnalysisEngine/Linux/stockfish-ubuntu-20.04-x86-64"
+                : "./AnalysisEngine/Linux/fairy-stockfish-largeboard_x86-64";
         }
         else
         {
-            throw new NotSupportedException("You are running an unsupported OS, Analysis will not function on your machine");
+            throw new NotSupportedException(
+                "You are running an unsupported OS, Analysis will not function on your machine");
         }
 
         m_engineFilePath = directoryString;
@@ -83,19 +90,21 @@ public class Stockfish : IAnalysis
 
         // Start of new game
         NewGame();
-
     }
+
     /// <summary>
     /// Initializes the Stockfish process so we can perform analysis in Chess Boom
     /// </summary>
     private void InitializeStockfishProcess()
     {
-        ProcessStartInfo processStartInfo = new ProcessStartInfo(m_engineFilePath);
-
-        processStartInfo.UseShellExecute = false;
-        processStartInfo.RedirectStandardError = true;
-        processStartInfo.RedirectStandardInput = true;
-        processStartInfo.RedirectStandardOutput = true;
+        var processStartInfo = new ProcessStartInfo(m_engineFilePath)
+        {
+            CreateNoWindow = true,
+            UseShellExecute = false,
+            RedirectStandardError = true,
+            RedirectStandardInput = true,
+            RedirectStandardOutput = true
+        };
 
         m_stockfish = new Process();
         m_stockfish.StartInfo = processStartInfo;
@@ -115,7 +124,6 @@ public class Stockfish : IAnalysis
         m_stockfish.StandardInput.WriteLine(command);
         m_stockfish.StandardInput.Flush();
 
-
         m_stockfish.WaitForExit(s_millisecondDelay);
     }
 
@@ -126,15 +134,14 @@ public class Stockfish : IAnalysis
     /// <exception cref="InvalidOperationException">If StandardOutput of our application (m_stockfish) is null, we throw this exception.</exception>
     public string? ReadOutput()
     {
-
         if (m_stockfish.StandardOutput == null)
         {
             throw new InvalidOperationException("StandardOutput of m_stockfish is null!");
         }
 
         return m_stockfish.StandardOutput.ReadLine();
-
     }
+
     /// <summary>
     /// Get confirmation Stockfish is ready
     /// </summary>
@@ -142,8 +149,8 @@ public class Stockfish : IAnalysis
     public bool IsReady()
     {
         WriteCommand("isready");
-        int tries = 0;
-        bool isReady = false;
+        var tries = 0;
+        var isReady = false;
         while (tries < s_maxRetries)
         {
             if (ReadOutput() == "readyok")
@@ -151,15 +158,19 @@ public class Stockfish : IAnalysis
                 isReady = true;
                 break;
             }
+
+            tries++;
         }
 
         if (!isReady)
         {
-            throw new InvalidOperationException("Stockfish is not ready for input! Is the application running properly?");
+            throw new InvalidOperationException(
+                "Stockfish is not ready for input! Is the application running properly?");
         }
 
         return isReady;
     }
+
     /// <summary>
     /// Tells Stockfish we are starting a new game.
     /// </summary>
@@ -170,6 +181,7 @@ public class Stockfish : IAnalysis
         {
             SetVariant();
         }
+
         WriteCommand("position startpos");
     }
 
@@ -178,150 +190,143 @@ public class Stockfish : IAnalysis
     /// </summary>
     private void SetVariant()
     {
-        if (Variant == Game.Variant.Chess960)
+        switch (Variant)
         {
-            WriteCommand("setoption name UCI_Variant value chess960");
-        }
-        else if (Variant == Game.Variant.Horde)
-        {
-            WriteCommand("setoption name UCI_Variant value horde");
-        }
-        else if (Variant == Game.Variant.Atomic)
-        {
-            WriteCommand("setoption name UCI_Variant value atomic");
-        }
-        else
-        {
-            throw new ArgumentException("Variant is not supported!");
+            case Game.Variant.Chess960:
+                WriteCommand("setoption name UCI_Variant value chess960");
+                break;
+            case Game.Variant.Horde:
+                WriteCommand("setoption name UCI_Variant value horde");
+                break;
+            case Game.Variant.Atomic:
+                WriteCommand("setoption name UCI_Variant value atomic");
+                break;
+            default:
+                throw new ArgumentException("Variant is not supported!");
         }
     }
+
     /// <summary>
     /// Gets the static evaluation of the current position as a float, and which side the value is relative to (White or Black).
     /// </summary>
     /// <returns>Evaluation Object. Null if output does not return an evaluation due to an error.</returns>
     public Evaluation? GetStaticEvaluation()
     {
-        if (m_fenPosition != null)
+        if (m_FENPosition == null)
+            throw new InvalidOperationException("Cannot get an evaluation with no fen position!");
+        if (!IsReady()) throw new InvalidOperationException("Stockfish is not ready!");
+        WriteCommand("eval");
+
+        var output = ReadOutput();
+
+        if (output is null)
         {
-            if (IsReady())
-            {
-                WriteCommand("eval");
-
-                string? output = ReadOutput();
-
-                if (output is null)
-                {
-                    return null;
-                }
-
-                while (!output.Contains("Final evaluation"))
-                {
-                    output = ReadOutput();
-
-                    if (output is null)
-                    {
-                        break;
-                    }
-                }
-                if (output is not null)
-                {
-                    string[] splitOutput = output.Split(" ", StringSplitOptions.RemoveEmptyEntries);
-
-                    float evaluation_number;
-                    if (!float.TryParse(splitOutput[2], out evaluation_number))
-                        throw new ArgumentException($"Expected a float for evaluation number, got {splitOutput[2]}");
-
-                    string side = splitOutput[3].Substring(1); // Normally gives (white or (black so we want to remove the "("
-
-                    char side_char = side[0];
-
-                    return new Evaluation(evaluation_number, side_char);
-                }
-                else
-                {
-                    return null;
-                }
-
-            }
-            throw new InvalidOperationException("Stockfish is not ready!");
+            return null;
         }
-        throw new InvalidOperationException("Cannot get an evaluation with no fen position!");
+
+        while (!output.Contains("Final evaluation"))
+        {
+            output = ReadOutput();
+
+            if (output is null)
+            {
+                break;
+            }
+        }
+
+        if (output is not null)
+        {
+            var splitOutput = output.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+
+            if (!float.TryParse(splitOutput[2], out var evaluationNumber))
+                throw new ArgumentException($"Expected a float for evaluation number, got {splitOutput[2]}");
+
+            var
+                side = splitOutput[3]
+                    .Substring(1); // Normally gives (white or (black so we want to remove the "("
+
+            var sideChar = side[0];
+
+            return new Evaluation(evaluationNumber, sideChar);
+        }
+        else
+        {
+            return null;
+        }
     }
+
     /// <summary>
     /// Returns the N best moves based on your position.
     /// </summary>
     /// <param name="n">Number of moves you want to return. Value greater than 0. Ordered by descending cp value). Default: 3</param>
     /// <param name="depth">Depth you want the search to go to. Value greater than 0. Default: 10</param>
-    /// <returns>List of (string, int) tuples, representing (move, cp value). Ordered from highest cp to lowest cp value moves</returns>
-    public List<(string, int)> GetNBestMoves(int n = 3, int depth = 10)
+    /// <returns>List of MoveEvaluations, representing (move, cp value). Ordered from highest cp to lowest cp value moves</returns>
+    public List<MoveEvaluation> GetNBestMoves(int n = 3, int depth = 10)
     {
         if (n <= 0)
             throw new ArgumentOutOfRangeException(nameof(n), "n must be > 0");
-        else if (depth <= 0)
+        if (depth <= 0)
             throw new ArgumentOutOfRangeException(nameof(depth), "depth must be > 0");
 
-        List<string> outputList = new List<string>();
+        var outputList = new List<string>();
 
-        if (IsReady())
+        if (!IsReady()) return new List<MoveEvaluation>();
+
+        // Get Stockfish to return N best moves
+        WriteCommand($"setoption name MultiPV value {n}");
+
+        // Run analysis to specified depth
+        WriteCommand($"go depth {depth}");
+
+        // Keep reading output until analysis ends
+        var output = ReadOutput();
+
+        if (output is null)
         {
-            // Get Stockfish to return N best moves
-            WriteCommand($"setoption name MultiPV value {n}");
-
-            // Run analysis to specified depth
-            WriteCommand($"go depth {depth}");
-
-            // Keep reading output until analysis ends
-            string? output = ReadOutput();
-
-            if (output is null)
-            {
-                return new List<(string, int)>();
-            }
-
-            outputList.Add(output);
-            while (!output.Contains("bestmove"))
-            {
-                output = ReadOutput();
-                if (output is not null)
-                {
-                    outputList.Add(output);
-                }
-                else
-                {
-                    break;
-                }
-
-            }
-
-            //Last N+1 lines are the N best moves and the bestmove line.
-            List<(string, int)> moves = new List<(string, int)>();
-            for (int i = outputList.Count - (n + 1); i < outputList.Count - 1; i++)
-            {
-                string[] splitOutput = outputList[i].Split();
-                int cp_index = Array.IndexOf(splitOutput, "cp"); // Find the position of "cp" because the next line is the cp value (cp = centipawn)
-                int move_index = Array.IndexOf(splitOutput, "pv"); // Find the position of "pv" because the next line is the move;
-
-                string move = "";
-                int cp = int.MaxValue;
-                if (cp_index != -1)
-                    cp = int.Parse(splitOutput[cp_index + 1]);
-                if (move_index != -1)
-                    move = splitOutput[move_index + 1];
-
-                moves.Add((move, cp));
-            }
-
-            moves.Sort((x, y) => (y.Item2).CompareTo(x.Item2)); // Sort in place, descending order
-
-            return moves;
-        }
-        else
-        {
-            return new List<(string, int)>();
+            return new List<MoveEvaluation>();
         }
 
+        outputList.Add(output);
+        while (!output.Contains("bestmove"))
+        {
+            output = ReadOutput();
+            if (output is not null)
+            {
+                outputList.Add(output);
+            }
+            else
+            {
+                break;
+            }
+        }
 
+        // Last N+1 lines are the N best moves and the bestmove line.
+        var moves = new List<MoveEvaluation>();
+        for (var i = outputList.Count - (n + 1); i < outputList.Count - 1; i++)
+        {
+            var splitOutput = outputList[i].Split();
+
+            // Find the position of "cp" because the next line is the cp value (cp = centipawn)
+            var cpIndex = Array.IndexOf(splitOutput, "cp");
+
+            // Find the position of "pv" because the next line is the move;
+            var moveIndex = Array.IndexOf(splitOutput, "pv");
+
+            var move = "";
+            var cp = int.MaxValue;
+            if (cpIndex != -1)
+                cp = int.Parse(splitOutput[cpIndex + 1]);
+            if (moveIndex != -1)
+                move = splitOutput[moveIndex + 1];
+
+            moves.Add(new MoveEvaluation(move, cp));
+        }
+
+        moves.Sort((move1, move2) => (move2.Evaluation).CompareTo(move1.Evaluation)); // Sort in place, descending order
+
+        return moves;
     }
+
     /// <summary>
     /// Close the Stockfish process
     /// </summary>
@@ -329,6 +334,7 @@ public class Stockfish : IAnalysis
     {
         m_stockfish.Close();
     }
+
     /// <summary>
     /// Checks if the stockfish process is running (responding)
     /// </summary>

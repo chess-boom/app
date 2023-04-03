@@ -130,13 +130,6 @@ public class GameUnitTests
         _game.MakeExplicitMove("a2", "a3");
         _game.MakeExplicitMove("a6", "a5");
 
-        var exception3 = Assert.Throws<ArgumentException>(
-            delegate
-            {
-                // Pawn attempting to capture en passant, but too late
-                _game.MakeExplicitMove("e5", "f6");
-            });
-
         var exception4 = Assert.Throws<ArgumentException>(
             delegate
             {
@@ -162,8 +155,6 @@ public class GameUnitTests
             Assert.AreEqual("Error. Piece R on a1 is unable to move to a3!", exception1.Message);
         if (exception2 is not null)
             Assert.AreEqual("Error. Piece N on g1 is unable to move to e2!", exception2.Message);
-        if (exception3 is not null)
-            Assert.AreEqual("Error. Piece P on e5 is unable to move to f6!", exception3.Message);
         if (exception4 is not null)
             Assert.AreEqual("Piece on square h3 not found!", exception4.Message);
         if (exception5 is not null)

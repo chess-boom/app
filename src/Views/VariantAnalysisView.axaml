@@ -4,6 +4,6 @@
              x:Class="ChessBoom.Views.VariantAnalysisView">
     <Design.DataContext>
         <!-- ReSharper disable once Xaml.ConstructorWarning -->
-        <viewModels:VariantAnalysisViewModel />
+        <viewModels:VariantMatchHistoryViewModel />
     </Design.DataContext>
 </UserControl>

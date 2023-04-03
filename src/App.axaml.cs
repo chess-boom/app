@@ -6,6 +6,7 @@ using ChessBoom.Views;
 using System.IO;
 using System.Reflection;
 using System.Diagnostics.CodeAnalysis;
+using ChessBoom.Models.Analysis;
 
 
 namespace ChessBoom;

@@ -15,17 +15,29 @@ public class Atomic : Ruleset
 
     public static Atomic Instance => _instance;
 
-    public override void Capture(Piece attacker, Board board, string square)
+    public override List<Piece> Capture(Piece attacker, Board board, string square)
     {
+        var capturedPieces = new List<Piece>();
+
         var capturedPiece = board.GetPiece(GameHelpers.GetCoordinateFromSquare(square));
-        capturedPiece?.Destroy();
+        if (capturedPiece is null)
+        {
+            throw new ArgumentException("No piece to capture on the specified square");
+        }
+
+        capturedPieces.Add(capturedPiece);
+        capturedPiece.Destroy();
+        capturedPieces.Add(attacker);
         attacker.Destroy();
 
         // Get all surrounding pieces (not pawns) and destroy them as well
-        foreach (Piece piece in GetSurroundingPieces(board, square, true, false))
+        foreach (var piece in GetSurroundingPieces(board, square, true))
         {
             piece.Destroy();
+            capturedPieces.Add(piece);
         }
+
+        return capturedPieces;
     }
 
     /// <summary>
@@ -36,7 +48,8 @@ public class Atomic : Ruleset
     /// <param name="includeOriginPiece">Flag for whether the piece on the specified square should be returned</param>
     /// <param name="includePawns">Flag for whether pawns should be returned</param>
     /// <returns>The list of pieces surrounding the square</returns>
-    private static List<Piece> GetSurroundingPieces(Board board, string square, bool includeOriginPiece = false, bool includePawns = false)
+    private static List<Piece> GetSurroundingPieces(Board board, string square, bool includeOriginPiece = false,
+        bool includePawns = false)
     {
         List<Piece> surroundingPieces = new List<Piece>();
 
@@ -57,6 +70,7 @@ public class Atomic : Ruleset
                     {
                         continue;
                     }
+
                     surroundingPieces.Add(piece);
                 }
             }
@@ -240,7 +254,7 @@ public class Atomic : Ruleset
         (int, int) whiteCoordinates = whiteKing.GetCoordinates();
         (int, int) blackCoordinates = blackKing.GetCoordinates();
         return (Math.Abs(whiteCoordinates.Item1 - blackCoordinates.Item1) <= 1 &&
-            Math.Abs(whiteCoordinates.Item2 - blackCoordinates.Item2) <= 1);
+                Math.Abs(whiteCoordinates.Item2 - blackCoordinates.Item2) <= 1);
     }
 
     public override Piece? GetCastlingRook(Board board, Player player, Castling side)

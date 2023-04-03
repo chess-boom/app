@@ -4,9 +4,9 @@ using ReactiveUI;
 namespace ChessBoom.ViewModels;
 
 [ExcludeFromCodeCoverage]
-public class VariantAnalysisViewModel : GameAnalysisViewModel
+public class VariantMatchHistoryViewModel : MatchHistoryViewModel
 {
-    public VariantAnalysisViewModel(IScreen hostScreen) : base(hostScreen)
+    public VariantMatchHistoryViewModel(IScreen hostScreen) : base(hostScreen)
     {
         PlayerCollection = GetDummyPlayerData("Resources/GameAnalysis_Variant.json");
     }

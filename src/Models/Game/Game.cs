@@ -93,15 +93,23 @@ struct Move
 [System.SerializableAttribute()] // Used to conform to the ISerializable interface.
 public class GameplayErrorException : Exception
 {
+    public GameplayErrorException()
+    {
+    }
 
-    public GameplayErrorException() { }
+    public GameplayErrorException(string message) : base(message)
+    {
+    }
 
-    public GameplayErrorException(string message) : base(message) { }
+    public GameplayErrorException(string message, Exception inner) : base(message, inner)
+    {
+    }
 
-    public GameplayErrorException(string message, Exception inner) : base(message, inner) { }
     // This constructor is needed for serialization. Used to conform to the ISerializable interface.
     protected GameplayErrorException(System.Runtime.Serialization.SerializationInfo info,
-        System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+        System.Runtime.Serialization.StreamingContext context) : base(info, context)
+    {
+    }
 }
 
 /// <summary>
@@ -109,7 +117,6 @@ public class GameplayErrorException : Exception
 /// </summary>
 public class Game
 {
-
     /// <summary>
     /// The chosen ruleset for this game
     /// </summary>
@@ -199,6 +206,7 @@ public class Game
                 colInstances.Add(c.ToString());
                 continue;
             }
+
             if (GameHelpers.k_boardRowNames.Contains(c.ToString()))
             {
                 rowInstances.Add(c.ToString());
@@ -254,6 +262,7 @@ public class Game
                 possiblePieces.Add(candidatePiece);
             }
         }
+
         // Get correct piece
         Piece correctPiece = null!;
         foreach (Piece candidatePiece in possiblePieces)
@@ -262,27 +271,35 @@ public class Game
             {
                 continue;
             }
+
             if (!candidatePiece.GetLegalMoves().Contains(square))
             {
                 continue;
             }
+
             if (candidatePiece.GetPlayer() != m_board.m_playerToPlay)
             {
                 continue;
             }
+
             if (rowInstances.Count == 1 && colInstances.Count == 1)
             {
                 correctPiece = candidatePiece;
                 break;
             }
-            if (rowInstances.Count != 1 && candidatePiece.GetCoordinates().Item2 != GameHelpers.k_boardRowNames.IndexOf(rowInstances[0]))
+
+            if (rowInstances.Count != 1 && candidatePiece.GetCoordinates().Item2 !=
+                GameHelpers.k_boardRowNames.IndexOf(rowInstances[0]))
             {
                 continue;
             }
-            if (colInstances.Count != 1 && candidatePiece.GetCoordinates().Item1 != GameHelpers.k_boardColumnNames.IndexOf(colInstances[0]))
+
+            if (colInstances.Count != 1 && candidatePiece.GetCoordinates().Item1 !=
+                GameHelpers.k_boardColumnNames.IndexOf(colInstances[0]))
             {
                 continue;
             }
+
             correctPiece = candidatePiece;
             break;
         }
@@ -298,7 +315,8 @@ public class Game
     /// <param name="requestPromotionPiece">Optional parameter denoting the function to call to determine promotion piece</param>
     /// <exception cref="ArgumentException">Thrown the piece on the starting square can not be found or be moved, or the square can not be found</exception>
     /// <exception cref="GameplayErrorException">Thrown if the attempted move is invalid as per gameplay rules</exception>
-    public void MakeExplicitMove(string startingSquare, string destinationSquare, Board.RequestPromotionPieceDelegate? requestPromotionPiece = null)
+    public void MakeExplicitMove(string startingSquare, string destinationSquare,
+        Board.RequestPromotionPieceDelegate? requestPromotionPiece = null)
     {
         var piece = m_board.GetPiece(GameHelpers.GetCoordinateFromSquare(startingSquare));
         if (piece is null)
@@ -425,6 +443,7 @@ public class Game
         {
             board = new Board();
         }
+
         var fenSplit = fen.Split(' ');
 
         board.CreateBoard(fenSplit[0]);

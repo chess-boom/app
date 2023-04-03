@@ -13,13 +13,13 @@ public class MainWindowViewModel : ReactiveObject, IScreen
     public RoutingState Router { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoHome { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoTutorial { get; }
-    internal ReactiveCommand<Unit, IRoutableViewModel> GoTemplate { get; }
-    internal ReactiveCommand<Unit, IRoutableViewModel> GoBoard { get; }
-    internal ReactiveCommand<Unit, IRoutableViewModel> GoChess960Board { get; }
-    internal ReactiveCommand<Unit, IRoutableViewModel> GoAtomicBoard { get; }
-    internal ReactiveCommand<Unit, IRoutableViewModel> GoHordeBoard { get; }
-    internal ReactiveCommand<Unit, IRoutableViewModel> GoAnalysis { get; }
-    internal ReactiveCommand<Unit, IRoutableViewModel> GoVariant { get; }
+    internal ReactiveCommand<Unit, IRoutableViewModel> GoStandardBoard { get; }
+    internal ReactiveCommand<Unit, IRoutableViewModel> GoChess960Analysis { get; }
+    internal ReactiveCommand<Unit, IRoutableViewModel> GoAtomicAnalysis { get; }
+    internal ReactiveCommand<Unit, IRoutableViewModel> GoHordeAnalysis { get; }
+    internal ReactiveCommand<Unit, IRoutableViewModel> GoMatchHistory { get; }
+    internal ReactiveCommand<Unit, IRoutableViewModel> GoGameAnalysis { get; }
+    internal ReactiveCommand<Unit, IRoutableViewModel> GoVariantMatchHistory { get; }
     internal ReactiveCommand<Unit, IRoutableViewModel> GoProfile { get; }
 
     // The command that navigates a user back.
@@ -43,26 +43,26 @@ public class MainWindowViewModel : ReactiveObject, IScreen
         GoTutorial = ReactiveCommand.CreateFromObservable(
             () => Router.Navigate.Execute(new TutorialViewModel(this))
         );
-        GoBoard = ReactiveCommand.CreateFromObservable(
+        GoStandardBoard = ReactiveCommand.CreateFromObservable(
             () => Router.Navigate.Execute(new BoardViewModel(this))
         );
-        GoChess960Board = ReactiveCommand.CreateFromObservable(
-            () => Router.Navigate.Execute(new BoardViewModel(this, Variant.Chess960))
-        );
-        GoAtomicBoard = ReactiveCommand.CreateFromObservable(
-            () => Router.Navigate.Execute(new BoardViewModel(this, Variant.Atomic))
-        );
-        GoHordeBoard = ReactiveCommand.CreateFromObservable(
-            () => Router.Navigate.Execute(new BoardViewModel(this, Variant.Horde))
-        );
-        GoTemplate = ReactiveCommand.CreateFromObservable(
-            () => Router.Navigate.Execute(new ProfileViewModel(this))
-        );
-        GoAnalysis = ReactiveCommand.CreateFromObservable(
+        GoGameAnalysis = ReactiveCommand.CreateFromObservable(
             () => Router.Navigate.Execute(new GameAnalysisViewModel(this))
         );
-        GoVariant = ReactiveCommand.CreateFromObservable(
-            () => Router.Navigate.Execute(new VariantAnalysisViewModel(this))
+        GoChess960Analysis = ReactiveCommand.CreateFromObservable(
+            () => Router.Navigate.Execute(new GameAnalysisViewModel(this, Variant.Chess960))
+        );
+        GoAtomicAnalysis = ReactiveCommand.CreateFromObservable(
+            () => Router.Navigate.Execute(new GameAnalysisViewModel(this, Variant.Atomic))
+        );
+        GoHordeAnalysis = ReactiveCommand.CreateFromObservable(
+            () => Router.Navigate.Execute(new GameAnalysisViewModel(this, Variant.Horde))
+        );
+        GoMatchHistory = ReactiveCommand.CreateFromObservable(
+            () => Router.Navigate.Execute(new MatchHistoryViewModel(this))
+        );
+        GoVariantMatchHistory = ReactiveCommand.CreateFromObservable(
+            () => Router.Navigate.Execute(new VariantMatchHistoryViewModel(this))
         );
         GoProfile = ReactiveCommand.CreateFromObservable(
             () => Router.Navigate.Execute(new ProfileViewModel(this))

@@ -14,6 +14,10 @@ public class GameHandler
     Game m_game;
     Board m_board;
 
+    public delegate void MovePlayedDelegate(string startingSquare, string destinationSquare);
+
+    public event MovePlayedDelegate? MovePlayed;
+
     public GameHandler()
     {
         // Define the game and board as null to appease compiler
@@ -212,7 +216,14 @@ public class GameHandler
     /// <exception cref="GameplayErrorException">Thrown if the attempted move is invalid as per gameplay rules</exception>
     public void MakeMove(string startingSquare, string destinationSquare, Board.RequestPromotionPieceDelegate? requestPromotionPiece = null)
     {
-        m_game.MakeExplicitMove(startingSquare, destinationSquare, requestPromotionPiece);
+        try
+        {
+            m_game.MakeExplicitMove(startingSquare, destinationSquare, requestPromotionPiece);
+        }
+        finally
+        {
+            MovePlayed?.Invoke(startingSquare, destinationSquare);
+        }
     }
 
     /// <summary>
@@ -316,5 +327,10 @@ public class GameHandler
     public Player GetPlayerToPlay()
     {
         return m_board.m_playerToPlay;
+    }
+
+    public List<Piece> GetCapturedPieces()
+    {
+        return m_board.m_capturedPieces;
     }
 }
