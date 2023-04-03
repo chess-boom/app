@@ -206,11 +206,6 @@ public class Game
             }
         }
 
-        bool containsCapture = (pgnNotation.IndexOf('x') != -1);
-        bool containsCheck = (pgnNotation.IndexOf('+') != -1);
-        bool containsCheckmate = (pgnNotation.IndexOf('#') != -1);
-        bool containsPromotion = (pgnNotation.IndexOf('=') != -1);
-
         // Get the target square
         Board dummyBoard = new Board();
         string square = colInstances[colInstances.Count - 1] + rowInstances[rowInstances.Count - 1];
