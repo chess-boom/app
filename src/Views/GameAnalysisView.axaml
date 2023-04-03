@@ -64,7 +64,7 @@
                                    FontSize="18"
                                    HorizontalAlignment="Center"
                                    Foreground="Black" />
-                            <Grid RowDefinitions="*,*,*,*" ColumnDefinitions="*">
+                            <Grid RowDefinitions="*,*,*,*,*">
                                 <Border Grid.Row="0" Background="#454545" Margin="0,20,0,0"
                                         BorderBrush="#454545"
                                         BorderThickness="0,10,0,10">
@@ -87,7 +87,14 @@
                                            Background="#0f8c14"
                                            HorizontalAlignment="Stretch" />
                                 </Border>
-                                <Border Grid.Row="3" Background="#454545" Margin="0,0,0,20"
+                                <Border Grid.Row="3" Background="#454545" BorderBrush="#454545"
+                                        BorderThickness="0,10,0,10">
+                                    <Label Content="{Binding CurrentOpening}"
+                                           FontSize="18"
+                                           Background="#0f8c14"
+                                           HorizontalAlignment="Stretch" />
+                                </Border>
+                                <Border Grid.Row="4" Background="#454545" Margin="0,0,0,20"
                                         BorderBrush="#454545"
                                         BorderThickness="0,10,0,10">
                                     <Label Content="{Binding AnalysisReport.MissedWins}"
@@ -126,7 +133,7 @@
                 </Border>
             </Grid>
             <!-- Captured Pieces -->
-            <Border Grid.Row="2" Grid.Column="2" Margin="20,20,20,20">
+            <Border Grid.Row="2" Grid.Column="2" Margin="20,20,20,20" IsVisible="False">
                 <Border CornerRadius="25" Background="LightGray">
                     <Grid Name="CapturedPieces" />
                 </Border>
