@@ -61,7 +61,7 @@ public class GameAnalysisViewModel : BoardViewModel
         _evaluationCollection = new ObservableCollection<Evaluation>();
 
         GameHandler = new GameHandler(variant);
-        
+
         GameHandler.MovePlayed += UpdateEngine;
         GameHandler.MovePlayed += UpdateGameData;
         GameHandler.MovePlayed += UpdateAnalysisData;
