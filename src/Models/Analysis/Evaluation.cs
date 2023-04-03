@@ -23,10 +23,10 @@ public class Evaluation
         FinalEvaluation = finalEvaluation;
         Side = side;
     }
+
     public override string ToString()
     {
         string side_string = (Side) == 'w' ? "White" : "Black";
         return $"Final Evaluation: {FinalEvaluation} for {side_string}";
     }
-
 }

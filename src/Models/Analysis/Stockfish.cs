@@ -347,5 +347,3 @@ public class Stockfish : IAnalysis
         m_stockfish.Start();
     }
 }
-
-

@@ -264,6 +264,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             {
                 Rectangle tile => tile,
                 SKBitmapControl tile => tile,
+                // The player may click on a drawn Ellipse object
                 Ellipse tile => tile,
                 _ => throw new InvalidOperationException("Invalid Tile")
             };

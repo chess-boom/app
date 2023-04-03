@@ -141,7 +141,7 @@ public class GameHandler
     {
         string editedList = moveList;
 
-        // TODO: Account for variations and comments
+        // Note: Currently does not account for variations and comments
         int openParenthesisIndex;
         int closeParenthesisIndex;
 
