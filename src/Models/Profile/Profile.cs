@@ -265,7 +265,7 @@ public class Profile : ReactiveObject
             if (variant != "" && variant != game["Variant"])
             {
                 continue;
-            }               
+            }
 
             if (game["White"] == Name)
             {
