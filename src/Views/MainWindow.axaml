@@ -4,6 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:avalonia="https://github.com/avaloniaui"
         xmlns:viewModels="clr-namespace:ChessBoom.ViewModels"
         xmlns:views="clr-namespace:ChessBoom.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -23,6 +24,26 @@
     </LinearGradientBrush>
   </Window.Background>
   <DockPanel>
+    <!-- Breadcrumbs -->
+    <Border DockPanel.Dock="Top"
+        Background="Black"
+        BorderBrush="#4287f5"
+        BorderThickness="1"
+        Padding="10"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext}">
+        <StackPanel Orientation="Horizontal" Spacing="5">
+            <ItemsControl Items="{Binding Breadcrumbs, Mode=OneWay}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Text}" Foreground="White" TextWrapping="NoWrap"/>
+                            <TextBlock Text="/" Foreground="White" TextWrapping="NoWrap"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </Border>
   <!-- App Navigation Bar -->
       <Border DockPanel.Dock="Top"
         BorderBrush="#4287f5"
