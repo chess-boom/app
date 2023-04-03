@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using ChessBoom.Models.Game.Pieces;
 
 namespace ChessBoom.Models.Game.Rulesets;
@@ -13,9 +14,9 @@ public class Horde : Ruleset
 
     public static Horde Instance => _instance;
 
-    public override void Capture(Piece attacker, Board board, string square)
+    public override List<Piece> Capture(Piece attacker, Board board, string square)
     {
-        Standard.Instance.Capture(attacker, board, square);
+        return Standard.Instance.Capture(attacker, board, square);
     }
 
     public override bool IsInCheck(Player player, Board board)
@@ -141,24 +142,6 @@ public class Horde : Ruleset
     public override Piece GetKing(Board board, Player player)
     {
         return Standard.Instance.GetKing(board, player);
-    }
-
-    /// <summary>
-    /// Retrieves a player's king. Null if it does not exist
-    /// </summary>
-    /// <param name="board">The board on which the king exists</param>
-    /// <param name="player">The player whose king is sought</param>
-    /// <returns>The player's king. Null if not found</returns>
-    private Piece? GetKingOrNull(Board board, Player player)
-    {
-        try
-        {
-            return GetKing(board, player);
-        }
-        catch (GameplayErrorException)
-        {
-            return null;
-        }
     }
 
     public override Piece? GetCastlingRook(Board board, Player player, Castling side)

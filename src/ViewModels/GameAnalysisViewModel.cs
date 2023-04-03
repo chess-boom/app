@@ -30,7 +30,7 @@ public class GameAnalysisViewModel : BoardViewModel
         set => this.RaiseAndSetIfChanged(ref _evaluationCollection, value);
     }
 
-    private SimpleReport? _analysisReport;
+    private SimpleReport? _analysisReport = new();
 
     public SimpleReport? AnalysisReport
     {
@@ -83,16 +83,17 @@ public class GameAnalysisViewModel : BoardViewModel
         _evaluationCollection.Add(_currentEvaluation);
     }
 
-    private void UpdateGameData(string _, string destinationsquare)
+    private void UpdateGameData(string startingSquare, string destinationSquare)
     {
         BestMovesCollection = new ObservableCollection<MoveEvaluation>(_engine.GetNBestMoves(10));
     }
 
-    private void UpdateAnalysisData(string startingsquare, string destinationsquare)
+    private void UpdateAnalysisData(string startingSquare, string destinationSquare)
     {
-        AnalysisReport = SimpleReport.GetSimpleReport(_currentEvaluation,
-            _previousEvaluation,
-            GameHandler.GetPlayerToPlay());
+        if (_currentEvaluation is not null)
+            AnalysisReport = SimpleReport.GetSimpleReport(_currentEvaluation,
+                _previousEvaluation,
+                GameHandler.GetPlayerToPlay());
     }
 
     private ReactiveCommand<Unit, Unit> HandleFileExplorer()

@@ -11,7 +11,7 @@ namespace ChessBoom.Models.Analysis;
 /// </summary>
 public class Stockfish : IAnalysis
 {
-    private string? _mFENPosition;
+    private string? m_FENPosition;
     private readonly string m_engineFilePath;
     private Process m_stockfish;
     private const int s_millisecondDelay = 100;
@@ -22,13 +22,13 @@ public class Stockfish : IAnalysis
     /// </summary>
     public string? FenPosition
     {
-        get => _mFENPosition;
+        get => m_FENPosition;
         set
         {
-            _mFENPosition = value;
+            m_FENPosition = value;
             if (IsReady())
             {
-                WriteCommand($"position fen {_mFENPosition}");
+                WriteCommand($"position fen {m_FENPosition}");
             }
         }
     }
@@ -123,7 +123,7 @@ public class Stockfish : IAnalysis
 
         m_stockfish.StandardInput.WriteLine(command);
         m_stockfish.StandardInput.Flush();
-        
+
         m_stockfish.WaitForExit(s_millisecondDelay);
     }
 
@@ -158,6 +158,7 @@ public class Stockfish : IAnalysis
                 isReady = true;
                 break;
             }
+
             tries++;
         }
 
@@ -211,7 +212,7 @@ public class Stockfish : IAnalysis
     /// <returns>Evaluation Object. Null if output does not return an evaluation due to an error.</returns>
     public Evaluation? GetStaticEvaluation()
     {
-        if (_mFENPosition == null)
+        if (m_FENPosition == null)
             throw new InvalidOperationException("Cannot get an evaluation with no fen position!");
         if (!IsReady()) throw new InvalidOperationException("Stockfish is not ready!");
         WriteCommand("eval");
@@ -252,7 +253,6 @@ public class Stockfish : IAnalysis
         {
             return null;
         }
-
     }
 
     /// <summary>

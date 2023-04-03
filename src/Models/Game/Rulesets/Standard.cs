@@ -15,10 +15,18 @@ public class Standard : Ruleset
 
     public static Standard Instance => _instance;
 
-    public override void Capture(Piece attacker, Board board, string square)
+    public override List<Piece> Capture(Piece attacker, Board board, string square)
     {
         var capturedPiece = board.GetPiece(GameHelpers.GetCoordinateFromSquare(square));
-        capturedPiece?.Destroy();
+
+        if (capturedPiece is null)
+        {
+            throw new ArgumentException("No piece to capture");
+        }
+
+        capturedPiece.Destroy();
+
+        return new List<Piece> { capturedPiece };
     }
 
     public override bool IsInCheck(Player player, Board board)
@@ -41,7 +49,8 @@ public class Standard : Ruleset
         }
 
         // Check if any of the opponent's pieces can move to a square occupied by a king
-        return kingSquares.Any(coordinate => GameHelpers.IsSquareVisible(board, GameHelpers.GetOpponent(player), coordinate));
+        return kingSquares.Any(coordinate =>
+            GameHelpers.IsSquareVisible(board, GameHelpers.GetOpponent(player), coordinate));
     }
 
     public override bool CanCastle(Board board, Player player, Castling side)

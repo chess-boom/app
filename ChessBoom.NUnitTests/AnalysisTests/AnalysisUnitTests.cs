@@ -19,6 +19,7 @@ public class AnalysisUnitTests
     {
         _engine.Close();
     }
+
     /// <summary>
     /// Test that the engine can successfully run.
     /// </summary>
@@ -56,8 +57,8 @@ public class AnalysisUnitTests
 
             Assert.AreEqual('w', staticEval.Side);
         }
-
     }
+
     /// <summary>
     /// Test that the analysis engine can return the top N moves, ordered from greatest to lowest CP.
     /// </summary>
@@ -76,7 +77,7 @@ public class AnalysisUnitTests
         Assert.AreEqual(n, topNMoves.Count);
 
         if (topNMoves.Count <= 1) return;
-        
+
         // Ensure the CP values are ordered greatest --> smallest.
         for (var i = 0; i < topNMoves.Count - 1; i++)
         {
@@ -120,5 +121,4 @@ public class AnalysisUnitTests
             Assert.AreEqual('w', staticEval.Side);
         }
     }
-
 }

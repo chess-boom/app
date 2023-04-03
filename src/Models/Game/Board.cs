@@ -80,6 +80,11 @@ public class Board
     public Game? m_game { get; set; }
 
     /// <summary>
+    /// A list of captured pieces
+    /// </summary>
+    protected internal List<Piece> m_capturedPieces { get; } = new();
+
+    /// <summary>
     /// The default constructor
     /// </summary>
     public Board()
@@ -342,7 +347,8 @@ public class Board
     /// <param name="coordinate">The square on which the capture takes place</param>
     public void Capture(Piece attacker, (int, int) coordinate)
     {
-        GetRuleset().Capture(attacker, this, GameHelpers.GetSquareFromCoordinate(coordinate));
+        var captured = GetRuleset().Capture(attacker, this, GameHelpers.GetSquareFromCoordinate(coordinate));
+        m_capturedPieces.AddRange(captured);
         m_game?.ClearVisitedPositions();
         m_halfmoveClock = 0;
     }
@@ -352,7 +358,7 @@ public class Board
     /// </summary>
     /// <param name="pawn">The pawn that wishes to promote</param>
     /// <param name="requestPromotionPiece">The function to call if piece is null. May be null</param>
-    public async void RequestPromotion(Pawn pawn, RequestPromotionPieceDelegate? requestPromotionPiece = null)
+    public async Task RequestPromotion(Pawn pawn, RequestPromotionPieceDelegate? requestPromotionPiece = null)
     {
         requestPromotionPiece ??= RequestPromotionPiece;
         try
@@ -363,6 +369,7 @@ public class Board
                 pieceType = await requestPromotionPiece();
                 pawn.Destroy();
             }
+
             var promotionPiece = (pawn.GetPlayer() == Player.White)
                 ? char.ToUpper(pieceType)
                 : char.ToLower(pieceType);

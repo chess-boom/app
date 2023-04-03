@@ -9,7 +9,15 @@ public class SimpleReport
     public string? Risk { get; set; }
     public string? MissedWins { get; set; }
 
-    public static SimpleReport? GetSimpleReport(Evaluation? current, Evaluation? previous, Player player)
+    public SimpleReport()
+    {
+        Accuracy = "Accuracy:";
+        Blunders = "Blunder?:";
+        Risk = "Risk:";
+        MissedWins = "Missed Win?:";
+    }
+
+    public static SimpleReport GetSimpleReport(Evaluation current, Evaluation? previous, Player player)
     {
         var difference = current.FinalEvaluation;
         if (previous is not null)

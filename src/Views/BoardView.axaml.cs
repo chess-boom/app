@@ -38,8 +38,8 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     /// </summary>
     private abstract class Tile
     {
-        internal static int Width => 50;
-        internal static int Height => 50;
+        internal const int k_width = 50;
+        internal const int k_height = 50;
 
         internal static readonly Color k_white = Color.FromRgb(243, 219, 180);
         internal static readonly Color k_black = Color.FromRgb(179, 140, 99);
@@ -51,8 +51,8 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     /// </summary>
     private abstract class Dot
     {
-        internal static int Width => Tile.Width / 5;
-        internal static int Height => Tile.Height / 5;
+        internal static int Width => Tile.k_width / 5;
+        internal static int Height => Tile.k_height / 5;
 
         internal static readonly Color k_green = Color.FromRgb(0, 153, 0);
         internal static readonly Color k_red = Color.FromRgb(153, 0, 0);
@@ -61,10 +61,10 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     /// <summary>
     /// Defines attributes related to rendered Pieces
     /// </summary>
-    private static class Piece
+    internal static class Piece
     {
-        internal static readonly string k_white = System.IO.Path.Combine(System.AppContext.BaseDirectory, "Assets/Pieces/{0}.svg");
-        internal static readonly string k_black = System.IO.Path.Combine(System.AppContext.BaseDirectory, "Assets/Pieces/{0}_.svg");
+        internal static readonly string k_white = System.IO.Path.Combine(AppContext.BaseDirectory, "Assets/Pieces/{0}.svg");
+        internal static readonly string k_black = System.IO.Path.Combine(AppContext.BaseDirectory, "Assets/Pieces/{0}_.svg");
     }
 
     /// <summary>
@@ -102,8 +102,8 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
 
                 var tile = new Rectangle
                 {
-                    Width = Tile.Width,
-                    Height = Tile.Height,
+                    Width = Tile.k_width,
+                    Height = Tile.k_height,
                     Name = square,
                     StrokeThickness = 0,
                     Fill = (row + col) % 2 == 0 ? new SolidColorBrush(Tile.k_white) : new SolidColorBrush(Tile.k_black)
@@ -115,8 +115,8 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
 
                 var bitmap = new SKBitmapControl
                 {
-                    Width = Tile.Width,
-                    Height = Tile.Height,
+                    Width = Tile.k_width,
+                    Height = Tile.k_height,
                     Name = square,
                     ZIndex = 1
                 };
@@ -136,7 +136,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     {
         for (var i = 0; i < GameHelpers.k_boardHeight; i++)
         {
-            NumberGridLabels.RowDefinitions.Add(new RowDefinition { Height = new GridLength(Tile.Height) });
+            NumberGridLabels.RowDefinitions.Add(new RowDefinition { Height = new GridLength(Tile.k_height) });
             var number = new TextBlock
             {
                 Text = (GameHelpers.k_boardWidth - i).ToString(),
@@ -148,7 +148,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             var container = new ContentControl
             {
                 VerticalAlignment = VerticalAlignment.Center,
-                Width = Tile.Width,
+                Width = Tile.k_width,
                 Content = number
             };
             NumberGridLabels.Children.Add(container);
@@ -157,7 +157,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
 
         for (var i = 0; i < GameHelpers.k_boardWidth; i++)
         {
-            LetterGridLabels.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(Tile.Width) });
+            LetterGridLabels.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(Tile.k_width) });
             var letter = new TextBlock
             {
                 Text = ((char)('A' + i)).ToString(),
@@ -169,7 +169,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             var container = new ContentControl
             {
                 VerticalAlignment = VerticalAlignment.Center,
-                Height = Tile.Height,
+                Height = Tile.k_height,
                 Content = letter
             };
             LetterGridLabels.Children.Add(container);
@@ -181,18 +181,20 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     /// Generate a Bitmap from a Piece's SVG
     /// </summary>
     /// <param name="piecePath"></param>
+    /// <param name="width">The width of the Bitmap</param>
+    /// <param name="height">The height of the Bitmap</param>
     /// <returns>Bitmap of the requested piece</returns>
     /// <exception cref="InvalidOperationException"></exception>
-    private static SKBitmap GeneratePieceBitmap(string piecePath)
+    public static SKBitmap GeneratePieceBitmap(string piecePath, int width = Tile.k_width, int height = Tile.k_height)
     {
         using var svg = new SKSvg();
-        var bitmap = new SKBitmap(Tile.Width, Tile.Height);
+        var bitmap = new SKBitmap(width, height);
         svg.Load(piecePath);
         if (svg.Picture is null) throw new InvalidOperationException("svg.Picture is null");
         var canvas = new SKCanvas(bitmap);
         var matrix = SKMatrix.CreateScale(
-            Tile.Width / svg.Picture.CullRect.Width,
-            Tile.Height / svg.Picture.CullRect.Height
+            width / svg.Picture.CullRect.Width,
+            height / svg.Picture.CullRect.Height
         );
         canvas.DrawPicture(svg.Picture, ref matrix);
         return bitmap;
@@ -264,6 +266,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             {
                 Rectangle tile => tile,
                 SKBitmapControl tile => tile,
+                // The player may click on a drawn Ellipse object
                 Ellipse tile => tile,
                 _ => throw new InvalidOperationException("Invalid Tile")
             };
@@ -305,18 +308,18 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     {
         for (var i = 0; i < PromotionPiecesOffset; i++)
         {
-            PromotionPieces.RowDefinitions.Add(new RowDefinition { Height = new GridLength(Tile.Height) });
+            PromotionPieces.RowDefinitions.Add(new RowDefinition { Height = new GridLength(Tile.k_height) });
         }
 
         for (var row = 0; row < GameHelpers.k_promotionPieces.Count; row++)
         {
-            PromotionPieces.RowDefinitions.Add(new RowDefinition { Height = new GridLength(Tile.Height) });
+            PromotionPieces.RowDefinitions.Add(new RowDefinition { Height = new GridLength(Tile.k_height) });
 
             var promotionPiece = new SKBitmapControl
             {
                 Name = GameHelpers.k_promotionPieces[row].ToString(),
-                Width = Tile.Width,
-                Height = Tile.Height,
+                Width = Tile.k_width,
+                Height = Tile.k_height,
                 ZIndex = 1
             };
             var piecePath = ViewModel?.GameHandler.GetPlayerToPlay() switch
@@ -392,8 +395,8 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             {
                 dot = new Ellipse
                 {
-                    Width = Tile.Width,
-                    Height = Tile.Height,
+                    Width = Tile.k_width,
+                    Height = Tile.k_height,
                     ZIndex = 2,
                     Name = move,
                     Stroke = new SolidColorBrush(Dot.k_red),

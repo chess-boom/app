@@ -16,7 +16,7 @@ public class GameHandler
 
     public delegate void MovePlayedDelegate(string startingSquare, string destinationSquare);
 
-    public event MovePlayedDelegate MovePlayed;
+    public event MovePlayedDelegate? MovePlayed;
 
     public GameHandler()
     {
@@ -145,7 +145,7 @@ public class GameHandler
     {
         string editedList = moveList;
 
-        // TODO: Account for variations and comments
+        // Note: Currently does not account for variations and comments
         int openParenthesisIndex;
         int closeParenthesisIndex;
 
@@ -222,7 +222,7 @@ public class GameHandler
         }
         finally
         {
-            MovePlayed.Invoke(startingSquare, destinationSquare);
+            MovePlayed?.Invoke(startingSquare, destinationSquare);
         }
     }
 
@@ -327,5 +327,10 @@ public class GameHandler
     public Player GetPlayerToPlay()
     {
         return m_board.m_playerToPlay;
+    }
+
+    public List<Piece> GetCapturedPieces()
+    {
+        return m_board.m_capturedPieces;
     }
 }
