@@ -14,6 +14,10 @@ public class GameHandler
     Game m_game;
     Board m_board;
 
+    public delegate void MovePlayedDelegate(string startingSquare, string destinationSquare);
+
+    public event MovePlayedDelegate? MovePlayed;
+
     public GameHandler()
     {
         // Define the game and board as null to appease compiler
@@ -22,6 +26,7 @@ public class GameHandler
         m_board = null!;
         StartGame();
     }
+
     public GameHandler(Variant variant)
     {
         // Define the game and board as null to appease compiler
@@ -71,7 +76,7 @@ public class GameHandler
 
         try
         {
-            foreach (string move in ExtractMovesFromPGN(pgn["Moves"]))
+            foreach (var move in ExtractMovesFromPGN(pgn["Moves"]))
             {
                 m_game.MakePGNMove(move);
             }
@@ -89,26 +94,26 @@ public class GameHandler
     /// <returns>The contents of the PGN file, parsed into a dictionary</returns>
     public static Dictionary<string, string> ReadPGN(string path)
     {
-        string pgn = File.ReadAllText(path);
-        string[] splitPGN = pgn.Split("\n");
+        var pgn = File.ReadAllText(path);
+        var splitPGN = pgn.Split("\n");
 
-        Dictionary<string, string> pgnInfo = new Dictionary<string, string>();
-        foreach (string line in splitPGN)
+        var pgnInfo = new Dictionary<string, string>();
+        foreach (var line in splitPGN)
         {
-            if (line == "" || line == "\r")
+            if (line is "" or "\r")
             {
                 continue;
             }
 
-            string editedLine = line;
+            var editedLine = line;
             // Strip appended "\r"
-            if (editedLine.Substring(editedLine.Length - 1) == "\r")
+            if (editedLine[^1..] == "\r")
             {
-                editedLine = editedLine.Substring(0, editedLine.Length - 1);
+                editedLine = editedLine[..^1];
             }
 
             // Handle moves
-            if (editedLine.Substring(0, 2) == "1.")
+            if (editedLine[..2] == "1.")
             {
                 pgnInfo.Add("Moves", editedLine);
                 continue;
@@ -117,18 +122,21 @@ public class GameHandler
             // Strip square brackets
             if (editedLine[0] == '[')
             {
-                editedLine = editedLine.Substring(1);
+                editedLine = editedLine[1..];
             }
-            if (editedLine.Substring(editedLine.Length - 1) == "]")
+
+            if (editedLine[^1..] == "]")
             {
-                editedLine = editedLine.Substring(0, editedLine.Length - 1);
+                editedLine = editedLine[..^1];
             }
-            string key = editedLine.Split(" ")[0];
-            string dirtyValue = editedLine.Substring(key.Length + 2);
-            string value = dirtyValue.Substring(0, dirtyValue.Length - 1);
+
+            var key = editedLine.Split(" ")[0];
+            var dirtyValue = editedLine[(key.Length + 2)..];
+            var value = dirtyValue[..^1];
 
             pgnInfo.Add(key, value);
         }
+
         return pgnInfo;
     }
 
@@ -139,51 +147,55 @@ public class GameHandler
     /// <exception cref="ArgumentException">Thrown if the list of moves extracted from the PGN is invalid</exception>
     private static List<string> ExtractMovesFromPGN(string moveList)
     {
-        string editedList = moveList;
+        var editedList = moveList;
 
-        // TODO: Account for variations and comments
+        // Note: Currently does not account for variations and comments
         int openParenthesisIndex;
         int closeParenthesisIndex;
 
         // Remove comments
         while (true)
         {
-            openParenthesisIndex = editedList.IndexOf("{");
+            openParenthesisIndex = editedList.IndexOf("{", StringComparison.Ordinal);
             if (openParenthesisIndex == -1)
             {
                 break;
             }
-            closeParenthesisIndex = editedList.IndexOf("}");
+
+            closeParenthesisIndex = editedList.IndexOf("}", StringComparison.Ordinal);
             if (closeParenthesisIndex == -1)
             {
                 // There is an '{' without a '}'
                 throw new ArgumentException("FEN move list is invalid!");
             }
 
-            editedList = string.Concat(editedList.AsSpan(0, openParenthesisIndex), editedList.AsSpan(closeParenthesisIndex + 1));
+            editedList = string.Concat(editedList.AsSpan(0, openParenthesisIndex),
+                editedList.AsSpan(closeParenthesisIndex + 1));
         }
 
         // Remove variations
         while (true)
         {
-            openParenthesisIndex = editedList.IndexOf("(");
+            openParenthesisIndex = editedList.IndexOf("(", StringComparison.Ordinal);
             if (openParenthesisIndex == -1)
             {
                 break;
             }
-            closeParenthesisIndex = editedList.IndexOf(")");
+
+            closeParenthesisIndex = editedList.IndexOf(")", StringComparison.Ordinal);
             if (closeParenthesisIndex == -1)
             {
                 // There is an '(' without a ')'
                 throw new ArgumentException("FEN move list is invalid!");
             }
 
-            editedList = string.Concat(editedList.AsSpan(0, openParenthesisIndex), editedList.AsSpan(closeParenthesisIndex + 1));
+            editedList = string.Concat(editedList.AsSpan(0, openParenthesisIndex),
+                editedList.AsSpan(closeParenthesisIndex + 1));
         }
 
         List<string> moves = editedList.Split().ToList();
         // foreach runs into iteration errors, therefore a simple for should be used
-        int moveIndex = 0;
+        var moveIndex = 0;
         while (moveIndex < moves.Count)
         {
             if (moves[moveIndex].Length == 0 ||
@@ -210,9 +222,17 @@ public class GameHandler
     /// <param name="requestPromotionPiece">Optional parameter denoting the function to call to determine promotion piece</param>
     /// <exception cref="ArgumentException">Thrown the piece on the starting square can not be found or be moved, or the square can not be found</exception>
     /// <exception cref="GameplayErrorException">Thrown if the attempted move is invalid as per gameplay rules</exception>
-    public void MakeMove(string startingSquare, string destinationSquare, Board.RequestPromotionPieceDelegate? requestPromotionPiece = null)
+    public void MakeMove(string startingSquare, string destinationSquare,
+        Board.RequestPromotionPieceDelegate? requestPromotionPiece = null)
     {
-        m_game.MakeExplicitMove(startingSquare, destinationSquare, requestPromotionPiece);
+        try
+        {
+            m_game.MakeExplicitMove(startingSquare, destinationSquare, requestPromotionPiece);
+        }
+        finally
+        {
+            MovePlayed?.Invoke(startingSquare, destinationSquare);
+        }
     }
 
     /// <summary>
@@ -262,12 +282,13 @@ public class GameHandler
     /// <returns>The list of legal moves</returns>
     public List<string> GetLegalMoves((int, int) coordinate)
     {
-        Piece? piece = m_game.m_board.GetPiece(coordinate);
+        var piece = m_game.m_board.GetPiece(coordinate);
         if (piece is null)
         {
             Console.WriteLine("Error! No piece has been found!");
             return new List<string>();
         }
+
         return GetLegalMoves(piece);
     }
 
@@ -292,6 +313,7 @@ public class GameHandler
         {
             throw new GameplayErrorException("Error! No game is in progress!");
         }
+
         return Game.CreateFENFromBoard(m_board);
     }
 
@@ -306,6 +328,7 @@ public class GameHandler
         {
             throw new GameplayErrorException("Error! No game is in progress!");
         }
+
         return m_game.m_gameState;
     }
 
@@ -316,5 +339,10 @@ public class GameHandler
     public Player GetPlayerToPlay()
     {
         return m_board.m_playerToPlay;
+    }
+
+    public List<Piece> GetCapturedPieces()
+    {
+        return m_board.m_capturedPieces;
     }
 }

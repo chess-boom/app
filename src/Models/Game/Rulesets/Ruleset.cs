@@ -34,7 +34,7 @@ public abstract class Ruleset
     /// <param name="attacker">The piece that initiates the capture sequence</param>
     /// <param name="board">The board on which the capture takes place</param>
     /// <param name="square">The square on which the capture takes place</param>
-    public abstract void Capture(Piece attacker, Board board, string square);
+    public abstract List<Piece> Capture(Piece attacker, Board board, string square);
 
     /// <summary>
     /// Check if a player is in check or not, according to the ruleset

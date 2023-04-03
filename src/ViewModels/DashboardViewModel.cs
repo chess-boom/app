@@ -26,28 +26,10 @@ public class DashboardViewModel : BaseViewModel, IScreen
     public DashboardViewModel(IScreen hostScreen) : base(hostScreen)
     {
         GoAnalysis = ReactiveCommand.CreateFromObservable(
-            () => hostScreen.Router.Navigate.Execute(new GameAnalysisViewModel(this)));
+            () => hostScreen.Router.Navigate.Execute(new MatchHistoryViewModel(this)));
         GoVariant = ReactiveCommand.CreateFromObservable(
-            () => hostScreen.Router.Navigate.Execute(new VariantAnalysisViewModel(this)));
+            () => hostScreen.Router.Navigate.Execute(new VariantMatchHistoryViewModel(this)));
         GoTutorial = ReactiveCommand.CreateFromObservable(
             () => hostScreen.Router.Navigate.Execute(new TutorialViewModel(this)));
-    }
-
-    public static void OnClickGameAnalysis()
-    {
-        System.Console.WriteLine("Game Analysis clicked");
-        System.Console.WriteLine("Game Analysis done");
-    }
-
-    public static void OnClickVariantGameAnalysis()
-    {
-        System.Console.WriteLine("Variant Game Analysis clicked");
-        System.Console.WriteLine("variant Game Analysis done");
-    }
-
-    public static void OnClickTutorial()
-    {
-        System.Console.WriteLine("Tutorial clicked");
-        System.Console.WriteLine("Tutorial done");
     }
 }

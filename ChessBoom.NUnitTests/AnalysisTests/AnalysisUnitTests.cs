@@ -19,6 +19,7 @@ public class AnalysisUnitTests
     {
         _engine.Close();
     }
+
     /// <summary>
     /// Test that the engine can successfully run.
     /// </summary>
@@ -56,8 +57,8 @@ public class AnalysisUnitTests
 
             Assert.AreEqual('w', staticEval.Side);
         }
-
     }
+
     /// <summary>
     /// Test that the analysis engine can return the top N moves, ordered from greatest to lowest CP.
     /// </summary>
@@ -73,18 +74,14 @@ public class AnalysisUnitTests
 
         Assert.IsNotNull(topNMoves);
 
-        if (topNMoves is not null)
-        {
-            Assert.AreEqual(n, topNMoves.Count);
+        Assert.AreEqual(n, topNMoves.Count);
 
-            if (topNMoves.Count > 1)
-            {
-                // Ensure the CP values are ordered greatest --> smallest.
-                for (int i = 0; i < topNMoves.Count - 1; i++)
-                {
-                    Assert.GreaterOrEqual(topNMoves[i].Item2, topNMoves[i + 1].Item2);
-                }
-            }
+        if (topNMoves.Count <= 1) return;
+
+        // Ensure the CP values are ordered greatest --> smallest.
+        for (var i = 0; i < topNMoves.Count - 1; i++)
+        {
+            Assert.GreaterOrEqual(topNMoves[i].Evaluation, topNMoves[i + 1].Evaluation);
         }
     }
 
@@ -105,4 +102,23 @@ public class AnalysisUnitTests
         engine.Close();
     }
 
+    [Test]
+    /// <summary>
+    /// Test that the analysis engine returns a valid static evaluation for a given FEN for the Atomic Variant.
+    /// </summary>
+    public void AnalysisEngineHasAccurateAtomicEvaluation()
+    {
+        var engine = new Stockfish(Models.Game.Variant.Atomic);
+        engine.FenPosition = "r1b1kbnr/ppp2ppp/2n1p3/3q4/8/2P2N2/PP1PPPPP/RNBQKB1R b KQkq - 0 1";
+
+        var staticEval = engine.GetStaticEvaluation();
+
+        Assert.IsNotNull(staticEval);
+
+        if (staticEval is not null) // Technically unecessary, but removes null dereference error
+        {
+            Assert.AreEqual(-36.15f, staticEval.FinalEvaluation, "This value may change if we update Stockfish");
+            Assert.AreEqual('w', staticEval.Side);
+        }
+    }
 }

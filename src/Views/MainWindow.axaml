@@ -71,21 +71,21 @@
                 </Border>
                 <Menu Background="Black" Grid.Column="3">
                     <MenuItem Header="Game Analysis" FontSize="20" CornerRadius="10" Cursor="Hand">
-                        <MenuItem Header="Board" Command="{Binding GoBoard}" />
-                        <MenuItem Header="Game List" Command="{Binding GoAnalysis}" />
-                        <MenuItem Header="Analysis Breakdown" Command="{Binding GoTemplate}" />
-                        <MenuItem Header="Template 4" Command="{Binding GoTemplate}" />
+                        <MenuItem Header="Standard Board" Command="{Binding GoStandardBoard}" />
+                        <MenuItem Header="Profile Page" Command="{Binding GoProfile}" />
+                        <MenuItem Header="Interactive Analysis" Command="{Binding GoGameAnalysis}" />
+                        <MenuItem Header="Match History" Command="{Binding GoMatchHistory}" />
                     </MenuItem>
                     <MenuItem Header="Variant Analysis" FontSize="20" CornerRadius="10" Cursor="Hand">
-                        <MenuItem Header="Variant 1" Command="{Binding GoVariant}" />
-                        <MenuItem Header="Chess 960" Command="{Binding GoChess960Board}" />
-                        <MenuItem Header="Atomic" Command="{Binding GoAtomicBoard}" />
-                        <MenuItem Header="Horde" Command="{Binding GoHordeBoard}" />
+                        <MenuItem Header="Chess 960" Command="{Binding GoChess960Analysis}" />
+                        <MenuItem Header="Atomic" Command="{Binding GoAtomicAnalysis}" />
+                        <MenuItem Header="Horde" Command="{Binding GoHordeAnalysis}" />
+                        <MenuItem Header="Match History" Command="{Binding GoVariantMatchHistory}" />
                     </MenuItem>
                     <MenuItem Header="Tutorials" FontSize="20" CornerRadius="10" Cursor="Hand">
                         <MenuItem Header="Beginner" Command="{Binding GoTutorial}" />
-                        <MenuItem Header="Intermediate" Command="{Binding GoTemplate}" />
-                        <MenuItem Header="Expert" Command="{Binding GoTemplate}" />
+                        <MenuItem Header="Intermediate" Command="{Binding GoTutorial}" />
+                        <MenuItem Header="Expert" Command="{Binding GoTutorial}" />
                     </MenuItem>
 
                 </Menu>
