@@ -10,7 +10,7 @@ namespace ChessBoom.Models.Profile;
 
 public class Profile : ReactiveObject
 {
-    public string Name { get; }
+    public string Name { get; set; }
 
     private readonly ObservableCollection<ObservableCollection<string>> _elo;
 
@@ -188,6 +188,10 @@ public class Profile : ReactiveObject
         Name = name;
         Games = new List<Dictionary<string, string>>();
         _elo = new ObservableCollection<ObservableCollection<string>>();
+        for (int i = 0; i < 10; i++)
+        {
+            _elo.Add(new ObservableCollection<string> { "0", "0", "1000", "0" });
+        }
         EloQueue = new Queue<string[]>();
         _winRateWhite = 0;
         _winRateBlack = 0;
@@ -238,6 +242,11 @@ public class Profile : ReactiveObject
         Games.Add(game);
     }
 
+    public void ClearGames()
+    {
+        Games.Clear();
+    }
+
     public void CalculateStats(string variant = "")
     {
         ResetStats();
@@ -258,17 +267,6 @@ public class Profile : ReactiveObject
                 continue;
             }
 
-            var opening = game["Opening"];
-            if (Openings.ContainsKey(opening))
-            {
-                Openings[opening]++;
-            }
-            else
-            {
-                Openings.Add(opening, 0);
-            }
-
-            totalGames++;
             if (game["White"] == Name)
             {
                 switch (game["Result"])
@@ -287,7 +285,7 @@ public class Profile : ReactiveObject
                 AddElo(game["WhiteElo"], game["Date"]);
                 whiteGames++;
             }
-            else
+            else if (game["Black"] == Name)
             {
                 switch (game["Result"])
                 {
@@ -305,6 +303,22 @@ public class Profile : ReactiveObject
                 AddElo(game["BlackElo"], game["Date"]);
                 blackGames++;
             }
+            else
+            {
+                // if game is not played by this profile, skip it
+                continue;
+            }
+
+            var opening = game["Opening"];
+            if (Openings.ContainsKey(opening))
+            {
+                Openings[opening]++;
+            }
+            else
+            {
+                Openings.Add(opening, 0);
+            }
+            totalGames++;
         }
 
         //Total Games

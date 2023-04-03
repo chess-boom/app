@@ -22,6 +22,14 @@ public class ProfileViewModel : BaseViewModel
         set => this.RaiseAndSetIfChanged(ref _profile, value);
     }
 
+    private string _username;
+
+    public string Username
+    {
+        get => _username;
+        set => this.RaiseAndSetIfChanged(ref _username, value);
+    }
+
     public ReactiveCommand<Unit, Unit> ParseAtomicGames { get; set; }
     public ReactiveCommand<Unit, Unit> ParseStandardGames { get; set; }
     public ReactiveCommand<Unit, Unit> ParseHordeGames { get; set; }
@@ -30,9 +38,8 @@ public class ProfileViewModel : BaseViewModel
 
     public ProfileViewModel(IScreen hostScreen) : base(hostScreen)
     {
-        var username = "MatteoGisondi";
-        _profile = new Profile(username);
-        ParseGames();
+        _username = "";
+        _profile = new Profile(Username);
         ParseAtomicGames = ReactiveCommand.Create(ParseAtomicGamesCommand);
         ParseStandardGames = ReactiveCommand.Create(ParseStandardGamesCommand);
         ParseHordeGames = ReactiveCommand.Create(ParseHordeGamesCommand);
@@ -42,6 +49,13 @@ public class ProfileViewModel : BaseViewModel
             .Subscribe(_ => this.RaisePropertyChanged(nameof(Profile)));
     }
 
+    public void InitializeProfile()
+    {
+        Profile.Name = Username;
+        Profile.ClearGames();
+        ParseGames();
+    }
+
     private void ParseGames()
     {
         DirectoryInfo cboom = new DirectoryInfo(Path.Combine(System.AppContext.BaseDirectory, "CBoom"));
@@ -49,7 +63,8 @@ public class ProfileViewModel : BaseViewModel
         {
             cboom.Create();
         }
-        //sorting files by creation time to get most recent games first
+
+        // sorting files by creation time to get most recent games first
         FileInfo[] files = cboom.GetFiles("*.pgn").OrderByDescending(p => p.CreationTime).ToArray();
 
         foreach (String file in files.Select(filePath => filePath.FullName))
@@ -60,22 +75,27 @@ public class ProfileViewModel : BaseViewModel
 
         Profile.CalculateStats();
     }
+
     private void ParseAllGamesCommand()
     {
         Profile.CalculateStats();
     }
+
     private void ParseAtomicGamesCommand()
     {
         Profile.CalculateStats("Atomic");
     }
+
     private void ParseStandardGamesCommand()
     {
         Profile.CalculateStats("Standard");
     }
+
     private void ParseHordeGamesCommand()
     {
         Profile.CalculateStats("Horde");
     }
+
     private void ParseChess960GamesCommand()
     {
         Profile.CalculateStats("Chess960");
