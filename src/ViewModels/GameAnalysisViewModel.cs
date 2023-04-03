@@ -129,8 +129,7 @@ public class GameAnalysisViewModel : BoardViewModel
             var result = await dialog.ShowAsync(parentWindow);
             if (result != null)
             {
-                var selectedFilePath = result[0];
-                HandleGameFileLoading(selectedFilePath);
+                HandleGameFileLoading(result[0]);
             }
         });
     }
