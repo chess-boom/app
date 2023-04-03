@@ -79,51 +79,6 @@ public class Atomic : Ruleset
         return surroundingPieces;
     }
 
-    /// <summary>
-    /// Determines if a capture occurring on a specified square explodes a specific player's king
-    /// </summary>
-    /// <param name="player">The player whose king might explode</param>
-    /// <param name="board">The board on which the pieces exist</param>
-    /// <param name="square">The square that is examined</param>
-    /// <returns>Whether or not the player's king explodes from a capture</returns>
-    private static bool CaptureExplodesKing(Player player, Board board, string square)
-    {
-        foreach (Piece piece in GetSurroundingPieces(board, square, true, false))
-        {
-            if (piece.GetType() == typeof(King)
-                || piece.GetPlayer() == player)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /// <summary>
-    /// Determines if a player's king can be blown up
-    /// </summary>
-    /// <param name="player">The player whose king might explode</param>
-    /// <param name="board">The board on which the pieces exist</param>
-    /// <returns>Whether or not an opponent can blow up the player's king</returns>
-    private bool CanExplodeKing(Player player, Board board)
-    {
-        // Get all allied pieces surrounding the king
-        var king = GetKingOrNull(board, player);
-        if (king is null)
-        {
-            return false;
-        }
-
-        List<Piece> surroundingPieces =
-            GetSurroundingPieces(board, GameHelpers.GetSquareFromCoordinate(king.GetCoordinates()), true, true);
-        surroundingPieces = surroundingPieces.Where(piece => piece.GetPlayer() == player).ToList();
-
-        // Query if those squares are visible to enemy pieces
-        return surroundingPieces.Any(piece =>
-            GameHelpers.IsSquareVisible(board, GameHelpers.GetOpponent(player), piece.GetCoordinates()));
-    }
-
     public override bool IsInCheck(Player player, Board board)
     {
         return Standard.Instance.IsInCheck(player, board);

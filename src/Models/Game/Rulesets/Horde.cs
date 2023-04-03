@@ -144,24 +144,6 @@ public class Horde : Ruleset
         return Standard.Instance.GetKing(board, player);
     }
 
-    /// <summary>
-    /// Retrieves a player's king. Null if it does not exist
-    /// </summary>
-    /// <param name="board">The board on which the king exists</param>
-    /// <param name="player">The player whose king is sought</param>
-    /// <returns>The player's king. Null if not found</returns>
-    private Piece? GetKingOrNull(Board board, Player player)
-    {
-        try
-        {
-            return GetKing(board, player);
-        }
-        catch (GameplayErrorException)
-        {
-            return null;
-        }
-    }
-
     public override Piece? GetCastlingRook(Board board, Player player, Castling side)
     {
         return (player == Player.Black) ? Standard.Instance.GetCastlingRook(board, player, side) : null;
