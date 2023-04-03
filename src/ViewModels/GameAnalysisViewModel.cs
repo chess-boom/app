@@ -46,7 +46,7 @@ public class GameAnalysisViewModel : BoardViewModel
         set => this.RaiseAndSetIfChanged(ref _currentOpening, value);
     }
 
-    private Stockfish _engine;
+    private readonly Stockfish _engine;
 
     private Evaluation? _currentEvaluation;
 
