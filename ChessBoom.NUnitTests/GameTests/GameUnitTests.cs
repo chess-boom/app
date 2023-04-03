@@ -86,7 +86,8 @@ public class GameUnitTests
     [Test]
     public void PromotionTest()
     {
-        // TODO: Update this test once requesting a piece type works! Currently (Nov. 3, 2022) always promotes to queen
+        // Update this test once requesting a piece type works! Currently (Nov. 3, 2022) always promotes to queen
+        // NOFIX: Promotion occurs in the UI, not the game logic so this test is not possible
         _game.MakeExplicitMove("h2", "h4");
         _game.MakeExplicitMove("b7", "b5");
         _game.MakeExplicitMove("h4", "h5");

@@ -22,13 +22,21 @@ public class GameHandler
         m_board = null!;
         StartGame();
     }
+    public GameHandler(Variant variant)
+    {
+        // Define the game and board as null to appease compiler
+        // Game and board are defined in the StartGame() method
+        m_game = null!;
+        m_board = null!;
+        StartGame(variant);
+    }
 
     /// <summary>
     /// Reinitializes the game. Should always be used at the start of a session
     /// </summary>
-    public void StartGame()
+    public void StartGame(Variant variant = Variant.Standard)
     {
-        m_game = new Game();
+        m_game = new Game(variant);
         m_board = m_game.m_board;
     }
 
@@ -50,15 +58,15 @@ public class GameHandler
         }
         catch (FileNotFoundException)
         {
-            throw;
+            throw new FileNotFoundException("Error! PGN file not found!");
         }
         catch (ArgumentException)
         {
-            throw;
+            throw new ArgumentException("Error! PGN file is invalid!");
         }
         catch (DirectoryNotFoundException)
         {
-            throw;
+            throw new DirectoryNotFoundException("Error! PGN file's directory not found!");
         }
 
         try
@@ -129,7 +137,7 @@ public class GameHandler
     /// </summary>
     /// <param name="moveList">List of moves in PGN format</param>
     /// <exception cref="ArgumentException">Thrown if the list of moves extracted from the PGN is invalid</exception>
-    private List<string> ExtractMovesFromPGN(string moveList)
+    private static List<string> ExtractMovesFromPGN(string moveList)
     {
         string editedList = moveList;
 
@@ -152,7 +160,7 @@ public class GameHandler
                 throw new ArgumentException("FEN move list is invalid!");
             }
 
-            editedList = editedList.Substring(0, openParenthesisIndex) + editedList.Substring(closeParenthesisIndex + 1);
+            editedList = string.Concat(editedList.AsSpan(0, openParenthesisIndex), editedList.AsSpan(closeParenthesisIndex + 1));
         }
 
         // Remove variations
@@ -170,7 +178,7 @@ public class GameHandler
                 throw new ArgumentException("FEN move list is invalid!");
             }
 
-            editedList = editedList.Substring(0, openParenthesisIndex) + editedList.Substring(closeParenthesisIndex + 1);
+            editedList = string.Concat(editedList.AsSpan(0, openParenthesisIndex), editedList.AsSpan(closeParenthesisIndex + 1));
         }
 
         List<string> moves = editedList.Split().ToList();
@@ -203,18 +211,7 @@ public class GameHandler
     /// <exception cref="GameplayErrorException">Thrown if the attempted move is invalid as per gameplay rules</exception>
     public void MakeMove(string startingSquare, string destinationSquare)
     {
-        try
-        {
-            m_game.MakeExplicitMove(startingSquare, destinationSquare);
-        }
-        catch (ArgumentException)
-        {
-            throw;
-        }
-        catch (GameplayErrorException)
-        {
-            throw;
-        }
+        m_game.MakeExplicitMove(startingSquare, destinationSquare);
     }
 
     /// <summary>
@@ -254,7 +251,7 @@ public class GameHandler
     /// <exception cref="ArgumentException">Thrown if the square parameter is not on the chess board</exception>
     public List<string> GetLegalMoves(string square)
     {
-        return GetLegalMoves(GameHelpers.GetCoordinateFromSquare(square));
+        return this.GetLegalMoves(GameHelpers.GetCoordinateFromSquare(square));
     }
 
     /// <summary>
@@ -278,7 +275,7 @@ public class GameHandler
     /// </summary>
     /// <param name="piece">The piece</param>
     /// <returns>The list of legal moves</returns>
-    public List<string> GetLegalMoves(Piece piece)
+    public static List<string> GetLegalMoves(Piece piece)
     {
         return piece.GetLegalMoves();
     }
@@ -287,12 +284,12 @@ public class GameHandler
     /// Get the current position in FEN format
     /// </summary>
     /// <returns>The FEN of the game's current position</returns>
-    /// <exception cref="NullReferenceException">Thrown if no game is in progress</exception>
+    /// <exception cref="GameplayErrorException">Thrown if no game is in progress</exception>
     public string GetCurrentFENPosition()
     {
         if (m_board is null)
         {
-            throw new NullReferenceException("Error! No game is in progress!");
+            throw new GameplayErrorException("Error! No game is in progress!");
         }
         return Game.CreateFENFromBoard(m_board);
     }
@@ -301,12 +298,12 @@ public class GameHandler
     /// Accessor for the game's current state
     /// </summary>
     /// <returns>The current game state</returns>
-    /// <exception cref="NullReferenceException">Thrown if no game is in progress</exception>
+    /// <exception cref="GameplayErrorException">Thrown if no game is in progress</exception>
     public GameState GetCurrentGameState()
     {
         if (m_game is null)
         {
-            throw new NullReferenceException("Error! No game is in progress!");
+            throw new GameplayErrorException("Error! No game is in progress!");
         }
         return m_game.m_gameState;
     }

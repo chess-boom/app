@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ChessBoom.Models.Game.Pieces;
 
 namespace ChessBoom.Models.Game.Rulesets;
@@ -13,11 +14,6 @@ public class Standard : Ruleset
     }
 
     public static Standard Instance => _instance;
-
-    /// <summary>
-    /// The limiting number of moves that amount to "no progress" before a game ends in a draw
-    /// </summary>
-    private const int k_progressMoveLimit = 50;
 
     public override void Capture(Piece attacker, Board board, string square)
     {
@@ -45,15 +41,7 @@ public class Standard : Ruleset
         }
 
         // Check if any of the opponent's pieces can move to a square occupied by a king
-        foreach (var coordinate in kingSquares)
-        {
-            if (GameHelpers.IsSquareVisible(board, GameHelpers.GetOpponent(player), coordinate))
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return kingSquares.Any(coordinate => GameHelpers.IsSquareVisible(board, GameHelpers.GetOpponent(player), coordinate));
     }
 
     public override bool CanCastle(Board board, Player player, Castling side)
@@ -254,5 +242,18 @@ public class Standard : Ruleset
         {
             game.m_gameState = (board.m_playerToPlay == Player.Black) ? GameState.VictoryWhite : GameState.VictoryBlack;
         }
+    }
+
+    public override Piece GetKing(Board board, Player player)
+    {
+        foreach (var piece in GameHelpers.GetPlayerPieces(player, board))
+        {
+            if (piece.GetType() == typeof(King))
+            {
+                return piece;
+            }
+        }
+
+        throw new GameplayErrorException($"King for player {player} not found!");
     }
 }

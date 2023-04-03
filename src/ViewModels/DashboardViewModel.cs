@@ -1,20 +1,41 @@
 using System.Diagnostics.CodeAnalysis;
-using ChessBoom.Models.Game;
+using System.Reactive;
 using ReactiveUI;
 
 namespace ChessBoom.ViewModels;
 
 [ExcludeFromCodeCoverage]
-public class DashboardViewModel : BaseViewModel
+public class DashboardViewModel : BaseViewModel, IScreen
 {
-    public DashboardViewModel(IScreen hostScreen) : base(hostScreen) { }
+    public RoutingState Router { get; } = new();
+    internal ReactiveCommand<Unit, IRoutableViewModel> GoAnalysis { get; }
+    internal ReactiveCommand<Unit, IRoutableViewModel> GoVariant { get; }
+    internal ReactiveCommand<Unit, IRoutableViewModel> GoTutorial { get; }
 
-    protected static string m_greeting => "Welcome to Chess Boom!";
+    public string Greeting { get; set; } = "Welcome to Chess Boom!";
+
+    public string GameAnalysisContent { get; set; } =
+        "\n\nReview your chess games\nin more detail and learn how to\nimprove your gameplay\n\n\n\n\n";
+
+    public string VariantGameAnalysisContent { get; set; } =
+        "\n\nReview your variant games\nof chess using a similar feature\nof Game Analysis, but specialized\nfor each chess variant\n\n\n\n";
+
+    public string TutorialContent { get; set; } =
+        "\n\nDive into basic and advanced chess\ntactics and learn skills that will\ngive you the upper hand against \nyour opponents\n\n\n\n";
+
+    public DashboardViewModel(IScreen hostScreen) : base(hostScreen)
+    {
+        GoAnalysis = ReactiveCommand.CreateFromObservable(
+            () => hostScreen.Router.Navigate.Execute(new GameAnalysisViewModel(this)));
+        GoVariant = ReactiveCommand.CreateFromObservable(
+            () => hostScreen.Router.Navigate.Execute(new VariantAnalysisViewModel(this)));
+        GoTutorial = ReactiveCommand.CreateFromObservable(
+            () => hostScreen.Router.Navigate.Execute(new TutorialViewModel(this)));
+    }
 
     public static void OnClickGameAnalysis()
     {
         System.Console.WriteLine("Game Analysis clicked");
-        var game = new Game();
         System.Console.WriteLine("Game Analysis done");
     }
 

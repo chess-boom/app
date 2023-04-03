@@ -21,6 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.10.18" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.10.18" />
     <PackageReference Include="Avalonia.Controls.Skia" Version="0.10.18" />
     <PackageReference Include="Avalonia.Desktop" Version="0.10.18" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
@@ -31,11 +32,23 @@
 	<PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="AnalysisEngine\Linux\fairy-stockfish-largeboard_x86-64">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="AnalysisEngine\Linux\stockfish-ubuntu-20.04-x86-64">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="AnalysisEngine\MacOS\stockfish-arm64">
+    <None Update="AnalysisEngine\MacOS\Fairy-Stockfish-14-LargeBoard_Mac_Apple_Silicon">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AnalysisEngine\MacOS\Fairy-Stockfish-14-LargeBoard_Mac_Intel">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AnalysisEngine\MacOS\stockfish">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AnalysisEngine\Windows\fairy-stockfish-largeboard_x86-64.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="AnalysisEngine\Windows\stockfish-windows-2022-x86-64-avx2.exe">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>

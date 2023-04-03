@@ -173,13 +173,13 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
                 {
                     Player.White => string.Format(Piece.k_white, piece),
                     Player.Black => string.Format(Piece.k_black, piece),
-                    _ => throw new ArgumentOutOfRangeException(nameof(Player))
+                    _ => throw new InvalidOperationException("Invalid Player")
                 };
 
                 using var svg = new SKSvg();
                 bitmap.Bitmap = new SKBitmap(Tile.Width, Tile.Height);
                 svg.Load(piecePath);
-                if (svg.Picture is null) throw new ArgumentNullException(nameof(svg));
+                if (svg.Picture is null) throw new InvalidOperationException("svg.Picture is null");
                 var canvas = new SKCanvas(bitmap.Bitmap);
                 var matrix = SKMatrix.CreateScale(
                     Tile.Width / svg.Picture.CullRect.Width,
@@ -230,7 +230,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
                 SKBitmapControl tile => tile,
                 // The player may click on a drawn Ellipse object
                 Ellipse tile => tile,
-                _ => throw new ArgumentOutOfRangeException(nameof(destinationTile))
+                _ => throw new InvalidOperationException("Invalid Tile")
             };
 
             if (_sourceTile is null) return;

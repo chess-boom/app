@@ -42,13 +42,11 @@ public class Pawn : Piece
         if (GameHelpers.IsOnBoard(standardMove)
             && GameHelpers.IsOnBoard(doubleMove)
             && (m_board.GetPiece(standardMove) is null)
-            && (m_board.GetPiece(doubleMove) is null))
+            && (m_board.GetPiece(doubleMove) is null)
+            && ((m_owner == Player.White && m_row < 2)
+                || (m_owner == Player.Black && m_row > 5)))
         {
-            if ((m_owner == Player.White && m_row < 2)
-                || (m_owner == Player.Black && m_row > 5))
-            {
-                movementSquares.Add(doubleMove);
-            }
+            movementSquares.Add(doubleMove);
         }
 
         var occupant = m_board.GetPiece(captureLeft);
@@ -135,11 +133,11 @@ public class Pawn : Piece
             }
 
             // Handle 2-square movement (enables en passant)
-            if (coordinate == GameHelpers.AddVector(GetCoordinates(), (0, 2)))
+            if (coordinate == GameHelpers.AddVector(GetCoordinates(), (0, 2)) && GetCoordinates().Item2 == 1)
             {
                 m_board.m_enPassant = GameHelpers.AddVector(GetCoordinates(), (0, 1));
             }
-            else if (coordinate == GameHelpers.AddVector(GetCoordinates(), (0, -2)))
+            else if (coordinate == GameHelpers.AddVector(GetCoordinates(), (0, -2)) && GetCoordinates().Item2 == 6)
             {
                 m_board.m_enPassant = GameHelpers.AddVector(GetCoordinates(), (0, -1));
             }
