@@ -352,7 +352,8 @@ public class Board
     /// </summary>
     /// <param name="pawn">The pawn that wishes to promote</param>
     /// <param name="requestPromotionPiece">The function to call if piece is null. May be null</param>
-    public async void RequestPromotion(Pawn pawn, RequestPromotionPieceDelegate? requestPromotionPiece = null)
+    /// <returns>The promotion piece request</returns>
+    public async Task RequestPromotion(Pawn pawn, RequestPromotionPieceDelegate? requestPromotionPiece = null)
     {
         requestPromotionPiece ??= RequestPromotionPiece;
         try
