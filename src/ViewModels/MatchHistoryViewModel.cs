@@ -20,7 +20,8 @@ public class MatchHistoryViewModel : BaseViewModel
 
     public MatchHistoryViewModel(IScreen hostScreen) : base(hostScreen)
     {
-        PlayerCollection = GetDummyPlayerData("Resources/GameAnalysis_Standard.json");
+        PlayerCollection =
+            GetDummyPlayerData(Path.Combine(System.AppContext.BaseDirectory, "Resources/GameAnalysis_Standard.json"));
     }
 
     protected static ObservableCollection<MatchData> GetDummyPlayerData(string path)

@@ -77,7 +77,6 @@
                         <MenuItem Header="Match History" Command="{Binding GoMatchHistory}" />
                     </MenuItem>
                     <MenuItem Header="Variant Analysis" FontSize="20" CornerRadius="10" Cursor="Hand">
-                        <MenuItem Header="Chess 960" Command="{Binding GoChess960Analysis}" />
                         <MenuItem Header="Atomic" Command="{Binding GoAtomicAnalysis}" />
                         <MenuItem Header="Horde" Command="{Binding GoHordeAnalysis}" />
                         <MenuItem Header="Match History" Command="{Binding GoVariantMatchHistory}" />

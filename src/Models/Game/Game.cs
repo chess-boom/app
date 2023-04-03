@@ -62,7 +62,6 @@ struct Move
     public string m_square { get; }
     public List<Move>? m_variations { get; set; }
 
-    // TODO: Implement variations
     public void AddVariation(Move move)
     {
         if (m_variations is null)
@@ -166,7 +165,6 @@ public class Game
         switch (variant)
         {
             case Variant.Chess960:
-                // TODO: CB-24
                 break;
             case Variant.Horde:
                 fen = File.ReadAllText(Path.Combine(System.AppContext.BaseDirectory, "Resources/horde.fen"));
