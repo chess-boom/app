@@ -137,7 +137,7 @@ public class GameAnalysisViewModel : BoardViewModel
 
     private void HandleGameFileLoading(string filePath)
     {
-        if(filePath != null)
+        if (filePath != null)
         {
             var _newGameHandler = new GameHandler(_variant);
             _newGameHandler.LoadGame(filePath);
