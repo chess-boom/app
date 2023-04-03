@@ -63,8 +63,11 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     /// </summary>
     internal static class Piece
     {
-        internal static readonly string k_white = System.IO.Path.Combine(AppContext.BaseDirectory, "Assets/Pieces/{0}.svg");
-        internal static readonly string k_black = System.IO.Path.Combine(AppContext.BaseDirectory, "Assets/Pieces/{0}_.svg");
+        internal static readonly string k_white =
+            System.IO.Path.Combine(AppContext.BaseDirectory, "Assets/Pieces/{0}.svg");
+
+        internal static readonly string k_black =
+            System.IO.Path.Combine(AppContext.BaseDirectory, "Assets/Pieces/{0}_.svg");
     }
 
     /// <summary>
@@ -78,7 +81,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             DrawGridLabels();
             DrawPieces();
             ViewModel.WhenAnyValue(x => x.GameHandler)
-            .Subscribe(_ => DrawPieces());
+                .Subscribe(_ => DrawPieces());
         });
         AvaloniaXamlLoader.Load(this);
 
@@ -434,14 +437,16 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             ZIndex = 2,
             Name = move
         };
+
         (int col, int row) coordinates;
+
         if (ViewModel?.GameHandler.GetPlayerToPlay() == Player.Black)
         {
             coordinates = move switch
             {
                 "O-O" => (6, 7),
                 "O-O-O" => (2, 7),
-                _ => throw new ArgumentOutOfRangeException()
+                _ => throw new ArgumentOutOfRangeException(nameof(move), move, "Invalid castling move.")
             };
         }
         else
@@ -450,7 +455,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             {
                 "O-O" => (6, 0),
                 "O-O-O" => (2, 0),
-                _ => throw new ArgumentOutOfRangeException()
+                _ => throw new ArgumentOutOfRangeException(nameof(move), move, "Invalid castling move.")
             };
         }
 
